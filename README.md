@@ -28,7 +28,7 @@ Go to "ACP" > "Customise" > "Extensions" and enable the "Inactive User Manager" 
 
 * Create a issue in the [tracker](https://github.com/andreaskou/PHPBB_IUM/issues)
 * Note the restrictions for [branch names](https://wiki.phpbb.com/Git#Branch_Names) and [commit messages](https://wiki.phpbb.com/Git#Commit_Messages) are similar to phpBB3
-* Submit a [pull-request](https://github.com/blitze/phpBB-ext-sitemaker/pulls)
+* Submit a [pull-request](https://github.com/andreaskou/PHPBB_IUM/pulls)
 
 ## License
 
