@@ -9,6 +9,8 @@ phpBB Inactive User Manager will allow you to manager inactive users in your php
 The extension is in a very early stage but I will try to update as often as I can.
 Please let me know your ideas and thoughts.
 
+WARNING: Do NOT install this on a production enviroment.
+
 ## Features
 
 Yet to be decided.
