@@ -50,47 +50,65 @@ class main_module
             $start = $request->variable('start', 0);
             $limit = $request->variable('users_per_page', 10);
             $with_posts = $request->variable('with_posts', 0);
-            $actions    = $request->variable('count_back', '');
+            $actions = $request->variable('count_back', '');
+            $sort_by = $request->variable('sort_by', '');
+            $sort_order = $request->variable('sort_order', 0);
 
+            // Keep the limit between 10 and 50
             if ($limit > 50) {
                 $limit = 50;
-            } elseif ($limit == 0) {
+            } elseif ($limit < 10) {
                 $limit = 10;
             }
 
-            var_dump($actions);
-
-            $options = array('with_posts'   => $with_posts,
-                             'count_back'   => $actions
+            // get the options to an array so that we pass them to the sql query
+            $options = array('with_posts' => $with_posts,
+                'count_back' => $actions,
+                'sort_by' => $sort_by,
+                'sort_order' => $sort_order,
             );
 
             // Sort keys
-            $sort_days = request_var('st', 0);
-            $sort_key = request_var('sk', 'i');
-            $sort_dir = request_var('sd', 'd');
-            $base_url = $this->u_action . "&amp;users_per_page=" . $limit . "&amp;with_posts=" . $with_posts ."&amp;count_back=". $actions;
+//            $sort_days = request_var('st', 0);
+//            $sort_key = request_var('sk', 'i');
+//            $sort_dir = request_var('sd', 'd');
+
+            //base url for pagination, filtering and sorting
+            $base_url = $this->u_action . "&amp;users_per_page=" . $limit
+                . "&amp;with_posts=" . $with_posts
+                . "&amp;count_back=" . $actions
+                . "&amp;sort_by=" . $sort_by
+                . "&amp;sort_order=" . $sort_order;
 
             // Sorting
-            $s_limit_days = $s_sort_key = $s_sort_dir = $u_sort_param = '';
-            $limit_days = array(0 => $user->lang['ALL_ENTRIES'], 1 => $user->lang['1_DAY'], 7 => $user->lang['7_DAYS'], 14 => $user->lang['2_WEEKS'], 30 => $user->lang['1_MONTH'], 90 => $user->lang['3_MONTHS'], 180 => $user->lang['6_MONTHS'], 365 => $user->lang['1_YEAR']);
-            $sort_by_text = array('i' => $user->lang['SORT_INACTIVE'], 'j' => $user->lang['SORT_REG_DATE'], 'l' => $user->lang['SORT_LAST_VISIT'], 'd' => $user->lang['SORT_LAST_REMINDER'], 'r' => $user->lang['SORT_REASON'], 'u' => $user->lang['SORT_USERNAME'], 'p' => $user->lang['SORT_POSTS'], 'e' => $user->lang['SORT_REMINDER']);
-            gen_sort_selects($limit_days, $sort_by_text, $sort_days, $sort_key, $sort_dir, $s_limit_days, $s_sort_key, $s_sort_dir, $u_sort_param);
+//            $s_limit_days = $s_sort_key = $s_sort_dir = $u_sort_param = '';
+//            $limit_days = array(0 => $user->lang['ALL_ENTRIES'], 1 => $user->lang['1_DAY'], 7 => $user->lang['7_DAYS'], 14 => $user->lang['2_WEEKS'], 30 => $user->lang['1_MONTH'], 90 => $user->lang['3_MONTHS'], 180 => $user->lang['6_MONTHS'], 365 => $user->lang['1_YEAR']);
+//            $sort_by_text = array('i' => $user->lang['SORT_INACTIVE'], 'j' => $user->lang['SORT_REG_DATE'], 'l' => $user->lang['SORT_LAST_VISIT'], 'd' => $user->lang['SORT_LAST_REMINDER'], 'r' => $user->lang['SORT_REASON'], 'u' => $user->lang['SORT_USERNAME'], 'p' => $user->lang['SORT_POSTS'], 'e' => $user->lang['SORT_REMINDER']);
+//            gen_sort_selects($limit_days, $sort_by_text, $sort_days, $sort_key, $sort_dir, $s_limit_days, $s_sort_key, $s_sort_dir, $u_sort_param);
 
             // Long list probably should make shorter.
-            $option_ary = array('select'=>  'SELECT',
-                                '30d'   =>  'THIRTY_DAYS',
-                                '60d'   =>  'SIXTY_DAYS',
-                                '90d'   =>  'NINETY_DAYS',
-                                '4m'    =>  'FOUR_MONTHS',
-                                '6m'    =>  'SIX_MONTHS',
-                                '9m'    =>  'NINE_MONTHS',
-                                '1Y'    =>  'ONE_YEAR',
-                                '2Y'    =>  'TWO_YEARS',
-                                '3Y'    =>  'THREE_YEARS',
-                                '5Y'    =>  'FIVE_YEARS',
-                                '7Y'    =>  'SEVEN_YEARS',
-                                '10Y'   =>  'DECADE');
+            $option_ary = array('select' => 'SELECT',
+                '30d' => 'THIRTY_DAYS',
+                '60d' => 'SIXTY_DAYS',
+                '90d' => 'NINETY_DAYS',
+                '4m' => 'FOUR_MONTHS',
+                '6m' => 'SIX_MONTHS',
+                '9m' => 'NINE_MONTHS',
+                '1Y' => 'ONE_YEAR',
+                '2Y' => 'TWO_YEARS',
+                '3Y' => 'THREE_YEARS',
+                '5Y' => 'FIVE_YEARS',
+                '7Y' => 'SEVEN_YEARS',
+                '10Y' => 'DECADE');
 
+            // Sort by element
+            $sort_by_ary = array('select' => 'SORT_BY_SELECT',
+                'username' => 'USERNAME',
+                'posts' => 'POSTS',
+                'reg_date' => 'JOINED',
+                'last_visit' => 'LAST_VISIT');
+
+            // Get the users list using get_inactive_users required parameters $limit $start
             $rows = $this->get_inactive_users(null, $limit, $start, $options);
             $inactive_count = $rows['count'];
             $rows = $rows['results'];
@@ -101,17 +119,18 @@ class main_module
             $pagination->generate_template_pagination($base_url, 'pagination', 'start', $inactive_count, $limit, $start);
 
             // Assign template vars (including pagination)
-
             $template->assign_vars(array(
                 'S_INACTIVE_USERS' => true,
                 'S_INACTIVE_OPTIONS' => build_select($option_ary, $actions),
-                'COUNT_BACK'    => $options,
-                'S_LIMIT_DAYS' => $s_limit_days,
-                'S_SORT_KEY' => $s_sort_key,
-                'S_SORT_DIR' => $s_sort_dir,
+                'S_IUM_SORT_BY' => build_select($sort_by_ary, $sort_by),
+                'COUNT_BACK' => $options,
+//                'S_LIMIT_DAYS' => $s_limit_days,
+//                'S_SORT_KEY' => $s_sort_key,
+//                'S_SORT_DIR' => $s_sort_dir,
                 'PER_PAGE' => $limit,
                 'TOTAL_USERS' => $inactive_count,
                 'WITH_POSTS' => ($with_posts) ? true : false,
+                'SORT_ORDER' => ($sort_order) ? true : false,
             ));
 
             // Assign row results to template var inactive
@@ -143,17 +162,20 @@ class main_module
         global $db;
 
         if ($filters) {
+
+            $ignore = 'select';
+
             if ($filters['with_posts']) {
                 $options = ' AND user_posts != 0';
             }
 
-            if ($filters['count_back'] && $filters['count_back'] != 'select'){
+            if ($filters['count_back'] && $filters['count_back'] != $ignore) {
 
                 /**
                  * Big case with days back, probably will have to rethink it.
                  */
 
-                switch ($filters['count_back']){
+                switch ($filters['count_back']) {
 
                     case "30d":
                         $back = '30 DAY';
@@ -192,17 +214,45 @@ class main_module
                         $back = '10 YEAR';
                         break;
                     case 'select':
-                         break;
+                        break;
                 }
-                $options .= ' AND user_lastvisit < (DATE_SUB(CURDATE(), INTERVAL '. $back .'))';
+                $options .= ' AND user_lastvisit < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
+            }
+
+            if ($filters['sort_by'] && $filters['sort_by'] != $ignore) {
+
+                $sort = ' ORDER BY ';
+                switch ($filters['sort_by']) {
+
+                    case 'username':
+                        $sort .= 'username';
+                        break;
+                    case 'reg_date':
+                        $sort .= 'user_regdate';
+                        break;
+                    case 'last_visit':
+                        $sort .= 'user_lastvisit';
+                        break;
+                    case 'posts':
+                        $sort .= 'user_posts';
+                        break;
+                    case 'select':
+                        break;
+                }
+
+                if ($filters['sort_order'] === 1) {
+                    var_dump($filters['sort_by']);
+                    $sort .= ' DESC';
+                }
             }
         }
+
 
         // Create the SQL statement
         $sql = 'SELECT username, user_regdate, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason
            FROM ' . USERS_TABLE . '
            WHERE user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-           AND group_id not in (1,4,5,6)' . $options;
+           AND group_id not in (1,4,5,6)' . $options . $sort;
 
         var_dump($sql);
 
