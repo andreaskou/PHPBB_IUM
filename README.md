@@ -17,8 +17,8 @@ Yet to be decided.
 
 * Lists inactive users
 * Send e-mail reminder to inactive users. 
-* * By selecting users or
-* * Sending to all of them
+** By selecting users or
+** Sending to all of them
 
 ## Installation
 
