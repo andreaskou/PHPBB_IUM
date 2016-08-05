@@ -120,7 +120,7 @@ class main_module
                     'USERNAME' => $row['username'],
                     'JOINED' => $user->format_date($row['user_regdate']),
                     'POSTS' => ($row['user_posts']) ? $row['user_posts'] : 0,
-                    'LAST_VISIT' => $user->format_date($row['user_posts']),
+                    'LAST_VISIT' => $user->format_date($row['user_lastvisit']),
                     'INACTIVE_DATE' => ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
                     'REASON' => $user->lang('ACP_IUM_INACTIVE', (int)$row['user_inactive_reason']),
                 ));
