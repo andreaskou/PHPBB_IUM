@@ -46,8 +46,10 @@
 </table>
 
 <fieldset class="display-options">
-	{L_ACP_USERS_WITH_POSTS} <input class="checkbox" type="checkbox" name="with_posts" value="1" <!-- IF WITH_POSTS --> checked <!-- ENDIF --> />&nbsp;
-	{L_COUNT_BACK}{L_COLON} &nbsp;<select name="count_back">{S_INACTIVE_OPTIONS}</select>&nbsp;<!-- IF .pagination -->&nbsp;{L_USERS_PER_PAGE}{L_COLON} <input class="inputbox autowidth" type="number" name="users_per_page" id="users_per_page" min="0" max="999" value="{USERS_PER_PAGE}" /><!-- ENDIF -->
+	{L_ACP_USERS_WITH_POSTS} <input class="checkbox" type="checkbox" name="with_posts" value="1" <!-- IF WITH_POSTS --> checked <!-- ENDIF --> /> &nbsp;
+	{L_COUNT_BACK}{L_COLON} &nbsp; <select name="count_back">{S_INACTIVE_OPTIONS}</select> &nbsp; <select name="sort_by">{S_IUM_SORT_BY}</select> &nbsp;
+	{L_ACP_DESCENDING} <input class="checkbox" type="checkbox" name="sort_order" value="1" <!-- IF SORT_ORDER --> checked <!-- ENDIF --> /> &nbsp;
+    <!-- IF .pagination -->&nbsp;{L_USERS_PER_PAGE}{L_COLON} <input class="inputbox autowidth" type="number" name="users_per_page" id="users_per_page" min="0" max="999" value="{USERS_PER_PAGE}" /><!-- ENDIF -->
 	<input class="button2" type="submit" value="{L_GO}" name="sort" />
 </fieldset>
 
