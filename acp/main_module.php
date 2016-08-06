@@ -24,7 +24,7 @@ class main_module
     public function main($id, $mode)
     {
 
-        global $user, $template, $request, $config, $phpbb_container, $helper;
+        global $user, $template, $request, $config, $phpbb_container;
 
         $user->add_lang_ext('andreask/ium', 'common');
 
