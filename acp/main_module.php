@@ -143,9 +143,9 @@ class main_module
                     'INACTIVE_DATE' => ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
                     'REASON' => $user->lang('ACP_IUM_INACTIVE', (int)$row['user_inactive_reason']),
                     'COUNT' =>  $row['remind_counter'],
-                    'LAST_SENT_REMINDER'    =>  $rows['previous_sent_date'],
-                    'REMINDER_DATE'     =>  $row['reminder_sent_date'],
-                    'IGNORE_USER'       =>  $row['dont_send']
+                    'LAST_SENT_REMINDER'    =>  ($rows['previous_sent_date']) ? $row['previous_sent_date'] : 'No reminder sent yet',
+                    'REMINDER_DATE'     =>  ($row['reminder_sent_date']) ? $row['reminder_sent_date'] : 'No reminder sent yet',
+                    'IGNORE_USER'       =>  ($row['dont_send']) ? true : false
                 ));
             }
         }
