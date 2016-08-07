@@ -17,6 +17,8 @@ use phpbb\db\migration\migration;
 
 class add_module extends migration
 {
+    private $schema_name;
+
 	public function effectively_installed()
 	{
 		return isset($this->config['andreask_ium_enable']);
@@ -50,10 +52,9 @@ class add_module extends migration
 
     public function update_schema()
     {
-
         return array(
             'add_tables'   => array(
-                $this->table_prefix . 'ium_reminder'   => array(
+                $this->table_prefix . $this->schema_name => array(
                     'COLUMNS'   => array(
                         'reminder_id'               => array('UINT', null, 'auto_increment'),
                         'user_id'                   => array('UINT', 0),
@@ -73,7 +74,7 @@ class add_module extends migration
     {
         return array(
             'drop_table'    =>  array(
-                $this->table_prefix . 'ium',
+                $this->table_prefix . $this->schema_name ,
             ),
         );
     }
