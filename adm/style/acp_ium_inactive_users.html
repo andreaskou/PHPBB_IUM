@@ -22,6 +22,9 @@
 	<th>{L_LAST_VISIT}</th>
 	<th>{L_INACTIVE_DATE}</th>
 	<th>{L_INACTIVE_REASON}</th>
+	<th>{L_LAST_SENT_REMINDER}</th>
+	<th>{L_COUNT}</th>
+	<th>{L_REMINDER_DATE}</th>
 </tr>
 </thead>
 <tbody>
@@ -32,10 +35,13 @@
 		</td>
 		<td style="vertical-align: top;">{inactive.JOINED}</td>
 		<td style="vertical-align: top;">{inactive.LAST_VISIT}</td>
-       		<td style="vertical-align: top;">{inactive.INACTIVE_DATE}</td>
+       	<td style="vertical-align: top;">{inactive.INACTIVE_DATE}</td>
 		<td style="vertical-align: top;">{inactive.REASON}
 			<!-- IF inactive.REMINDED --><br />{inactive.REMINDED_EXPLAIN}<!-- ENDIF -->
 		</td>
+		<td style="vertical-align: top;">{inactive.LAST_SENT_REMINDER}</td>
+		<td style="vertical-align: top;">{inactive.COUNT}</td>
+		<td style="vertical-align: top;">{inactive.REMINDER_DATE}</td>
 	</tr>
 <!-- BEGINELSE -->
 	<tr>
