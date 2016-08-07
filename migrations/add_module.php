@@ -17,7 +17,7 @@ use phpbb\db\migration\migration;
 
 class add_module extends migration
 {
-    private $schema_name;
+    private $schema_name = 'ium_reminder';
 
 	public function effectively_installed()
 	{
