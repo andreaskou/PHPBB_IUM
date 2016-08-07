@@ -30,4 +30,7 @@ $lang = array_merge($lang, array(
                                         5   =>  'Temporarily Banned'],
         'ACP_IUM_NODATE'       =>  'User is <strong>not</strong> disabled',
         'ACP_USERS_WITH_POSTS'  =>  'Show only users with posts',
+        'LAST_SENT_REMINDER'    =>  'Previous Reminder',
+        'COUNT'                 =>  'Reminders Count',
+        'REMINDER_DATE'         =>  'Last Reminder Sent'
 ));
