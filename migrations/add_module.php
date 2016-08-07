@@ -47,4 +47,34 @@ class add_module extends migration
     			)),
     		);
     }
+
+    public function update_schema()
+    {
+
+        return array(
+            'add_tables'   => array(
+                $this->table_prefix . 'ium'   => array(
+                    'COLUMNS'   => array(
+                        'reminder_id'               => array('UINT', null, 'auto_increment'),
+                        'user_id'                   => array('UINT', 0),
+                        'username'                  => array('VCHAR', ''),
+                        'remind_counter'            => array('UINT', '0'),
+                        'previous_sent_date'        => array('TIMESTAMP', 0),
+                        'reminder_sent_date'        => array('TIMESTAMP', 0),
+                        'ignore'                    => array('UINT', 0)
+                        ),
+                    'PRIMARY_KEY'   => 'reminder_id',
+                ),
+            ),
+        );
+    }
+
+    public function revert_schema()
+    {
+        return array(
+            'drop_table'    =>  array(
+                $this->table_prefix . 'ium',
+            ),
+        );
+    }
 }
