@@ -142,6 +142,10 @@ class main_module
                     'LAST_VISIT' => $user->format_date($row['user_lastvisit']),
                     'INACTIVE_DATE' => ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
                     'REASON' => $user->lang('ACP_IUM_INACTIVE', (int)$row['user_inactive_reason']),
+                    'COUNT' =>  $row['remind_counter'],
+                    'LAST_SENT_REMINDER'    =>  $rows['previous_sent_date'],
+                    'REMINDER_DATE'     =>  $row['reminder_sent_date'],
+                    'IGNORE_USER'       =>  $row['dont_send']
                 ));
             }
         }
@@ -159,14 +163,14 @@ class main_module
     private function get_inactive_users($days_back = null, $limit, $start, $filters = null)
     {
 
-        global $db;
+        global $db, $table_prefix;
 
         if ($filters) {
 
             $ignore = 'select';
 
             if ($filters['with_posts']) {
-                $options = ' AND user_posts != 0';
+                $options = ' AND p.user_posts != 0';
             }
 
             if ($filters['count_back'] && $filters['count_back'] != $ignore) {
@@ -216,7 +220,7 @@ class main_module
                     case 'select':
                         break;
                 }
-                $options .= ' AND from_unixtime(user_lastvisit) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
+                $options .= ' AND from_unixtime(p.user_lastvisit) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
             }
 
             if ($filters['sort_by'] && $filters['sort_by'] != $ignore) {
@@ -225,16 +229,16 @@ class main_module
                 switch ($filters['sort_by']) {
 
                     case 'username':
-                        $sort .= 'username';
+                        $sort .= 'p.username';
                         break;
                     case 'reg_date':
-                        $sort .= 'user_regdate';
+                        $sort .= 'p.user_regdate';
                         break;
                     case 'last_visit':
-                        $sort .= 'user_lastvisit';
+                        $sort .= 'p.user_lastvisit';
                         break;
                     case 'posts':
-                        $sort .= 'user_posts';
+                        $sort .= 'p.user_posts';
                         break;
                     case 'select':
                         break;
@@ -248,10 +252,14 @@ class main_module
 
 
         // Create the SQL statement
-        $sql = 'SELECT username, user_regdate, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason
-           FROM ' . USERS_TABLE . '
-           WHERE user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-           AND group_id not in (1,4,5,6)' . $options . $sort;
+        $table_name = $table_prefix .'ium_reminder';
+
+        $sql = 'SELECT p.username, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
+           FROM ' . USERS_TABLE . ' p LEFT OUTER JOIN ' . $table_name . ' r ON (p.user_id = r.user_id)
+           WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
+           AND p.group_id not in (1,4,5,6)' . $options . $sort;
+
+        var_dump($sql);
 
 
         // Run the query
