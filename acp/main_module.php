@@ -216,7 +216,7 @@ class main_module
                     case 'select':
                         break;
                 }
-                $options .= ' AND user_lastvisit < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
+                $options .= ' AND from_unixtime(user_lastvisit) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
             }
 
             if ($filters['sort_by'] && $filters['sort_by'] != $ignore) {
@@ -241,7 +241,6 @@ class main_module
                 }
 
                 if ($filters['sort_order'] === 1) {
-                    var_dump($filters['sort_by']);
                     $sort .= ' DESC';
                 }
             }
@@ -254,7 +253,6 @@ class main_module
            WHERE user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
            AND group_id not in (1,4,5,6)' . $options . $sort;
 
-        var_dump($sql);
 
         // Run the query
         $result = $db->sql_query_limit($sql, $limit, $start);
