@@ -53,7 +53,7 @@ class add_module extends migration
 
         return array(
             'add_tables'   => array(
-                $this->table_prefix . 'ium'   => array(
+                $this->table_prefix . 'ium_reminder'   => array(
                     'COLUMNS'   => array(
                         'reminder_id'               => array('UINT', null, 'auto_increment'),
                         'user_id'                   => array('UINT', 0),
