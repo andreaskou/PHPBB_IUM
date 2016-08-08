@@ -106,10 +106,14 @@ class main_module
                 'username' => 'USERNAME',
                 'posts' => 'POSTS',
                 'reg_date' => 'JOINED',
-                'last_visit' => 'LAST_VISIT');
+                'last_visit' => 'LAST_VISIT',
+                'last_sent_reminder' => 'LAST_SENT_REMINDER',
+                'count' => 'COUNT',
+                'reminder_date' => 'REMINDER_DATE',
+                );
 
             // Get the users list using get_inactive_users required parameters $limit $start
-            $rows = $this->get_inactive_users(null, $limit, $start, $options);
+            $rows = $this->get_inactive_users($limit, $start, $options);
             $inactive_count = $rows['count'];
             $rows = $rows['results'];
 
@@ -153,14 +157,13 @@ class main_module
 
 
     /**
-     * @param null $days_back future feature :)
      * @param int $limit Used for pagination in sql query to limit the numbers of rows.
      * @param int $start Used for pagination in sql query to say where to start from.
      * @param null $filters Array Used for query to supply extra filters.
      * @return array result of query and total amount of the result.
      */
 
-    private function get_inactive_users($days_back = null, $limit, $start, $filters = null)
+    private function get_inactive_users($limit, $start, $filters = null)
     {
 
         global $db, $table_prefix;
@@ -239,6 +242,15 @@ class main_module
                         break;
                     case 'posts':
                         $sort .= 'p.user_posts';
+                        break;
+                    case 'last_sent_reminder':
+                        $sort .= 'r.previous_sent_date';
+                        break;
+                    case 'count':
+                        $sort .= 'r.remind_counter';
+                        break;
+                    case 'reminder_date':
+                        $sort .= 'r.reminder_sent_date';
                         break;
                     case 'select':
                         break;
