@@ -15,11 +15,13 @@
 namespace andreask\ium\acp;
 
 use phpbb\log\null;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class main_module
 {
 
     public $u_action, $tpl_name, $page_title;
+
 
     public function main($id, $mode)
     {
@@ -27,7 +29,6 @@ class main_module
         global $user, $template, $request, $config, $phpbb_container;
 
         $user->add_lang_ext('andreask/ium', 'common');
-
 
         if ($mode == 'ium_settings') {
 
@@ -39,6 +40,8 @@ class main_module
             $template->assign_vars(array(
                 'ANDREASK_IUM_ENABLE' => $config['andreask_ium_enable'],
             ));
+
+            $this->send_reminder();
         }
 
         if ($mode == 'ium_list') {
@@ -68,23 +71,12 @@ class main_module
                 'sort_order' => $sort_order,
             );
 
-            // Sort keys
-//            $sort_days = request_var('st', 0);
-//            $sort_key = request_var('sk', 'i');
-//            $sort_dir = request_var('sd', 'd');
-
             //base url for pagination, filtering and sorting
             $base_url = $this->u_action . "&amp;users_per_page=" . $limit
                 . "&amp;with_posts=" . $with_posts
                 . "&amp;count_back=" . $actions
                 . "&amp;sort_by=" . $sort_by
                 . "&amp;sort_order=" . $sort_order;
-
-            // Sorting
-//            $s_limit_days = $s_sort_key = $s_sort_dir = $u_sort_param = '';
-//            $limit_days = array(0 => $user->lang['ALL_ENTRIES'], 1 => $user->lang['1_DAY'], 7 => $user->lang['7_DAYS'], 14 => $user->lang['2_WEEKS'], 30 => $user->lang['1_MONTH'], 90 => $user->lang['3_MONTHS'], 180 => $user->lang['6_MONTHS'], 365 => $user->lang['1_YEAR']);
-//            $sort_by_text = array('i' => $user->lang['SORT_INACTIVE'], 'j' => $user->lang['SORT_REG_DATE'], 'l' => $user->lang['SORT_LAST_VISIT'], 'd' => $user->lang['SORT_LAST_REMINDER'], 'r' => $user->lang['SORT_REASON'], 'u' => $user->lang['SORT_USERNAME'], 'p' => $user->lang['SORT_POSTS'], 'e' => $user->lang['SORT_REMINDER']);
-//            gen_sort_selects($limit_days, $sort_by_text, $sort_days, $sort_key, $sort_dir, $s_limit_days, $s_sort_key, $s_sort_dir, $u_sort_param);
 
             // Long list probably should make shorter.
             $option_ary = array('select' => 'SELECT',
@@ -116,6 +108,7 @@ class main_module
             $rows = $this->get_inactive_users($limit, $start, $options);
             $inactive_count = $rows['count'];
             $rows = $rows['results'];
+
 
             // Load the pagination
             $pagination = $phpbb_container->get('pagination');
@@ -165,7 +158,6 @@ class main_module
 
     private function get_inactive_users($limit, $start, $filters = null)
     {
-
         global $db, $table_prefix;
 
         if ($filters) {
@@ -226,8 +218,11 @@ class main_module
                 $options .= ' AND from_unixtime(p.user_lastvisit) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
             }
 
-            if ($filters['sort_by'] && $filters['sort_by'] != $ignore) {
+            /**
+             * Big case with sort by, probably will have to rethink it.
+             */
 
+            if ($filters['sort_by'] && $filters['sort_by'] != $ignore) {
                 $sort = ' ORDER BY ';
                 switch ($filters['sort_by']) {
 
@@ -255,13 +250,11 @@ class main_module
                     case 'select':
                         break;
                 }
-
                 if ($filters['sort_order'] === 1) {
                     $sort .= ' DESC';
                 }
             }
         }
-
 
         // Create the SQL statement
         $table_name = $table_prefix .'ium_reminder';
@@ -270,9 +263,6 @@ class main_module
            FROM ' . USERS_TABLE . ' p LEFT OUTER JOIN ' . $table_name . ' r ON (p.user_id = r.user_id)
            WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
            AND p.group_id not in (1,4,5,6)' . $options . $sort;
-
-        var_dump($sql);
-
 
         // Run the query
         $result = $db->sql_query_limit($sql, $limit, $start);
@@ -307,5 +297,34 @@ class main_module
 
 
         return array('results' => $inactive_users, 'count' => $count);
+    }
+
+    private function send_reminder($user_id = null, $reminder = null){
+
+        global $phpEx, $phpbb_root_path, $config;
+
+//     if($user_id && $reminder){
+
+
+         if (!class_exists('messenger'))
+         {
+             include( $phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
+         }
+         $messenger = new \messenger(false);
+         $server_url = generate_board_url();
+         $messenger->template('@andreask_ium/template', $data['lang']);
+         $messenger->to($row['user_email'], $row['username']);
+         $messenger->im($row['user_jabber'], $row['username']);
+         $messenger->assign_vars(array(
+                 'USERNAME'		 => htmlspecialchars_decode($data['username']),
+                 'USER_MAIL'		 => $data['email'],
+                 'USER_REGDATE'		=> date($config['default_dateformat'], $data['user_regdate']),
+                 'USER_IP'		 => $data['user_ip'])
+         );
+         $messenger->send(NOTIFY_EMAIL);
+//     }
+//
+//        return false;
+
     }
 }
