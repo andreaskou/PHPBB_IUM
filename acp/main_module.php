@@ -40,13 +40,18 @@ class main_module
             add_form_key($form_key);
 
             $template->assign_vars(array(
-                'ANDREASK_IUM_ENABLE'   =>  $config['andreask_ium_enable'],
-                'ANDREASK_IUM_INTERVAL' =>  $config['andreask_ium_interval'],
+                'ANDREASK_IUM_ENABLE'                   =>  $config['andreask_ium_enable'],
+                'ANDREASK_IUM_INTERVAL'                 =>  $config['andreask_ium_interval'],
+                'ANDREASK_IUM_TOP_USER_THREADS'         =>  $config['andreask_ium_top_user_threads'],
+                'ANDREASK_IUM_TOP_USER_THREADS_COUNT'   =>  $config['andreask_ium_top_user_threads_count'],
+                'ANDREASK_IUM_TOP_FORUM_THREADS'        =>  $config['andreask_ium_top_forum_threads'],
+                'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT'  =>  $config['andreask_ium_top_forum_threads_count'],
+                'ANDREASK_IUM_SELF_DELETE'              =>  $config['andreask_ium_self_delete'],
             ));
 
             $user_list = $this->get_inactive_users(false);
 //            echo "<pre>";
-//            var_dump($user_list);
+//            var_dump($conf);
 //            echo "</pre>";
 
             $reminder = new reminder();
