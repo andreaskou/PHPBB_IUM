@@ -2,12 +2,39 @@
 
 <h1>{{ lang('ACP_IUM') }}</h1>
 
-<form id="acp_board" method="post" action="{U_ACTION}">
+<form id="andreask_ium" method="post" action="{U_ACTION}">
     <fieldset>
         <dl>
-            <dt><label for="andreask_ium_enable">{{ lang('ACP_IUM_ENABLE') }}</label></dt>
+            <dt><label for="andreask_ium_enable">{{ lang('ANDREASK_IUM_ENABLE') }}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN')}}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
                 <input type="radio" class="radio" name="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL')}}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN')}}</span></dt>
+            <dd><input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" min="10" max="365"/> days </dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_top_user_threads">{{ lang('ANDREASK_IUM_TOP_USER_THREADS') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN')}}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_top_user_threads" value="1" <!-- IF ANDREASK_IUM_TOP_USER_THREADS -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
+                <input type="radio" class="radio" name="andreask_ium_top_user_threads" value="0" <!-- IF not ANDREASK_IUM_TOP_USER_THREADS -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_top_user_threads_count">{{ lang('ANDREASK_IUM_INTERVAL_COUNT')}}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN_COUNT')}}</span></dt>
+            <dd><input type="number" value="{ANDREASK_IUM_INTERVAL_COUNT}" size="2" id="andreask_ium_interval_count" min="1" max="20"/></dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_top_threads">{{ lang('ANDREASK_IUM_TOP_THREADS') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_THREADS_EXPLAIN')}}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_top_threads" value="1" <!-- IF ANDREASK_IUM_TOP_THREADS -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
+                <input type="radio" class="radio" name="andreask_ium_top_threads" value="0" <!-- IF not ANDREASK_IUM_TOP_THREADS -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_top_threads_count">{{ lang('ANDREASK_IUM_TOP_THREADS_COUNT')}}</label><br/><span>{{lang('ANDREASK_IUM_TOP_THREADS_COUNT')}}</span></dt>
+            <dd><input type="number" value="{ANDREASK_IUM_TOP_THREADS_COUNT}" size="2" id="andreask_ium_top_threads_count" min="1" max="20"/></dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_self_delete">{{ lang('ANDREASK_IUM_SELF_DELETE') }}</label><br/><span>{{lang('ANDREASK_IUM_SELF_DELETE_EXPLAIN')}}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_self_delete" value="1" <!-- IF ANDREASK_IUM_SELF_DELETE -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
+                <input type="radio" class="radio" name="andreask_ium_self_delete" value="0" <!-- IF not ANDREASK_IUM_SELF_DELETE -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
         </dl>
 
         <p class="submit-buttons">
