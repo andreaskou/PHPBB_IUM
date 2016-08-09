@@ -34,11 +34,11 @@ class add_module extends migration
     	return array(
     		array('config.add',	array('andreask_ium_enable', 0)),
             array('config.add', array('andreask_ium_interval', 30)),
-            array('config.add', array('andreask_ium_top_user_treads', 0)),
-            array('config.add', array('andreask_ium_top_user_treads_count', 5)),
-            array('config.add', array('andreask_ium_top_treads', 0)),
-            array('config.add', array('andreask_ium_top_treads_count', 5)),
-            array('config.add', array('andreask_ium_self_delete', 5)),
+            array('config.add', array('andreask_ium_top_user_threads', 0)),
+            array('config.add', array('andreask_ium_top_user_threads_count', 5)),
+            array('config.add', array('andreask_ium_top_forum_threads', 0)),
+            array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
+            array('config.add', array('andreask_ium_self_delete', 0)),
 
             array('module.add',	array(
                 'acp',
