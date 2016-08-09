@@ -20,7 +20,7 @@ use phpbb\log\null;
 class main_module
 {
 
-    public $u_action, $tpl_name, $page_title;
+//    public $u_action, $tpl_name, $page_title;
 
 
     public function main($id, $mode)
@@ -39,6 +39,18 @@ class main_module
 
             add_form_key($form_key);
 
+            if($request->is_set_post('submit')){
+
+                // Check form key
+                if(!check_form_key($form_key)){
+                    trigger_error($user->lang('FORM_INVALID'), adm_back_link($this->u_action), E_USER_WARNING);
+                }
+
+                // If everything is OK store the setting
+                $this->update_config();
+                trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
+            }
+
             $template->assign_vars(array(
                 'ANDREASK_IUM_ENABLE'                   =>  $config['andreask_ium_enable'],
                 'ANDREASK_IUM_INTERVAL'                 =>  $config['andreask_ium_interval'],
@@ -49,16 +61,13 @@ class main_module
                 'ANDREASK_IUM_SELF_DELETE'              =>  $config['andreask_ium_self_delete'],
             ));
 
-            $user_list = $this->get_inactive_users(false);
-//            echo "<pre>";
-//            var_dump($conf);
-//            echo "</pre>";
-
             $reminder = new reminder();
             $reminder->set_users($user_list['results']);
         }
 
         if ($mode == 'ium_list') {
+
+
 
             $this->tpl_name = 'acp_ium_inactive_users';
             $this->page_title = $user->lang('ACP_IUM_TITLE2');
@@ -79,7 +88,8 @@ class main_module
             }
 
             // get the options to an array so that we pass them to the sql query
-            $options = array('with_posts' => $with_posts,
+            $options = array(
+                'with_posts' => $with_posts,
                 'count_back' => $actions,
                 'sort_by' => $sort_by,
                 'sort_order' => $sort_order,
@@ -335,5 +345,21 @@ class main_module
 
 
         return array('results' => $inactive_users, 'count' => $count);
+    }
+
+    /**
+     * Configuration setter
+     */
+
+    protected function update_config(){
+        global $config, $request;
+
+        $config->set('andreask_ium_enable', $request->variable('andreask_ium_enable', ''));
+        $config->set('andreask_ium_interval', $request->variable('andreask_ium_interval', ''));
+        $config->set('andreask_ium_top_user_threads', $request->variable('andreask_ium_top_user_threads', ''));
+        $config->set('andreask_ium_top_user_threads_count', $request->variable('andreask_ium_top_user_threads_count', ''));
+        $config->set('andreask_ium_top_forum_threads', $request->variable('andreask_ium_top_forum_threads', ''));
+        $config->set('andreask_ium_top_forum_threads_count', $request->variable('andreask_ium_top_forum_threads_count', ''));
+        $config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
     }
 }
