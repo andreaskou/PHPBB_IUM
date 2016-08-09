@@ -15,7 +15,7 @@
 namespace andreask\ium\acp;
 
 use phpbb\log\null;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+
 
 class main_module
 {
@@ -41,7 +41,13 @@ class main_module
                 'ANDREASK_IUM_ENABLE' => $config['andreask_ium_enable'],
             ));
 
-            $this->send_reminder();
+            $user_list = $this->get_inactive_users(false);
+//            echo "<pre>";
+//            var_dump($user_list);
+//            echo "</pre>";
+
+            $reminder = new reminder();
+            $reminder->set_users($user_list['results']);
         }
 
         if ($mode == 'ium_list') {
@@ -102,10 +108,10 @@ class main_module
                 'last_sent_reminder' => 'LAST_SENT_REMINDER',
                 'count' => 'COUNT',
                 'reminder_date' => 'REMINDER_DATE',
-                );
+            );
 
             // Get the users list using get_inactive_users required parameters $limit $start
-            $rows = $this->get_inactive_users($limit, $start, $options);
+            $rows = $this->get_inactive_users(true, $limit, $start, $options);
             $inactive_count = $rows['count'];
             $rows = $rows['results'];
 
@@ -121,9 +127,6 @@ class main_module
                 'S_INACTIVE_OPTIONS' => build_select($option_ary, $actions),
                 'S_IUM_SORT_BY' => build_select($sort_by_ary, $sort_by),
                 'COUNT_BACK' => $options,
-//                'S_LIMIT_DAYS' => $s_limit_days,
-//                'S_SORT_KEY' => $s_sort_key,
-//                'S_SORT_DIR' => $s_sort_dir,
                 'PER_PAGE' => $limit,
                 'TOTAL_USERS' => $inactive_count,
                 'WITH_POSTS' => ($with_posts) ? true : false,
@@ -139,10 +142,10 @@ class main_module
                     'LAST_VISIT' => $user->format_date($row['user_lastvisit']),
                     'INACTIVE_DATE' => ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
                     'REASON' => $user->lang('ACP_IUM_INACTIVE', (int)$row['user_inactive_reason']),
-                    'COUNT' =>  $row['remind_counter'],
-                    'LAST_SENT_REMINDER'    =>  ($rows['previous_sent_date']) ? $row['previous_sent_date'] : 'No reminder sent yet',
-                    'REMINDER_DATE'     =>  ($row['reminder_sent_date']) ? $row['reminder_sent_date'] : 'No reminder sent yet',
-                    'IGNORE_USER'       =>  ($row['dont_send']) ? true : false
+                    'COUNT' => $row['remind_counter'],
+                    'LAST_SENT_REMINDER' => ($rows['previous_sent_date']) ? $row['previous_sent_date'] : 'No reminder sent yet',
+                    'REMINDER_DATE' => ($row['reminder_sent_date']) ? $row['reminder_sent_date'] : 'No reminder sent yet',
+                    'IGNORE_USER' => ($row['dont_send']) ? true : false
                 ));
             }
         }
@@ -150,13 +153,30 @@ class main_module
 
 
     /**
+     * Getter for inactive users
      * @param int $limit Used for pagination in sql query to limit the numbers of rows.
      * @param int $start Used for pagination in sql query to say where to start from.
+     * @param bool $paginate define if pagination is used or not.
      * @param null $filters Array Used for query to supply extra filters.
      * @return array result of query and total amount of the result.
      */
 
-    private function get_inactive_users($limit, $start, $filters = null)
+    public function get_inactive_users($paginate = true, $limit=null, $start=null, $filters = null){
+
+        return $this->inactive_users($paginate, $limit, $start, $filters);
+
+    }
+
+
+    /**
+     * @param int $limit Used for pagination in sql query to limit the numbers of rows.
+     * @param int $start Used for pagination in sql query to say where to start from.
+     * @param bool $paginate define if pagination is used or not.
+     * @param null $filters Array Used for query to supply extra filters.
+     * @return array result of query and total amount of the result.
+     */
+
+    private function inactive_users($paginate = true, $limit=null, $start=null, $filters = null)
     {
         global $db, $table_prefix;
 
@@ -257,16 +277,26 @@ class main_module
         }
 
         // Create the SQL statement
-        $table_name = $table_prefix .'ium_reminder';
+        $table_name = $table_prefix . 'ium_reminder';
 
         $sql = 'SELECT p.username, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
-           FROM ' . USERS_TABLE . ' p LEFT OUTER JOIN ' . $table_name . ' r ON (p.user_id = r.user_id)
-           WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-           AND p.group_id not in (1,4,5,6)' . $options . $sort;
+           FROM ' . USERS_TABLE . ' p 
+           LEFT OUTER JOIN ' . $table_name . ' r 
+           ON (p.user_id = r.user_id)
+           WHERE p.user_id not in 
+            (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
+           AND p.group_id 
+           not in (1,4,5,6)' . $options . $sort;
 
         // Run the query
-        $result = $db->sql_query_limit($sql, $limit, $start);
-
+        // With pagination
+        if($paginate) {
+            $result = $db->sql_query_limit($sql, $limit, $start);
+        }
+        // W/o pagination
+        else{
+            $result = $db->sql_query($sql);
+        }
 
         // $row should hold the data you selected
         $inactive_users = array();
@@ -297,34 +327,5 @@ class main_module
 
 
         return array('results' => $inactive_users, 'count' => $count);
-    }
-
-    private function send_reminder($user_id = null, $reminder = null){
-
-        global $phpEx, $phpbb_root_path, $config;
-
-//     if($user_id && $reminder){
-
-
-         if (!class_exists('messenger'))
-         {
-             include( $phpbb_root_path . 'includes/functions_messenger.' . $phpEx);
-         }
-         $messenger = new \messenger(false);
-         $server_url = generate_board_url();
-         $messenger->template('@andreask_ium/template', $data['lang']);
-         $messenger->to($row['user_email'], $row['username']);
-         $messenger->im($row['user_jabber'], $row['username']);
-         $messenger->assign_vars(array(
-                 'USERNAME'		 => htmlspecialchars_decode($data['username']),
-                 'USER_MAIL'		 => $data['email'],
-                 'USER_REGDATE'		=> date($config['default_dateformat'], $data['user_regdate']),
-                 'USER_IP'		 => $data['user_ip'])
-         );
-         $messenger->send(NOTIFY_EMAIL);
-//     }
-//
-//        return false;
-
     }
 }
