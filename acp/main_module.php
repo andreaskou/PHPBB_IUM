@@ -61,6 +61,8 @@ class main_module
                 'ANDREASK_IUM_SELF_DELETE'              =>  $config['andreask_ium_self_delete'],
             ));
 
+            $user_list = $this->get_inactive_users(false);
+
             $reminder = new reminder();
             $reminder->set_users($user_list['results']);
         }
