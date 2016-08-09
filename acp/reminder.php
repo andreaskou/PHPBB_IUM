@@ -50,7 +50,6 @@ class reminder
                     'ADMIN_MAIL' => 'admin@mail.bla',
                     'SITE_NAME' => 'This is the sine name!!!',
                     'URL' => $server_url
-
                 ));
                 $messenger->send(NOTIFY_EMAIL);
             }
