@@ -35,10 +35,13 @@ class main_module
             $this->tpl_name = 'acp_ium_body';
             $this->page_title = $user->lang('ACP_IUM_TITLE');
 
-            add_form_key('andreask/ium');
+            $form_key = 'andreask_ium';
+
+            add_form_key($form_key);
 
             $template->assign_vars(array(
-                'ANDREASK_IUM_ENABLE' => $config['andreask_ium_enable'],
+                'ANDREASK_IUM_ENABLE'   =>  $config['andreask_ium_enable'],
+                'ANDREASK_IUM_INTERVAL' =>  $config['andreask_ium_interval'],
             ));
 
             $user_list = $this->get_inactive_users(false);
