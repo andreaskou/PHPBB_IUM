@@ -51,9 +51,9 @@ $lang = array_merge($lang, array(
         'ANDREASK_IUM_ENABLE_EXPLAIN'                   =>  'If enabled, the extension will start sending reminders to "sleepers". FOR NOW NON OF THESE CONFIGURATIONS ARE ACTIVE/WORKING <strong>EXT UNDER DEVELOPMENT</strong>',
         'ANDREASK_IUM_INTERVAL_EXPLAIN'                 =>  'It is the interval of days back to count to consider a user a "sleeper". Default is 30 days',
         'ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN'         =>  'If enabled, mail will include users top active threads since users last visit.',
-        'ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN'   =>  'How many top users threads should be included in mail?',
-        'ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN'              =>  'If enabled, mail will include forum top threads since users last visit?',
-        'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN'        =>  'How many forum threads should be included in mail?',
-        'ANDREASK_IUM_SELF_DELETE_EXPLAIN'              =>  'If enabled, the user will be able to remove himself from the forum',
+        'ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN'   =>  'How many user top threads should be included in mail?',
+        'ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN'        =>  'If enabled, mail will include forum top threads since users last visit?',
+        'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN'  =>  'How many forum threads should be included in mail?',
+        'ANDREASK_IUM_SELF_DELETE_EXPLAIN'              =>  'If enabled, the user will be able to remove himself from the board.',
 
 ));
