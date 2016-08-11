@@ -1,0 +1,20 @@
+services:
+    andreask.ium.cron.send_reminder:
+        class: andreask\ium\cron\send_reminder
+        arguments:
+            - @config
+            - @log
+            - @user
+        calls:
+            - [set_name, [cron.task.ium_send_reminder]]
+        tags:
+            - { name: cron.task }
+    andreask.ium.classes.reminder:
+        class: andreask\ium\classes\reminder
+        arguments:
+            - @config
+            - @dbal.conn
+            - @user_loader
+            - %core.table_prefix%
+            - %core.root_path%
+            - %core.php_ext%
