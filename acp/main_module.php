@@ -15,6 +15,7 @@
 namespace andreask\ium\acp;
 
 use phpbb\log\null;
+use andreask\ium\classes\reminder;
 
 
 class main_module
@@ -22,24 +23,31 @@ class main_module
 
 //    public $u_action, $tpl_name, $page_title;
 
+protected $reminder;
 
     public function main($id, $mode)
     {
 
         global $user, $template, $request, $config, $phpbb_container;
 
+
         $user->add_lang_ext('andreask/ium', 'common');
 
-        if ($mode == 'ium_settings') {
+        if ($mode == 'ium_settings')
+        {
 
-            $this->tpl_name = 'acp_ium_body';
+//        	$this->reminder = $phpbb_container->get('andreask.ium.classes.reminder');
+//	        $this->reminder->send();
+
+        	$this->tpl_name = 'acp_ium_body';
             $this->page_title = $user->lang('ACP_IUM_TITLE');
 
             $form_key = 'andreask_ium';
 
             add_form_key($form_key);
 
-            if($request->is_set_post('submit')){
+            if($request->is_set_post('submit'))
+            {
 
                 // Check form key
                 if(!check_form_key($form_key)){
@@ -61,15 +69,10 @@ class main_module
                 'ANDREASK_IUM_SELF_DELETE'              =>  $config['andreask_ium_self_delete'],
             ));
 
-            $user_list = $this->get_inactive_users(false);
-
-            $reminder = new reminder();
-            $reminder->set_users($user_list['results']);
         }
 
-        if ($mode == 'ium_list') {
-
-
+        if ($mode == 'ium_list')
+        {
 
             $this->tpl_name = 'acp_ium_inactive_users';
             $this->page_title = $user->lang('ACP_IUM_TITLE2');
@@ -83,9 +86,12 @@ class main_module
             $sort_order = $request->variable('sort_order', 0);
 
             // Keep the limit between 10 and 50
-            if ($limit > 50) {
+            if ($limit > 50)
+            {
                 $limit = 50;
-            } elseif ($limit < 10) {
+            }
+            elseif ($limit < 10)
+            {
                 $limit = 10;
             }
 
@@ -139,7 +145,7 @@ class main_module
             // Load the pagination
             $pagination = $phpbb_container->get('pagination');
             $start = $pagination->validate_start($start, $limit, $inactive_count);
-            $pagination->generate_template_pagination($base_url, 'pagination', 'start', $inactive_count, $limit, $start);
+	        $pagination->generate_template_pagination($base_url, 'pagination', 'start', $inactive_count, $limit, $start);
 
             // Assign template vars (including pagination)
             $template->assign_vars(array(
@@ -154,7 +160,8 @@ class main_module
             ));
 
             // Assign row results to template var inactive
-            foreach ($rows as $row) {
+            foreach ($rows as $row)
+            {
                 $template->assign_block_vars('inactive', array(
                     'USERNAME' => $row['username'],
                     'JOINED' => $user->format_date($row['user_regdate']),
@@ -171,6 +178,22 @@ class main_module
         }
     }
 
+    /**
+     * Configuration setter
+     */
+
+    protected function update_config()
+    {
+        global $config, $request;
+
+        $config->set('andreask_ium_enable', $request->variable('andreask_ium_enable', ''));
+        $config->set('andreask_ium_interval', $request->variable('andreask_ium_interval', ''));
+        $config->set('andreask_ium_top_user_threads', $request->variable('andreask_ium_top_user_threads', ''));
+        $config->set('andreask_ium_top_user_threads_count', $request->variable('andreask_ium_top_user_threads_count', ''));
+        $config->set('andreask_ium_top_forum_threads', $request->variable('andreask_ium_top_forum_threads', ''));
+        $config->set('andreask_ium_top_forum_threads_count', $request->variable('andreask_ium_top_forum_threads_count', ''));
+        $config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
+    }
 
     /**
      * Getter for inactive users
@@ -181,12 +204,12 @@ class main_module
      * @return array result of query and total amount of the result.
      */
 
-    public function get_inactive_users($paginate = true, $limit=null, $start=null, $filters = null){
+    public function get_inactive_users($paginate = true, $limit=null, $start=null, $filters = null)
+    {
 
         return $this->inactive_users($paginate, $limit, $start, $filters);
 
     }
-
 
     /**
      * @param int $limit Used for pagination in sql query to limit the numbers of rows.
@@ -335,7 +358,7 @@ class main_module
         // $row should hold the data you selected
         $count_inactive_users = array();
 
-        // Store results to rows
+        // Store results to an array
         while ($row = $db->sql_fetchrow($result)) {
             $count_inactive_users[] = $row;
         };
@@ -347,21 +370,5 @@ class main_module
 
 
         return array('results' => $inactive_users, 'count' => $count);
-    }
-
-    /**
-     * Configuration setter
-     */
-
-    protected function update_config(){
-        global $config, $request;
-
-        $config->set('andreask_ium_enable', $request->variable('andreask_ium_enable', ''));
-        $config->set('andreask_ium_interval', $request->variable('andreask_ium_interval', ''));
-        $config->set('andreask_ium_top_user_threads', $request->variable('andreask_ium_top_user_threads', ''));
-        $config->set('andreask_ium_top_user_threads_count', $request->variable('andreask_ium_top_user_threads_count', ''));
-        $config->set('andreask_ium_top_forum_threads', $request->variable('andreask_ium_top_forum_threads', ''));
-        $config->set('andreask_ium_top_forum_threads_count', $request->variable('andreask_ium_top_forum_threads_count', ''));
-        $config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
     }
 }
