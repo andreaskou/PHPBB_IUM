@@ -40,6 +40,22 @@ class add_module extends migration
             array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
             array('config.add', array('andreask_ium_self_delete', 0)),
 
+            // cron config
+            array('config.add', array('send_reminder_last_gc', 0, true)),
+            array('config.add', array('send_reminder_gc', 30 )),
+
+            // remove old config
+//            array('config.remove', array('andreask_ium_test', date('Y-m-d H:i:s'))),
+//            array('config.remove', array('test_task_last_gc', 0, true)),
+//            array('config.remove', array('test_task_gc', 5 )),
+
+//            array('config.remove', array('andreask_ium_cront_task_last_gc')),
+//            array('config.remove', array('andreask_ium_cront_task_gc')),
+//            array('config.remove', array('andreask_ium_send_reminder_gc')),
+//            array('config.remove', array('andreask_ium_task_gc')),
+//            array('config.remove', array('andreask_ium_last_gc')),
+
+            // add module
             array('module.add',	array(
                 'acp',
     			'ACP_CAT_DOT_MODS',
