@@ -31,45 +31,42 @@ class add_module extends migration
 
     public function update_data()
     {
-    	return array(
-    		array('config.add',	array('andreask_ium_enable', 0)),
-            array('config.add', array('andreask_ium_interval', 30)),
-            array('config.add', array('andreask_ium_top_user_threads', 0)),
-            array('config.add', array('andreask_ium_top_user_threads_count', 5)),
-            array('config.add', array('andreask_ium_top_forum_threads', 0)),
-            array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
-            array('config.add', array('andreask_ium_self_delete', 0)),
+		// Initial table population.
+		return array(
 
-            // cron config
-            array('config.add', array('send_reminder_last_gc', 0, true)),
-            array('config.add', array('send_reminder_gc', 30 )),
+		//
+		array('config.add',	array('andreask_ium_enable', 0)),
+		array('config.add', array('andreask_ium_interval', 30)),
+		array('config.add', array('andreask_ium_top_user_threads', 0)),
+		array('config.add', array('andreask_ium_top_user_threads_count', 5)),
+		array('config.add', array('andreask_ium_top_forum_threads', 0)),
+		array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
+		array('config.add', array('andreask_ium_self_delete', 0)),
 
-            // remove old config
-//            array('config.remove', array('andreask_ium_test', date('Y-m-d H:i:s'))),
-//            array('config.remove', array('test_task_last_gc', 0, true)),
-//            array('config.remove', array('test_task_gc', 5 )),
+		// cron config
+		array('config.add', array('send_reminder_last_gc', 0, true)),
+		array('config.add', array('send_reminder_gc', 30 )),
+		array('config.add', array('reminder_limit',	250 )),
 
-//            array('config.remove', array('andreask_ium_cront_task_last_gc')),
-//            array('config.remove', array('andreask_ium_cront_task_gc')),
-//            array('config.remove', array('andreask_ium_send_reminder_gc')),
-//            array('config.remove', array('andreask_ium_task_gc')),
-//            array('config.remove', array('andreask_ium_last_gc')),
+		// add module
+		array('module.add',	array(
+			'acp',
+			'ACP_CAT_DOT_MODS',
+			'ACP_IUM_TITLE'
+			)),
 
-            // add module
-            array('module.add',	array(
-                'acp',
-    			'ACP_CAT_DOT_MODS',
-    			'ACP_IUM_TITLE'
-    			)),
-            
-    		array('module.add',	array(
-    			'acp',
-    			'ACP_IUM_TITLE',
-    			array('module_basename'		=>	'\andreask\ium\acp\main_module',
-    				  'modes'		=>	array('ium_settings','ium_list'),
-    				  ),
-    			)),
-    		);
+		array('module.add',	array(
+			'acp',
+			'ACP_IUM_TITLE',
+			array('module_basename'		=>	'\andreask\ium\acp\main_module',
+				  'modes'		=>	array('ium_settings','ium_list'),
+				  ),
+			)),
+
+		array('custom', array(array($this, 'first_time_install')
+		)),
+
+		);
     }
 
     public function update_schema()
@@ -78,15 +75,15 @@ class add_module extends migration
             'add_tables'   => array(
                 $this->table_prefix . $this->schema_name => array(
                     'COLUMNS'   => array(
-                        'reminder_id'               => array('UINT', null, 'auto_increment'),
-                        'user_id'                   => array('UINT', 0),
-                        'username'                  => array('VCHAR', ''),
-                        'remind_counter'            => array('UINT', '0'),
-                        'previous_sent_date'        => array('TIMESTAMP', 0),
-                        'reminder_sent_date'        => array('TIMESTAMP', 0),
-                        'dont_send'                    => array('UINT', 0),
+                        'id'               		=> array('UINT', null, 'auto_increment'),
+                        'user_id'               => array('UINT', 0),
+                        'username'              => array('VCHAR', ''),
+                        'remind_counter'        => array('UINT', '0'),
+                        'previous_sent_date'    => array('TIMESTAMP', 0),
+                        'reminder_sent_date'    => array('TIMESTAMP', 0),
+                        'dont_send'             => array('UINT', 0),
                         ),
-                    'PRIMARY_KEY'   => 'reminder_id',
+                    'PRIMARY_KEY'   => 'id',
                 ),
             ),
         );
@@ -100,4 +97,24 @@ class add_module extends migration
             ),
         );
     }
+
+    public function first_time_install(){
+    	if (!$this->has_users())
+		{
+			if ($this->db_tools->sql_table_exists($this->table_prefix . $this->schema_name))
+			{
+				$sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
+					SELECT user_id, username FROM `' . USERS_TABLE . '` u
+					WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
+					AND u.group_id NOT IN (1,4,5,6)';
+				$result = $this->sql_query($sql);
+				$this->db->sql_freeresult($result);
+			}
+		}
+	}
+
+	private function has_users(){
+		$result = $this->db->get_row_count($this->table_prefix.$this->schema_name);
+		return (bool) $result;
+	}
 }
