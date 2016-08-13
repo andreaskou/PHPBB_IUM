@@ -36,8 +36,8 @@ protected $reminder;
         if ($mode == 'ium_settings')
         {
 
-//        	$this->reminder = $phpbb_container->get('andreask.ium.classes.reminder');
-//	        $this->reminder->send();
+        	$this->reminder = $phpbb_container->get('andreask.ium.classes.reminder');
+	        $this->reminder->send();
 
         	$this->tpl_name = 'acp_ium_body';
             $this->page_title = $user->lang('ACP_IUM_TITLE');
