@@ -1,0 +1,18 @@
+Hello, {USERNAME}
+
+We see that you have registered at : {REG_DATE}
+But since then there have been no activity.
+
+blah blah....
+
+
+In case you have lost your credentials you can retrieve them from <a href="#"><u>here</u></a>.
+Else, you can contact the administrator of the forum {ADMIN_MAIL}.
+
+{URL}
+
+We hope that we will see you again soon.
+
+Best regards,
+
+From the team of {SITE_NAME}
