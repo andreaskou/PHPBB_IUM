@@ -39,16 +39,18 @@ class reminder
 
 		$table_name = $this->table_prefix . 'ium_reminder';
 
-		$sql = 'SELECT p.username, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
-           FROM ' . USERS_TABLE . ' p 
-           LEFT OUTER JOIN ' . $table_name . ' r 
-           ON (p.user_id = r.user_id)
-           WHERE p.user_id not in 
-            (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-           AND p.group_id 
-           NOT IN (1,4,5,6)' . ' 
-           AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL '. $this->config['andreask_ium_interval'] . ' day) 
-           ORDER BY p.user_lastvisit DESC';
+		$sql = 'SELECT p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
+			FROM ' . USERS_TABLE . ' p
+			LEFT OUTER JOIN ' . $table_name . ' r
+			ON (p.user_id = r.user_id) 
+			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ') 
+			AND p.user_id 
+			NOT IN (1,4,5,6)
+			AND from_unixtime(p.user_regdate) < DATE_SUB(NOW(), INTERVAL 5 year )
+			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 4 year )';
+//			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL '. $this->config['andreask_ium_interval'] . ' day)
+
+		var_export($sql);
 
 		// Run the query
 		$result = $this->db->sql_query($sql);
@@ -60,6 +62,9 @@ class reminder
 		while ($row = $this->db->sql_fetchrow($result)) {
 			$inactive_users[] = $row;
 		};
+		echo "<pre>";
+		var_export(sizeof($inactive_users));
+		echo "</pre>";
 
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
@@ -88,6 +93,11 @@ class reminder
     }
 
 
+	/**
+	 *
+	 * Send email depending on the list of $inactive_users
+	 *
+	 */
     public function send()
     {
     	$this->get_users();
@@ -98,22 +108,50 @@ class reminder
 			    include($this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext);
 		    }
 
-		    foreach ($this->inactive_users as $user)
-		    {
+		    echo date("H:i:s")."<br/>";
+		    foreach ($this->inactive_users as $sleeper)
+			{
+				$lang = ($sleeper['user_lang'] = 'en') ? $sleeper['user_lang'] : 'en';
+				$server_url = generate_board_url();
+				$messenger = new \messenger();
 
-//                $messenger = new \messenger(false);
-//                $server_url = generate_board_url();
-//                $messenger->template('@andreask_ium/template', 'en');
-//                $messenger->to($user['user_email'], $user['username']);
-//                $messenger->assign_vars(array(
-//                    'USERNAME' => htmlspecialchars_decode($user['username']),
-//                    'LAST_VISIT' => $user['last_visit'],
-//                    'ADMIN_MAIL' => 'admin@mail.bla',
-//                    'SITE_NAME' => 'This is the signr name!!!',
-//                    'URL' => $server_url
-//                ));
-//                $messenger->send(NOTIFY_EMAIL);
-		    }
-	    }
+				if ($sleeper['user_lastvisit'] != 0)
+				{
+					$messenger->template('@andreask_ium/sleeper', $lang);
+					$messenger->subject('We\'ve missed you!');
+					$messenger->to($sleeper['user_email'], $sleeper['username']);
+					$messenger->assign_vars(array(
+						'USERNAME'   => htmlspecialchars_decode($sleeper['username']),
+						'LAST_VISIT' => date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
+						'ADMIN_MAIL' => 'admin@mail.bla',
+						'SITE_NAME'  => 'This is the site name!!!',
+						'URL'        => $server_url
+					));
+				}
+				if ($sleeper['user_lastvisit'] == 0)
+				{
+					$messenger->template('@andreask_ium/inactive', $lang);
+					$messenger->subject('Hello!');
+					$messenger->to($sleeper['user_email'], $sleeper['username']);
+					$messenger->assign_vars(array(
+						'USERNAME'   => htmlspecialchars_decode($sleeper['username']),
+						'REG_DATE' => date($sleeper['user_dateformat'], $sleeper['user_regdate']),
+						'ADMIN_MAIL' => 'admin@mail.bla',
+						'SITE_NAME'  => 'This is the site name!!!',
+						'URL'        => $server_url
+					));
+
+//					$messenger->send();
+					$messenger->save_queue();
+				}
+//				$messenger->msg_email();
+			}
+//			echo 'Reseting email_package_size<br/>';
+//			$this->config->set('email_package_size', $original_email_package_size);
+//			var_export($this->config['email_package_size']);
+			echo "<br/>";
+			echo date("H:i:s");
+
+		}
     }
 }
