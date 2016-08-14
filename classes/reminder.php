@@ -137,7 +137,7 @@ class reminder
 					$messenger->subject('Hello!');
 					$messenger->assign_vars($template_ary);
 				}
-				$messenger->send();
+//				$messenger->send();
 //				$messenger->save_queue();
 			}
 		}
