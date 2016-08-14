@@ -31,16 +31,14 @@ class add_module extends migration
 
     public function update_data()
     {
-		// Initial table population.
 		return array(
-
-		//
 		array('config.add',	array('andreask_ium_enable', 0)),
 		array('config.add', array('andreask_ium_interval', 30)),
 		array('config.add', array('andreask_ium_top_user_threads', 0)),
 		array('config.add', array('andreask_ium_top_user_threads_count', 5)),
 		array('config.add', array('andreask_ium_top_forum_threads', 0)),
 		array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
+		array('config.add', array('andreask_ium_email_limit', 250)),
 		array('config.add', array('andreask_ium_self_delete', 0)),
 
 		// cron config
@@ -63,6 +61,7 @@ class add_module extends migration
 				  ),
 			)),
 
+		// Initial table population.
 		array('custom', array(array($this, 'first_time_install')
 		)),
 
@@ -84,6 +83,9 @@ class add_module extends migration
                         'dont_send'             => array('UINT', 0),
                         ),
                     'PRIMARY_KEY'   => 'id',
+					'KEYS'			=> array(
+						'type'			=> array('UNIQUE', array('user_id'))
+					),
                 ),
             ),
         );
