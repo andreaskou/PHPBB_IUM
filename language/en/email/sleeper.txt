@@ -5,11 +5,10 @@ And we would like you to know that we would like to see you again soon!
 
 We see that your last visit was at : {LAST_VISIT}
 In case you have lost your credentials you can retrieve them from <a href="#"><u>here</u></a>.
-Else, you can contact the administrator of the forum {ADMIN_MAIL}.
-{URL}
+Else, you can always contact the administrator of the forum on this e-mail : {ADMIN_MAIL}.
 
 We hope that we will see you again soon.
 
-Best regards,
+{SIGNATURE}
 
-From the team of {SITE_NAME}
+{URL}
