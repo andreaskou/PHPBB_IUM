@@ -2,8 +2,6 @@
 
 namespace andreask\ium\classes;
 
-use phpbb\log\null;
-
 class reminder
 {
 
@@ -26,6 +24,7 @@ class reminder
 	protected   $table_prefix;
 	protected   $phpbb_root_path;
 	protected   $php_ext;
+	protected	$table_name;
 
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user_loader $user, $table_prefix, $phpbb_root_path, $php_ext)
 	{
@@ -35,24 +34,24 @@ class reminder
 		$this->table_prefix = $table_prefix;
 		$this->php_ext = $php_ext;
 		$this->phpbb_root_path = $phpbb_root_path;
+		$this->table_name = 'ium_reminder';
 	}
 
-	public function get_users($limit = null){
+	private function get_users($limit = null){
 
-		$limit = ($limit) ? 'limit '.(int) $limit : '';
+		$limit = ($limit) ? 'limit '.(int) $limit : 'limit '.$this->config['andreask_ium_email_limit'];
+		$table_name = $this->table_prefix . $this->table_name;
 
 
-		$table_name = $this->table_prefix . 'ium_reminder';
-
-		$sql = 'SELECT p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
+		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
 			FROM ' . USERS_TABLE . ' p
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id) 
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ') 
 			AND p.group_id NOT IN (1,4,5,6) 
-			AND from_unixtime(p.user_regdate) < DATE_SUB(NOW(), INTERVAL '.$this->config['andreask_ium_interval'] .' DAY) order by p.user_regdate asc '.$limit;
-
-		var_export($sql);
+			AND from_unixtime(p.user_regdate) < DATE_SUB(NOW(), INTERVAL '.$this->config['andreask_ium_interval'] .' DAY) 
+			and from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL '.$this->config['andreask_ium_interval'] .' DAY) 
+			order by p.user_regdate asc '.$limit;
 
 		// Run the query
 		$result = $this->db->sql_query($sql);
@@ -68,6 +67,7 @@ class reminder
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
 
+		// Store user sho we can use them.
 		$this->set_users($inactive_users);
 	}
 
@@ -86,7 +86,7 @@ class reminder
 	 * @param $inactive_users
 	 */
 
-    public function set_users($inactive_users)
+    private function set_users($inactive_users)
     {
     	$this->inactive_users = $inactive_users;
     }
@@ -99,7 +99,7 @@ class reminder
 	 */
     public function send()
     {
-    	$this->get_users(10);
+    	$this->get_users(50);
     	if ($this->has_users())
 	    {
 		    if (!class_exists('messenger'))
@@ -107,11 +107,10 @@ class reminder
 			    include($this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext);
 		    }
 
-		    echo date("H:i:s")."<br/>";
 		    foreach ($this->inactive_users as $sleeper)
 			{
 				$lang = ($sleeper['user_lang'] == 'en') ? $sleeper['user_lang'] : 'en';
-				$server_url = generate_board_url();
+
 				$template_ary = array(
 					'USERNAME'   	=> htmlspecialchars_decode($sleeper['username']),
 					'REG_DATE'		=> date($sleeper['user_dateformat'], $sleeper['user_regdate']),
@@ -138,8 +137,101 @@ class reminder
 					$messenger->assign_vars($template_ary);
 				}
 //				$messenger->send();
-//				$messenger->save_queue();
+				$messenger->save_queue();
+				$this->update_ium_reminder($sleeper);
+
 			}
 		}
     }
+
+    private function update_ium_reminder($user)
+	{
+
+		$count = $this->user_exist($user['user_id']);
+		if ($this->user_exist($user['user_id']) != 0 )
+		{
+			if ($user['dont_send'] != 1)
+			{
+				$update_arr = array('reminder_sent_date' => time());
+				$counter = ($user['remind_counter'] + 1);
+
+				if ($user['remind_counter']  == 0 ){
+					$merge = array('remind_counter' => $counter);
+					$update_arr = array_merge($update_arr, $merge);
+				}
+				elseif ($user['remind_counter']  == 1 ){
+					$merge = array('previous_sent_date' => $user['reminder_sent_date'],
+								   'remind_counter' => $counter );
+					$update_arr = array_merge($update_arr, $merge);
+				}
+				elseif ($user['reminder_coounter'] == 2 )
+				{
+					$merge = array('previous_sent_date' => $user['reminder_sent_date'],
+								   'remind_counter'		=> $counter,
+								   'dont_send'			=> 1);
+					$update_arr = array_merge($update_arr, $merge);
+				}
+
+				$sql = 'UPDATE ' . $this->table_prefix.$this->table_name . ' SET ' . $this->db->sql_build_array('UPDATE', $update_arr) .
+				' WHERE user_id = '.$user['user_id'];
+				var_export($sql);
+				echo "<br/>";
+				$this->db->sql_query($sql);
+			}
+		}if ($count == 0)
+		{
+			$insert_arr = array(
+				'user_id'            => $user['user_id'],
+				'username'           => $user['username'],
+				'remind_counter'     => 1,
+				'previous_sent_date' => 0,
+				'reminder_sent_date' => time(),
+			);
+
+			$sql = 'INSERT INTO ' . $this->table_prefix . $this->table_name . $this->db->sql_build_array('INSERT', $insert_arr);
+			$this->db->sql_query($sql);
+		}
+	}
+
+	/**
+	 * @param $user_id Search table ium_reminder if user exists
+	 * @return bool
+	 */
+
+	private function user_exist($user_id){
+
+		$sql = 'SELECT COUNT(user_id) as user_count
+        FROM ' . $this->table_prefix.$this->table_name . '
+        WHERE user_id = ' . $user_id;
+
+		$result = $this->db->sql_query($sql);
+		$this->db->sql_freeresult($result);
+
+		// Return true if user found:
+		return (bool) $this->db->sql_fetchfield('user_count');
+	}
+
+	private function get_from_ium_reminder($user_id)
+	{
+		$select_array = array(
+			'user_id'    => $user_id,
+		);
+
+		// Create the SQL statement
+		$sql = 'SELECT username, remind_counter, previous_sent_date, reminder_sent_date, dont_send 
+        FROM ' . $this->table_prefix.$this->table_name . ' 
+        WHERE ' . $this->db->sql_build_array('SELECT', $select_array);
+
+		// Run the query
+				$result = $this->db->sql_query($sql);
+
+		// $row should hold the data you selected
+				$row = $this->db->sql_fetchrow($result);
+
+		// Be sure to free the result after a SELECT query
+				$this->db->sql_freeresult($result);
+
+		// Show we got the result we were looking for
+				return $row;
+	}
 }

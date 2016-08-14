@@ -62,9 +62,9 @@ protected $reminder;
                 'ANDREASK_IUM_TOP_USER_THREADS_COUNT'   =>  $config['andreask_ium_top_user_threads_count'],
                 'ANDREASK_IUM_TOP_FORUM_THREADS'        =>  $config['andreask_ium_top_forum_threads'],
                 'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT'  =>  $config['andreask_ium_top_forum_threads_count'],
+                'ANDREASK_IUM_EMAIL_LIMIT'  			=>  $config['andreask_ium_email_limit'],
                 'ANDREASK_IUM_SELF_DELETE'              =>  $config['andreask_ium_self_delete'],
             ));
-
         }
 
         if ($mode == 'ium_list')
@@ -165,12 +165,12 @@ protected $reminder;
                     'USERNAME' => $row['username'],
                     'JOINED' => $user->format_date($row['user_regdate']),
                     'POSTS' => ($row['user_posts']) ? $row['user_posts'] : 0,
-                    'LAST_VISIT' => $user->format_date($row['user_lastvisit']),
+                    'LAST_VISIT' => ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
                     'INACTIVE_DATE' => ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
                     'REASON' => $user->lang('ACP_IUM_INACTIVE', (int)$row['user_inactive_reason']),
-                    'COUNT' => ($row['remind_counter']) ? $row['reminder_counter'] : $user->lang('NO_REMINDER_COUNT'),
-                    'LAST_SENT_REMINDER' => ($row['previous_sent_date']) ? $row['previous_sent_date'] : $user->lang('NO_PREVIOUS_SENT_DATE'),
-                    'REMINDER_DATE' => ($row['reminder_sent_date']) ? $row['reminder_sent_date'] : $user->lang('NO_REMINDER_SENT_YET'),
+                    'COUNT' => ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
+                    'LAST_SENT_REMINDER' => ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
+                    'REMINDER_DATE' => ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
                     'IGNORE_USER' => ($row['dont_send']) ? true : false
                 ));
             }
