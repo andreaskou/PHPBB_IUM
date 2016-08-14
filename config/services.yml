@@ -5,6 +5,7 @@ services:
             - @config
             - @log
             - @user
+            - @service_container
         calls:
             - [set_name, [cron.task.ium_send_reminder]]
         tags:
