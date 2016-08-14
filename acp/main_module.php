@@ -35,11 +35,7 @@ protected $reminder;
 
         if ($mode == 'ium_settings')
         {
-
-        	$this->reminder = $phpbb_container->get('andreask.ium.classes.reminder');
-	        $this->reminder->send();
-
-        	$this->tpl_name = 'acp_ium_body';
+			$this->tpl_name = 'acp_ium_body';
             $this->page_title = $user->lang('ACP_IUM_TITLE');
 
             $form_key = 'andreask_ium';
@@ -77,6 +73,9 @@ protected $reminder;
             $this->tpl_name = 'acp_ium_inactive_users';
             $this->page_title = $user->lang('ACP_IUM_TITLE2');
             $user->add_lang('memberlist');
+
+			$this->reminder = $phpbb_container->get('andreask.ium.classes.reminder');
+			$this->reminder->send();
 
             $start = $request->variable('start', 0);
             $limit = $request->variable('users_per_page', 10);
