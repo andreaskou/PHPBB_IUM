@@ -2,6 +2,8 @@
 
 namespace andreask\ium\classes;
 
+use phpbb\log\null;
+
 class reminder
 {
 
@@ -35,7 +37,10 @@ class reminder
 		$this->phpbb_root_path = $phpbb_root_path;
 	}
 
-	public function get_users(){
+	public function get_users($limit = null){
+
+		$limit = ($limit) ? 'limit '.(int) $limit : '';
+
 
 		$table_name = $this->table_prefix . 'ium_reminder';
 
@@ -44,11 +49,8 @@ class reminder
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id) 
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ') 
-			AND p.user_id 
-			NOT IN (1,4,5,6)
-			AND from_unixtime(p.user_regdate) < DATE_SUB(NOW(), INTERVAL 5 year )
-			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 4 year )';
-//			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL '. $this->config['andreask_ium_interval'] . ' day)
+			AND p.group_id NOT IN (1,4,5,6) 
+			AND from_unixtime(p.user_regdate) < DATE_SUB(NOW(), INTERVAL '.$this->config['andreask_ium_interval'] .' DAY) order by p.user_regdate asc '.$limit;
 
 		var_export($sql);
 
@@ -62,9 +64,6 @@ class reminder
 		while ($row = $this->db->sql_fetchrow($result)) {
 			$inactive_users[] = $row;
 		};
-		echo "<pre>";
-		var_export(sizeof($inactive_users));
-		echo "</pre>";
 
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
@@ -79,7 +78,7 @@ class reminder
 
     public function has_users()
     {
-        return $result = (sizeof($this->inactive_users) > 0) ? $this->inactive_users : false;
+        return (bool) sizeof($this->inactive_users);
     }
 
 	/**
@@ -100,7 +99,7 @@ class reminder
 	 */
     public function send()
     {
-    	$this->get_users();
+    	$this->get_users(10);
     	if ($this->has_users())
 	    {
 		    if (!class_exists('messenger'))
@@ -111,47 +110,36 @@ class reminder
 		    echo date("H:i:s")."<br/>";
 		    foreach ($this->inactive_users as $sleeper)
 			{
-				$lang = ($sleeper['user_lang'] = 'en') ? $sleeper['user_lang'] : 'en';
+				$lang = ($sleeper['user_lang'] == 'en') ? $sleeper['user_lang'] : 'en';
 				$server_url = generate_board_url();
-				$messenger = new \messenger();
+				$template_ary = array(
+					'USERNAME'   	=> htmlspecialchars_decode($sleeper['username']),
+					'REG_DATE'		=> date($sleeper['user_dateformat'], $sleeper['user_regdate']),
+					'LAST_VISIT' 	=> date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
+					'ADMIN_MAIL' 	=> $this->config['board_contact'],
+					'SITE_NAME'  	=> htmlspecialchars_decode($this->config['sitename']),
+					'SIGNATURE'	 	=> $this->config['board_email_sig'],
+					'URL'        	=> generate_board_url(),
+				);
+				$messenger = new \messenger(false);
+				$messenger->to($sleeper['user_email'], $sleeper['username']);
+				$messenger->from($this->config['board_contact']);
 
 				if ($sleeper['user_lastvisit'] != 0)
 				{
 					$messenger->template('@andreask_ium/sleeper', $lang);
 					$messenger->subject('We\'ve missed you!');
-					$messenger->to($sleeper['user_email'], $sleeper['username']);
-					$messenger->assign_vars(array(
-						'USERNAME'   => htmlspecialchars_decode($sleeper['username']),
-						'LAST_VISIT' => date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
-						'ADMIN_MAIL' => 'admin@mail.bla',
-						'SITE_NAME'  => 'This is the site name!!!',
-						'URL'        => $server_url
-					));
+					$messenger->assign_vars($template_ary);
 				}
-				if ($sleeper['user_lastvisit'] == 0)
+				else
 				{
 					$messenger->template('@andreask_ium/inactive', $lang);
 					$messenger->subject('Hello!');
-					$messenger->to($sleeper['user_email'], $sleeper['username']);
-					$messenger->assign_vars(array(
-						'USERNAME'   => htmlspecialchars_decode($sleeper['username']),
-						'REG_DATE' => date($sleeper['user_dateformat'], $sleeper['user_regdate']),
-						'ADMIN_MAIL' => 'admin@mail.bla',
-						'SITE_NAME'  => 'This is the site name!!!',
-						'URL'        => $server_url
-					));
-
-//					$messenger->send();
-					$messenger->save_queue();
+					$messenger->assign_vars($template_ary);
 				}
-//				$messenger->msg_email();
+				$messenger->send();
+//				$messenger->save_queue();
 			}
-//			echo 'Reseting email_package_size<br/>';
-//			$this->config->set('email_package_size', $original_email_package_size);
-//			var_export($this->config['email_package_size']);
-			echo "<br/>";
-			echo date("H:i:s");
-
 		}
     }
 }
