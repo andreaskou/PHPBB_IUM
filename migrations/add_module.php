@@ -93,7 +93,7 @@ class add_module extends migration
     {
         return array(
             'drop_table'    =>  array(
-                $this->table_prefix . $this->schema_name ,
+                $this->table_prefix . $this->schema_name
             ),
         );
     }
