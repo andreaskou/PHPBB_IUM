@@ -4,43 +4,60 @@
 
 <form id="andreask_ium" method="post" action="{U_ACTION}">
     <fieldset>
+        <legend>{{ lang('ACP_IUM_SETTINGS') }}</legend>
         <dl>
-            <dt><label for="andreask_ium_enable">{{ lang('ANDREASK_IUM_ENABLE') }}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_enable">{{ lang('ANDREASK_IUM_ENABLE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN')}}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
                 <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
         </dl>
+    </fieldset>
+    <fieldset>
+        <legend>{{ lang('ACP_IUM_MAIL_SETTINGS') }}</legend>
         <dl>
-            <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL')}}</label><br/><span>{{lang('ANDREASK_IUM_INTERVAL_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_INTERVAL_EXPLAIN')}}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="365"/> days </dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_top_user_threads">{{ lang('ANDREASK_IUM_TOP_USER_THREADS') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_email_limit">{{ lang('ANDREASK_IUM_EMAIL_LIMIT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN')}}</span></dt>
+            <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500"/> e-mails </dd>
+        </dl>
+    </fieldset>
+    <fieldset>
+        <legend>{{ lang('ACP_IUM_MAIL_INCLUDE_SETTINGS') }}</legend>
+        <dl>
+            <dt><label for="andreask_ium_top_user_threads">{{ lang('ANDREASK_IUM_TOP_USER_THREADS')  ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN')}}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_top_user_threads" id="andreask_ium_top_user_threads" value="1" <!-- IF ANDREASK_IUM_TOP_USER_THREADS -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
                 <input type="radio" class="radio" name="andreask_ium_top_user_threads" value="0" <!-- IF not ANDREASK_IUM_TOP_USER_THREADS -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_top_user_threads_count">{{ lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT')}}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_top_user_threads_count">{{ lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN')}}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_TOP_USER_THREADS_COUNT}" size="2" id="andreask_ium_top_user_threads_count" name="andreask_ium_top_user_threads_count" min="1" max="20"/></dd>
         </dl>
+        <hr>
         <dl>
-            <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN')}}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="1" <!-- IF ANDREASK_IUM_TOP_FORUM_THREADS -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
                 <input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="0" <!-- IF not ANDREASK_IUM_TOP_FORUM_THREADS -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_top_forum_threads_count">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT')}}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_top_forum_threads_count">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN')}}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_TOP_FORUM_THREADS_COUNT}" size="2" id="andreask_ium_top_forum_threads_count" name="andreask_ium_top_forum_threads_count" min="1" max="20"/></dd>
         </dl>
+    </fieldset>
+    <fieldset>
+        <legend>{{ lang('ACP_IUM_DANGER') }}</legend>
         <dl>
-            <dt><label for="andreask_ium_self_delete">{{ lang('ANDREASK_IUM_SELF_DELETE') }}</label><br/><span>{{lang('ANDREASK_IUM_SELF_DELETE_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_self_delete">{{ lang('ANDREASK_IUM_SELF_DELETE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_SELF_DELETE_EXPLAIN')}}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="1" <!-- IF ANDREASK_IUM_SELF_DELETE -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
                 <input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="0" <!-- IF not ANDREASK_IUM_SELF_DELETE -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
         </dl>
-
+    </fieldset>
+    <fieldset>
         <p class="submit-buttons">
             <input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
             <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
         </p>
+    </fieldset>
 
         {S_FORM_TOKEN}
     </fieldset>
