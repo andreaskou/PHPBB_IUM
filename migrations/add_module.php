@@ -43,7 +43,7 @@ class add_module extends migration
 
 		// cron config
 		array('config.add', array('send_reminder_last_gc', 0, true)),
-		array('config.add', array('send_reminder_gc', 30 )),
+		array('config.add', array('send_reminder_gc', 10800 )),
 		array('config.add', array('reminder_limit',	250 )),
 
 		// add module
