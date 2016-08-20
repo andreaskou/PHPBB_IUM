@@ -71,7 +71,7 @@ class main_module
 			$limit = $request->variable('users_per_page', 10);
 			$with_posts = $request->variable('with_posts', 0);
 			$actions = $request->variable('count_back', '');
-			$sort_by = $request->variable('sort_by', '');
+			$sort_by = $request->variable('sort_by', '0');
 			$sort_order = $request->variable('sort_order', 0);
 
 			// Keep the limit between 10 and 50
