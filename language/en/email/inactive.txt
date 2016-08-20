@@ -1,15 +1,20 @@
+Subject: Was there a problem?
+
 Hello, {USERNAME}
 
 We see that you have registered at : {REG_DATE}
 But since then there have been no activity.
 
-In case you have lost your credentials you can retrieve them from <a href="#"><u>here</u></a>.
-Or you can contact the administrator of the forum {ADMIN_MAIL}.
+In case you have lost your credentials you can retrieve them from the following link.
+
+{FORGOT_PASS}
+
+If you never received the activation e-mail then please click on the following link to send a new activation mail.
+
+{SEND_ACT_AG}
+
+Else, you can always contact the administrator of the forum {ADMIN_MAIL}.
 
 We hope that we will see you again soon.
 
-{SIGNATURE}
-
-{SITE_NAME}
-
-{URL}
+{EMAIL_SIG}

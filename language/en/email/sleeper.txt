@@ -1,14 +1,15 @@
+Subject: We've missed you!
+
 Hello, {USERNAME}
 
-It's been a while since your last visit.
-And we would like you to know that we would like to see you again soon!
+We see that your last visit on our forum {SITENAME}, was on "{LAST_VISIT}".
+It's been a while, and we would like you to know that we hope to see you again soon!
 
-We see that your last visit was at : {LAST_VISIT}
-In case you have lost your credentials you can retrieve them from <a href="#"><u>here</u></a>.
-Else, you can always contact the administrator of the forum on this e-mail : {ADMIN_MAIL}.
+In case you have forgot your credentials you can always retrieve them using the following link.
 
-We hope that we will see you again soon.
+{FORGOT_PASS}
 
-{SIGNATURE}
+Else, you can always contact the administrator of the forum on this e-mail "{ADMIN_MAIL}".
+Hope to see you back again.
 
-{URL}
+{EMAIL_SIG}
