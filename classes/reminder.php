@@ -2,6 +2,7 @@
 
 namespace andreask\ium\classes;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 class reminder
 {
 
@@ -22,17 +23,19 @@ class reminder
 	protected   $db;
 	protected   $user;
 	protected 	$log;
+	protected 	$container;
 	protected   $table_prefix;
 	protected   $phpbb_root_path;
 	protected   $php_ext;
 	protected	$table_name;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user_loader $user,\phpbb\log\log $log ,$table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user_loader $user, \phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config = $config;
 		$this->db = $db;
 		$this->user = $user;
 		$this->log	= $log;
+		$this->container = $container;
 		$this->table_prefix = $table_prefix;
 		$this->php_ext = $php_ext;
 		$this->phpbb_root_path = $phpbb_root_path;
@@ -46,7 +49,6 @@ class reminder
 	 */
     public function send($limit)
     {
-		$this->log->add('admin', 54 , '127.0.0.1', 'Preparing to send reminders to users...', time());
 		$this->get_users($limit);
     	if ($this->has_users())
 	    {
@@ -57,9 +59,6 @@ class reminder
 
 		    foreach ($this->inactive_users as $sleeper)
 			{
-				$this->log->add('admin', 54 , '127.0.0.1', '-------------- START ----------------------', time());
-				$this->log->add('admin', 54 , '127.0.0.1', 'Sending to '. $sleeper['username'], time());
-
 				// dirty fix for now, need to find a way for the templates.
 				$lang = ($sleeper['user_lang'] == 'en') ? $sleeper['user_lang'] : 'en';
 
@@ -69,6 +68,8 @@ class reminder
 					'REG_DATE'		=> date($sleeper['user_dateformat'], $sleeper['user_regdate']),
 					'LAST_VISIT' 	=> date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
 					'ADMIN_MAIL' 	=> $this->config['board_contact'],
+					'FORGOT_PASS'	=> generate_board_url() . "ucp" . $this->php_ext . "?mode=sendpassword",
+					'SEND_ACT_AG'	=> generate_board_url() . "ucp" . $this->php_ext . "?mode=resend_act",
 					'SITE_NAME'  	=> htmlspecialchars_decode($this->config['sitename']),
 					'SIGNATURE'	 	=> $this->config['board_email_sig'],
 					'URL'        	=> generate_board_url(),
@@ -82,17 +83,13 @@ class reminder
 				if ($sleeper['user_lastvisit'] != 0)
 				{
 					// User never came back after registration...
-					$this->log->add('admin', 54 , '127.0.0.1', 'User has visited us before' , time());
 					$messenger->template('@andreask_ium/sleeper', $lang);
-					$messenger->subject('We\'ve missed you!');
 					$messenger->assign_vars($template_ary);
 				}
 				else
 				{
 					// User has forsaken us! :(
-					$this->log->add('admin', 54 , '127.0.0.1', 'Users has never visited us before' , time());
 					$messenger->template('@andreask_ium/inactive', $lang);
-					$messenger->subject('Hello!');
 					$messenger->assign_vars($template_ary);
 				}
 
@@ -101,11 +98,23 @@ class reminder
 //				$messenger->save_queue();
 				// Update ext's table...
 				$this->update_ium_reminder($sleeper);
-
-				$this->log->add('admin', 54 , '127.0.0.1', '-------------- END ----------------------', time());
 			}
 		}
-		// release the user list.
+		// Log it and release the user list.
+
+		if (phpbb_version_compare($this->config['version'], '3.2.0-dev', '>='))
+		{
+			// For phpBB 3.2.x
+			$lang = $this->container->get('language');
+			$lang->add_lang('log', 'andreask/ium');
+		}
+		else
+		{
+			// For phpBB 3.1.x
+			$lang = $this->container->get('user');
+			$lang->add_lang_ext('andreask/ium', 'log');
+		}
+		$this->log->add('admin',54,'127.0.0.1',sizeof($this->inactive_users) . $lang->lang('SENT_REMINDERS'), time());
 		unset($this->inactive_users);
     }
 
@@ -113,13 +122,11 @@ class reminder
 	 * @param null $limit optional parameter to limit the amount of results. (need to fix this)
 	 */
 
-	private function get_users($limit = null){
-
+	private function get_users($limit = null)
+	{
 		// if limit is not set use limit from configuration.
 		$limit = ($limit) ? 'limit '. $limit : 'limit '.$this->config['andreask_ium_email_limit'];
 		$table_name = $this->table_prefix . $this->table_name;
-
-		$this->log->add('admin', 54 , '127.0.0.1', 'Getting users...', time());
 
 		// prepare the sql statement.
 		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
@@ -127,11 +134,10 @@ class reminder
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id) 
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ') 
-			AND p.group_id NOT IN (1,4,5,6) 
+			AND p.group_id NOT IN (1,4,5,6)
+			AND r.dont_send = 0
 			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL '.$this->config['andreask_ium_interval'] .' MINUTE) 
 			ORDER BY p.user_regdate ASC '.$limit;
-
-//			AND from_unixtime(p.user_regdate) < DATE_SUB(NOW(), INTERVAL '.$this->config['andreask_ium_interval'] .' DAY)
 
 		// Run the query
 		$result = $this->db->sql_query($sql);
@@ -149,8 +155,6 @@ class reminder
 
 		// Store user sho we can use them.
 		$this->set_users($inactive_users);
-		$this->log->add('admin', 54 , '127.0.0.1', 'got '. sizeof($this->inactive_users).' users.', time());
-
 	}
 
 	/**
@@ -161,7 +165,6 @@ class reminder
     private function set_users($inactive_users)
     {
     	$this->inactive_users = $inactive_users;
-		$this->log->add('admin', 54 , '127.0.0.1', 'Users are stored...', time());
 	}
 
 	/**
@@ -171,7 +174,6 @@ class reminder
 
     public function has_users()
     {
-		$this->log->add('admin', 54 , '127.0.0.1', 'Checking if users exist', time());
 		return (bool) sizeof($this->inactive_users);
     }
 
@@ -186,26 +188,20 @@ class reminder
 		// If he does update the row?
 		if ($this->user_exist($user['user_id']))
 		{
-			$this->log->add('admin', 54 , '127.0.0.1', 'User exist!' , time());
-
 			$update_arr = array('reminder_sent_date' => time());
 			$counter = ($user['remind_counter'] + 1);
 
 			if ($user['remind_counter']  == 0 ){
-				$this->log->add('admin', 54 , '127.0.0.1', 'First reminder' , time());
 				$merge = array('remind_counter' => $counter);
 				$update_arr = array_merge($update_arr, $merge);
 			}
 			elseif ($user['remind_counter']  == 1 ){
-				$this->log->add('admin', 54 , '127.0.0.1', 'Second reminder' , time());
 				$merge = array('previous_sent_date' => $user['reminder_sent_date'],
 							   'remind_counter' => $counter );
 				$update_arr = array_merge($update_arr, $merge);
 			}
 			elseif ($user['remind_counter'] == 2 )
 			{
-				$this->log->add('admin', 54 , '127.0.0.1', 'Last reminder...' , time());
-
 				$merge = array('previous_sent_date' => $user['reminder_sent_date'],
 							   'remind_counter'		=> $counter,
 							   'dont_send'			=> 1);
@@ -214,15 +210,12 @@ class reminder
 
 			$sql = 'UPDATE ' . $this->table_prefix.$this->table_name . ' SET ' . $this->db->sql_build_array('UPDATE', $update_arr) .
 			' WHERE user_id = '.$user['user_id'];
-			$this->log->add('admin', 54 , '127.0.0.1', "$sql" , time());
-
 			$this->db->sql_query($sql);
-
 		}
+
 		// User does not exist in the table let's add him.
 		else
 		{
-			$this->log->add('admin', 54 , '127.0.0.1', 'new user... inserting' , time());
 
 			$insert_arr = array(
 				'user_id'            => $user['user_id'],
@@ -233,7 +226,6 @@ class reminder
 			);
 
 			$sql = 'INSERT INTO ' . $this->table_prefix . $this->table_name . $this->db->sql_build_array('INSERT', $insert_arr);
-			$this->log->add('admin', 54 , '127.0.0.1', "$sql" , time());
 			$this->db->sql_query($sql);
 		}
 	}
@@ -244,8 +236,6 @@ class reminder
 	 */
 
 	private function user_exist($user_id){
-
-		$this->log->add('admin', 54 , '127.0.0.1', 'Checking if user exist in custome table...' , time());
 
 		$sql = 'SELECT COUNT(user_id) as user_count
         FROM ' . $this->table_prefix.$this->table_name . '
