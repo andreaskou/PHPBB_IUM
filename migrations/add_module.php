@@ -19,10 +19,10 @@ class add_module extends migration
 {
     private $schema_name = 'ium_reminder';
 
-	public function effectively_installed()
-	{
-		return isset($this->config['andreask_ium_enable']);
-	}
+//	public function effectively_installed()
+//	{
+//		return isset($this->config['andreask_ium_enable']);
+//	}
 	
 	static public function depends_on()
     {
@@ -43,7 +43,7 @@ class add_module extends migration
 
 		// cron config
 		array('config.add', array('send_reminder_last_gc', 0, true)),
-		array('config.add', array('send_reminder_gc', 10800 )),
+		array('config.add', array('send_reminder_gc', (60 * 60 * 24))),
 		array('config.add', array('reminder_limit',	250 )),
 
 		// add module
