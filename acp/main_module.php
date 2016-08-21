@@ -24,9 +24,6 @@ class main_module
 
 		global $user, $template, $request, $config, $phpbb_container;
 
-
-		$user->add_lang_ext('andreask/ium', 'common');
-
 		if ($mode == 'ium_settings')
 		{
 			$this->tpl_name = 'acp_ium_body';
@@ -63,6 +60,8 @@ class main_module
 
 		if ($mode == 'ium_list')
 		{
+//			$user->add_lang_ext('andreask/ium', 'user_list');
+
 			$this->tpl_name = 'acp_ium_inactive_users';
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang('memberlist');
@@ -70,8 +69,8 @@ class main_module
 			$start = $request->variable('start', 0);
 			$limit = $request->variable('users_per_page', 10);
 			$with_posts = $request->variable('with_posts', 0);
-			$actions = $request->variable('count_back', '');
-			$sort_by = $request->variable('sort_by', '0');
+			$actions = $request->variable('count_back', '30d');
+			$sort_by = $request->variable('sort_by', 'reg_date');
 			$sort_order = $request->variable('sort_order', 0);
 
 			// Keep the limit between 10 and 50
@@ -216,9 +215,10 @@ class main_module
 		if ($filters) {
 
 			$ignore = 'select';
+			$options = '';
 
 			if ($filters['with_posts']) {
-				$options = ' AND p.user_posts != 0';
+				$options .= ' AND p.user_posts != 0';
 			}
 
 			if ($filters['count_back'] && $filters['count_back'] != $ignore) {
