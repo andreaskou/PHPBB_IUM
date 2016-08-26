@@ -74,6 +74,19 @@ class reminder
 
 		    foreach ($this->inactive_users as $sleeper)
 			{
+				$topics = $this->container->get('andreask.ium.classes.top_topics');
+				if ($top_topics = $topics->get_user_top_topics($sleeper['user_id']))
+				{
+					$links = 'Here are some links to topics that you\'ve been active.' . PHP_EOL;
+					foreach ($top_topics as $item)
+					{
+						$links .= PHP_EOL;
+						$links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
+						$links .= generate_board_url() ."/viewtopic.".$this->php_ext ."?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
+						$links .= PHP_EOL;
+					}
+				}
+
 				// dirty fix for now, need to find a way for the templates.
 				$lang = ($sleeper['user_lang'] == 'en') ? $sleeper['user_lang'] : 'en';
 
@@ -83,11 +96,12 @@ class reminder
 					'REG_DATE'		=> date($sleeper['user_dateformat'], $sleeper['user_regdate']),
 					'LAST_VISIT' 	=> date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
 					'ADMIN_MAIL' 	=> $this->config['board_contact'],
-					'FORGOT_PASS'	=> generate_board_url() . "ucp" . $this->php_ext . "?mode=sendpassword",
-					'SEND_ACT_AG'	=> generate_board_url() . "ucp" . $this->php_ext . "?mode=resend_act",
+					'FORGOT_PASS'	=> generate_board_url() . "/ucp." . $this->php_ext . "?mode=sendpassword",
+					'SEND_ACT_AG'	=> generate_board_url() . "/ucp." . $this->php_ext . "?mode=resend_act",
 					'SITE_NAME'  	=> htmlspecialchars_decode($this->config['sitename']),
 					'SIGNATURE'	 	=> $this->config['board_email_sig'],
 					'URL'        	=> generate_board_url(),
+					'USR_TPC_LIST'	=> ($top_topics) ? $links : '',
 				);
 				$messenger = new \messenger(false);
 				$messenger->to($sleeper['user_email'], $sleeper['username']);
@@ -111,6 +125,7 @@ class reminder
 				// Send mail...
 				$messenger->send();
 //				$messenger->save_queue();
+
 				// Update ext's table...
 				$this->update_ium_reminder($sleeper);
 			}
