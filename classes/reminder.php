@@ -2,6 +2,7 @@
 
 namespace andreask\ium\classes;
 
+use phpbb\cache\driver\null;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 class reminder
 {
@@ -29,7 +30,20 @@ class reminder
 	protected   $php_ext;
 	protected	$table_name;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user_loader $user, \phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext)
+	/**
+	 * reminder constructor.
+	 *
+	 * @param \phpbb\config\config                                      $config				PhpBB Config
+	 * @param \phpbb\db\driver\driver_interface                         $db					PhpBB Database
+	 * @param \phpbb\user                                               $user				PhpBB User
+	 * @param \phpbb\log\log                                            $log				PhpBB Log
+	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $container			PhpBB container loader
+	 * @param                                                           $table_prefix		PhpBB table prefix
+	 * @param                                                           $phpbb_root_path	PhpBB root path
+	 * @param                                                           $php_ext			Php extension
+	 */
+
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config = $config;
 		$this->db = $db;
@@ -44,9 +58,10 @@ class reminder
 
 	/**
 	 *
-	 * Send email depending on the list of $inactive_users
+	 * Send email to users in the list of stored $inactive_users (need to be populated by the set_users() function)
 	 *
 	 */
+
     public function send($limit)
     {
 		$this->get_users($limit);
@@ -119,7 +134,8 @@ class reminder
     }
 
 	/**
-	 * @param null $limit optional parameter to limit the amount of results. (need to fix this)
+	 * Gets the users from database
+	 * @param null $limit limit the amount of results. (need to fix this)
 	 */
 
 	private function get_users($limit = null)
@@ -158,7 +174,7 @@ class reminder
 	}
 
 	/**
-	 * Setter for $inactive_users
+	 * Sets users for $inactive_users
 	 * @param $inactive_users
 	 */
 
@@ -168,7 +184,7 @@ class reminder
 	}
 
 	/**
-	 * Check if inactive_users is populated
+	 * Checks if inactive_users is populated
 	 * @return bool returns false if empty.
 	 */
 
@@ -178,7 +194,8 @@ class reminder
     }
 
 	/**
-	 * @param $user, used to updates/populate ext's table ium_reminder
+	 * Updates/inserts users to ium_reminder
+	 * @param $user single user
 	 */
 
     private function update_ium_reminder($user)
@@ -231,7 +248,8 @@ class reminder
 	}
 
 	/**
-	 * @param $user_id, used to search in ium_reminder if exist
+	 * Check if user exist in ium_reminder
+	 * @param $user_id	User id to search.
 	 * @return bool
 	 */
 
@@ -248,6 +266,7 @@ class reminder
 		// Return true if user found:
 		return $give_back;
 	}
+
 
 	private function get_from_ium_reminder($user_id)
 	{
