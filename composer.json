@@ -2,13 +2,13 @@
    "name": "andreask/ium",
    "type": "phpbb-extension",
    "description": "Inactive User Manager for phpBB 3.1.x",
-   "version": "0.1.0",
-   "time": "2013-11-05",
+   "version": "0.5.0",
+   "time": "2016-08-25",
    "license": "GPL-2.0",
    "authors": [{
       "name": "Andreas Kourtidis",
       "email": "akourtidis@gmail.com",
-      "role": "Lead Developer"
+      "role": "Main Developer"
    }],
    "require": {
       "php": ">=5.3.3",
