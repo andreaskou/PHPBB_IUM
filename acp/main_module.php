@@ -15,6 +15,7 @@
 namespace andreask\ium\acp;
 
 use phpbb\log\null;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class main_module
 {
@@ -56,6 +57,10 @@ class main_module
 				'ANDREASK_IUM_EMAIL_LIMIT'  			=>  $config['andreask_ium_email_limit'],
 				'ANDREASK_IUM_SELF_DELETE'              =>  $config['andreask_ium_self_delete'],
 			));
+
+			$test = $phpbb_container->get('andreask.ium.classes.top_topics');
+			$test->get_user_top_topics(534);
+
 		}
 
 		if ($mode == 'ium_list')
