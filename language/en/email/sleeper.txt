@@ -12,4 +12,7 @@ In case you have forgot your credentials you can always retrieve them using the 
 Else, you can always contact the administrator of the forum on this e-mail "{ADMIN_MAIL}".
 Hope to see you back again.
 
+{USR_TPC_LIST}
+
+
 {EMAIL_SIG}
