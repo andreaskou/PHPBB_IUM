@@ -58,14 +58,10 @@ class main_module
 				'ANDREASK_IUM_SELF_DELETE'              =>  $config['andreask_ium_self_delete'],
 			));
 
-			$test = $phpbb_container->get('andreask.ium.classes.top_topics');
-			$test->get_user_top_topics(534);
-
 		}
 
 		if ($mode == 'ium_list')
 		{
-//			$user->add_lang_ext('andreask/ium', 'user_list');
 
 			$this->tpl_name = 'acp_ium_inactive_users';
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
