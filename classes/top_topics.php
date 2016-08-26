@@ -40,6 +40,8 @@ class top_topics
 		if (!$id)
 		{
 			return false;
+		}elseif ($this->config['andreask_ium_top_user_threads'] == 0){
+			return false;
 		}
 		$this->set_id($id);
 
@@ -64,20 +66,24 @@ class top_topics
 
 			if (!empty($active_t_row))
 			{
-				foreach($active_t_row as &$post)
+				foreach($active_t_row as $key => &$topic)
 				{
-					$sql = 'SELECT topic_title as title
+					if (!$this->user_access($topic['forum_id']))
+					{
+						// delete if user does not have access to the topic any more, I just couldn't find a better place to do this.
+						unset($active_t_row[$key]);
+					}else
+					{
+						// else complete the puzzle.
+						$sql = 'SELECT topic_title as title
 							FROM ' . TOPICS_TABLE . '
-							WHERE topic_id = ' . $post['topic_id'];
+							WHERE topic_id = ' . $topic['topic_id'];
 
-					$result = $this->db->sql_query($sql);
-					$post['topic_title'] = (string) $this->db->sql_fetchfield('title');
-					$this->db->sql_freeresult($result);
-					$post['have_access'] = (bool) $this->user_access($post['forum_id']);
+						$result = $this->db->sql_query($sql);
+						$topic['topic_title'] = (string) $this->db->sql_fetchfield('title');
+						$this->db->sql_freeresult($result);
+					}
 				}
-				echo "<pre>";
-				var_export($active_t_row);
-				echo "</pre>";
 				return $active_t_row;
 			}
 			return false;
@@ -106,7 +112,7 @@ class top_topics
 		return false;
 	}
 
-	public function user_access($forum_id){
+	private function user_access($forum_id){
 		$data = $this->auth->obtain_user_data($this->user_id);
 		$this->auth->acl($data);
 		return  $this->auth->acl_get('f_read', $forum_id);
