@@ -1,29 +1,23 @@
 <?php
 
 /**
- *
  * This file is part of the phpBB Forum Software package.
  *
  * @copyright (c) phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @license   GNU General Public License, version 2 (GPL-2.0)
  *
  * For full copyright and license information, please see
  * the docs/CREDITS.txt file.
- *
  */
 
 namespace andreask\ium\migrations;
 
 use phpbb\db\migration\migration;
 
-class add_module extends migration{
-    
-    private $schema_name='ium_reminder';
+class add_module extends migration
+{
 
-//	public function effectively_installed()
-//	{
-//		return isset($this->config['andreask_ium_enable']);
-//	}
+    private $schema_name='ium_reminder';
 
     static public function depends_on()
     {
@@ -69,18 +63,18 @@ class add_module extends migration{
         return array(
             'add_tables' => array(
                 $this->table_prefix . $this->schema_name => array(
-                    'COLUMNS' => array(
-                        'id' => array('UINT', null, 'auto_increment'),
-                        'user_id' => array('UINT', 0),
-                        'username' => array('VCHAR', ''),
-                        'remind_counter' => array('UINT', '0'),
-                        'previous_sent_date' => array('TIMESTAMP', 0),
-                        'reminder_sent_date' => array('TIMESTAMP', 0),
-                        'dont_send' => array('UINT', 0),
+                    'COLUMNS'   =>  array(
+                        'id'        =>  array('UINT', null, 'auto_increment'),
+                        'user_id'   =>  array('UINT', 0),
+                        'username'  =>  array('VCHAR', ''),
+                        'remind_counter'        =>  array('UINT', '0'),
+                        'previous_sent_date'    =>  array('TIMESTAMP', 0),
+                        'reminder_sent_date'    =>  array('TIMESTAMP', 0),
+                        'dont_send'             =>  array('UINT', 0),
                     ),
-                    'PRIMARY_KEY' => 'id',
+                    'PRIMARY_KEY'   =>  'id',
                     'KEYS' => array(
-                        'type' => array('UNIQUE', array('user_id'))
+                        'type'  =>  array('UNIQUE', array('user_id'))
                     ),
                 ),
             ),
@@ -98,15 +92,13 @@ class add_module extends migration{
 
     public function first_time_install()
     {
-        if (!$this->has_users())
-            {
-            if ($this->db_tools->sql_table_exists($this->table_prefix . $this->schema_name))
-            {
-                $sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
-					SELECT user_id, username FROM `' . USERS_TABLE . '` u
-					WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
-					AND u.group_id NOT IN (1,4,5,6)';
-                $result = $this->sql_query($sql);
+        if (!$this->has_users()) {
+            if ($this->db_tools->sql_table_exists($this->table_prefix . $this->schema_name)) {
+                $sql='INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
+			SELECT user_id, username FROM `' . USERS_TABLE . '` u
+			WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
+			AND u.group_id NOT IN (1,4,5,6)';
+                $result=$this->sql_query($sql);
                 $this->db->sql_freeresult($result);
             }
         }
@@ -114,7 +106,7 @@ class add_module extends migration{
 
     private function has_users()
     {
-        $result = $this->db->get_row_count($this->table_prefix . $this->schema_name);
+        $result=$this->db->get_row_count($this->table_prefix . $this->schema_name);
         return (bool) $result;
     }
 

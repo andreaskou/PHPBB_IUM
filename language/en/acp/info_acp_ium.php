@@ -4,20 +4,18 @@
 * @package phpBB Extension - Advanced Inactive User Manager
 * @copyright (c) 2013 phpBB Group
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
 */
 
-if (!defined('IN_PHPBB'))
-{
+if (!defined('IN_PHPBB')) {
     exit;
 }
 
-if (empty($lang) || !is_array($lang))
-{
+if (empty($lang) || !is_array($lang)) {
     $lang = array();
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge(
+    $lang, array(
     //
     'ACP_IUM'               =>  'IUM configuration',
     'ACP_IUM_LIST'          =>  'Inactive Users List',
@@ -58,7 +56,7 @@ $lang = array_merge($lang, array(
                                                                             3   =>  'Admin deactivated',
                                                                             4   =>  'Permanently Banned',
                                                                             5   =>  'Temporarily Banned'),
-    'NEVER_CONNECTED'		=> 'User never connected',
+    'NEVER_CONNECTED'        => 'User never connected',
 
     // Inactive users list page
     'ACP_IUM_NODATE'        =>  'User is <strong>not</strong> disabled',
@@ -69,7 +67,7 @@ $lang = array_merge($lang, array(
     'NO_PREVIOUS_SENT_DATE' =>  'Not sent any reminders yet',
     'REMINDER_DATE'         =>  'Last Reminder Sent',
     'NO_REMINDER_SENT_YET'  =>  'Not sent any reminders yet',
-    'IUM_INACTIVE_REASON'   =>	'Status',
+    'IUM_INACTIVE_REASON'   =>    'Status',
 
     // Sort Lists
     'COUNT_BACK'    =>  '<strong>FROM</strong> days/months/years interval and backwards',
@@ -88,4 +86,5 @@ $lang = array_merge($lang, array(
     'FIVE_YEARS'    =>  'Five Years',
     'SEVEN_YEARS'   =>  'Seven Years',
     'DECADE'        =>  'One Decade',
-));
+    )
+);
