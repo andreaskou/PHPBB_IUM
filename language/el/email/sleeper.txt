@@ -1,13 +1,19 @@
-Hello, {USERNAME}
+Subject: Μας έχετε λείψει
 
-It's been a while since your last visit.
-And we would like you to know that we would like to see you again soon!
+Γεια σας, {USERNAME}
 
-We see that your last visit was at : {LAST_VISIT}
-In case you have lost your credentials you can retrieve them from <a href="#"><u>here</u></a>.
-Else, you can always contact the administrator of the forum on this e-mail : {ADMIN_MAIL}.
+Βλέπουμε ότι την τελευταία σας επίσκεψη στο φόρουμ μας {SITENAME}, ήταν στις "{LAST_VISIT}".
+Έχει περάσει καιρός και Θα θέλαμε να γνωρίζετε ότι ελπίζουμε να σας δούμε και πάλι σύντομα!
 
-We hope that we will see you again soon.
+Σε περίπτωση που έχετε ξεχάσει τα διαπιστευτήριά σας, μπορείτε πάντα να τα ανακτήσετε χρησιμοποιώντας τον παρακάτω σύνδεσμο.
 
-{SIGNATURE}
+{FORGOT_PASS}
 
+Αλλιώς, μπορείτε πάντα να επικοινωνήσετε με τον διαχειριστή του φόρουμ σε αυτό το e-mail "{ADMIN_MAIL}".
+
+Ελπίζουμε να σας δούμε και πάλι στην παρέα μας.
+
+{USR_TPC_LIST}
+
+
+{EMAIL_SIG}

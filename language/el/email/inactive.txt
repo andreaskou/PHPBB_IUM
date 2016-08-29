@@ -1,13 +1,20 @@
-Hello, {USERNAME}
+Subject: Αντιμετωπίζετε κάποιο πρόβλημα;
 
-We see that you have registered at : {REG_DATE}
-But since then there have been no activity.
+Γεια σας, {USERNAME}
 
-In case you have lost your credentials you can retrieve them from <a href="#"><u>here</u></a>.
-Or you can contact the administrator of the forum {ADMIN_MAIL}.
+Βλέπουμε ότι έχετε εγγραφεί στις: {REG_DATE}
+Αλλά από τότε δεν υπήρξε καμία δραστηριότητα.
 
-We hope that we will see you again soon.
+Σε περίπτωση που έχετε χάσει τα διαπιστευτήριά σας, μπορείτε να τα ανακτήσετε από το παρακάτω link.
 
-{SIGNATURE}
+{FORGOT_PASS}
 
-{SITE_NAME}
+Αν δεν έχετε λάβει το e-mail ενεργοποίησης, κάντε κλικ στον παρακάτω σύνδεσμο για να σας σταλεί εκ νέου το μήνυμα ενεργοποίησης.
+
+{SEND_ACT_AG}
+
+Αλλιώς, μπορείτε πάντα να επικοινωνήσετε με τον διαχειριστή του φόρουμ {ADMIN_MAIL}.
+
+Ελπίζουμε ότι θα σας δούμε και πάλι σύντομα.
+
+{EMAIL_SIG}
