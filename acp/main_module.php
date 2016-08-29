@@ -30,6 +30,9 @@ class main_module
 			$this->tpl_name = 'acp_ium_body';
 			$this->page_title = $user->lang('ACP_IUM_TITLE');
 
+                        $test = $phpbb_container->get('andreask.ium.classes.reminder');
+                        $test->send(5);
+                        
 			$form_key = 'andreask_ium';
 
 			add_form_key($form_key);
@@ -132,7 +135,7 @@ class main_module
 			$rows = $rows['results'];
 
 
-			// Load the pagination
+			// Load pagination
 			$pagination = $phpbb_container->get('pagination');
 			$start = $pagination->validate_start($start, $limit, $inactive_count);
 			$pagination->generate_template_pagination($base_url, 'pagination', 'start', $inactive_count, $limit, $start);
