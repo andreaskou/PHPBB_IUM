@@ -16,9 +16,9 @@ namespace andreask\ium\migrations;
 
 use phpbb\db\migration\migration;
 
-class add_module extends migration {
-
-    private $schema_name = 'ium_reminder';
+class add_module extends migration{
+    
+    private $schema_name='ium_reminder';
 
 //	public function effectively_installed()
 //	{
@@ -98,8 +98,10 @@ class add_module extends migration {
 
     public function first_time_install()
     {
-        if (!$this->has_users()) {
-            if ($this->db_tools->sql_table_exists($this->table_prefix . $this->schema_name)) {
+        if (!$this->has_users())
+            {
+            if ($this->db_tools->sql_table_exists($this->table_prefix . $this->schema_name))
+            {
                 $sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
 					SELECT user_id, username FROM `' . USERS_TABLE . '` u
 					WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
