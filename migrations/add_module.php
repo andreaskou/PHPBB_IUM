@@ -17,6 +17,7 @@ use phpbb\db\migration\migration;
 
 class add_module extends migration
 {
+    
     private $schema_name='ium_reminder';
 
 //	public function effectively_installed()
@@ -32,7 +33,7 @@ class add_module extends migration
     public function update_data()
     {
 		return array(
-		array('config.add',	array('andreask_ium_enable', 0)),
+		array('config.add', array('andreask_ium_enable', 0)),
 		array('config.add', array('andreask_ium_interval', 30)),
 		array('config.add', array('andreask_ium_top_user_threads', 0)),
 		array('config.add', array('andreask_ium_top_user_threads_count', 5)),
