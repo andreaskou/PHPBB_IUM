@@ -7,29 +7,30 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class reminder {
 
-    /**
-     *
-     * This file is part of the phpBB Forum Software package.
-     *
-     * @copyright (c) phpBB Limited <https://www.phpbb.com>
-     * @license GNU General Public License, version 2 (GPL-2.0)
-     *
-     * For full copyright and license information, please see
-     * the docs/CREDITS.txt file.
-     *
-     */
-    protected $inactive_users = [];
-    protected $config;
-    protected $db;
-    protected $user;
-    protected $user_loader;
-    protected $log;
-    protected $container;
-    protected $table_prefix;
-    protected $phpbb_root_path;
-    protected $php_ext;
-    protected $table_name;
-    protected $lang;
+	/**
+	 *
+	 * This file is part of the phpBB Forum Software package.
+	 *
+	 * @copyright (c) phpBB Limited <https://www.phpbb.com>
+	 * @license GNU General Public License, version 2 (GPL-2.0)
+	 *
+	 * For full copyright and license information, please see
+	 * the docs/CREDITS.txt file.
+	 *
+	 */
+
+	protected $inactive_users = [];
+	protected $config;
+	protected $db;
+	protected $user;
+	protected $user_loader;
+	protected $log;
+	protected $container;
+	protected $table_prefix;
+	protected $phpbb_root_path;
+	protected $php_ext;
+	protected $table_name;
+	protected $lang;
 
     /**
      * reminder constructor.
@@ -54,7 +55,6 @@ class reminder {
         $this->php_ext = $php_ext;
         $this->phpbb_root_path = $phpbb_root_path;
         $this->table_name = 'ium_reminder';
-//        $this->lang = $this->get_board_lang();
     }
 
     /**
@@ -74,9 +74,13 @@ class reminder {
             $this->user->add_lang_ext('andreask/ium', 'body');
             foreach ($this->inactive_users as $sleeper)
             {
-            	$user_conf = $this->user_loader->get_user($sleeper['user_id']);
-				$this->user->lang_name = $this->user->data['user_lang'] = $user_conf['user_lang'];
-				$this->user->add_lang_ext('andreask/ium', 'body');
+            	$user_row = $this->user_loader->get_user($sleeper['user_id']);
+				$user_instance = new \phpbb\user('\phpbb\datetime');
+				$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
+				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+				$user_instance->add_lang_ext('andreask/ium', 'body');
+
+
 				$topics = $this->container->get('andreask.ium.classes.top_topics');
 
                 if ($top_topics = $topics->get_user_top_topics($sleeper['user_id']))
@@ -90,21 +94,23 @@ class reminder {
                     }
                 }
 
-                // dirty fix for now, need to find a way for the templates.
-                $lang = ( $this->lang_exists($this->user->lang_name) ) ? $this->user->lang_name : $this->config['default_lang'];
 
+                // dirty fix for now, need to find a way for the templates.
+                $lang = ( $this->lang_exists($user_instance->lang_name) ) ? $user_instance->lang_name : $this->config['default_lang'];
                 // add template variables
                 $template_ary = array(
                     'USERNAME' => htmlspecialchars_decode($sleeper['username']),
-                    'REG_DATE' => date($sleeper['user_dateformat'], $sleeper['user_regdate']),
-                    'LAST_VISIT' => date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
+                    'REG_DATE' => date('d-m-Y', $sleeper['user_regdate']),
+//                    'REG_DATE' => date($sleeper['user_dateformat'], $sleeper['user_regdate']),
+                    'LAST_VISIT' => date('d-m-Y', $sleeper['user_lastvisit']),
+//                    'LAST_VISIT' => date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
                     'ADMIN_MAIL' => $this->config['board_contact'],
                     'FORGOT_PASS' => generate_board_url() . "/ucp." . $this->php_ext . "?mode=sendpassword",
                     'SEND_ACT_AG' => generate_board_url() . "/ucp." . $this->php_ext . "?mode=resend_act",
                     'SITE_NAME' => htmlspecialchars_decode($this->config['sitename']),
                     'SIGNATURE' => $this->config['board_email_sig'],
                     'URL' => generate_board_url(),
-                    'USR_TPC_LIST' => ($top_topics) ? $this->user->lang('INCLUDE_USER_TOPICS') . $links : '',
+                    'USR_TPC_LIST' => ($top_topics) ? $user_instance->lang('INCLUDE_USER_TOPICS') . $links : '',
                 );
                 $messenger = new \messenger(false);
                 // mail headers
@@ -176,7 +182,7 @@ class reminder {
 //			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' MINUTE)
 //			ORDER BY p.user_regdate ASC ' . $limit;
 
-		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
+		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
 			FROM ' . USERS_TABLE . ' p
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
