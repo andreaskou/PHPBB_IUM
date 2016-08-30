@@ -30,9 +30,9 @@ class main_module
 			$this->tpl_name = 'acp_ium_body';
 			$this->page_title = $user->lang('ACP_IUM_TITLE');
 
-                        $test = $phpbb_container->get('andreask.ium.classes.reminder');
-                        $test->send(5);
-                        
+//                        $test = $phpbb_container->get('andreask.ium.classes.reminder');
+//                        $test->send(5);
+
 			$form_key = 'andreask_ium';
 
 			add_form_key($form_key);
