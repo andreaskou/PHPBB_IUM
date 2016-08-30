@@ -15,6 +15,7 @@ services:
             - '@config'
             - '@dbal.conn'
             - '@user'
+            - '@user_loader'
             - '@log'
             - '@service_container'
             - '%core.table_prefix%'
