@@ -16,8 +16,8 @@ namespace andreask\ium\acp;
 
 class main_info {
 
-    public function module() {
-
+    public function module()
+    {
         return array(
             'filename' => '\andreask\ium\acp\main_module',
             'title' => 'ACP_IUM_TITLE',

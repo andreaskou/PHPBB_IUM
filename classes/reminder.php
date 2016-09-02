@@ -36,12 +36,12 @@ class reminder
      * reminder constructor.
      *
      * @param \phpbb\config\config                                      $config				PhpBB Config
-     * @param \phpbb\db\driver\driver_interface                         $db					PhpBB Database
+     * @param \phpbb\db\driver\driver_interface                         $db                             PhpBB Database
      * @param \phpbb\user                                               $user				PhpBB User
      * @param \phpbb\log\log                                            $log				PhpBB Log
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container			PhpBB container loader
-     * @param                                                           $table_prefix		PhpBB table prefix
-     * @param                                                           $phpbb_root_path	PhpBB root path
+     * @param                                                           $table_prefix                   PhpBB table prefix
+     * @param                                                           $phpbb_root_path                PhpBB root path
      * @param                                                           $php_ext			Php extension
      */
     
