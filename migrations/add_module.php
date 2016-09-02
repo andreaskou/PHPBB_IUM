@@ -15,7 +15,7 @@ use phpbb\db\migration\migration;
  */
 class add_module extends migration {
 
-    private $schema_name = 'ium_reminder';
+    private $schema_name='ium_reminder';
 
     static public function depends_on()
     {
@@ -39,75 +39,77 @@ class add_module extends migration {
             array('config.add', array('reminder_limit', 250)),
             // add module
             array('module.add', array(
-                    'acp',
-                    'ACP_CAT_DOT_MODS',
-                    'ACP_IUM_TITLE'
+                'acp',
+                'ACP_CAT_DOT_MODS',
+                'ACP_IUM_TITLE'
                 )),
             array('module.add', array(
-                    'acp',
-                    'ACP_IUM_TITLE',
-                    array('module_basename' => '\andreask\ium\acp\main_module',
-                        'modes' => array('ium_settings', 'ium_list'),
+                'acp',
+                'ACP_IUM_TITLE',
+                array('module_basename' => '\andreask\ium\acp\main_module',
+                    'modes' => array('ium_settings', 'ium_list'),
                     ),
                 )),
             // Initial table population.
-            array('custom', array(array($this, 'first_time_install')
-                )),
+            array('custom', 
+                array(
+                    array(
+                        $this, 'first_time_install'))),
         );
     }
 
-    public function update_schema()
-    {
-        return array(
-            'add_tables' => array(
-                $this->table_prefix . $this->schema_name => array(
-                    'COLUMNS' => array(
-                        'id' => array('UINT', null, 'auto_increment'),
-                        'user_id' => array('UINT', 0),
-                        'username' => array('VCHAR', ''),
-                        'remind_counter' => array('UINT', '0'),
-                        'previous_sent_date' => array('TIMESTAMP', 0),
-                        'reminder_sent_date' => array('TIMESTAMP', 0),
-                        'dont_send' => array('UINT', 0),
+public function update_schema()
+{
+    return array(
+        'add_tables' => array(
+            $this->table_prefix . $this->schema_name => array(
+                'COLUMNS' => array(
+                    'id' => array('UINT', null, 'auto_increment'),
+                    'user_id' => array('UINT', 0),
+                    'username' => array('VCHAR', ''),
+                    'remind_counter' => array('UINT', '0'),
+                    'previous_sent_date' => array('TIMESTAMP', 0),
+                    'reminder_sent_date' => array('TIMESTAMP', 0),
+                    'dont_send' => array('UINT', 0),
                     ),
-                    'PRIMARY_KEY' => 'id',
-                    'KEYS' => array(
-                        'type' => array('UNIQUE', array('user_id'))
+                'PRIMARY_KEY' => 'id',
+                'KEYS' => array(
+                    'type' => array('UNIQUE', array('user_id'))
                     ),
                 ),
             ),
         );
-    }
+}
 
-    public function revert_schema()
-    {
-        return array(
-            'drop_table' => array(
-                $this->table_prefix . $this->schema_name
+public function revert_schema()
+{
+    return array(
+        'drop_table' => array(
+            $this->table_prefix . $this->schema_name
             ),
         );
-    }
+}
 
-    public function first_time_install()
+public function first_time_install()
+{
+    if ( !$this->has_users() )
     {
-        if ( !$this->has_users() )
+        if ( $this->db_tools->sql_table_exists( $this->table_prefix . $this->schema_name ) )
         {
-            if ( $this->db_tools->sql_table_exists( $this->table_prefix . $this->schema_name ) )
-            {
-                $sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
-			SELECT user_id, username FROM `' . USERS_TABLE . '` u
-			WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
-			AND u.group_id NOT IN (1,4,5,6)';
-                $result = $this->sql_query($sql);
-                $this->db->sql_freeresult($result);
-            }
+            $sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
+            SELECT user_id, username FROM `' . USERS_TABLE . '` u
+            WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
+            AND u.group_id NOT IN (1,4,5,6)';
+            $result = $this->sql_query($sql);
+            $this->db->sql_freeresult($result);
         }
     }
+}
 
-    private function has_users()
-    {
-        $result = $this->db->get_row_count($this->table_prefix . $this->schema_name);
-        return (bool) $result;
-    }
+private function has_users()
+{
+    $result = $this->db->get_row_count($this->table_prefix . $this->schema_name);
+    return (bool) $result;
+}
 
 }
