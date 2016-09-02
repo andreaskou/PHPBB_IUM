@@ -48,7 +48,7 @@ before_install:
   - sudo rm -rf phpbb-ext-acme-demo
 
 install:
-  - composer install --dev --no-interaction --prefer-source
+  - composer install --no-interaction --prefer-source
   - travis/prepare-phpbb.sh $EXTNAME $PHPBB_BRANCH
   - cd ../../phpBB3
   - travis/prepare-extension.sh $EXTNAME $PHPBB_BRANCH
@@ -59,8 +59,14 @@ before_script:
   - travis/setup-database.sh $DB $TRAVIS_PHP_VERSION
 
 script:
-  - sh -c "if [ '$SNIFF' != '0' ]; then travis/ext-sniff.sh $DB $TRAVIS_PHP_VERSION $EXTNAME; fi"
+ - sh -c "if [ '$SNIFF' != '0' ]; then travis/ext-sniff.sh $DB $TRAVIS_PHP_VERSION $EXTSNIFF; fi"
   - sh -c "if [ '$IMAGE_ICC' != '0' ]; then travis/check-image-icc-profiles.sh $DB $TRAVIS_PHP_VERSION; fi"
-  - phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/travis/phpunit-$DB-travis.xml --bootstrap ./tests/bootstrap.php
-  - sh -c "if [ '$EPV' != '0' ] && [ '$TRAVIS_PHP_VERSION' = '5.3.3' ] && [ '$DB' = 'mysqli' ]; then phpBB/ext/$EXTNAME/vendor/bin/EPV.php run --dir='phpBB/ext/$EXTNAME/'; fi"
-  - sh -c "if [ '$EPV' != '0' ] && [ '$TRAVIS_PHP_VERSION' = '5.5' ] && [ '$DB' = 'mysqli' ]; then phpBB/vendor/bin/EPV.php run --dir='phpBB/ext/$EXTNAME/'; fi"
+  - mkdir phpBB/ext/$EXTNAME/logs
+  - phpBB/vendor/bin/phpunit --configuration phpBB/ext/$EXTNAME/travis/phpunit-local-$DB-travis.xml --bootstrap ./tests/bootstrap.php --coverage-clover phpBB/ext/$EXTNAME/build/logs/clover.xml
+  - sh -c "if [ '$EPV' != '0' ] && [ '$TRAVIS_PHP_VERSION' = '5.3' ] && [ '$DB' = 'mysqli' ]; then phpBB/ext/$EXTSNIFF/vendor/bin/EPV.php run --dir='phpBB/ext/$EXTNAME/core'; fi"
+  - sh -c "if [ '$EPV' != '0' ] && [ '$TRAVIS_PHP_VERSION' = '5.3' ] && [ '$DB' = 'mysqli' ]; then phpBB/ext/$EXTSNIFF/vendor/bin/EPV.php run --dir='phpBB/ext/$EXTNAME/acpcleanup'; fi"
+  - sh -c "if [ '$EPV' != '0' ] && [ '$TRAVIS_PHP_VERSION' = '5.3' ] && [ '$DB' = 'mysqli' ]; then phpBB/ext/$EXTSNIFF/vendor/bin/EPV.php run --dir='phpBB/ext/$EXTNAME/acpimport'; fi"
+  - sh -c "if [ '$EPV' != '0' ] && [ '$TRAVIS_PHP_VERSION' = '5.3' ] && [ '$DB' = 'mysqli' ]; then phpBB/ext/$EXTSNIFF/vendor/bin/EPV.php run --dir='phpBB/ext/$EXTNAME/exif'; fi"
+
+after_script:
+  - sh -c "if [ '$COVERAGE' != '0' ] && [ '$TRAVIS_PHP_VERSION' = '5.6' ] && [ '$DB' = 'mysqli' ]; then php phpBB/ext/$EXTSNIFF/vendor/bin/coveralls -v -x build/logs/clover.xml -r phpBB/ext/$EXTNAME/; fi"
