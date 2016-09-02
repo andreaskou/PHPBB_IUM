@@ -13,20 +13,17 @@ use phpbb\db\migration\migration;
  * For full copyright and license information, please see
  * the docs/CREDITS.txt file.
  */
-
-class add_module extends migration
-{
+class add_module extends migration {
 
     private $schema_name = 'ium_reminder';
-    
+
     static public function depends_on()
     {
         return array('\phpbb\db\migration\data\v31x\v314');
     }
 
-
     public function update_data()
-    {            
+    {
         return array(
             array('config.add', array('andreask_ium_enable', 0)),
             array('config.add', array('andreask_ium_interval', 30)),
@@ -58,7 +55,7 @@ class add_module extends migration
                 )),
         );
     }
-    
+
     public function update_schema()
     {
         return array(
@@ -81,7 +78,7 @@ class add_module extends migration
             ),
         );
     }
-    
+
     public function revert_schema()
     {
         return array(
@@ -90,10 +87,10 @@ class add_module extends migration
             ),
         );
     }
-    
+
     public function first_time_install()
     {
-        if (!$this->has_users())
+        if ( !$this->has_users() )
         {
             if ( $this->db_tools->sql_table_exists( $this->table_prefix . $this->schema_name ) )
             {

@@ -2,7 +2,7 @@
 namespace andreask\ium\classes;
 
 
-class top_topics
+class top_forum_topics
 {
 
 	/**

@@ -5,32 +5,32 @@ namespace andreask\ium\classes;
 use phpbb\cache\driver\null;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class reminder {
+class reminder
+{
 
-	/**
-	 *
-	 * This file is part of the phpBB Forum Software package.
-	 *
-	 * @copyright (c) phpBB Limited <https://www.phpbb.com>
-	 * @license GNU General Public License, version 2 (GPL-2.0)
-	 *
-	 * For full copyright and license information, please see
-	 * the docs/CREDITS.txt file.
-	 *
-	 */
-
-	protected $inactive_users = [];
-	protected $config;
-	protected $db;
-	protected $user;
-	protected $user_loader;
-	protected $log;
-	protected $container;
-	protected $table_prefix;
-	protected $phpbb_root_path;
-	protected $php_ext;
-	protected $table_name;
-	protected $lang;
+    /**
+     *
+     * This file is part of the phpBB Forum Software package.
+     *
+     * @copyright (c) phpBB Limited <https://www.phpbb.com>
+     * @license GNU General Public License, version 2 (GPL-2.0)
+     *
+     * For full copyright and license information, please see
+     * the docs/CREDITS.txt file.
+     *
+     */
+    protected $inactive_users = [];
+    protected $config;
+    protected $db;
+    protected $user;
+    protected $user_loader;
+    protected $log;
+    protected $container;
+    protected $table_prefix;
+    protected $phpbb_root_path;
+    protected $php_ext;
+    protected $table_name;
+    protected $lang;
 
     /**
      * reminder constructor.
@@ -44,7 +44,9 @@ class reminder {
      * @param                                                           $phpbb_root_path	PhpBB root path
      * @param                                                           $php_ext			Php extension
      */
-    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user,\phpbb\user_loader $user_loader,\phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext) {
+    
+    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext)
+    {
         $this->config = $config;
         $this->db = $db;
         $this->user = $user;
@@ -62,48 +64,48 @@ class reminder {
      * @param $limit ammount of email (users) to sent to
      */
     public function send($limit)
-	{
-        $this->get_users($limit);
-        if ($this->has_users())
+    {
+        $this->get_users( $limit );
+        if ( $this->has_users() )
         {
-            if (!class_exists('messenger'))
+            if ( !class_exists('messenger') )
             {
-                include($this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext);
+                include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
             }
 
             $this->user->add_lang_ext('andreask/ium', 'body');
-            foreach ($this->inactive_users as $sleeper)
+            foreach ( $this->inactive_users as $sleeper )
             {
-            	$user_row = $this->user_loader->get_user($sleeper['user_id']);
-				$user_instance = new \phpbb\user('\phpbb\datetime');
-				$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
-				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
-				$user_instance->add_lang_ext('andreask/ium', 'body');
+                $user_row = $this->user_loader->get_user($sleeper['user_id']);
+                $user_instance = new \phpbb\user('\phpbb\datetime');
+                $user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
+                $user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+                $user_instance->add_lang_ext('andreask/ium', 'body');
+                
+                
+                
+                $user_topics = $this->container->get('andreask.ium.classes.top_topics');
 
-
-				$topics = $this->container->get('andreask.ium.classes.top_topics');
-
-                if ($top_topics = $topics->get_user_top_topics($sleeper['user_id']))
+                if ( $top_user_topics = $user_topics->get_user_top_topics( $sleeper['user_id'] ) )                        
                 {
                     $links = PHP_EOL;
-                    foreach ($top_topics as $item) {
+                    foreach ( $top_topics as $item )
+                    {
                         $links .= PHP_EOL;
                         $links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
                         $links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
                         $links .= PHP_EOL;
                     }
                 }
-
-
+                
                 // dirty fix for now, need to find a way for the templates.
-                $lang = ( $this->lang_exists($user_instance->lang_name) ) ? $user_instance->lang_name : $this->config['default_lang'];
-                // add template variables
+                $lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
+                
+// add template variables
                 $template_ary = array(
                     'USERNAME' => htmlspecialchars_decode($sleeper['username']),
                     'REG_DATE' => date('d-m-Y', $sleeper['user_regdate']),
-//                    'REG_DATE' => date($sleeper['user_dateformat'], $sleeper['user_regdate']),
                     'LAST_VISIT' => date('d-m-Y', $sleeper['user_lastvisit']),
-//                    'LAST_VISIT' => date($sleeper['user_dateformat'], $sleeper['user_lastvisit']),
                     'ADMIN_MAIL' => $this->config['board_contact'],
                     'FORGOT_PASS' => generate_board_url() . "/ucp." . $this->php_ext . "?mode=sendpassword",
                     'SEND_ACT_AG' => generate_board_url() . "/ucp." . $this->php_ext . "?mode=resend_act",
@@ -119,7 +121,7 @@ class reminder {
                 $messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
                 $messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
 
-				// mail content...
+                // mail content...
                 $messenger->to($sleeper['user_email'], $sleeper['username']);
                 $messenger->from($this->config['board_contact']);
 
@@ -130,10 +132,11 @@ class reminder {
                     // User never came back after registration...
                     $messenger->template('@andreask_ium/sleeper', $lang);
                     $messenger->assign_vars($template_ary);
-                }else
-				{
-                    // User has forsaken us! :(
-					$messenger->template('@andreask_ium/inactive', $lang);
+                }
+                // User has forsaken us! :(
+                else
+                {
+                    $messenger->template('@andreask_ium/inactive', $lang);
                     $messenger->assign_vars($template_ary);
                 }
 
@@ -151,14 +154,15 @@ class reminder {
             // For phpBB 3.2.x
             $lang = $this->container->get('language');
             $lang->add_lang('log', 'andreask/ium');
-        }else
-		{
+        }
+        else
+        {
             // For phpBB 3.1.x
             $lang = $this->container->get('user');
             $lang->add_lang_ext('andreask/ium', 'log');
         }
         $this->log->add('admin', 54, '127.0.0.1', sizeof($this->inactive_users) . $lang->lang('SENT_REMINDERS'), time());
-        unset($this->inactive_users);
+        unset( $this->inactive_users );
     }
 
     /**
@@ -166,31 +170,20 @@ class reminder {
      * @param null $limit limit the amount of results. (need to fix this)
      */
     private function get_users($limit = null)
-	{
+    {
         // if limit is not set use limit from configuration.
         $limit = ($limit) ? 'limit ' . $limit : 'limit ' . $this->config['andreask_ium_email_limit'];
         $table_name = $this->table_prefix . $this->table_name;
 
-        // prepare the sql statement.
-//        $sql = 'SELECT p.*, r.*
-//			FROM ' . USERS_TABLE . ' p
-//			LEFT OUTER JOIN ' . $table_name . ' r
-//			ON (p.user_id = r.user_id)
-//			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-//			AND p.group_id NOT IN (1,4,5,6)
-//			AND r.dont_send <> 1
-//			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' MINUTE)
-//			ORDER BY p.user_regdate ASC ' . $limit;
-
-		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
+        $sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
 			FROM ' . USERS_TABLE . ' p
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
 			AND p.group_id NOT IN (1,4,5,6)
 			AND r.dont_send <> 1
-			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL '.$this->config['andreask_ium_interval'] .' MINUTE)
-			ORDER BY p.user_regdate ASC '.$limit;
+			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' MINUTE)
+			ORDER BY p.user_regdate ASC ' . $limit;
 
         // Run the query
         $result = $this->db->sql_query($sql);
@@ -200,7 +193,7 @@ class reminder {
 
         // Store results to rows
         while ($row = $this->db->sql_fetchrow($result))
-		{
+        {
             $inactive_users[] = $row;
         };
 
@@ -215,9 +208,9 @@ class reminder {
      * Sets users for $inactive_users
      * @param $inactive_users
      */
-    private function set_users($inactive_users)
-	{
-        $this->inactive_users = $inactive_users;
+    private function set_users($users)
+    {
+        $this->inactive_users = $users;
     }
 
     /**
@@ -225,7 +218,7 @@ class reminder {
      * @return bool returns false if empty.
      */
     public function has_users()
-	{
+    {
         return (bool) sizeof($this->inactive_users);
     }
 
@@ -234,8 +227,7 @@ class reminder {
      * @param $user single user
      */
     private function update_ium_reminder($user)
-	{
-
+    {
         // Does the user exists in ium_reminder?
         // If he does update the row?
         if ($this->user_exist($user['user_id']))
@@ -247,13 +239,15 @@ class reminder {
             {
                 $merge = array('remind_counter' => $counter);
                 $update_arr = array_merge($update_arr, $merge);
-            } elseif ($user['remind_counter'] == 1)
-			{
+            }
+            elseif ($user['remind_counter'] == 1)
+            {
                 $merge = array('previous_sent_date' => $user['reminder_sent_date'],
                     'remind_counter' => $counter);
                 $update_arr = array_merge($update_arr, $merge);
-            } elseif ($user['remind_counter'] == 2)
-			{
+            }
+            elseif ($user['remind_counter'] == 2)
+            {
                 $merge = array('previous_sent_date' => $user['reminder_sent_date'],
                     'remind_counter' => $counter,
                     'dont_send' => 1);
@@ -266,7 +260,8 @@ class reminder {
         }
 
         // User does not exist in the table let's add him.
-        else {
+        else
+        {
 
             $insert_arr = array(
                 'user_id' => $user['user_id'],
@@ -286,8 +281,8 @@ class reminder {
      * @param $user_id	User id to search.
      * @return bool
      */
-    private function user_exist($user_id)
-	{
+    private function user_exist($user_id) 
+    {
 
         $sql = 'SELECT COUNT(user_id) as user_count
         FROM ' . $this->table_prefix . $this->table_name . '
@@ -302,7 +297,7 @@ class reminder {
     }
 
     private function get_from_ium_reminder($user_id)
-	{
+    {
         $select_array = array(
             'user_id' => $user_id,
         );
@@ -326,12 +321,13 @@ class reminder {
     }
 
     private function get_board_lang()
-	{
+    {
         $sql = 'SELECT lang_iso
                 FROM ' . LANG_TABLE;
         $result = $this->db->sql_query($sql);
 
-        while ($row = $this->db->sql_fetchrow($result)) {
+        while ($row = $this->db->sql_fetchrow($result))
+        {
             $lang = $row;
         }
         $this->db->sql_freeresult($result);
@@ -340,7 +336,7 @@ class reminder {
     }
 
     public function lang_exists($user_lang)
-	{
+    {
         $ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
         return (bool) file_exists($ext_path . '/language/' . $user_lang);
     }

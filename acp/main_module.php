@@ -15,7 +15,7 @@
 namespace andreask\ium\acp;
 
 use phpbb\log\null;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+//use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class main_module
 {
@@ -37,12 +37,13 @@ class main_module
 
 			add_form_key($form_key);
 
-			if($request->is_set_post('submit'))
+			if( $request->is_set_post('submit') )
 			{
 
 				// Check form key
-				if(!check_form_key($form_key)){
-					trigger_error($user->lang('FORM_INVALID'), adm_back_link($this->u_action), E_USER_WARNING);
+				if( !check_form_key($form_key) )
+                                {
+					trigger_error($user->lang('FORM_INVALID'), adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				// If everything is OK store the setting
@@ -82,7 +83,7 @@ class main_module
 			{
 				$limit = 50;
 			}
-			elseif ($limit < 10)
+			else if ($limit < 10)
 			{
 				$limit = 10;
 			}
@@ -134,7 +135,6 @@ class main_module
 			$inactive_count = $rows['count'];
 			$rows = $rows['results'];
 
-
 			// Load pagination
 			$pagination = $phpbb_container->get('pagination');
 			$start = $pagination->validate_start($start, $limit, $inactive_count);
@@ -161,7 +161,7 @@ class main_module
 					'POSTS' => ($row['user_posts']) ? $row['user_posts'] : 0,
 					'LAST_VISIT' => ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
 					'INACTIVE_DATE' => ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
-					'REASON' => $user->lang('ACP_IUM_INACTIVE', (int)$row['user_inactive_reason']),
+					'REASON' => $user->lang('ACP_IUM_INACTIVE', (int) $row['user_inactive_reason']),
 					'COUNT' => ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
 					'LAST_SENT_REMINDER' => ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
 					'REMINDER_DATE' => ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
@@ -199,7 +199,7 @@ class main_module
 	 * @return array result of query and total amount of the result.
 	 */
 
-	public function get_inactive_users($paginate = true, $limit=null, $start=null, $filters = null)
+	public function get_inactive_users( $paginate = true, $limit = null, $start = null, $filters = null )
 	{
 		return $this->inactive_users($paginate, $limit, $start, $filters);
 	}
@@ -212,65 +212,67 @@ class main_module
 	 * @return array result of query and total amount of the result.
 	 */
 
-	private function inactive_users($paginate = true, $limit=null, $start=null, $filters = null)
+	private function inactive_users( $paginate = true, $limit = null, $start = null, $filters = null )
 	{
 		global $db, $table_prefix;
 
-		if ($filters) {
-
+		if ($filters)
+                {
 			$ignore = 'select';
 			$options = '';
 
-			if ($filters['with_posts']) {
+			if ( $filters['with_posts'] )
+                        {
 				$options .= ' AND p.user_posts != 0';
 			}
 
-			if ($filters['count_back'] && $filters['count_back'] != $ignore) {
-
+			if ( $filters['count_back'] && $filters['count_back'] != $ignore )
+                        {
 				/**
 				 * Big case with days back, probably will have to rethink it.
 				 */
 
-				switch ($filters['count_back']) {
+				switch ( $filters['count_back'] )
+                                {
 
 					case "30d":
-						$back = '30 DAY';
-						break;
+                                            $back = '30 DAY';
+                                            break;
 					case "60d":
-						$back = '60 DAY';
-						break;
+                                            $back = '60 DAY';
+                                            break;
 					case '90d':
-						$back = '90 DAY';
-						break;
+                                            $back = '90 DAY';
+                                            break;
 					case '4m':
-						$back = '4 MONTH';
-						break;
+                                            $back = '4 MONTH';
+                                            break;
 					case '6m':
-						$back = '6 MONTH';
-						break;
+                                            $back = '6 MONTH';
+                                            break;
 					case '9m':
-						$back = '9 MONTH';
-						break;
+                                            $back = '9 MONTH';
+                                            break;
 					case '1Y':
-						$back = '1 YEAR';
-						break;
+                                            $back = '1 YEAR';
+                                            break;
 					case '2Y':
-						$back = '2 YEAR';
-						break;
+                                            $back = '2 YEAR';
+                                            break;
 					case '3Y':
-						$back = '3 YEAR';
-						break;
+                                            $back = '3 YEAR';
+                                            break;
 					case '5Y':
-						$back = '5 YEAR';
-						break;
+                                            $back = '5 YEAR';
+                                            break;
 					case '7Y':
-						$back = '7 YEAR';
-						break;
+                                            $back = '7 YEAR';
+                                            break;
 					case '10Y':
-						$back = '10 YEAR';
-						break;
+                                            $back = '10 YEAR';
+                                            break;
 					case 'select':
-						break;
+                                            break;
 				}
 				$options .= ' AND from_unixtime(p.user_lastvisit) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
 			}
@@ -279,35 +281,38 @@ class main_module
 			 * Big case with sort by, probably will have to rethink it.
 			 */
 
-			if ($filters['sort_by'] && $filters['sort_by'] != $ignore) {
+			if ($filters['sort_by'] && $filters['sort_by'] != $ignore)
+                        {
 				$sort = ' ORDER BY ';
-				switch ($filters['sort_by']) {
+				switch ($filters['sort_by'])
+                                {
 
 					case 'username':
-						$sort .= 'p.username';
-						break;
+                                            $sort .= 'p.username';
+                                            break;
 					case 'reg_date':
-						$sort .= 'p.user_regdate';
-						break;
+                                            $sort .= 'p.user_regdate';
+                                            break;
 					case 'last_visit':
-						$sort .= 'p.user_lastvisit';
-						break;
+                                            $sort .= 'p.user_lastvisit';
+                                            break;
 					case 'posts':
-						$sort .= 'p.user_posts';
-						break;
+                                            $sort .= 'p.user_posts';
+                                            break;
 					case 'last_sent_reminder':
-						$sort .= 'r.previous_sent_date';
-						break;
+                                            $sort .= 'r.previous_sent_date';
+                                            break;
 					case 'count':
-						$sort .= 'r.remind_counter';
-						break;
+                                            $sort .= 'r.remind_counter';
+                                            break;
 					case 'reminder_date':
-						$sort .= 'r.reminder_sent_date';
-						break;
+                                            $sort .= 'r.reminder_sent_date';
+                                            break;
 					case 'select':
-						break;
+                                            break;
 				}
-				if ($filters['sort_order'] === 1) {
+				if ($filters['sort_order'] === 1)
+                                {
 					$sort .= ' DESC';
 				}
 			}
@@ -326,11 +331,13 @@ class main_module
 		   not in (1,4,5,6)' . $options . $sort;
 
 		// Run the query With pagination
-		if($paginate) {
-			$result = $db->sql_query_limit($sql, $limit, $start);
+		if($paginate)
+                {
+			$result = $db->sql_query_limit( $sql, $limit, $start );
 		}
 		// W/o pagination
-		else{
+		else
+                {
 			$result = $db->sql_query($sql);
 		}
 
@@ -338,7 +345,8 @@ class main_module
 		$inactive_users = array();
 
 		// Store results to rows
-		while ($row = $db->sql_fetchrow($result)) {
+		while ($row = $db->sql_fetchrow($result))
+                {
 			$inactive_users[] = $row;
 		};
 
@@ -352,7 +360,8 @@ class main_module
 		$count_inactive_users = array();
 
 		// Store results to an array
-		while ($row = $db->sql_fetchrow($result)) {
+		while ($row = $db->sql_fetchrow($result))
+                {
 			$count_inactive_users[] = $row;
 		};
 

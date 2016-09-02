@@ -10,7 +10,8 @@ if (!defined('IN_PHPBB')) {
     exit;
 }
 
-if (empty($lang) || !is_array($lang)) {
+if (empty( $lang) || !is_array($lang) )
+{
     $lang = array();
 }
 
@@ -79,6 +80,5 @@ $lang = array_merge(
     'THREE_YEARS' => 'Three Years',
     'FIVE_YEARS' => 'Five Years',
     'SEVEN_YEARS' => 'Seven Years',
-    'DECADE' => 'One Decade',
-        )
+    'DECADE' => 'One Decade',)
 );
