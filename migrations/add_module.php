@@ -51,7 +51,7 @@ class add_module extends migration {
 					),
 				)),
 			// Initial table population.
-			array('custom', 
+			array('custom',
 				array(
 					array(
 						$this, 'first_time_install'))),
