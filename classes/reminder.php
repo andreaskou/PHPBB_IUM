@@ -81,11 +81,11 @@ class reminder
 				$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
 				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 				$user_instance->add_lang_ext('andreask/ium', 'body');
-				
+
 				// Load top_topics class
 				$user_topics = $this->container->get('andreask.ium.classes.top_topics');
 
-				if ( $top_user_topics = $user_topics->get_user_top_topics( $sleeper['user_id'] ) )                        
+				if ( $top_user_topics = $user_topics->get_user_top_topics( $sleeper['user_id'] ) )
 				{
 					$links = PHP_EOL;
 					foreach ($top_topics as $item)
@@ -280,7 +280,7 @@ class reminder
 	 * @param $user_id	User id to search.
 	 * @return bool
 	 */
-	private function user_exist($user_id) 
+	private function user_exist($user_id)
 	{
 		$sql = 'SELECT COUNT(user_id) as user_count
 		FROM ' . $this->table_prefix . $this->table_name . '

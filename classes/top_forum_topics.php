@@ -1,6 +1,6 @@
 <?php
-namespace andreask\ium\classes;
 
+namespace andreask\ium\classes;
 
 class top_forum_topics
 {
@@ -42,7 +42,9 @@ class top_forum_topics
 		if (!$id)
 		{
 			return false;
-		}else if ($this->config['andreask_ium_top_user_threads'] == 0){
+		}
+		else if ($this->config['andreask_ium_top_user_threads'] == 0)
+		{
 			return null;
 		}
 		$this->set_id($id);
@@ -60,7 +62,8 @@ class top_forum_topics
 			$result = $this->db->sql_query_limit($sql, $this->config['andreask_ium_top_user_threads_count']);
 			$active_t_row = array();
 
-			while ($row = $this->db->sql_fetchrow($result)) {
+			while ($row = $this->db->sql_fetchrow($result))
+			{
 				$active_t_row[] = $row;
 			};
 
@@ -116,7 +119,7 @@ class top_forum_topics
 	}
 
 	private function user_access($forum_id)
-		{
+	{
 		$data = $this->auth->obtain_user_data($this->user_id);
 		$this->auth->acl($data);
 		return  $this->auth->acl_get('f_read', $forum_id);
