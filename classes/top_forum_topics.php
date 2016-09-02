@@ -25,13 +25,14 @@ class top_forum_topics
 
 	public function __construct(\phpbb\config\config $config, \phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db)
 	{
-		$this->config 	= $config;
-		$this->auth 	= $auth;
-		$this->db       = $db;
+		$this->config	=	$config;
+		$this->auth		=	$auth;
+		$this->db		=	$db;
 	}
 
-        // Set the iser_id
-	public function set_id($id){
+		// Set the iser_id
+	public function set_id($id)
+	{
 		$this->user_id=$id;
 	}
 
@@ -41,20 +42,20 @@ class top_forum_topics
 		if (!$id)
 		{
 			return false;
-		}elseif ($this->config['andreask_ium_top_user_threads'] == 0){
-			return NULL;
+		}else if ($this->config['andreask_ium_top_user_threads'] == 0){
+			return null;
 		}
 		$this->set_id($id);
 
-		if($this->user_post_count($this->user_id) > $this->config['andreask_ium_top_user_threads_count'])
+		if ($this->user_post_count($this->user_id) > $this->config['andreask_ium_top_user_threads_count'])
 		{
 			// Obtain most active topic for user
 			$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count
-			FROM ' . POSTS_TABLE . '
-			WHERE poster_id = ' . $this->user_id . '
-			AND post_postcount = 1
-			GROUP BY forum_id, topic_id 
-			ORDER BY posts_count DESC';
+					FROM ' . POSTS_TABLE . '
+					WHERE poster_id = ' . $this->user_id . '
+					AND post_postcount = 1 
+					GROUP BY forum_id, topic_id 
+					ORDER BY posts_count DESC';
 
 			$result = $this->db->sql_query_limit($sql, $this->config['andreask_ium_top_user_threads_count']);
 			$active_t_row = array();
@@ -67,14 +68,14 @@ class top_forum_topics
 
 			if (!empty($active_t_row))
 			{
-				foreach($active_t_row as $key => &$topic)
+				foreach ($active_t_row as $key => &$topic)
 				{
 					if (!$this->user_access($topic['forum_id']))
 					{
 						// delete if user does not have access to the topic any more, I just couldn't find a better place to do this.
 						unset($active_t_row[$key]);
 					}
-                                        else
+					else
 					{
 						// else complete the puzzle.
 						$sql = 'SELECT topic_title as title
@@ -100,7 +101,7 @@ class top_forum_topics
 
 	private function user_post_count($user_id)
 	{
-		if($user_id)
+		if ($user_id)
 		{
 			$sql = 'SELECT user_posts AS post_count 
 				FROM ' . USERS_TABLE . ' 
@@ -115,7 +116,7 @@ class top_forum_topics
 	}
 
 	private function user_access($forum_id)
-        {
+		{
 		$data = $this->auth->obtain_user_data($this->user_id);
 		$this->auth->acl($data);
 		return  $this->auth->acl_get('f_read', $forum_id);
