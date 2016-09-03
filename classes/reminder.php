@@ -83,18 +83,35 @@ class reminder
 				$user_instance->add_lang_ext('andreask/ium', 'body');
 
 				// Load top_topics class
-				$user_topics = $this->container->get('andreask.ium.classes.top_topics');
+				$topics = $this->container->get('andreask.ium.classes.top_topics');
 
-				if ( $top_user_topics = $user_topics->get_user_top_topics( $sleeper['user_id'] ) )
+				$topic_links = null;
+
+				if ( $top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'] ) )
 				{
-					$links = PHP_EOL;
-					foreach ($top_topics as $item)
-					{
-						$links .= PHP_EOL;
-						$links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
-						$links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
-						$links .= PHP_EOL;
+					$topic_links = PHP_EOL;
+					foreach ($top_user_topics as $item)
+					{	
+						$topic_links .= PHP_EOL;
+						$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
+						$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
+						$topic_links .= PHP_EOL;
 					}
+				}
+				
+				$forum_links = null;
+
+				if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'] ) )
+				{
+					$forum_links = PHP_EOL;
+					foreach ($top_forum_topics as $item)
+					{
+						$forum_links .= PHP_EOL;
+						$forum_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
+						$forum_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
+						$forum_links .= PHP_EOL;
+					}
+					
 				}
 
 				// dirty fix for now, need to find a way for the templates.
@@ -111,8 +128,18 @@ class reminder
 					'SITE_NAME'	=>	htmlspecialchars_decode($this->config['sitename']),
 					'SIGNATURE'	=>	$this->config['board_email_sig'],
 					'URL'	=>	generate_board_url(),
-					'USR_TPC_LIST'	=>	($top_topics) ? $user_instance->lang('INCLUDE_USER_TOPICS') . $links : '',
 				);
+
+				if (!is_null($topic_links))
+				{
+					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links ) ) );
+				}
+				if (!is_null($forum_links))
+				{
+					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links ) ) );
+				}
+
+
 				$messenger = new \messenger(false);
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
@@ -144,6 +171,7 @@ class reminder
 //				$messenger->save_queue();
 				// Update ext's table...
 				$this->update_ium_reminder($sleeper);
+				unset($topics);
 			}
 		}
 		// Log it and release the user list.
@@ -160,7 +188,7 @@ class reminder
 			$lang = $this->container->get('user');
 			$lang->add_lang_ext('andreask/ium', 'log');
 		}
-		$this->log->add('admin', 54, '127.0.0.1', sizeof($this->inactive_users) . $lang->lang('SENT_REMINDERS'), time());
+		$this->log->add('admin', 54, '127.0.0.1', sprintf($lang->lang('SENT_REMINDERS'), sizeof($this->inactive_users) ), time());
 		unset( $this->inactive_users );
 	}
 
@@ -207,6 +235,7 @@ class reminder
 	 * Sets users for $inactive_users
 	 * @param $inactive_users
 	 */
+
 	private function set_users($users)
 	{
 		$this->inactive_users = $users;
@@ -216,6 +245,7 @@ class reminder
 	 * Checks if inactive_users is populated
 	 * @return bool returns false if empty.
 	 */
+
 	public function has_users()
 	{
 		return (bool) sizeof($this->inactive_users);
@@ -225,6 +255,7 @@ class reminder
 	 * Updates/inserts users to ium_reminder
 	 * @param $user single user
 	 */
+
 	private function update_ium_reminder($user)
 	{
 		// Does the user exists in ium_reminder?
@@ -280,6 +311,7 @@ class reminder
 	 * @param $user_id	User id to search.
 	 * @return bool
 	 */
+
 	private function user_exist($user_id)
 	{
 		$sql = 'SELECT COUNT(user_id) as user_count
@@ -338,5 +370,4 @@ class reminder
 		$ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
 		return (bool) file_exists($ext_path . '/language/' . $user_lang);
 	}
-
 }
