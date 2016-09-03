@@ -91,14 +91,14 @@ class reminder
 				{
 					$topic_links = PHP_EOL;
 					foreach ($top_user_topics as $item)
-					{	
+					{
 						$topic_links .= PHP_EOL;
 						$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
 						$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
 						$topic_links .= PHP_EOL;
 					}
 				}
-				
+
 				$forum_links = null;
 
 				if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'] ) )
@@ -111,7 +111,6 @@ class reminder
 						$forum_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
 						$forum_links .= PHP_EOL;
 					}
-					
 				}
 
 				// dirty fix for now, need to find a way for the templates.
@@ -138,7 +137,6 @@ class reminder
 				{
 					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links ) ) );
 				}
-
 
 				$messenger = new \messenger(false);
 				// mail headers
