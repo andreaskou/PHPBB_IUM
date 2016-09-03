@@ -18,5 +18,5 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
-	'SENT_REMINDERS'				=>	' reminders where sent.'
+	'SENT_REMINDERS'				=>	'%s reminders were sent.'
 ));

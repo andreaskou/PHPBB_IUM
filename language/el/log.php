@@ -7,7 +7,7 @@
  *
  */
 
-if ( !defined('IN_PHPBB') )
+if (!defined('IN_PHPBB'))
 {
 	exit;
 }
@@ -18,6 +18,5 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
-	'INCLUDE_USER_TOPICS'				=>	'Bellow some links to topics that you\'ve been active. %s',
-	'INCLUDE_FORUM_TOPICS'				=>	'Bellow some links to the most active topics of the board. %s',
+	'SENT_REMINDERS'				=>	'%s υπενθυμίσεις εστάλησαν.'
 ));

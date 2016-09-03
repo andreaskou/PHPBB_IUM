@@ -18,5 +18,6 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
-	'INCLUDE_USER_TOPICS'				=>	'Εδώ είναι μερικοί σύνδεσμοι σε θέματα που ήσασταν ενεργοί.'
+	'INCLUDE_USER_TOPICS'				=>	'Παρακάτω μερικοί σύνδεσμοι σε θέματα που ήσασταν ενεργοί. %s',
+	'INCLUDE_FORUM_TOPICS'				=>	'Παρακάτω μερικοί σύνδεσμοι στα πιο ενεργά θέματα. %s',
 ));
