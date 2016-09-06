@@ -81,10 +81,10 @@ public function update_schema()
 		);
 }
 
-public function revert_schema()
+public function disabled_revert_schema()
 {
 	return array(
-		'drop_table' => array(
+		'drop_tables' => array(
 			$this->table_prefix . $this->schema_name
 			),
 		);
