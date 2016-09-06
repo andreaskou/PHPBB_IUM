@@ -19,8 +19,8 @@ if ( empty($lang) || !is_array($lang) )
 
 $lang=array_merge( $lang, array(
 	// Sort by, options for the inactive users list
-	'ACP_IUM_TITLE'	=>	'IUM extension',
-	'ACP_IUM'	=>	'IUM ρυθμίσεις',
+	'ACP_IUM_TITLE'	=>	'IUR extension',
+	'ACP_IUM'	=>	'IUR ρυθμίσεις',
 	'ACP_IUM_LIST'	=>	'Λίστα ανενεργών μελών',
 	'ACP_IUM_INACTIVE'	=>	[	0 =>	'Ενεργοποιημένο μέλος',
 								1 =>	'Προ-ενεργοποίηση εγγραφής',
@@ -38,7 +38,7 @@ $lang=array_merge( $lang, array(
 	'REMINDER_DATE'	=>	'Τελευταία υπενθύμιση εστάλη',
 	'NO_REMINDER_SENT_YET'	=>	'Δεν εστάλη καμία υπενθύμιση ακόμα',
 	// Configuration APC
-	'ANDREASK_IUM_ENABLE'	=>	'Ενεργοποίηση "Inactive User Manager";',
+	'ANDREASK_IUM_ENABLE'	=>	'Ενεργοποίηση "Inactive User Reminder";',
 	'ANDREASK_IUM_EMAIL_LIMIT'	=>	'Όριο αποστολής E-mails',
 	'ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN'	=>	'Αριθμός υπενθυμίσεων προς αποστολή <strong>ανά μέρα</strong>. Προτεινόμενη ρύθμιση είναι ~250. Επικοινονήστε με τον πάροχο hosting σας για τυχών όριο στα e-mails ανά μέρα',
 	'ANDREASK_IUM_INTERVAL'	=>	'Διάστημα ημερών πίσω',

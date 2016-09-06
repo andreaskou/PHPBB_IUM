@@ -19,12 +19,12 @@ if (empty( $lang) || !is_array($lang) )
 $lang = array_merge(
 		$lang, array(
 	//
-	'ACP_IUM'	=>	'IUM configuration',
+	'ACP_IUM'	=>	'IUR configuration',
 	'ACP_IUM_LIST'	=>	'Inactive Users List',
-	'ACP_IUM_TITLE'	=>	'IUM extension',
+	'ACP_IUM_TITLE'	=>	'IUR extension',
 	'ACP_IUM_TITLE2'	=> 'Inactive Users List',
 	// ACP configuration page
-	'ANDREASK_IUM_ENABLE'	=>	'Enable Advanced Inactive User Manager ',
+	'ANDREASK_IUM_ENABLE'	=>	'Enable Advanced Inactive User Reminder ',
 	'ANDREASK_IUM_INTERVAL'	=>	'Interval ',
 	'ANDREASK_IUM_EMAIL_LIMIT'	=>	'Limit E-mails ',
 	'ANDREASK_IUM_TOP_USER_THREADS'	=>	'Include user\'s top topics ',
