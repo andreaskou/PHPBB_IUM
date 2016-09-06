@@ -2,7 +2,6 @@
 
 namespace andreask\ium\classes;
 
-use phpbb\cache\driver\null;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class reminder
@@ -35,28 +34,28 @@ class reminder
 	/**
 	 * reminder constructor.
 	 *
-	 * @param \phpbb\config\config                                      $config				PhpBB Config
-	 * @param \phpbb\db\driver\driver_interface                         $db                             PhpBB Database
-	 * @param \phpbb\user                                               $user				PhpBB User
-	 * @param \phpbb\log\log                                            $log				PhpBB Log
+	 * @param \phpbb\config\config                                      $config                     PhpBB Config
+	 * @param \phpbb\db\driver\driver_interface                         $db                         PhpBB Database
+	 * @param \phpbb\user                                               $user			PhpBB User
+	 * @param \phpbb\log\log                                            $log			PhpBB Log
 	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $container			PhpBB container loader
-	 * @param                                                           $table_prefix                   PhpBB table prefix
-	 * @param                                                           $phpbb_root_path                PhpBB root path
+	 * @param                                                           $table_prefix               PhpBB table prefix
+	 * @param                                                           $phpbb_root_path            PhpBB root path
 	 * @param                                                           $php_ext			Php extension
 	 */
 
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext)
 	{
-		$this->config	=	$config;
+		$this->config           =	$config;
 		$this->db		=	$db;
 		$this->user		=	$user;
 		$this->user_loader	=	$user_loader;
-		$this->log	=	$log;
+		$this->log              =	$log;
 		$this->container	=	$container;
 		$this->table_prefix	=	$table_prefix;
-		$this->php_ext	=	$php_ext;
+		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
-		$this->table_name='ium_reminder';
+		$this->table_name       =       'ium_reminder';
 	}
 
 	/**
@@ -258,7 +257,7 @@ class reminder
 	{
 		// Does the user exists in ium_reminder?
 		// If he does update the row?
-		if ($this->user_exist($user['user_id']))
+		if ( $this->user_exist($user['user_id']) )
 		{
 			$update_arr = array('reminder_sent_date' => time());
 			$counter = ($user['remind_counter'] + 1);
@@ -276,7 +275,7 @@ class reminder
 			}
 			else if ( $user['remind_counter'] == 2 )
 			{
-				$merge = array('previous_sent_date' => $user['reminder_sent_date'],
+				$merge = array('previous_sent_date' =>	$user['reminder_sent_date'],
 					'remind_counter' => $counter,
 					'dont_send' => 1);
 				$update_arr = array_merge($update_arr, $merge);
