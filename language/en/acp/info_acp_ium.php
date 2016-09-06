@@ -43,7 +43,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_SELF_DELETE_EXPLAIN'	=>	'If enabled, the user will be able to remove himself from the board.',
 	// configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for a certain amount of time.',
-	'ACP_IUM_SETTINGS'	=>	'Inactive User Manager Settings',
+	'ACP_IUM_SETTINGS'	=>	'Inactive User Reminder Settings',
 	'ACP_IUM_MAIL_SETTINGS'	=>	'Reminder Settings',
 	'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Reminder Include Settings',
 	'ACP_IUM_DANGER'	=>	'Danger Area',
