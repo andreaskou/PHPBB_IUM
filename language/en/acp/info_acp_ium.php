@@ -34,7 +34,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_SELF_DELETE'	=>	'User is able to self delete THIS CONFIGURATION IS NOT AVAILIABLE YET ',
 	// ACP configuration page Explanations
 	'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'If enabled, the extension will start sending reminders to "sleepers".',
-	'ANDREASK_IUM_INTERVAL_EXPLAIN'	=>	'It is the interval of days back to count to consider a user a "sleeper". Recommended is 30 days',
+	'ANDREASK_IUM_INTERVAL_EXPLAIN'	=>	'It is the interval of days to count back to consider a user a "sleeper". Recommended is 30 days',
 	'ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN'	=>	'Amount of the reminders that can be sent <strong>per day</strong>. Recommended is ~250. But do check with your host for any limit of e-mails per day',
 	'ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN'	=>	'If enabled, mail will include user\'s top active topics since user\'s last visit.',
 	'ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN'	=>	'Amount of user\'s top topics that should be included in the e-mail.',
