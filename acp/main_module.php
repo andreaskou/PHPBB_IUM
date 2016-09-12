@@ -39,15 +39,15 @@ class main_module
 
 			if ( $request->is_set_post('submit') )
 			{
-				// Check form key
-				if ( !check_form_key($form_key) )
-				{
-					trigger_error($user->lang('FORM_INVALID'), adm_back_link( $this->u_action ), E_USER_WARNING);
-				}
+                            // Check form key
+                            if ( !check_form_key($form_key) )
+                            {
+                                    trigger_error($user->lang('FORM_INVALID'), adm_back_link( $this->u_action ), E_USER_WARNING);
+                            }
 
-				// If everything is OK store the setting
-				$this->update_config();
-				trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
+                            // If everything is OK store the setting
+                            $this->update_config();
+                            trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
 			}
 
 			$template->assign_vars(array(
