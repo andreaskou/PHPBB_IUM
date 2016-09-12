@@ -1,0 +1,3 @@
+acme_demo_controller:
+    path: /ium/{random}
+    defaults: { _controller: andreask.ium.controller:handle }
