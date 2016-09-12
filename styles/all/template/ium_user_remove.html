@@ -1,0 +1,22 @@
+<!-- INCLUDE overall_header.html -->
+<div class="panel" id="message">
+    <div class="inner">
+        <h2>{{lang('USER_SELF_DELETE_TITLE')}}</h2>
+
+        <form action="{U_ACTION}" id="andreask_ium_self_delete" method="post">
+            <fieldset>
+            <legend>{{lang('USER_SELF_DELETE_EXPLAIN')}}</legend>
+            <br/>
+            {{lang('USER_SELF_DELETE_VERIFY') ~ lang('COLON')}} <input type="checkbox" class="checkbox" value="1" name="self_delete_verify" />
+            </fieldset>
+            <fieldset>
+                <p class="submit-buttons">
+                    <input class="button1" type="submit" id="submit" name="submit" value="{{lang('CONFIRM')}}" />
+                </p>
+            </fieldset>
+            <input type="hidden" value="{RANDOM}" id="random" name="random" />
+            {S_FORM_TOKEN}
+        </form>
+    </div>
+</div>
+<!-- INCLUDE overall_footer.html -->
