@@ -22,8 +22,17 @@ services:
             - '%core.root_path%'
             - '%core.php_ext%'
     andreask.ium.classes.top_topics:
-            class: andreask\ium\classes\top_topics
-            arguments:
-                - '@config'
-                - '@auth'
-                - '@dbal.conn'
+        class: andreask\ium\classes\top_topics
+        arguments:
+            - '@config'
+            - '@auth'
+            - '@dbal.conn'
+    andreask.ium.controller:
+        class: andreask\ium\controller\main
+        arguments:
+            - '@config'
+            - '@auth'
+            - '@user'
+            - '@request'
+            - '@controller.helper'
+            - '@template'
