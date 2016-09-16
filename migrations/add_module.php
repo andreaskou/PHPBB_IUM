@@ -13,7 +13,8 @@ use phpbb\db\migration\migration;
  * For full copyright and license information, please see
  * the docs/CREDITS.txt file.
  */
-class add_module extends migration {
+class add_module extends migration
+{
 
 	private $schema_name='ium_reminder';
 
