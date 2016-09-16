@@ -104,7 +104,7 @@ class main
                 WHERE ' . $this->db->sql_build_array('SELECT', $sql_arr);
         $result = $this->db->sql_query($sql);
         $count = $this->db->sql_fetchfield('user_count');
-        $this->db->free_result($result);
+        $this->db->sql_freeresult($result);
         
         if($count == 0)
         {
