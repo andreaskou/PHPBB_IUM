@@ -1,0 +1,2 @@
+parameters:
+    andreask.ium.tables.reminder_table: %core.table_prefix%ium_reminder
