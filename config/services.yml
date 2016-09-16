@@ -1,3 +1,5 @@
+imports:
+    - { resource: tables.yml }
 services:
     andreask.ium.cron.send_reminder:
         class: andreask\ium\cron\send_reminder
@@ -27,12 +29,25 @@ services:
             - '@config'
             - '@auth'
             - '@dbal.conn'
+    andreask.ium.classes.delete_user:
+        class: andreask\ium\classes\delete_user
+        arguments:
+            - '@config'
+            - '@dbal.conn'
+            - '@user'
+            - '@log'
+            - '@service_container'
+            - '%andreask.ium.tables.reminder_table%'
+            - '%core.root_path%'
+            - '%core.php_ext%'
     andreask.ium.controller:
         class: andreask\ium\controller\main
         arguments:
             - '@config'
-            - '@auth'
+            - '@dbal.conn'
             - '@user'
             - '@request'
             - '@controller.helper'
             - '@template'
+            - '@service_container'
+            - '%andreask.ium.tables.reminder_table%'
