@@ -275,9 +275,12 @@ class reminder
 			}
 			else if ( $user['remind_counter'] == 2 )
 			{
+				$random_md5	= md5(uniqid($sleeper['user_email'], true));
 				$merge = array('previous_sent_date' =>	$user['reminder_sent_date'],
-					'remind_counter' => $counter,
-					'dont_send' => 1);
+					'remind_counter'	=>	$counter,
+					'dont_send'			=>	1,
+					'random'			=>	$random_md5,);
+
 				$update_arr = array_merge($update_arr, $merge);
 			}
 
