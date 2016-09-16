@@ -30,8 +30,12 @@ class main_module
 			$this->tpl_name = 'acp_ium_body';
 			$this->page_title = $user->lang('ACP_IUM_TITLE');
 
+
+			// $ids = array(867);
+			$ids = array(867,555, 666);
 //                        $test = $phpbb_container->get('andreask.ium.classes.reminder');
-//                        $test->send(5);
+           $test = $phpbb_container->get('andreask.ium.classes.delete_user');
+           $test->delete($ids,'auto');
 
 			$form_key = 'andreask_ium';
 
@@ -59,6 +63,8 @@ class main_module
 					'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT'	=>	$config['andreask_ium_top_forum_threads_count'],
 					'ANDREASK_IUM_EMAIL_LIMIT'				=>	$config['andreask_ium_email_limit'],
 					'ANDREASK_IUM_SELF_DELETE'				=>	$config['andreask_ium_self_delete'],
+					'ANDREASK_IUM_APPROVE_DEL'				=>	$config['andreask_ium_approve_del'],
+					'ANDREASK_IUM_KEEP_POSTS'				=>	$config['andreask_ium_keep_posts'],
 			));
 
 		}
@@ -80,11 +86,11 @@ class main_module
 			// Keep the limit between 10 and 50
 			if ($limit > 50)
 			{
-					$limit = 50;
+				$limit = 50;
 			}
 			else if ($limit < 10)
 			{
-					$limit = 10;
+				$limit = 10;
 			}
 
 			// get the options to an array so that we pass them to the sql query
@@ -187,6 +193,9 @@ class main_module
 		$config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
 		$config->set('andreask_ium_email_limit', $request->variable('andreask_ium_email_limit', ''));
 		$config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
+		$config->set('andreask_ium_approve_del', $request->variable('andreask_ium_delete_approve', ''));
+		$config->set('andreask_ium_keep_posts', $request->variable('andreask_ium_keep_posts',''));
+			
 	}
 
 	/**
