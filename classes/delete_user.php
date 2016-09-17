@@ -29,7 +29,7 @@ class delete_user
 	 * @param                                                           $php_ext					Php extension
 	 */
 
-		public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, ContainerInterface $container, $ium_reminder_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, ContainerInterface $container, $ium_reminder_table, $phpbb_root_path, $php_ext)
 	{
 		$this->config			=	$config;
 		$this->db				=	$db;
@@ -43,11 +43,11 @@ class delete_user
 
 	private function user_exist($id)
 	{
-		if(!$id)
+		if (!$id)
 		{
 			return false;
 		}
-		if( !is_array($id) )
+		if ( !is_array($id) )
 		{
 			// we need id(s) in array
 			$id = (array) $id;
@@ -62,7 +62,7 @@ class delete_user
 		$user_count = (int) $this->db->sql_fetchfield('user_count');
 		$this->db->sql_freeresult($result);
 
-		if( !$user_count == $users_to_delete )
+		if ( !$user_count == $users_to_delete )
 		{
 			// Assign language file
 			$this->user->add_lang_ext('andreask/ium', 'log');
@@ -82,7 +82,7 @@ class delete_user
 			return false;
 		}
 
-		// Determin where the request is comming from and act acordingly 
+		// Determin where the request is comming from and act acordingly
 		switch ( $request )
 		{
 			case 'auto':
@@ -131,10 +131,10 @@ class delete_user
 
 		// Assign language file
 		$this->user->add_lang_ext('andreask/ium', 'log');
-		
+
 		// Include functions_user for the user_delete function
 		include_once( $this->phpbb_root_path . 'includes/functions_user.' . $this->php_ext );
-				
+
 		// Use config to determin if posts shuld be kept or deleted. or perhaps admin want's them specifically deleted.
 		$posts = ( $this->config['andreask_ium_keep_posts'] ) ? 'retain' : 'remove';
 

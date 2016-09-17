@@ -38,13 +38,13 @@ class release_0_0_9 extends migration
 		);
 	}
 
-		public function update_schema()
+	public function update_schema()
 	{
 		return array(
 			'add_columns' => array(
 				$this->table_prefix . $this->schema_name => array(
-						'deleted'	=> array('UINT', 0),
-						'random'	=> array('VCHAR:255', 0),
+					'deleted'	=> array('UINT', 0),
+					'random'	=> array('VCHAR:255', 0),
 
 				),
 			),

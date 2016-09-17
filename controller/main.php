@@ -6,9 +6,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class main
 {
 	/**
-	 * 
+	 *
 	 * Main class for self deletion of inactive users
-	 * 
+	 *
 	 */
 
 	protected $config;
@@ -44,7 +44,7 @@ class main
 		{
 			return $this->helper->error($this->user->lang('PAGE_NOT_EXIST'), 404);
 		}
-		
+
 		// Check to see if user is logged in.
 		if ($this->user->data['user_id'] == ANONYMOUS)
 		{
@@ -78,7 +78,7 @@ class main
 			// log out user.
 			$board_url = generate_board_url(). '/ucp.php?mode=logout&sid='. $this->user->session_id;
 			$message = ($this->config['andreask_ium_approve_del']) ? $this->user->lang('NEEDS_APPROVAL', htmlspecialchars_decode($this->config['sitename'])) : $this->user->lang('USER_SELF_DELETE_SUCCESS', htmlspecialchars_decode($this->config['sitename']));
-			
+
 			// meta_refresh has to run before return because after return nothing is going to run...
 			meta_refresh(5, $board_url );
 
@@ -93,7 +93,8 @@ class main
 		return $this->helper->render('ium_user_remove.html', 'User self deletion');
 	}
 
-	private function user_check($user, $random){
+	private function user_check($user, $random)
+	{
 
 		$sql_arr = array(
 			'user_id'   => $user,
@@ -106,7 +107,7 @@ class main
 		$count = $this->db->sql_fetchfield('user_count');
 		$this->db->sql_freeresult($result);
 
-		if($count == 0)
+		if ($count == 0)
 		{
 			return false;
 		}

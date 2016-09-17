@@ -30,7 +30,6 @@ class main_module
 			$this->tpl_name = 'acp_ium_body';
 			$this->page_title = $user->lang('ACP_IUM_TITLE');
 
-
 			// $ids = array(867);
 			$ids = array(867,555, 666);
 //                        $test = $phpbb_container->get('andreask.ium.classes.reminder');
@@ -195,7 +194,7 @@ class main_module
 		$config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
 		$config->set('andreask_ium_approve_del', $request->variable('andreask_ium_delete_approve', ''));
 		$config->set('andreask_ium_keep_posts', $request->variable('andreask_ium_keep_posts',''));
-			
+
 	}
 
 	/**
