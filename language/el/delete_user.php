@@ -18,8 +18,8 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
-        'USERS_DELETED'         	=>	'"%1s" users were deleted, request type : "%2s"',
-        'USER_DELETED'          	=>	'User "%1s" was deleted, request type : "%2s"',
-        'SOMETHING_WRONG'       	=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
-        'USER_SELF_DELETED'     	=>	'A user was self deleted. Configuration for posts was set on "%s"',
-        ));
+		'USERS_DELETED'			=>	'"%1s" users were deleted, request type : "%2s"',
+		'USER_DELETED'			=>	'User "%1s" was deleted, request type : "%2s"',
+		'SOMETHING_WRONG'		=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
+		'USER_SELF_DELETED'		=>	'A user was self deleted. Configuration for posts was set on "%s"',
+		));

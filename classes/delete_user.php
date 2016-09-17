@@ -31,14 +31,14 @@ class delete_user
 
 		public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, ContainerInterface $container, $ium_reminder_table, $phpbb_root_path, $php_ext)
 	{
-		$this->config           =	$config;
+		$this->config			=	$config;
 		$this->db				=	$db;
 		$this->user				=	$user;
-		$this->log              =	$log;
+		$this->log				=	$log;
 		$this->container		=	$container;
-		$this->php_ext          =	$php_ext;
+		$this->php_ext			=	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
-		$this->table_name       =	$ium_reminder_table;
+		$this->table_name		=	$ium_reminder_table;
 	}
 
 	private function user_exist($id)
@@ -102,9 +102,9 @@ class delete_user
 				else
 				{
 					// Else delete the user...
-					$this->update_and_log($ids, $request);            
+					$this->update_and_log($ids, $request);
 				}
-				
+
 			default:
 				break;
 		}
@@ -164,7 +164,7 @@ class delete_user
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_DELETED',$users['username'], $type), time());
 			}
 		}
-		
+
 		if ( $type == 'user' )
 		{
 			// user_delete($posts, $id);
