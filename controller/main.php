@@ -51,6 +51,11 @@ class main
 			return $this->helper->error(login_box('', $this->user->lang('HAVE_TO_LOGIN')), 403);
 		}
 
+		if (! $this->user_check( $this->user->data['user_id'], $random ) )
+		{
+			return $this->helper->error($this->user->lang('INVALID_LINK_OR_USER'), 403);
+		}
+
 		$form_key = 'andreask_ium';
 		add_form_key($form_key);
 
@@ -65,10 +70,6 @@ class main
 			if ( $this->request->variable('self_delete_verify', '') != 1)
 			{
 				return $this->helper->message($this->user->lang('HAVE_TO_VERIFY') . $this->usr_back_link( $this->u_action ));
-			}
-			if (! $this->user_check( $this->user->data['user_id'], $this->request->variable('random', '') ) )
-			{
-				return $this->helper->message($this->user->lang('NO_USER_FOUND') . $this->usr_back_link( $this->u_action ));
 			}
 
 			// Request to delete user...
@@ -86,11 +87,11 @@ class main
 		}
 
 		$this->template->assign_vars(array(
-										'RANDOM'    => $random,
-										'U_ACTION'  => $this->u_action
+					'RANDOM'    => $random,
+					'U_ACTION'  => $this->u_action
 				));
 
-		return $this->helper->render('ium_user_remove.html', 'User self deletion');
+		return $this->helper->render('ium_user_remove.html', $this->user->lang('USER_SELF_DELETE_TITLE'));
 	}
 
 	private function user_check($user, $random)
@@ -100,19 +101,14 @@ class main
 			'user_id'   => $user,
 			'random'    => $random);
 
-		$sql = 'SELECT count(user_id) as user_count 
+		$sql = 'SELECT user_id, random 
 				FROM ' . $this->table_name . ' 
 				WHERE ' . $this->db->sql_build_array('SELECT', $sql_arr);
 		$result = $this->db->sql_query($sql);
-		$count = $this->db->sql_fetchfield('user_count');
+		$valid = (bool) $this->db->sql_fetchrow($result);		
 		$this->db->sql_freeresult($result);
-
-		if ($count == 0)
-		{
-			return false;
-		}
-
-		return true;
+		
+		return $valid;
 	}
 
 	private function usr_back_link($u_action)
