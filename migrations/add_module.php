@@ -25,37 +25,37 @@ class add_module extends migration
 
 	public function update_data()
 	{
-			return array(
-				array('config.add', array('andreask_ium_enable', 0)),
-				array('config.add', array('andreask_ium_interval', 30)),
-				array('config.add', array('andreask_ium_top_user_threads', 0)),
-				array('config.add', array('andreask_ium_top_user_threads_count', 5)),
-				array('config.add', array('andreask_ium_top_forum_threads', 0)),
-				array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
-				array('config.add', array('andreask_ium_email_limit', 250)),
-				array('config.add', array('andreask_ium_self_delete', 0)),
-				// cron config
-				array('config.add', array('send_reminder_last_gc', 0, true)),
-				array('config.add', array('send_reminder_gc', (60 * 60 * 24))),
-				array('config.add', array('reminder_limit', 250)),
-				// add module
-				array('module.add', array(
-						'acp',
-						'ACP_CAT_DOT_MODS',
-						'ACP_IUM_TITLE'
-						)),
-				array('module.add', array(
-						'acp',
-						'ACP_IUM_TITLE',
-						array('module_basename' => '\andreask\ium\acp\main_module',
-								'modes' => array('ium_settings', 'ium_list'),
-								),
-						)),
-				// Initial table population.
-				array('custom',
+		return array(
+			array('config.add', array('andreask_ium_enable', 0)),
+			array('config.add', array('andreask_ium_interval', 30)),
+			array('config.add', array('andreask_ium_top_user_threads', 0)),
+			array('config.add', array('andreask_ium_top_user_threads_count', 5)),
+			array('config.add', array('andreask_ium_top_forum_threads', 0)),
+			array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
+			array('config.add', array('andreask_ium_email_limit', 250)),
+			array('config.add', array('andreask_ium_self_delete', 0)),
+			// cron config
+			array('config.add', array('send_reminder_last_gc', 0, true)),
+			array('config.add', array('send_reminder_gc', (60 * 60 * 24))),
+			array('config.add', array('reminder_limit', 250)),
+			// add module
+			array('module.add', array(
+					'acp',
+					'ACP_CAT_DOT_MODS',
+					'ACP_IUM_TITLE'
+					)),
+			array('module.add', array(
+					'acp',
+					'ACP_IUM_TITLE',
+					array('module_basename' => '\andreask\ium\acp\main_module',
+							'modes' => array('ium_settings', 'ium_list', 'ium_approval_list'),
+							),
+					)),
+			// Initial table population.
+			array('custom',
+				array(
 					array(
-						array(
-							$this, 'first_time_install'))),
+						$this, 'first_time_install'))),
 			);
 	}
 
@@ -102,7 +102,6 @@ class add_module extends migration
 				WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
 				AND u.group_id NOT IN (1,4,5,6)';
 				$result = $this->sql_query($sql);
-				$this->db->sql_freeresult($result);
 			}
 		}
 	}
