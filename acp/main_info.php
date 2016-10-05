@@ -33,7 +33,12 @@ class main_info {
 					'auth'	=>	'ext_andreask/ium && acl_a_board',
 					'cat'	=>	array('ACP_IUM_TITLE'),
 					),
+				'ium_approval_list'	=>	array(
+					'title'	=>	'ACP_IUM_APPROVAL_LIST',
+					'auth'	=>	'ext_andreask/ium && acl_a_board',
+					'cat'	=>	array('ACP_IUM_TITLE'),
+					),
 				)
 			);
-	}
+	
 }
