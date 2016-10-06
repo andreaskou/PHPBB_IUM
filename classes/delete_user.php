@@ -140,7 +140,9 @@ class delete_user
 
 		if ( $type == 'auto')
 		{
-			// user_delete($posts, $id);
+			user_delete($posts, $id);
+			$this->clean_ium_table($id);
+
 			if ( $req_to_del > 1 )
 			{
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USERS_DELETED',$req_to_del, $type), time());
@@ -154,7 +156,9 @@ class delete_user
 		if ( $type == 'admin')
 		{
 			$act = ($action != null) ? $action : $posts;
-			// user_delete($act, $id);
+			user_delete($act, $id);
+			$this->clean_ium_table($id);
+			
 			if ( $req_to_del > 1 )
 			{
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USERS_DELETED',$req_to_del, $type), time());
@@ -167,13 +171,17 @@ class delete_user
 
 		if ( $type == 'user' )
 		{
-			// user_delete($posts, $id);
+			user_delete($posts, $id);
+			$this->clean_ium_table($id);
 			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_SELF_DELETED', $posts), time());
 		}
+	}
 
-		$sql_arr = array('deleted' => 1);
-
-		$sql = 'UPDATE ' . $this->table_name . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_arr) . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
-		// $this->db->sql_query($sql);
+	private function clean_ium_table($id)
+	{
+		$sql_in_array = (array) $id;
+		$sql = 'DELETE FROM ' . $this->table_name .' WHERE ' . $this->db->sql_in_set('user_id', $sql_in_array);
+		$this->db->sql_query($sql);
+		$this->db->sql_affectedrows();
 	}
 }
