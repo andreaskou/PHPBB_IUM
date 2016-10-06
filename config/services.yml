@@ -40,6 +40,12 @@ services:
             - '%andreask.ium.tables.reminder_table%'
             - '%core.root_path%'
             - '%core.php_ext%'
+    andreask.ium.classes.ignore_user:
+        class: andreask\ium\classes\ignore_user
+        arguments:
+            - '@dbal.conn'
+            - '@log'
+            - '%andreask.ium.tables.reminder_table%'
     andreask.ium.controller:
         class: andreask\ium\controller\main
         arguments:
