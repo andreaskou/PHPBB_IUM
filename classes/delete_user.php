@@ -56,7 +56,7 @@ class delete_user
 		$users_to_delete = sizeof($id);
 
 		// check user if exist if so return true
-		$sql = 'SELECT count(user_id) AS user_count 
+		$sql = 'SELECT count(user_id) AS user_count
 				FROM ' . USERS_TABLE . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 		$user_count = (int) $this->db->sql_fetchfield('user_count');
@@ -115,7 +115,7 @@ class delete_user
 		$req_to_del = sizeof($id);
 
 		// Lets just keep the usernames for logging and have a count to verify later the delete later.
-		$sql = 'SELECT username 
+		$sql = 'SELECT username
 		FROM ' . $this->table_name . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
@@ -158,7 +158,7 @@ class delete_user
 			$act = ($action != null) ? $action : $posts;
 			user_delete($act, $id);
 			$this->clean_ium_table($id);
-			
+
 			if ( $req_to_del > 1 )
 			{
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USERS_DELETED',$req_to_del, $type), time());

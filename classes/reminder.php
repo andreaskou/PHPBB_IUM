@@ -99,7 +99,7 @@ class reminder
 						$topic_links .= PHP_EOL;
 					}
 				}
-				
+
 				// Set the forum topic links first.
 				$forum_links = null;
 
@@ -177,7 +177,7 @@ class reminder
 				// Send mail...
 				$messenger->send();
 //				$messenger->save_queue();
-				
+
 				// Update ext's table...
 				$this->update_ium_reminder($sleeper);
 				unset($topics);
@@ -347,8 +347,8 @@ class reminder
 		);
 
 		// Create the SQL statement
-		$sql = 'SELECT username, remind_counter, previous_sent_date, reminder_sent_date, dont_send 
-		FROM ' . $this->table_prefix . $this->table_name . ' 
+		$sql = 'SELECT username, remind_counter, previous_sent_date, reminder_sent_date, dont_send
+		FROM ' . $this->table_prefix . $this->table_name . '
 		WHERE ' . $this->db->sql_build_array('SELECT', $select_array);
 
 		// Run the query

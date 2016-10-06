@@ -49,7 +49,7 @@ class ignore_user
 
 			$this->db->sql_freeresult($result);
 		}
-		if($not_exist)
+		if ($not_exist)
 		{
 			return $not_exist;
 		}
@@ -87,8 +87,6 @@ class ignore_user
 			'WHERE'	=> $this->db->sql_in_set('u.username', $username ) .
 			' AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) .
 			' AND r.username is null');
-
-
 
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);

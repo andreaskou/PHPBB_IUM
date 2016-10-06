@@ -101,13 +101,13 @@ class main
 			'user_id'   => $user,
 			'random'    => $random);
 
-		$sql = 'SELECT user_id, random 
-				FROM ' . $this->table_name . ' 
+		$sql = 'SELECT user_id, random
+				FROM ' . $this->table_name . '
 				WHERE ' . $this->db->sql_build_array('SELECT', $sql_arr);
 		$result = $this->db->sql_query($sql);
-		$valid = (bool) $this->db->sql_fetchrow($result);		
+		$valid = (bool) $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
-		
+
 		return $valid;
 	}
 

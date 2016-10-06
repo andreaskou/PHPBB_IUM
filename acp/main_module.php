@@ -251,7 +251,6 @@ class main_module
 				}
 			}
 
-
 			$start = $request->variable('start', 0);
 			$limit = $request->variable('users_per_page', 10);
 
@@ -267,7 +266,6 @@ class main_module
 
 			//base url for pagination, filtering and sorting
 			$base_url = $this->u_action . "&amp;users_per_page=" . $limit;
-
 
 			// Get the users list for delition using get_inactive_users
 			$rows = $this->get_inactive_users(true, $limit, $start, $options);
@@ -287,7 +285,8 @@ class main_module
 			$ignored_count = $ignored['count'];
 			$ignored = $ignored['results'];
 			$s_defined_user_options = '';
-			foreach ($ignored as $ignored_user) {
+			foreach ($ignored as $ignored_user)
+			{
 				$s_defined_user_options .= '<option value="' . $ignored_user['user_id'] . '">' . $ignored_user['username'] . '</option>';
 			}
 
@@ -359,12 +358,12 @@ class main_module
 	}
 
 	/**
-	 * @param int $limit Used for pagination in sql query to limit the numbers of rows.
-	 * @param int $start Used for pagination in sql query to say where to start from.
-	 * @param bool $paginate define if pagination is used or not.
-	 * @param null $filters Array Used for query to supply extra filters.
-	 * @return array result of query and total amount of the result.
-	 */
+	* @param int $limit Used for pagination in sql query to limit the numbers of rows.
+	* @param int $start Used for pagination in sql query to say where to start from.
+	* @param bool $paginate define if pagination is used or not.
+	* @param null $filters Array Used for query to supply extra filters.
+	* @return array result of query and total amount of the result.
+	*/
 
 	private function inactive_users($type = null, $paginate = true, $limit = null, $start = null, $filters = null)
 	{
