@@ -34,7 +34,7 @@ class release_0_0_9 extends migration
 		return array(
 			array('config.add', array('andreask_ium_version',   '0.0.9')),
 			array('config.add', array('andreask_ium_keep_posts',    1)),
-			array('config.add', array('andreask_ium_approve_del',   1)),
+			array('config.add', array('andreask_ium_approve_del',   1)),	
 		);
 	}
 
@@ -43,9 +43,8 @@ class release_0_0_9 extends migration
 		return array(
 			'add_columns' => array(
 				$this->table_prefix . $this->schema_name => array(
-					'deleted'	=> array('UINT', 0),
+					'request_date'	=> array('TIMESTAMP', 0),
 					'random'	=> array('VCHAR:255', 0),
-
 				),
 			),
 		);
