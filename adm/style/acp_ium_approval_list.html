@@ -1,0 +1,86 @@
+<!-- INCLUDE overall_header.html -->
+<a id="maincontent"></a>
+<!-- IF S_SELF_DELETE -->
+<h1>{{ lang('APPROVAL_LIST_PAGE_TITLE') }}</h1>
+
+<p>{{ lang('IUM_APPROVAL_LIST_EXPLAIN') }}</p>
+
+<form id="approval_list" method="post" action="{U_ACTION}">
+
+
+<!-- IF .pagination -->
+<div class="pagination">
+	<!-- INCLUDE pagination.html -->
+</div>
+<!-- ENDIF -->
+
+<table class="table1 zebra-table">
+<thead>
+<tr>
+	<th>{L_USERNAME}</th>
+	<th>{{ lang('REQUEST_DATE') }}</th>
+	<th>{{ lang('USER_SELECT') }}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN approval_list -->
+	<tr>
+		<td style="vertical-align: top;"><a href="{approval_list.LINK_TO_USER}">{approval_list.USERNAME}</a>
+		<!-- IF approval_list.POSTS --><br />{L_POSTS}{L_COLON}<strong>{approval_list.POSTS}</strong><!-- ENDIF -->
+		</td>
+		<td style="vertical-align: top;">{approval_list.REQUEST_DATE}</td>
+		<td style="vertical-align: top;">&nbsp;<input type="checkbox" class="radio" name="mark[]" value="{approval_list.USER_ID}" />&nbsp;</td>
+	</tr>
+<!-- BEGINELSE -->
+	<tr>
+		<td colspan="6" style="text-align: center;">{{ lang('NO_REQUESTS') }}</td>
+	</tr>
+<!-- END approval_list -->
+</tbody>
+</table>
+<fieldset class=" quick">
+	<p class="small"><a href="#" onclick="marklist('approval_list', 'mark', true); return false;">{L_MARK_ALL}</a>
+		&bull; <a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{L_UNMARK_ALL}</a></p>
+		<input class="button2" type="submit" name="approve" value="{{ lang('APPROVE') }}" />
+		{S_FORM_TOKEN}
+	</fieldset>
+<!-- IF .pagination -->
+	<div class="pagination">
+		<!-- INCLUDE pagination.html -->
+	</div>
+<!-- ENDIF -->
+</form>
+<hr>
+<!-- ENDIF -->
+<div class="column">
+<h1>{{ lang('IUM_MANAGMENT') }}</h1>
+<p>{{ lang('ANDREASK_IUM_IGNORE_LIST_EXPLAIN') }}</p>
+<form id="add_user" method="post" action="{U_ACTION}">
+	<fieldset>
+		<legend>{{ lang('IGNORE_USER_LIST') }}</legend>
+		<dl>
+		<dd class="full"><textarea id="usernames" name="usernames" rows="5" cols="5" style="width: 100%; height: 60px;"></textarea></dd>
+		<dd class="full" style="text-align: left;"><div style="float: {S_CONTENT_FLOW_END};">[ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]</div></dd>
+	</dl>
+	</fieldset>
+	<fieldset class="quick">
+		{S_HIDDEN_FIELDS}
+		{S_FORM_TOKEN}
+		<input class="button2" type="submit" name="add_users_options" value="{{ lang('ADD_IGNORE_USER') }}" />
+	</fieldset>
+</form>
+<form id="users" method="post" action="{U_ACTION}">
+	<fieldset>
+		<legend>{{ lang('IGNORED_USERS_LIST') }}</legend>
+	<dl>
+		<dd class="full"><select style="width: 100%;" name="user_id[]" multiple="multiple" size="5">{IGNORED_USER}</select></dd>
+	</dl>
+	</fieldset>
+	<fieldset class="quick">
+		{S_HIDDEN_FIELDS}
+		{S_FORM_TOKEN}
+		<input type="submit" class="button2" name="ignore[remove]" value="{{ lang('REMOVE_IGNORE_USER') }}" />
+	</fieldset>
+</form>
+</div>
+<!-- INCLUDE overall_footer.html
