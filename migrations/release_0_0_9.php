@@ -32,7 +32,7 @@ class release_0_0_9 extends migration
 	public function update_data()
 	{
 		return array(
-			array('config.add', array('andreask_ium_version',   '0.0.9')),
+			array('config.add', array('andreask_ium_version',   '0.9.0')),
 			array('config.add', array('andreask_ium_keep_posts',    1)),
 			array('config.add', array('andreask_ium_approve_del',   1)),
 		);
