@@ -84,8 +84,10 @@ class reminder
 				// Load top_topics class
 				$topics = $this->container->get('andreask.ium.classes.top_topics');
 
+				// Set the user topic links first.
 				$topic_links = null;
 
+				// If there are topics then prepare the for the mail.
 				if ( $top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'] ) )
 				{
 					$topic_links = PHP_EOL;
@@ -97,9 +99,11 @@ class reminder
 						$topic_links .= PHP_EOL;
 					}
 				}
-
+				
+				// Set the forum topic links first.
 				$forum_links = null;
 
+				// If there are topics then prepare the for the mail.
 				if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'] ) )
 				{
 					$forum_links = PHP_EOL;
@@ -113,7 +117,7 @@ class reminder
 				}
 
 				// dirty fix for now, need to find a way for the templates.
-				$lang=( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
+				$lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
 
 				// add template variables
 				$template_ary	=	array(
@@ -134,7 +138,14 @@ class reminder
 				}
 				if (!is_null($forum_links))
 				{
-					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links ) ) );
+					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $user_instance->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
+					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links ) ) );
+				}
+				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
+				{
+					$link = PHP_EOL;
+					$link .= generate_board_url() . "/ium/" . $sleeper['random'];
+					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLOW_TO_DELETE', $link)));
 				}
 
 				$messenger = new \messenger(false);
@@ -166,6 +177,7 @@ class reminder
 				// Send mail...
 				$messenger->send();
 //				$messenger->save_queue();
+				
 				// Update ext's table...
 				$this->update_ium_reminder($sleeper);
 				unset($topics);
@@ -185,7 +197,7 @@ class reminder
 			$lang = $this->container->get('user');
 			$lang->add_lang_ext('andreask/ium', 'log');
 		}
-		$this->log->add('admin', 54, '127.0.0.1', sprintf($lang->lang('SENT_REMINDERS'), sizeof($this->inactive_users) ), time());
+		$this->log->add('admin', 54, $this->user->ip, $lang->lang('SENT_REMINDERS', sizeof($this->inactive_users)), time());
 		unset( $this->inactive_users );
 	}
 
@@ -199,14 +211,15 @@ class reminder
 		$limit = ($limit) ? 'limit ' . $limit : 'limit ' . $this->config['andreask_ium_email_limit'];
 		$table_name = $this->table_prefix . $this->table_name;
 
-		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
+		// $sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
+		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*
 			FROM ' . USERS_TABLE . ' p
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
 			AND p.group_id NOT IN (1,4,5,6)
 			AND r.dont_send <> 1
-			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' MINUTE)
+			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)
 			ORDER BY p.user_regdate ASC ' . $limit;
 
 		// Run the query
@@ -269,18 +282,19 @@ class reminder
 			}
 			else if ( $user['remind_counter'] == 1 )
 			{
+				$random_md5	= md5(uniqid($user['user_email'], true));
 				$merge = array('previous_sent_date'	=>	$user['reminder_sent_date'],
-					'remind_counter'	=>	$counter);
+					'remind_counter'	=>	$counter,
+					'random'			=>	$random_md5,
+					);
 				$update_arr = array_merge($update_arr, $merge);
 			}
 			else if ( $user['remind_counter'] == 2 )
 			{
-				$random_md5	= md5(uniqid($sleeper['user_email'], true));
 				$merge = array('previous_sent_date' =>	$user['reminder_sent_date'],
 					'remind_counter'	=>	$counter,
 					'dont_send'			=>	1,
-					'random'			=>	$random_md5,);
-
+					);
 				$update_arr = array_merge($update_arr, $merge);
 			}
 
