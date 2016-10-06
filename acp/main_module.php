@@ -350,7 +350,7 @@ class main_module
 	* @param bool $paginate define if pagination is used or not.
 	* @param null $filters Array Used for query to supply extra filters.
 	* @return array result of query and total amount of the result.
- 	*/
+	*/
 
 	public function get_inactive_users($paginate = true, $limit = null, $start = null, $filters = null)
 	{
