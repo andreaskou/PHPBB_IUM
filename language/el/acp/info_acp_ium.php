@@ -22,6 +22,7 @@ $lang=array_merge( $lang, array(
 	'ACP_IUM_TITLE'	=>	'IUR extension',
 	'ACP_IUM'	=>	'IUR ρυθμίσεις',
 	'ACP_IUM_LIST'	=>	'Λίστα ανενεργών μελών',
+	'ACP_IUM_APPROVAL_LIST_TITLE'	=>	'Requests For Deletion List',
 	'ACP_IUM_INACTIVE'	=>	[	0 =>	'Ενεργοποιημένο μέλος',
 								1 =>	'Προ-ενεργοποίηση εγγραφής',
 								2 =>	'Αλλαγή προφίλ',
@@ -64,6 +65,13 @@ $lang=array_merge( $lang, array(
 	'NEVER_CONNECTED'	=>	'Το μέλος δεν συνδέθηκε ποτέ',
 	// Inactive users list page
 	'IUM_INACTIVE_REASON'	=>	'Κατάσταση',
+	// Delete approval page
+	'APPROVAL_LIST_PAGE_TITLE'	=>	'User Delete Request',
+	'IUM_APPROVAL_LIST_EXPLAIN'	=>	'This is the list of users that have requested to delete their acounts via the IUM page if the "Require approval for self delete requests" is enabled.<br/>To delete a user ither select user(s) and click APPROVE, or click on user to take you to the users overview page.',
+	'USER_SELECT'	=>	'Selected Users',
+	'NO_USER_SELECTED'	=>	'Δεν επιλέχθηκε κανένα μέλος.',
+	'NO_REQUESTS'	=>	'No requests.',
+	'USER_NOT_FOUND'	=> 'User(s) %s not found.',
 	// Sort Lists
 	'COUNT_BACK'	=>	'<strong>ΠΡΙΝ</strong> από ημέρες/μήνες/χρόνια, χρονικό διάστημα',
 	'ACP_DESCENDING'	=>	'Φθίνουσα σειρά',

@@ -19,3 +19,5 @@ Subject: Μας έχετε λείψει
 
 
 {EMAIL_SIG}
+
+{SELF_DELETE_LINK}

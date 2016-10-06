@@ -18,12 +18,13 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
-	'USER_SELF_DELETE_TITLE'		=>  'Self deletion page.',
-		'USER_SELF_DELETE_EXPLAIN'	=>  'By checking the verify box and clicking on the confirm button you accept to delete your user account in this forum.<br/>All your posts will remain intact but you will no longer be able to connect with your username/password.<br/>If you create an account with the same username previous post will not be connected with the new acount.',
-		'USER_SELF_DELETE_VERIFY'	=>  'I understand the consequencies and I verify',
-		'HAVE_TO_LOGIN'				=>  'we are sorry, but you have to login to see this page.',
-		'HAVE_TO_VERIFY'			=>  'Please check the verification box.',
-		'PAGE_NOT_EXIST'			=>  'We are teribly sorry for the inconvinience.<br/><br/>But self deletion is disabled.<br/>If you came to this page by accident please check the url you\'ve typed in your browser.<br/>If you followed a link from an e-mail that you received from us, please contact with the administrator of the page.',
-		'NEEDS_APPROVAL'			=>	'We are very sorry that you have decided to leave %s. Please note that your account is still not deleted, it first needs to be approved. Please give us some time for this action. In 3 seconds you will be redirected to our home page.',
-		'USER_SELF_DELETE_SUCCESS'	=>	'We are very sorry that you have decided to leave %s. Your account have been deleted. In 3 seconds you will be redirected to our home page.',
+	'USER_SELF_DELETE_TITLE'	=>  'Σελίδα αυτοδιαγραφής.',
+	'USER_SELF_DELETE_EXPLAIN'	=>  'Σημειώνοντας το κουτάκι και πατώντας το κουμπί επιβεβαίωσης αποδέχεστε να διαγραφεί ο λογαριασμός σας στον φόρουμ.<br/> Όλα σας οι δημοσιεύσεις θα παραμείνουν αλλά δεν θα μπορείτε πλέον να συνδεθείτε με το όνομα χρήστη/κωδικό σας.<br/>Εάν δημιουργήσετε νέο λογαριασμό με το ίδιο όνομα χρήστη οι παλιές δημοσιεύσεις δεν θα συνδεθούν με τον λογαριασμό.',
+	'USER_SELF_DELETE_VERIFY'	=>  'Κατανοώ τις συνέπειες και επιβεβαιώνω.',
+	'HAVE_TO_LOGIN'				=>  'Λυπούμαστε, αλλά θα πρέπει να συνδεθείτε για να δείτε αυτή τη σελίδα.',
+	'HAVE_TO_VERIFY'			=>  'Παρακαλώ σημειώστε το κουτάκι επιβεβαίωσης.',
+	'PAGE_NOT_EXIST'			=>  'Λυπούμαστε για την ταλαιπωρία.<br/><br/>Αλλά η σελίδα της αυτοδιαγραφής είναι απενεργοποιημένη.<br/>Αν ήρθατε σε αυτή τη σελίδα καταλάθος ελέγξτε τη διεύθυνση url που έχετε πληκτρολογήσει στο πρόγραμμα περιήγησής σας.<br/>Εάν ακολουθήσατε έναν σύνδεσμο από ένα μήνυμα ηλεκτρονικού ταχυδρομείου που λάβατε από εμάς, παρακαλούμε επικοινωνήστε με τον διαχειριστή της σελίδας.',
+	'NEEDS_APPROVAL'			=>	'Λυπούμαστε πολύ που αποφασίσατε να αποχωρήσετε από το %s. Παρακαλούμε σημειώστε ότι ο λογαριασμός σας δεν έχει διαγραφεί ακόμη, θα πρέπει πρώτα να εγκριθεί. Παρακαλώ δώστε μας λίγο χρόνο για αυτήν την ενέργεια. Σε 5 δευτερόλεπτα θα ανακατευθυνθείτε στην αρχική μας σελίδα.',
+	'USER_SELF_DELETE_SUCCESS'	=>	'Λυπούμαστε πολύ που αποφασίσατε να αποχωρήσετε από το %s. Ο λογαριασμός σας έχει διαγραφεί. Σε 5 δευτερόλεπτα θα ανακατευθυνθείτε στην αρχική μας σελίδα',
+	'INVALID_LINK_OR_USER'		=>	'Λυπούμαστε για την ταλαιπωρία.<br/><br/>Αλλά δεν έχετε πρόσβαση σε αυτή την σελίδα.<br/>Αν ήρθατε σε αυτή τη σελίδα καταλάθος ελέγξτε τη διεύθυνση url που έχετε πληκτρολογήσει στο πρόγραμμα περιήγησής σας.<br/>Εάν ακολουθήσατε έναν σύνδεσμο από ένα μήνυμα ηλεκτρονικού ταχυδρομείου που λάβατε από εμάς, παρακαλούμε επικοινωνήστε με τον διαχειριστή της σελίδας',
 	));
