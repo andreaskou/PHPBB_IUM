@@ -61,6 +61,16 @@
             <dd><input type="radio" class="radio" name="andreask_ium_keep_posts" id="andreask_ium_keep_posts" value="1" <!-- IF ANDREASK_IUM_KEEP_POSTS -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
                 <input type="radio" class="radio" name="andreask_ium_keep_posts" id="andreask_ium_keep_posts" value="0" <!-- IF not ANDREASK_IUM_KEEP_POSTS -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
         </dl>
+        <hr>
+        <dl>
+            <dt><label for="andreask_ium_auto_del">{{ lang('ANDREASK_IUM_AUTO_DEL') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_AUTO_DEL_EXPLAIN') }}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_auto_del" id="andreask_ium_auto_del" value="1" <!-- IF ANDREASK_IUM_AUTO_DEL -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
+                <input type="radio" class="radio" name="andreask_ium_auto_del" id="andreask_ium_auto_del" value="0" <!-- IF not ANDREASK_IUM_AUTO_DEL -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_auto_del_days">{{ lang('ANDREASK_IUM_AUTO_DEL_DAYS') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN')}}</span></dt>
+            <dd><input type="number" value="{ANDREASK_IUM_AUTO_DEL_DAYS}" size="2" id="andreask_ium_auto_del_days" name="andreask_ium_auto_del_days" min="1" max="365"/></dd>
+        </dl>
     </fieldset>
     <fieldset>
         <p class="submit-buttons">
