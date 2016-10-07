@@ -73,7 +73,7 @@ class delete_user
 		return true;
 	}
 
-
+	// XXX redundant???
 	public function delete($ids, $request = 'auto', $posts = null)
 	{
 
@@ -86,27 +86,17 @@ class delete_user
 		switch ( $request )
 		{
 			case 'auto':
-
 				$this->update_and_log($ids, $request);
-
-				break;
+			break;
 			case 'admin':
 				$this->update_and_log($ids, $request, $posts);
-				break;
+			break;
 			case 'user':
-				if ( $this->config['andreask_ium_approve_del'] )
-				{
-					// store for approval and send notification to admin
-					$this->update_and_log($ids, $request);
-				}
-				else
-				{
-					// Else delete the user...
-					$this->update_and_log($ids, $request);
-				}
+				$this->update_and_log($ids, $request);
+			break;
 
 			default:
-				break;
+			break;
 		}
 	}
 
@@ -119,7 +109,7 @@ class delete_user
 		FROM ' . $this->table_name . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
-		$users = array();
+		$users = [];
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -171,10 +161,42 @@ class delete_user
 
 		if ( $type == 'user' )
 		{
-			user_delete($posts, $id);
-			$this->clean_ium_table($id);
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_SELF_DELETED', $posts), time());
+			if ( $this->config['andreask_ium_approve_del'] )
+			{
+				// store for approval and add user to the list.
+				$sql_array = array(
+								'request_date'	=>	time(),
+								'type'			=>	'user',
+							);
+				$sql = 'UPDATE ' . $this->table_name . '
+						SET '. $this->db->sql_build_array('UPDATE', $sql_array) .'
+						WHERE username="' . $users['username'] . '"';
+				$this->db->sql_query($sql);
+			}
+			else
+			{
+				// Else delete the user...
+				user_delete($posts, $id);
+				$this->clean_ium_table($id);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_SELF_DELETED', $posts), time());
+			}
 		}
+	}
+
+	public function	auto_delete()
+	{
+		$sql = 'SELECT user_id FROM ' . $this->table_name . '
+				WHERE type="auto" and from_unixtime(request_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_auto_del_days'] . ' DAY)';
+		$result = $this->db->sql_query($sql);
+
+		$users = '';
+
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$users[] = $row['user_id'];
+		}
+		$this->db->sql_freeresult($result);
+		$this->delete($users);
 	}
 
 	private function clean_ium_table($id)
