@@ -32,30 +32,30 @@ class reminder
 	protected $lang;
 
 	/**
-	 * reminder constructor.
-	 *
-	 * @param \phpbb\config\config                                      $config                     PhpBB Config
-	 * @param \phpbb\db\driver\driver_interface                         $db                         PhpBB Database
-	 * @param \phpbb\user                                               $user			PhpBB User
-	 * @param \phpbb\log\log                                            $log			PhpBB Log
-	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $container			PhpBB container loader
-	 * @param                                                           $table_prefix               PhpBB table prefix
-	 * @param                                                           $phpbb_root_path            PhpBB root path
-	 * @param                                                           $php_ext			Php extension
-	 */
+	* reminder constructor.
+	*
+	* @param \phpbb\config\config                                      $config				PhpBB Config
+	* @param \phpbb\db\driver\driver_interface                         $db					PhpBB Database
+	* @param \phpbb\user                                               $user				PhpBB User
+	* @param \phpbb\log\log                                            $log					PhpBB Log
+	* @param \Symfony\Component\DependencyInjection\ContainerInterface $container			PhpBB container loader
+	* @param                                                           $table_prefix		PhpBB table prefix
+	* @param                                                           $phpbb_root_path		PhpBB root path
+	* @param                                                           $php_ext				Php extension
+	*/
 
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
-		$this->db		=	$db;
-		$this->user		=	$user;
-		$this->user_loader	=	$user_loader;
+		$this->db				=	$db;
+		$this->user				=	$user;
+		$this->user_loader		=	$user_loader;
 		$this->log              =	$log;
-		$this->container	=	$container;
-		$this->table_prefix	=	$table_prefix;
+		$this->container		=	$container;
+		$this->table_prefix		=	$table_prefix;
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
-		$this->table_name       =       'ium_reminder';
+		$this->table_name       =	'ium_reminder';
 	}
 
 	/**
@@ -121,15 +121,15 @@ class reminder
 
 				// add template variables
 				$template_ary	=	array(
-					'USERNAME'	=>	htmlspecialchars_decode($sleeper['username']),
-					'REG_DATE'	=>	date('d-m-Y', $sleeper['user_regdate']),
-					'LAST_VISIT'	=>	date('d-m-Y', $sleeper['user_lastvisit']),
-					'ADMIN_MAIL'	=>	$this->config['board_contact'],
 					'FORGOT_PASS'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=sendpassword",
 					'SEND_ACT_AG'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=resend_act",
-					'SITE_NAME'	=>	htmlspecialchars_decode($this->config['sitename']),
-					'SIGNATURE'	=>	$this->config['board_email_sig'],
-					'URL'	=>	generate_board_url(),
+					'SITE_NAME'		=>	htmlspecialchars_decode($this->config['sitename']),
+					'USERNAME'		=>	htmlspecialchars_decode($sleeper['username']),
+					'LAST_VISIT'	=>	date('d-m-Y', $sleeper['user_lastvisit']),
+					'REG_DATE'		=>	date('d-m-Y', $sleeper['user_regdate']),
+					'SIGNATURE'		=>	$this->config['board_email_sig'],
+					'ADMIN_MAIL'	=>	$this->config['board_contact'],
+					'URL'			=>	generate_board_url(),
 				);
 
 				if (!is_null($topic_links))
@@ -151,13 +151,13 @@ class reminder
 				$messenger = new \messenger(false);
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-				$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
 				$messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
+				$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
 				$messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
 
 				// mail content...
-				$messenger->to($sleeper['user_email'], $sleeper['username']);
 				$messenger->from($this->config['board_contact']);
+				$messenger->to($sleeper['user_email'], $sleeper['username']);
 
 				// Load template depending on the user
 
@@ -237,7 +237,7 @@ class reminder
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
 
-		// Store user sho we can use them.
+		// Store user so we can use them.
 		$this->set_users($inactive_users);
 	}
 
@@ -269,7 +269,8 @@ class reminder
 	private function update_ium_reminder($user)
 	{
 		// Does the user exists in ium_reminder?
-		// If he does update the row?
+		// If he does update the row...
+
 		if ( $this->user_exist($user['user_id']) )
 		{
 			$update_arr = array('reminder_sent_date' => time());
@@ -293,6 +294,8 @@ class reminder
 			{
 				$merge = array('previous_sent_date' =>	$user['reminder_sent_date'],
 					'remind_counter'	=>	$counter,
+					'request_date'		=>	time(),
+					'type'				=>	'auto',
 					'dont_send'			=>	1,
 					);
 				$update_arr = array_merge($update_arr, $merge);
