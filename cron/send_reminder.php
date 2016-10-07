@@ -36,6 +36,13 @@ class send_reminder extends \phpbb\cron\task\base
 		$reminder->send((int) $this->config['andreask_ium_email_limit']);
 		// Update last run datetime stamp
 		$this->config->set('send_reminder_last_gc', time());
+
+		// autodelete users
+		if ($this->config['andreask_ium_auto_del'])
+		{
+			$delete_user = $this->container->get('andreask.ium.classes.delete_user');
+			$delete_user->auto_delete();
+		}
 	}
 
 
