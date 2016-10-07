@@ -58,6 +58,8 @@ class main_module
 					'ANDREASK_IUM_SELF_DELETE'				=>	$config['andreask_ium_self_delete'],
 					'ANDREASK_IUM_APPROVE_DEL'				=>	$config['andreask_ium_approve_del'],
 					'ANDREASK_IUM_KEEP_POSTS'				=>	$config['andreask_ium_keep_posts'],
+					'ANDREASK_IUM_AUTO_DEL'					=>	$config['andreask_ium_auto_del'],
+					'ANDREASK_IUM_AUTO_DEL_DAYS'			=>	$config['andreask_ium_auto_del_days'],
 			));
 
 		}
@@ -310,10 +312,11 @@ class main_module
 
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('approval_list', array(
-						'USER_ID'		=> $row['user_id'],
-						'USERNAME'		=> $row['username'],
-						'POSTS'			=> ($row['user_posts']) ? $row['user_posts'] : 0,
-						'REQUEST_DATE' 	=> $user->format_date($row['request_date']),
+						'USER_ID'		=>	$row['user_id'],
+						'USERNAME'		=>	$row['username'],
+						'POSTS'			=>	($row['user_posts']) ? $row['user_posts'] : 0,
+						'REQUEST_DATE' 	=>	$user->format_date($row['request_date']),
+						'TYPE'			=>	$row['type'],
 						'LINK_TO_USER'	=>	$link
 				));
 			}
@@ -339,7 +342,8 @@ class main_module
 		$config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
 		$config->set('andreask_ium_approve_del', $request->variable('andreask_ium_delete_approve', ''));
 		$config->set('andreask_ium_keep_posts', $request->variable('andreask_ium_keep_posts',''));
-
+		$config->set('andreask_ium_auto_del', $request->variable('andreask_ium_auto_del',''));
+		$config->set('andreask_ium_auto_del_days', $request->variable('andreask_ium_auto_del_days',''));
 	}
 
 	/**
@@ -376,11 +380,11 @@ class main_module
 
 			if ( $filters['with_posts'] )
 			{
-				$options .= ' AND p.user_posts != 0';
+				$options .= ' AND p.user_posts <> 0';
 			}
 			if ( $filters['approval'])
 			{
-				$options .= ' AND r.request_date != 0';
+				$options .= ' AND (r.request_date <> 0 OR type in ("user", "auto"))';
 			}
 			if ( $filters['ignore'])
 			{
