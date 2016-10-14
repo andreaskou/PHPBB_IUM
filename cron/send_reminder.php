@@ -1,5 +1,15 @@
 <?php
-/* Put your header comments here. */
+
+/**
+* This file is part of the phpBB Forum extension package
+* IUM (Inactive User Manager).
+*
+* @copyright (c) 2016 by Andreas Kourtidis
+* @license   GNU General Public License, version 2 (GPL-2.0)
+*
+* For full copyright and license information, please see
+* the CREDITS.txt file.
+*/
 
 namespace andreask\ium\cron;
 
@@ -34,10 +44,11 @@ class send_reminder extends \phpbb\cron\task\base
 	{
 		$reminder = $this->container->get('andreask.ium.classes.reminder');
 		$reminder->send((int) $this->config['andreask_ium_email_limit']);
+
 		// Update last run datetime stamp
 		$this->config->set('send_reminder_last_gc', time());
 
-		// autodelete users
+		// autodelete users if active
 		if ($this->config['andreask_ium_auto_del'])
 		{
 			$delete_user = $this->container->get('andreask.ium.classes.delete_user');
