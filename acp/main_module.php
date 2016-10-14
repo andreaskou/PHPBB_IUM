@@ -39,13 +39,12 @@ class main_module
 				$mail_to_sleeper->send_to_admin($user->data['user_id'], 'send_sleeper');
 				trigger_error($user->lang('SLEEPER_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
 			}
-			elseif ($request->is_set_post('send_inactive'))
+			else if ($request->is_set_post('send_inactive'))
 			{
 				$mail_to_inactive = $phpbb_container->get('andreask.ium.classes.reminder');
 				$mail_to_inactive->send_to_admin($user->data['user_id'], 'send_inactive');
 				trigger_error($user->lang('INACTIVE_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
 			}
-
 
 			if ( $request->is_set_post('submit') )
 			{
