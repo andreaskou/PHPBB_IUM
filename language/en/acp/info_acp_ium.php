@@ -1,11 +1,16 @@
 <?php
 
 /**
- *
- * @package phpBB Extension - Advanced Inactive User Manager
- * @copyright (c) 2013 phpBB Group
- * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- */
+* This file is part of the phpBB Forum extension package
+* IUM (Inactive User Manager).
+*
+* @copyright (c) 2016 by Andreas Kourtidis
+* @license   GNU General Public License, version 2 (GPL-2.0)
+*
+* For full copyright and license information, please see
+* the CREDITS.txt file.
+*/
+
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -37,6 +42,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_KEEP_POSTS'				=>	'Keep posts of deleted users',
 	'ANDREASK_IUM_AUTO_DEL'					=>	'Auto delete User',
 	'ANDREASK_IUM_AUTO_DEL_DAYS'			=>	'Days after',
+	'ANDREASK_IUM_TEST_EMAIL'				=>	'Sent test e-mail',
 
 	// ACP configuration page Explanations
 	'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'If enabled, the extension will start sending reminders to "sleepers".',
@@ -52,6 +58,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'	=>	'Here you can manage the users that you want to ignore (don\'t send reminder) or remove them from the ignore list.<br/><strong>Each user in a new line.</strong><br/>Note, the following groups are <strong>ignored by default</strong> : 1. GUESTS, 4. GLOBAL_MODERATORS, 5. ADMINISTRATOR and 6. BOTS',
 	'ANDREASK_IUM_AUTO_DEL_EXPLAIN'			=>	'Users will be autodeleted after a given amount of days if they do not return after the 3 reminders.',
 	'ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN'	=>	'Ammount of days to wait untill auto delete a user after the requested day.',
+	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'A test e-mail will be sent to "%s"',
 
 	// configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for a certain amount of time.',
@@ -59,6 +66,11 @@ $lang = array_merge(
 	'ACP_IUM_MAIL_SETTINGS'	=>	'Reminder Settings',
 	'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Reminder Include Settings',
 	'ACP_IUM_DANGER'	=>	'Danger Area',
+	// configuration page
+	'INACTIVE_MAIL_SENT_TO'			=>	'A sample of email for inactive users was sent to "%s"',
+	'SLEEPER_MAIL_SENT_TO'			=>	'A sample of email for inactive users was sent to "%s"',
+	'SEND_SLEEPER'					=>	'Send sleeper template',
+	'SEND_INACTIVE'					=>	'Send Inactive template',
 	// Sort by, options for the inactive users list
 	'ACP_IUM_INACTIVE'	=> array(	0	=>	'Active',
 									1	=>	'Registration pre-activation',
@@ -85,7 +97,9 @@ $lang = array_merge(
 	'ADD_IGNORE_USER'		=>	'Add to List',
 	'REMOVE_IGNORE_USER'	=>	'Remove from List',
 	'DELETED_SUCCESSFULLY'	=>	'Deleted successfully.',
+	'REQUEST_TYPE'			=>	'Request Type',
 	'APPROVE'				=>	'Approve',
+	'NO_USER_TYPED'			=>	'No user was typed',
 	// Sort Lists
 	'COUNT_BACK'	=>	'<strong>FROM</strong> days/months/years interval and backwards',
 	'ACP_DESCENDING'	=>	'Descending order',
