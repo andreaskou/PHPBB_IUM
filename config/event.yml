@@ -1,0 +1,9 @@
+services:
+    andreask.ium.listener:
+        class: andreask\ium\event\listener
+        arguments:
+            - '@service_container'
+            - '@user'
+            - '@log'
+        tags:
+            - { name: event.listener }
