@@ -204,7 +204,6 @@ class main_module
 					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				// If no user selected trigger_error
 				if (empty($_REQUEST['mark']))
 				{
 					trigger_error($user->lang('NO_USER_SELECTED') . adm_back_link( $this->u_action ), E_USER_WARNING);
@@ -218,7 +217,7 @@ class main_module
 
 				$delete->delete($mark, 'admin');
 
-				trigger_error($user->lang('DELETED_SUCCESSFULLY'));
+				trigger_error($user->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
 			}
 
 			if ( $request->is_set_post('add_users_options'))
@@ -254,7 +253,6 @@ class main_module
 				}
 			}
 
-			// TODO make the remove ignored user to work...
 			if ( $request->is_set_post('ignore'))
 			{
 				$user_ids = request_var('user_id', array(0));
