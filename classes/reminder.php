@@ -1,5 +1,18 @@
 <?php
 
+/**
+* This file is part of the phpBB Forum extension package
+* IUM (Inactive User Manager).
+*
+* @copyright (c) 2016 by Andreas Kourtidis
+* @license   GNU General Public License, version 2 (GPL-2.0)
+*
+* For full copyright and license information, please see
+* the CREDITS.txt file.
+*/
+
+// TODO Send to admin sample mail.
+
 namespace andreask\ium\classes;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -7,17 +20,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class reminder
 {
 
-	/**
-	 *
-	 * This file is part of the phpBB Forum Software package.
-	 *
-	 * @copyright (c) phpBB Limited <https://www.phpbb.com>
-	 * @license GNU General Public License, version 2 (GPL-2.0)
-	 *
-	 * For full copyright and license information, please see
-	 * the docs/CREDITS.txt file.
-	 *
-	 */
 	protected $inactive_users = [];
 	protected $config;
 	protected $db;
@@ -386,5 +388,175 @@ class reminder
 	{
 		$ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
 		return (bool) file_exists($ext_path . '/language/' . $user_lang);
+	}
+
+	public function send_to_admin($id, $template = null)
+	{
+
+		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason
+				FROM ' . USERS_TABLE . ' WHERE user_id = '. $id ;
+
+		// Run the query
+		$result = $this->db->sql_query($sql);
+
+		// Store results to rows
+		$sleeper = $this->db->sql_fetchrow($result);
+
+		// Be sure to free the result after a SELECT query
+		$this->db->sql_freeresult($result);
+
+		if ( $sleeper )
+		{
+			if ( !class_exists('messenger') )
+			{
+				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
+			}
+
+			$this->user->add_lang_ext('andreask/ium', 'body');
+
+			$user_row = $this->user_loader->get_user($sleeper['user_id']);
+			$user_instance = new \phpbb\user('\phpbb\datetime');
+			$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
+			$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+			$user_instance->add_lang_ext('andreask/ium', 'body');
+
+			// Load top_topics class
+			$topics = $this->container->get('andreask.ium.classes.top_topics');
+
+			// Set the user topic links first.
+			$topic_links = null;
+
+			// If there are topics then prepare the for the mail.
+			// TODO fix this, Surelly can be done by a function.
+			if ( $top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'] ) )
+			{
+				$topic_links = PHP_EOL;
+				foreach ($top_user_topics as $item)
+				{
+					$topic_links .= PHP_EOL;
+					$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
+					$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
+					$topic_links .= PHP_EOL;
+				}
+			}
+
+			// Set the forum topic links first.
+			$forum_links = null;
+
+			// If there are topics then prepare the for the mail.
+			if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'] ) )
+			{
+				$forum_links = PHP_EOL;
+				foreach ($top_forum_topics as $item)
+				{
+					$forum_links .= PHP_EOL;
+					$forum_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
+					$forum_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
+					$forum_links .= PHP_EOL;
+				}
+			}
+
+			// dirty fix for now, need to find a way for the templates.
+			$lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
+
+			// add template variables
+			$template_ary	=	array(
+				'FORGOT_PASS'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=sendpassword",
+				'SEND_ACT_AG'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=resend_act",
+				'SITE_NAME'		=>	htmlspecialchars_decode($this->config['sitename']),
+				'USERNAME'		=>	htmlspecialchars_decode($sleeper['username']),
+				'LAST_VISIT'	=>	date('d-m-Y', $sleeper['user_lastvisit']),
+				'REG_DATE'		=>	date('d-m-Y', $sleeper['user_regdate']),
+				'SIGNATURE'		=>	$this->config['board_email_sig'],
+				'ADMIN_MAIL'	=>	$this->config['board_contact'],
+				'URL'			=>	generate_board_url(),
+			);
+
+			if (!is_null($topic_links))
+			{
+				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links ) ) );
+			}
+			if (!is_null($forum_links))
+			{
+				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $user_instance->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
+				// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links ) ) );
+			}
+			if ( $this->config['andreask_ium_self_delete'] == 1 )
+			{
+				$link = PHP_EOL;
+				$link .= generate_board_url() . "/ium/" . $sleeper['random'];
+				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLOW_TO_DELETE', $link)));
+			}
+
+			$messenger = new \messenger(false);
+			// mail headers
+			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
+			$messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
+			$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
+			$messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
+
+			// mail content...
+			$messenger->from($this->config['board_contact']);
+			$messenger->to($sleeper['user_email'], $sleeper['username']);
+
+			// Load template depending on the user
+
+			switch ($template)
+			{
+				case 'send_sleeper':
+					// Load sleeper template...
+					$messenger->template('@andreask_ium/sleeper', $lang);
+					$messenger->assign_vars($template_ary);
+				break;
+				case 'send_inactive':
+					$messenger->template('@andreask_ium/inactive', $lang);
+					$messenger->assign_vars($template_ary);
+				break;
+				default :
+				break;
+			}
+
+			// Send mail...
+			$messenger->send();
+			unset($topics);
+		}
+		// Log it and release the user list.
+
+		if (phpbb_version_compare($this->config['version'], '3.2.0-dev', '>='))
+		{
+			// For phpBB 3.2.x
+			$lang = $this->container->get('language');
+			$lang->add_lang('log', 'andreask/ium');
+		}
+		else
+		{
+			// For phpBB 3.1.x
+			$lang = $this->container->get('user');
+			$lang->add_lang_ext('andreask/ium', 'log');
+		}
+		$this->log->add('admin', 54, $this->user->ip, $lang->lang('SENT_REMINDERS', sizeof($this->inactive_users)), time());
+		unset( $this->inactive_users );
+	}
+
+	public function reset_counter($id)
+	{
+		// if user is not in ium_reminder...
+		if (!$this->user_exist($id))
+		{
+			return null;
+		}
+
+		// else reset counter and hope that user_lastvisit will update before ext query!
+		$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0 WHERE user_id = ' . $id and remind_counter <> 0;
+		$this->db->sql_query($sql);
+	}
+
+	// TODO Remove me!
+	public function dd($var)
+	{
+		echo "<pre>";
+		var_export($var);
+		echo "</pre>";
+		die();
 	}
 }
