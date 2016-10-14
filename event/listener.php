@@ -52,7 +52,7 @@ class listener implements EventSubscriberInterface
 		$action = $event['retain_username'];
 		$id = $event['user_ids'];
 
-		$delete = $this->container->get('andreask.classes.delete_user');
+		$delete = $this->container->get('andreask.ium.classes.delete_user');
 		$delete->clean_ium_table($id);
 
 		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'deletion mode ' . $mode, time());
