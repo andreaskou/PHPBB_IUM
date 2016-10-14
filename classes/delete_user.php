@@ -1,5 +1,16 @@
 <?php
 
+/**
+* This file is part of the phpBB Forum extension package
+* IUM (Inactive User Manager).
+*
+* @copyright (c) 2016 by Andreas Kourtidis
+* @license   GNU General Public License, version 2 (GPL-2.0)
+*
+* For full copyright and license information, please see
+* the CREDITS.txt file.
+*/
+
 namespace andreask\ium\classes;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -73,7 +84,7 @@ class delete_user
 		return true;
 	}
 
-	// XXX redundant???
+	// XXX This is redundant!!!!
 	public function delete($ids, $request = 'auto', $posts = null)
 	{
 
@@ -99,6 +110,14 @@ class delete_user
 			break;
 		}
 	}
+
+	/**
+	 * Updates ext's table and runs the delete_user to delete the user for board.
+	 * @param  int $id	array of user ids
+	 * @param  string $type	Can be only AUTO|ADMIN|USER AUTO for scheduler, ADMIN for admins approvals, USER for user request
+	 * @param  string $action retain|remove this is a parameter for delete_user to retain or delete user posts.
+	 * @return null
+	 */
 
 	private function update_and_log($id, $type, $action = null)
 	{
@@ -131,7 +150,7 @@ class delete_user
 		if ( $type == 'auto')
 		{
 			user_delete($posts, $id);
-			$this->clean_ium_table($id);
+			// $this->clean_ium_table($id);
 
 			if ( $req_to_del > 1 )
 			{
@@ -147,7 +166,7 @@ class delete_user
 		{
 			$act = ($action != null) ? $action : $posts;
 			user_delete($act, $id);
-			$this->clean_ium_table($id);
+			// $this->clean_ium_table($id);
 
 			if ( $req_to_del > 1 )
 			{
@@ -177,11 +196,16 @@ class delete_user
 			{
 				// Else delete the user...
 				user_delete($posts, $id);
-				$this->clean_ium_table($id);
+				// $this->clean_ium_table($id);
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_SELF_DELETED', $posts), time());
 			}
 		}
 	}
+
+	/**
+	 * This runs from the scheduler and it's for deleting the users automatically.
+	 * @return null
+	 */
 
 	public function	auto_delete()
 	{
@@ -195,13 +219,25 @@ class delete_user
 		{
 			$users[] = $row['user_id'];
 		}
+
 		$this->db->sql_freeresult($result);
 		$this->delete($users);
 	}
 
-	private function clean_ium_table($id)
+	/**
+	 * This cleans up users on ext's table after a user has been requested for deletion.
+	 * @param  int $id array of user ids
+	 * @return null
+	 */
+
+	public function clean_ium_table($id)
 	{
-		$sql_in_array = (array) $id;
+		if (!is_array($id))
+		{
+			$id = (array) $id;
+		}
+
+		$sql_in_array = $id;
 		$sql = 'DELETE FROM ' . $this->table_name .' WHERE ' . $this->db->sql_in_set('user_id', $sql_in_array);
 		$this->db->sql_query($sql);
 		$this->db->sql_affectedrows();
