@@ -10,6 +10,14 @@
             <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" name="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked"<!-- ENDIF -->/> {L_YES} &nbsp;
                 <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" name="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked"<!-- ENDIF -->/> {L_NO}</dd>
         </dl>
+        <dl>
+            <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TEST_EMAIL') ~ lang('COLON') }}</label><br/><span>{ANDREASK_IUM_TEST_EXPLAIN}</span></dt>
+            <dd>
+                <input class="button1" type="submit" id="submit" name="send_sleeper" value="{{lang('SEND_SLEEPER')}}" />
+            &nbsp;
+                <input class="button1" type="submit" id="submit" name="send_inactive" value="{{lang('SEND_INACTIVE')}}" />
+            </dd>
+        </dl>
     </fieldset>
     <fieldset>
         <legend>{{ lang('ACP_IUM_MAIL_SETTINGS') }}</legend>
@@ -77,8 +85,6 @@
             <input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
             <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
         </p>
-    </fieldset>
-
         {S_FORM_TOKEN}
     </fieldset>
 </form>
