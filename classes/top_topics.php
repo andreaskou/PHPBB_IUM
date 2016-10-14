@@ -1,20 +1,20 @@
 <?php
 
+/**
+* This file is part of the phpBB Forum extension package
+* IUM (Inactive User Manager).
+*
+* @copyright (c) 2016 by Andreas Kourtidis
+* @license   GNU General Public License, version 2 (GPL-2.0)
+*
+* For full copyright and license information, please see
+* the CREDITS.txt file.
+*/
+
 namespace andreask\ium\classes;
 
 class top_topics {
 
-	/**
-	 *
-	 * This file is part of the phpBB Forum Software package.
-	 *
-	 * @copyright (c) phpBB Limited <https://www.phpbb.com>
-	 * @license GNU General Public License, version 2 (GPL-2.0)
-	 *
-	 * For full copyright and license information, please see
-	 * the docs/CREDITS.txt file.
-	 *
-	 */
 	protected $user_id = null;
 	protected $db;
 	protected $config;
@@ -52,7 +52,7 @@ class top_topics {
 			FROM ' . POSTS_TABLE . '
 			WHERE poster_id = ' . $this->user_id . '
 			AND post_postcount = 1
-			GROUP BY forum_id, topic_id 
+			GROUP BY forum_id, topic_id
 			ORDER BY posts_count DESC';
 
 			// limit results to configuration
@@ -111,9 +111,9 @@ class top_topics {
 
 		// Obtain most active topic of board
 		$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count
-		FROM ' . POSTS_TABLE . ' 
-		WHERE post_postcount = 1 
-		GROUP BY forum_id, topic_id 
+		FROM ' . POSTS_TABLE . '
+		WHERE post_postcount = 1
+		GROUP BY forum_id, topic_id
 		ORDER BY posts_count DESC';
 
 		// limit results to configuration
@@ -163,8 +163,8 @@ class top_topics {
 	{
 		if ($user_id)
 		{
-			$sql = 'SELECT user_posts AS post_count 
-				FROM ' . USERS_TABLE . ' 
+			$sql = 'SELECT user_posts AS post_count
+				FROM ' . USERS_TABLE . '
 				WHERE user_id = ' . $user_id;
 
 			$result = $this->db->sql_query($sql);
