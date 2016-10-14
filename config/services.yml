@@ -1,5 +1,6 @@
 imports:
     - { resource: tables.yml }
+    - { resource: event.yml }
 services:
     andreask.ium.cron.send_reminder:
         class: andreask\ium\cron\send_reminder
