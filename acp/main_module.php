@@ -1,16 +1,15 @@
 <?php
 
 /**
- *
- * This file is part of the phpBB Forum Software package.
- *
- * @copyright (c) phpBB Limited <https://www.phpbb.com>
- * @license GNU General Public License, version 2 (GPL-2.0)
- *
- * For full copyright and license information, please see
- * the docs/CREDITS.txt file.
- *
- */
+* This file is part of the phpBB Forum extension package
+* IUM (Inactive User Manager).
+*
+* @copyright (c) 2016 by Andreas Kourtidis
+* @license   GNU General Public License, version 2 (GPL-2.0)
+*
+* For full copyright and license information, please see
+* the CREDITS.txt file.
+*/
 
 namespace andreask\ium\acp;
 
@@ -34,12 +33,26 @@ class main_module
 
 			add_form_key($form_key);
 
+			if ($request->is_set_post('send_sleeper'))
+			{
+				$mail_to_sleeper = $phpbb_container->get('andreask.ium.classes.reminder');
+				$mail_to_sleeper->send_to_admin($user->data['user_id'], 'send_sleeper');
+				trigger_error($user->lang('SLEEPER_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
+			}
+			elseif ($request->is_set_post('send_inactive'))
+			{
+				$mail_to_inactive = $phpbb_container->get('andreask.ium.classes.reminder');
+				$mail_to_inactive->send_to_admin($user->data['user_id'], 'send_inactive');
+				trigger_error($user->lang('INACTIVE_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
+			}
+
+
 			if ( $request->is_set_post('submit') )
 			{
 				// Check form key
 				if ( !check_form_key($form_key) )
 				{
-					trigger_error($user->lang('FORM_INVALID'), adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				// If everything is OK store the setting
@@ -60,8 +73,8 @@ class main_module
 					'ANDREASK_IUM_KEEP_POSTS'				=>	$config['andreask_ium_keep_posts'],
 					'ANDREASK_IUM_AUTO_DEL'					=>	$config['andreask_ium_auto_del'],
 					'ANDREASK_IUM_AUTO_DEL_DAYS'			=>	$config['andreask_ium_auto_del_days'],
+					'ANDREASK_IUM_TEST_EXPLAIN'				=>	$user->lang('ANDREASK_IUM_TEST_EMAIL_EXPLAIN', $user->data['user_email']),
 			));
-
 		}
 
 		if ($mode == 'ium_list')
@@ -215,7 +228,7 @@ class main_module
 				{
 					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
-				if (empty(request_var('usernames', '')))
+				if (!request_var('usernames', ''))
 				{
 					trigger_error($user->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
