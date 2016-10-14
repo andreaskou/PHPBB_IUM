@@ -32,11 +32,11 @@ class listener implements EventSubscriberInterface
 
 	static public function getSubscribedEvents()
 	{
-	    return array(
-            'core.login_box_redirect'	=>	'update_table_ium_reminder_counter',
+		array(
+			'core.login_box_redirect'	=>	'update_table_ium_reminder_counter',
 			'core.delete_user_after'	=>	'update_table_ium_reminder_user_deleted',
-        );
-    }
+		);
+	}
 
 	public function update_table_ium_reminder_counter($event)
 	{
