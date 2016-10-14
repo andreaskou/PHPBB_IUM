@@ -13,17 +13,18 @@ WARNING: Do NOT install this on a production enviroment.
 
 ## Features:
 
-EXT sends e-mail reminders to users that are inactive for a certain amount of time. If user will not wake up after x amount of reminders he will be enabled for (auto) purging. After 3 reminders the ext stops sending reminders to user and admin will be able to delete that user.
+EXT sends e-mail reminders to users that are inactive for a certain amount of time. If user will not wake up after the 3d reminder user will be enabled for (auto) purging. After 3 reminders the ext stops sending reminders to user and admin will be able to delete that user.
+Also user can self delete his account (with or without the approval of the administrator)
 
 * List of inactive users and their reminders status
 * Automatically send reminders to inactive users
 * Two different templates depending on user's status
 * Define by admin interval of days to consider a user as "sleeper"
-* Define by admin how many reminders per day to send
+* Define by admin how many reminders (mails) per day to send
 * Option to include user's/forums top active topics in mail
-* Option to self delete for a user.
-* Admin will be able to send reminders to individual inactive users
-* probably will be able to delete/purge inactive users if not "wake up". 
+* Option to self delete for a user. (with or without admins approval)
+* Ignore users. List of users that the ext should not send reminders
+* In future release admin will be able to send reminders to individual inactive users
 
 ## Installation
 
@@ -41,5 +42,4 @@ Go to "ACP" > "Customise" > "Extensions" and enable the "Inactive User Manager" 
 
 ## License
 
-[GPLv2]
-(licence.txt)
+[GPLv2](licence.txt)
