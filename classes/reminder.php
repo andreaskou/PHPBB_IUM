@@ -141,7 +141,6 @@ class reminder
 				if (!is_null($forum_links))
 				{
 					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $user_instance->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
-					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links ) ) );
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
 				{
