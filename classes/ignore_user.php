@@ -3,12 +3,15 @@
 namespace andreask\ium\classes;
 
 /**
- * This file is part of phpbb ext Inactive User Manager
- * @license GNU General Public License, version 2 (GPL-2.0)
- * Class ignore_user is made to enable IUM extention update
- * reminder table with the users that need to be or not to be
- * ignored by the extention.
- */
+* This file is part of the phpBB Forum extension package
+* IUM (Inactive User Manager).
+*
+* @copyright (c) 2016 by Andreas Kourtidis
+* @license   GNU General Public License, version 2 (GPL-2.0)
+*
+* For full copyright and license information, please see
+* the CREDITS.txt file.
+*/
 
 class ignore_user
 {
@@ -183,14 +186,5 @@ class ignore_user
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 		return $row;
-	}
-
-	// NOTE REMOVE ME!!!!
-	public function dd($dump)
-	{
-		echo "<pre>";
-		var_dump($dump);
-		echo "</pre>";
-		die();
 	}
 }
