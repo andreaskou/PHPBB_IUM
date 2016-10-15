@@ -164,6 +164,7 @@ class main_module
 					'TOTAL_USERS' => $inactive_count,
 					'WITH_POSTS' => ($with_posts) ? true : false,
 					'SORT_ORDER' => ($sort_order) ? true : false,
+					'USERS_PER_PAGE' => $limit,
 			));
 
 			// Assign row results to template var inactive
