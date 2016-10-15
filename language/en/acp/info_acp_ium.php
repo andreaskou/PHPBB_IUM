@@ -57,7 +57,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_KEEP_POSTS_EXPLAIN'	=>	'"Yes" will delete user but will <strong>keep</strong> the post, "No" will delete the posts of the user as well.',
 	'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'	=>	'Here you can manage the users that you want to ignore (don\'t send reminder) or remove them from the ignore list.<br/><strong>Each user in a new line.</strong><br/>Note, the following groups are <strong>ignored by default</strong> : 1. GUESTS, 4. GLOBAL_MODERATORS, 5. ADMINISTRATOR and 6. BOTS',
 	'ANDREASK_IUM_AUTO_DEL_EXPLAIN'			=>	'Users will be autodeleted after a given amount of days if they do not return after the 3 reminders.',
-	'ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN'	=>	'Ammount of days to wait untill auto delete a user after the requested day.',
+	'ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN'	=>	'Ammount of days to wait until auto delete a user after the requested day.',
 	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'A test e-mail will be sent to "%s"',
 
 	// configuration page Legend
@@ -90,6 +90,9 @@ $lang = array_merge(
 	'NO_REMINDER_SENT_YET'	=>	'Not sent any reminders yet',
 	'IUM_INACTIVE_REASON'	=>	'Status',
 	// Delete approval page
+	'APPROVAL_LIST_PAGE_TITLE'	=> 'Deletion approval list',
+	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Approval list of users with a request for deleting their account',
+	'NO_REQUESTS'			=> 'No requests yet',
 	'NO_USER_SELECTED'		=>	'No user selected.',
 	'IUM_MANAGMENT'			=>	'Inactive User Managment',
 	'IGNORE_USER_LIST'		=>	'Add users to ignore list',

@@ -1,0 +1,19 @@
+Subject: {SITENAME}: Gab es ein Problem {USERNAME}?
+
+Hallo, {USERNAME}
+
+Sie haben sich bei {SITENAME} am {REG_DATE} registriert, doch seitdem gab es keine Aktivität.
+
+Wenn Sie Ihre Zugangsdaten vergessen haben, dann können Sie diese unter nachfolgendem Link zurückerlangen:
+
+{FORGOT_PASS}
+
+Wenn Sie die Aktivierungsmail niemals bekommen haben, dann klicken Sie bitte auf den nachfolgenden Link, um eine neue Aktivierungsmail anzufordern.
+
+{SEND_ACT_AG}
+
+Sollte etwas anderes sein, kannst Sie immer den Administrator des Forums kontaktieren: {ADMIN_MAIL}.
+
+Wir hoffen, Sie bald wiederzusehen.
+
+{EMAIL_SIG}

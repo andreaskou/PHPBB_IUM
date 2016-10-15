@@ -1,0 +1,21 @@
+Subject: {SITENAME}: Wir haben dich vermisst {USERNAME}!
+
+Hallo, {USERNAME}
+
+Dein letzter Besuch beim Forum  {SITENAME} war am "{LAST_VISIT}".
+Das ist schon eine Weile her und wir hoffen dich bald wiederzusehen!
+
+Im Fall, dass du deine Zugangsdaten vergessen hast, so kannst du sie immer unter dem nachfolgenden Link zurückerlangen:
+
+{FORGOT_PASS}
+
+In jedem Fall kannst du immer den Administrator des Forums unter dieser E-Mail "{ADMIN_MAIL}" kontaktieren.
+
+Wir hoffen, dich bald wiederzusehen.
+
+{USR_TPC_LIST}
+
+{USR_FRM_LIST}
+
+
+{EMAIL_SIG}
