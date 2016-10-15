@@ -79,7 +79,7 @@ class reminder
 			{
 				$user_row = $this->user_loader->get_user($sleeper['user_id']);
 				$user_instance = new \phpbb\user('\phpbb\datetime');
-				$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
+				$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 				$user_instance->add_lang_ext('andreask/ium', 'body');
 
@@ -89,6 +89,7 @@ class reminder
 				// Set the user topic links first.
 				$topic_links = null;
 
+				// TODO make a function for this!!!
 				// If there are topics then prepare the for the mail.
 				if ( $top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'] ) )
 				{
@@ -415,7 +416,7 @@ class reminder
 
 			$user_row = $this->user_loader->get_user($sleeper['user_id']);
 			$user_instance = new \phpbb\user('\phpbb\datetime');
-			$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
+			$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 			$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 			$user_instance->add_lang_ext('andreask/ium', 'body');
 
