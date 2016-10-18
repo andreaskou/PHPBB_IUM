@@ -41,7 +41,7 @@ class top_topics {
 		}
 		if ($this->config['andreask_ium_top_user_threads'] == 0)
 		{
-			return null;
+			return false;
 		}
 
 		$this->set_id($id);
@@ -104,7 +104,7 @@ class top_topics {
 		}
 		else if ($this->config['andreask_ium_top_forum_threads'] == 0)
 		{
-			return null;
+			return false;
 		}
 		if (!$this->user_id)
 		{
@@ -129,30 +129,31 @@ class top_topics {
 
 		$this->db->sql_freeresult($result);
 
-		if ( !empty($active_t_row) )
+		if (empty($active_t_row))
 		{
-			foreach ($active_t_row as $key => &$topic)
-			{
-				if ( !$this->user_access($topic['forum_id']) )
-				{
-					// delete if user does not have access to the topic any more, I just couldn't find a better place to do this.
-					unset($active_t_row[$key]);
-				}
-				else
-				{
-					// else complete the puzzle.
-					$sql = 'SELECT topic_title as title
-						FROM ' . TOPICS_TABLE . '
-						WHERE topic_id = ' . $topic['topic_id'];
-
-					$result = $this->db->sql_query($sql);
-					$topic['topic_title'] = (string) $this->db->sql_fetchfield('title');
-					$this->db->sql_freeresult($result);
-				}
-			}
-			return $active_t_row;
+			return null;
 		}
-		return null;
+
+		foreach ($active_t_row as $key => &$topic)
+		{
+			if ( !$this->user_access($topic['forum_id']) )
+			{
+				// delete if user does not have access to the topic any more, I just couldn't find a better place to do this.
+				unset($active_t_row[$key]);
+			}
+			else
+			{
+				// else complete the puzzle.
+				$sql = 'SELECT topic_title as title
+					FROM ' . TOPICS_TABLE . '
+					WHERE topic_id = ' . $topic['topic_id'];
+
+				$result = $this->db->sql_query($sql);
+				$topic['topic_title'] = (string) $this->db->sql_fetchfield('title');
+				$this->db->sql_freeresult($result);
+			}
+		}
+		return $active_t_row;
 	}
 
 	/**
