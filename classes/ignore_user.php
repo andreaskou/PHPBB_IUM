@@ -177,6 +177,14 @@ class ignore_user
 		$this->db->sql_query($sql);
 	}
 
+	/**
+	 *
+	 * Getter for username
+	 * @param user_id
+	 * @return username
+	 *
+	 */
+
 	private function get_user_username($id)
 	{
 		$sql_array = array('user_id' => $id);
