@@ -11,8 +11,6 @@
 * the CREDITS.txt file.
 */
 
-// TODO Send to admin sample mail.
-
 namespace andreask\ium\classes;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -79,7 +77,7 @@ class reminder
 			{
 				$user_row = $this->user_loader->get_user($sleeper['user_id']);
 				$user_instance = new \phpbb\user('\phpbb\datetime');
-				$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
+				$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 				$user_instance->add_lang_ext('andreask/ium', 'body');
 
@@ -89,17 +87,10 @@ class reminder
 				// Set the user topic links first.
 				$topic_links = null;
 
-				// If there are topics then prepare the for the mail.
+				// If there are topics then prepare them for the e-mail.
 				if ( $top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'] ) )
 				{
-					$topic_links = PHP_EOL;
-					foreach ($top_user_topics as $item)
-					{
-						$topic_links .= PHP_EOL;
-						$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
-						$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
-						$topic_links .= PHP_EOL;
-					}
+					$topic_links = $this->make_topics($top_user_topics);
 				}
 
 				// Set the forum topic links first.
@@ -108,14 +99,7 @@ class reminder
 				// If there are topics then prepare the for the mail.
 				if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'] ) )
 				{
-					$forum_links = PHP_EOL;
-					foreach ($top_forum_topics as $item)
-					{
-						$forum_links .= PHP_EOL;
-						$forum_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
-						$forum_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
-						$forum_links .= PHP_EOL;
-					}
+					$forum_links = $this->make_topics($top_forum_topics);
 				}
 
 				// dirty fix for now, need to find a way for the templates.
@@ -415,7 +399,7 @@ class reminder
 
 			$user_row = $this->user_loader->get_user($sleeper['user_id']);
 			$user_instance = new \phpbb\user('\phpbb\datetime');
-			$user_instance->lang_name = $user_instance->data['user_lang'] = $user_row['user_lang'];
+			$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 			$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 			$user_instance->add_lang_ext('andreask/ium', 'body');
 
@@ -425,18 +409,10 @@ class reminder
 			// Set the user topic links first.
 			$topic_links = null;
 
-			// If there are topics then prepare the for the mail.
-			// TODO fix this, Surelly can be done by a function.
+			// If there are topics then prepare them for the e-mail.
 			if ( $top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'] ) )
 			{
-				$topic_links = PHP_EOL;
-				foreach ($top_user_topics as $item)
-				{
-					$topic_links .= PHP_EOL;
-					$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
-					$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
-					$topic_links .= PHP_EOL;
-				}
+				$topic_links = $this->make_topics($top_user_topics);
 			}
 
 			// Set the forum topic links first.
@@ -445,14 +421,7 @@ class reminder
 			// If there are topics then prepare the for the mail.
 			if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'] ) )
 			{
-				$forum_links = PHP_EOL;
-				foreach ($top_forum_topics as $item)
-				{
-					$forum_links .= PHP_EOL;
-					$forum_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
-					$forum_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
-					$forum_links .= PHP_EOL;
-				}
+				$forum_links = $this->make_topics($top_forum_topics);
 			}
 
 			// dirty fix for now, need to find a way for the templates.
@@ -471,16 +440,18 @@ class reminder
 				'URL'			=>	generate_board_url(),
 			);
 
+			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
 				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links ) ) );
 			}
+			// If there are forum topics merge them with the template_ary
 			if (!is_null($forum_links))
 			{
 				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $user_instance->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
-				// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links ) ) );
 			}
-			if ( $this->config['andreask_ium_self_delete'] == 1 )
+			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
+			if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
 			{
 				$link = PHP_EOL;
 				$link .= generate_board_url() . "/ium/" . $sleeper['random'];
@@ -488,6 +459,7 @@ class reminder
 			}
 
 			$messenger = new \messenger(false);
+
 			// mail headers
 			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 			$messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
@@ -499,21 +471,21 @@ class reminder
 			$messenger->to($sleeper['user_email'], $sleeper['username']);
 
 			// Load template depending on the user
-
 			switch ($template)
 			{
 				case 'send_sleeper':
 					// Load sleeper template...
 					$messenger->template('@andreask_ium/sleeper', $lang);
-					$messenger->assign_vars($template_ary);
 				break;
 				case 'send_inactive':
 					$messenger->template('@andreask_ium/inactive', $lang);
-					$messenger->assign_vars($template_ary);
 				break;
 				default :
 				break;
 			}
+
+			// Add template_ary to mail.
+			$messenger->assign_vars($template_ary);
 
 			// Send mail...
 			$messenger->send();
@@ -533,7 +505,9 @@ class reminder
 			$lang = $this->container->get('user');
 			$lang->add_lang_ext('andreask/ium', 'log');
 		}
-		$this->log->add('admin', 54, $this->user->ip, $lang->lang('SENT_REMINDERS', sizeof($this->inactive_users)), time());
+
+		$template = explode('_', $template);
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $lang->lang('SENT_REMINDER_TO_ADMIN',$template[1] , $sleeper['user_email']), time());
 		unset( $this->inactive_users );
 	}
 
@@ -548,6 +522,20 @@ class reminder
 		// else reset counter and hope that user_lastvisit will update before ext query!
 		$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0 WHERE user_id = ' . $id and remind_counter <> 0;
 		$this->db->sql_query($sql);
+	}
+
+	public function make_topics($topics)
+	{
+		$topic_links = '';
+		foreach ($topics as $item)
+		{
+			$topic_links .= PHP_EOL;
+			$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
+			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
+			$topic_links .= PHP_EOL;
+		}
+
+		return $topic_links;
 	}
 
 	// TODO Remove me!
