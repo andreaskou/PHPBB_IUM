@@ -90,6 +90,7 @@ $lang = array_merge(
 	'NO_REMINDER_SENT_YET'	=>	'Not sent any reminders yet',
 	'IUM_INACTIVE_REASON'	=>	'Status',
 	// Delete approval page
+	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Deletion approval list',
 	'APPROVAL_LIST_PAGE_TITLE'	=> 'Deletion approval list',
 	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Approval list of users with a request for deleting their account',
 	'NO_REQUESTS'			=> 'No requests yet',

@@ -90,6 +90,7 @@ $lang = array_merge(
 	'NO_REMINDER_SENT_YET'	=>	'Noch keine Erinnerungsmails geschickt',
 	'IUM_INACTIVE_REASON'	=>	'Status',
 	// Delete approval page
+	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Überprüfung der Löschanträge',
 	'APPROVAL_LIST_PAGE_TITLE'	=> 'Überprüfung der Löschanträge',
 	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Liste der Mitglieder, die eine Löschung beantragt haben',
 	'NO_REQUESTS'			=> 'Bisher keine Löschanträge',
