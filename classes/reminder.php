@@ -205,6 +205,7 @@ class reminder
 			AND p.group_id NOT IN (1,4,5,6)
 			AND r.dont_send <> 1
 			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)
+			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)
 			ORDER BY p.user_regdate ASC ' . $limit;
 
 		// Run the query
