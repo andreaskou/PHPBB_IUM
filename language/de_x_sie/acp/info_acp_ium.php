@@ -69,7 +69,7 @@ $lang = array_merge(
 	// configuration page
 	'INACTIVE_MAIL_SENT_TO'			=>	'Eine Beispielmail für inaktive Mitglieder wurde an "%s" gesendet',
 	'SLEEPER_MAIL_SENT_TO'			=>	'Eine Beispielmail für schlafende Mitglieder wurde an "%s" gesendet',
-	'SEND_SLEEPER'					=>	'Sendet ein Beispiel für "Schläfer"',
+	'SEND_SLEEPER'					=>	'Sendet ein Beispiel für Schläfer',
 	'SEND_INACTIVE'					=>	'Sendet ein Beispiel für inaktive Mitglieder',
 	// Sort by, options for the inactive users list
 	'ACP_IUM_INACTIVE'	=> array(	0	=>	'Aktiv',
