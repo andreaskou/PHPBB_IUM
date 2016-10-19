@@ -22,6 +22,7 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
+	'SENT REMINDER TO ADMIN'		=>	'Template "%1s" was sent to "%2s"',
 	'SENT_REMINDERS'			=>	'%s reminders were sent.',
 	'USERS_DELETED'				=>	'"%1s" users were deleted, request type : "%2s"',
 	'USER_DELETED'				=>	'User "%1s" was deleted, request type : "%2s"',

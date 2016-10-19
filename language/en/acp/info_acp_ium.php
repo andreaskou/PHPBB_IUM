@@ -52,7 +52,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN'	=>	'Amount of user\'s top topics that should be included in the e-mail.',
 	'ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN'	=>	'If enabled, mail will include board\'s top topics since user\'s last visit.',
 	'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN'	=>	'Amount of forum topics that should be included in e-mail',
-	'ANDREASK_IUM_SELF_DELETE_EXPLAIN'	=>	'If enabled, a link to a page <strong>board_url/ium/{random_key}</strong>" will be included to user and they will be able to self delete their acount..',
+	'ANDREASK_IUM_SELF_DELETE_EXPLAIN'	=>	'If enabled, a link to a page "<strong>board_url/ium/{random_key}</strong>" will be included to user and they will be able to self delete their acount..',
 	'ANDREASK_IUM_DELETE_APPROVE_EXPLAIN'	=>	'If enabled all self delete request will have to be approved by the administrator.',
 	'ANDREASK_IUM_KEEP_POSTS_EXPLAIN'	=>	'"Yes" will delete user but will <strong>keep</strong> the post, "No" will delete the posts of the user as well.',
 	'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'	=>	'Here you can manage the users that you want to ignore (don\'t send reminder) or remove them from the ignore list.<br/><strong>Each user in a new line.</strong><br/>Note, the following groups are <strong>ignored by default</strong> : 1. GUESTS, 4. GLOBAL_MODERATORS, 5. ADMINISTRATOR and 6. BOTS',
@@ -90,6 +90,7 @@ $lang = array_merge(
 	'NO_REMINDER_SENT_YET'	=>	'Not sent any reminders yet',
 	'IUM_INACTIVE_REASON'	=>	'Status',
 	// Delete approval page
+	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Deletion approval list',
 	'APPROVAL_LIST_PAGE_TITLE'	=> 'Deletion approval list',
 	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Approval list of users with a request for deleting their account',
 	'NO_REQUESTS'			=> 'No requests yet',

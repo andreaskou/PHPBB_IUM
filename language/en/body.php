@@ -24,5 +24,5 @@ if ( empty($lang) || !is_array($lang) )
 $lang = array_merge($lang, array(
 	'INCLUDE_USER_TOPICS'				=>	'Bellow some links to topics that you\'ve been active. %s',
 	'INCLUDE_FORUM_TOPICS'				=>	'Bellow some links to the most active topics of the board. %s',
-	'FOLOW_TO_DELETE'					=>	'Click on the following link to delete your account.%s',
+	'FOLOW_TO_DELETE'					=>	'Click on the following link to delete your account. %s',
 ));
