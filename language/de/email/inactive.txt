@@ -1,6 +1,6 @@
 Subject: {SITENAME}: Gab es ein Problem {USERNAME}?
 
-Hallo, {USERNAME}
+Hallo {USERNAME},
 
 Du hast dich bei Ukraine-Forum am {REG_DATE} registriert, doch seitdem gab es keine Aktivität.
 

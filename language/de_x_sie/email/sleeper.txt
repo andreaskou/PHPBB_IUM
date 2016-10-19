@@ -1,6 +1,6 @@
 Subject: {SITENAME}: Wir vermissen Sie {USERNAME}!
 
-Hallo, {USERNAME}
+Hallo {USERNAME},
 
 Ihr letzter Besuch beim Forum {SITENAME} liegt mit dem "{LAST_VISIT}" schon eine Weile zurück.
 

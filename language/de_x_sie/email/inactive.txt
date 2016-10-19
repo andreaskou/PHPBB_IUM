@@ -1,6 +1,6 @@
 Subject: {SITENAME}: Gab es ein Problem {USERNAME}?
 
-Hallo, {USERNAME}
+Hallo {USERNAME},
 
 Sie haben sich bei {SITENAME} am {REG_DATE} registriert, doch seitdem gab es keine Aktivität.
 
@@ -12,7 +12,7 @@ Wenn Sie die Aktivierungsmail niemals bekommen haben, dann klicken Sie bitte auf
 
 {SEND_ACT_AG}
 
-Sollte etwas anderes sein, kannst Sie immer den Administrator des Forums kontaktieren: {ADMIN_MAIL}.
+Sollte etwas anderes sein, können Sie immer den Administrator des Forums kontaktieren: {ADMIN_MAIL}.
 
 Wir hoffen, Sie bald wiederzusehen.
 

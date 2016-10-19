@@ -46,19 +46,19 @@ $lang = array_merge(
 
 	// ACP configuration page Explanations
 	'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'Wenn aktiviert, beginnt die Erweiterung damit E-Mails an "Schläfer" zu senden.',
-	'ANDREASK_IUM_INTERVAL_EXPLAIN'	=>	'Der Zeitraum nachdem ein Mitglied als "Schläfer" angesehen wird. Empfohlen sind 30 Tage',
-	'ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN'	=>	'Anzahl der Erinnerungenm die <b>pro Tag</b> gesendet werden können. Empfohlen sind ~250. Aber überprüfen Sie, ob die Zahl der E-Mails pro Tag bei Ihrem Provider in irgendeiner Form beschränkt ist',
-	'ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN'	=>	'Wenn ausgewählt, dann wird die Mail die Top aktiven Themen des Mitglieds seit seinem letzten Besuch enthalten.',
+	'ANDREASK_IUM_INTERVAL_EXPLAIN'	=>	'Der Zeitraum nachdem ein Mitglied als "Schläfer" angesehen wird. Empfohlen sind 30 Tage.',
+	'ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN'	=>	'Anzahl der Erinnerungenm die <b>pro Tag</b> gesendet werden können. Empfohlen sind ~250. Aber überprüfen Sie, ob die Zahl der E-Mails pro Tag bei Ihrem Provider in irgendeiner Form beschränkt ist.',
+	'ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN'	=>	'Wenn ausgewählt, dann wird die Mail die aktiven Topthemen des Mitglieds seit seinem letzten Besuch enthalten.',
 	'ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN'	=>	'Anzahl der Topthemen des Mitglieds, die in der E-Mail enthalten sein sollten.',
 	'ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN'	=>	'Wenn aktiviert, wird die Mail die Topthemen des Forums seit seinem letzten Besuch enthalten.',
-	'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN'	=>	'Anzahl der Forum-Themen, die in der E-Mail enthalten sein sollen',
-	'ANDREASK_IUM_SELF_DELETE_EXPLAIN'	=>	'Wenn aktiviert, dann wird ein Link zur Seite <strong>board_url/ium/{random_key}</strong>" in der E-Mail an das Mitglied enthalten sein, über den er seinen Zugang selbst löschen kann..',
+	'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN'	=>	'Anzahl der Forum-Themen, die in der E-Mail enthalten sein sollen.',
+	'ANDREASK_IUM_SELF_DELETE_EXPLAIN'	=>	'Wenn aktiviert, dann wird ein Link zur Seite "<strong>board_url/ium/{random_key}</strong>" in der E-Mail an das Mitglied enthalten sein, über den er seinen Zugang selbst löschen kann.',
 	'ANDREASK_IUM_DELETE_APPROVE_EXPLAIN'	=>	'Wenn aktiviert, dann müssen alle Anfragen zur Selbstlöschung von einem Administrator geprüft werden.',
 	'ANDREASK_IUM_KEEP_POSTS_EXPLAIN'	=>	'"Ja" wird den Zugang löschen, aber die Beiträge <strong>beibehalten</strong>, "Nein" wird die Beiträge des Nutzers ebenso löschen.',
 	'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'	=>	'Hier können Sie die Mitglieder managen, die Sie ignorieren (keine Erinnerungsmails) wollen oder sie von der Ignorierungsliste löschen.<br/><strong>Pro Zeile ein Nutzername.</strong><br/>Hinweis: die nachfolgenden Gruppen werden <strong>standardmäßig ignoriert</strong> : 1. Gäste, 4. Globale Moderatoren, 5. Administratoren and 6. Bots',
 	'ANDREASK_IUM_AUTO_DEL_EXPLAIN'			=>	'Mitglieder werden automatisch gelöscht nach einer angegebenen Zahl von Tagen, wenn sie nicht nach drei Erinnerungen zurückkommen.',
 	'ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN'	=>	'Anzahl an Wartetagen bis ein Mitglied automatisch nach Ablauf der Wartefrist gelöscht wird.',
-	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'Eine Test-E-Mail wird gesendet an "%s"',
+	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'Eine Test-E-Mail wird gesendet an "%s".',
 
 	// configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In dieser Liste können Sie die Mitglieder sehen, die sich registriert haben, aber deren Zugänge inaktiv sind und diejenigen, die das Forum über einen definierten Zeitraum nicht besucht haben.',
@@ -69,8 +69,8 @@ $lang = array_merge(
 	// configuration page
 	'INACTIVE_MAIL_SENT_TO'			=>	'Eine Beispielmail für inaktive Mitglieder wurde an "%s" gesendet',
 	'SLEEPER_MAIL_SENT_TO'			=>	'Eine Beispielmail für schlafende Mitglieder wurde an "%s" gesendet',
-	'SEND_SLEEPER'					=>	'Sende ein "Schläfer"-Beispiel',
-	'SEND_INACTIVE'					=>	'Sende ein Beispiel für inaktive Mitglieder',
+	'SEND_SLEEPER'					=>	'Sendet ein Beispiel für "Schläfer"',
+	'SEND_INACTIVE'					=>	'Sendet ein Beispiel für inaktive Mitglieder',
 	// Sort by, options for the inactive users list
 	'ACP_IUM_INACTIVE'	=> array(	0	=>	'Aktiv',
 									1	=>	'Registriert nicht aktiviert',
@@ -101,7 +101,7 @@ $lang = array_merge(
 	'REMOVE_IGNORE_USER'	=>	'Von der Liste entfernen',
 	'DELETED_SUCCESSFULLY'	=>	'Erfolgreich gelöscht.',
 	'REQUEST_TYPE'			=>	'Anfragetyp',
-	'APPROVE'				=>	'Bestätige',
+	'APPROVE'				=>	'Bestätigen',
 	'NO_USER_TYPED'			=>	'Kein Mitglied wurde eingestuft',
 	// Sort Lists
 	'COUNT_BACK'	=>	'im Intervall <strong>VON</strong> Tagen/Monaten/Jahren und zurück',
