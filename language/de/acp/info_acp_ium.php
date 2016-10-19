@@ -40,7 +40,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_SELF_DELETE'	=>	'Der Nutzer ist in der Lage sich selbst zu löschen',
 	'ANDREASK_IUM_DELETE_APPROVE'			=>	'Bestätigung für einen Selbstlöschungsantrag erforderlich',
 	'ANDREASK_IUM_KEEP_POSTS'				=>	'Die Beiträge des Nutzers behalten',
-	'ANDREASK_IUM_AUTO_DEL'					=>	'Nutzer automatische löschen',
+	'ANDREASK_IUM_AUTO_DEL'					=>	'Nutzer automatisch löschen?',
 	'ANDREASK_IUM_AUTO_DEL_DAYS'			=>	'Nach wie vielen Tagen?',
 	'ANDREASK_IUM_TEST_EMAIL'				=>	'Test-E-Mail senden',
 
