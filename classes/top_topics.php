@@ -149,7 +149,7 @@ class top_topics {
 					WHERE topic_id = ' . $topic['topic_id'];
 
 				$result = $this->db->sql_query($sql);
-				$topic['topic_title'] = (string) $this->db->sql_fetchfield('title');
+				$topic['topic_title'] = (string) htmlspecialchars_decode($this->db->sql_fetchfield('title'));
 				$this->db->sql_freeresult($result);
 			}
 		}
