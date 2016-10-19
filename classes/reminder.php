@@ -530,7 +530,7 @@ class reminder
 		foreach ($topics as $item)
 		{
 			$topic_links .= PHP_EOL;
-			$topic_links .= '"' . htmlspecialchars_decode($item['topic_title']) . '"' . PHP_EOL;
+			$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
 			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
 			$topic_links .= PHP_EOL;
 		}
