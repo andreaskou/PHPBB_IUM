@@ -134,7 +134,10 @@ class reminder
 				}
 
 				$messenger = new \messenger(false);
-				// mail headers
+
+				// TODO check if this is OK to do...
+				// $this->request->server('SERVER_ADDR');
+				// mail andtiabuse headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 				$messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
 				$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
