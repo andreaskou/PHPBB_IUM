@@ -16,6 +16,7 @@ namespace andreask\ium\classes;
 class top_topics {
 
 	protected $user_id = null;
+	protected $user_lastvisit;
 	protected $db;
 	protected $config;
 	protected $auth;
@@ -28,12 +29,13 @@ class top_topics {
 	}
 
 	// Set the iser_id
-	public function set_id($id)
+	public function set_id_and_date($id, $date)
 	{
-		$this->user_id = $id;
+		$this->user_id			=	$id;
+		$this->user_lastvisit	=	$date;
 	}
 
-	public function get_user_top_topics($id)
+	public function get_user_top_topics($id, $last_visit)
 	{
 		if (!$id)
 		{
@@ -44,25 +46,24 @@ class top_topics {
 			return false;
 		}
 
-		$this->set_id($id);
+		$this->set_id_and_date($id, $last_visit);
 
 		if ( $this->user_post_count($this->user_id) > $this->config['andreask_ium_top_user_threads_count'])
 		{
 			// Obtain most active topic for user
-			$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count
-			FROM ' . POSTS_TABLE . '
-			WHERE poster_id = ' . $this->user_id . '
-			AND post_postcount = 1
-			GROUP BY forum_id, topic_id
-			ORDER BY posts_count DESC';
+			$sql = 'SELECT topic_id, count(post_id) as posts_count
+					FROM ' . POSTS_TABLE . '
+					WHERE poster_id = ' . $this->user_id . '
+					AND post_postcount = 1
+					GROUP BY topic_id
+					ORDER BY posts_count DESC';
 
-			// limit results to configuration
-			$result = $this->db->sql_query_limit($sql, $this->config['andreask_ium_top_user_threads_count']);
-			$active_t_row = array();
+			$result = $this->db->sql_query($sql);
+			$active_t_row = '';
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$active_t_row[] = $row;
+				$active_t_row[] = $row['topic_id'];
 			};
 
 			$this->db->sql_freeresult($result);
@@ -72,12 +73,33 @@ class top_topics {
 				return null;
 			}
 
-			foreach ($active_t_row as $key => &$topic)
+			// get the latest updated topics from users last visit date
+			$sql = 'SELECT forum_id, topic_id, count(post_id) as post_count, max(post_time)
+					FROM ' . POSTS_TABLE . '
+					WHERE ' . $this->db->sql_in_set('topic_id', $active_t_row) .'
+					AND post_time > '. $this->user_lastvisit .'
+					GROUP BY forum_id, topic_id ORDER BY max(post_time) desc, count(post_id) desc';
+			$result = $this->db->sql_query_limit($sql, $this->config['andreask_ium_top_user_threads_count']);
+			$active_topics = '';
+
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$active_topics[] = $row;
+			}
+
+			$this->db->sql_freeresult($result);
+
+			if (empty($active_topics))
+			{
+				return null;
+			}
+
+			foreach ($active_topics as $key => &$topic)
 			{
 				if ( !$this->user_access($topic['forum_id']) )
 				{
 					// delete if user does not have access to the topic any more, I just couldn't find a better place to do this.
-					unset($active_t_row[$key]);
+					unset($active_topics[$key]);
 				}
 				else
 				{
@@ -91,30 +113,27 @@ class top_topics {
 					$this->db->sql_freeresult($result);
 				}
 			}
-			return $active_t_row;
+			return $active_topics;
 		}
 	}
 
-
-	public function get_forum_top_topics($id)
+	public function get_forum_top_topics($id, $last_visit)
 	{
 		if (!$id)
 		{
-			return false;
+			return null;
 		}
 		else if ($this->config['andreask_ium_top_forum_threads'] == 0)
 		{
-			return false;
+			return null;
 		}
-		if (!$this->user_id)
-		{
-			$this->set_id($id);
-		}
+		$this->set_id_and_date($id, $last_visit);
 
 		// Obtain most active topic of board
 		$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count
 		FROM ' . POSTS_TABLE . '
 		WHERE post_postcount = 1
+		AND post_time > '. $this->user_lastvisit .'
 		GROUP BY forum_id, topic_id
 		ORDER BY posts_count DESC';
 
