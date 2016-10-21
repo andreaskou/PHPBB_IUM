@@ -1,5 +1,4 @@
-# phpBB Inactive User Manager
-
+# phpBB Inactive User Manager v 0.9.3-beta
 
 phpBB Inactive User Manager is an Extension for [phpBB 3.1](https://www.phpbb.com/)
 
