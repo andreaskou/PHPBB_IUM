@@ -9,8 +9,6 @@ phpBB Inactive User Manager will allow you to manager inactive users in your php
 The extension is in a very early stage but I will try to update as often as I can.
 Please let me know your ideas and thoughts.
 
-WARNING: Do NOT install this on a production enviroment.
-
 ## Features:
 
 EXT sends e-mail reminders to users that are inactive for a certain amount of time. If user will not wake up after the 3d reminder user will be enabled for (auto) purging. After 3 reminders the ext stops sending reminders to user and admin will be able to delete that user.
