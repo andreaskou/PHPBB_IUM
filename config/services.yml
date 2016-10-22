@@ -21,6 +21,7 @@ services:
             - '@user_loader'
             - '@log'
             - '@service_container'
+            - '@request'
             - '%core.table_prefix%'
             - '%core.root_path%'
             - '%core.php_ext%'
