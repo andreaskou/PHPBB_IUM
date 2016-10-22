@@ -17,7 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class reminder
 {
-
 	protected $inactive_users = [];
 	protected $config;
 	protected $db;
@@ -25,6 +24,7 @@ class reminder
 	protected $user_loader;
 	protected $log;
 	protected $container;
+	protected $request;
 	protected $table_prefix;
 	protected $phpbb_root_path;
 	protected $php_ext;
@@ -32,19 +32,19 @@ class reminder
 	protected $lang;
 
 	/**
-	* reminder constructor.
 	*
-	* @param \phpbb\config\config                                      $config				PhpBB Config
-	* @param \phpbb\db\driver\driver_interface                         $db					PhpBB Database
-	* @param \phpbb\user                                               $user				PhpBB User
-	* @param \phpbb\log\log                                            $log					PhpBB Log
-	* @param \Symfony\Component\DependencyInjection\ContainerInterface $container			PhpBB container loader
-	* @param                                                           $table_prefix		PhpBB table prefix
-	* @param                                                           $phpbb_root_path		PhpBB root path
-	* @param                                                           $php_ext				Php extension
+	* @param \phpbb\config\config                                     	$config				PhpBB Config
+	* @param \phpbb\db\driver\driver_interface                        	$db					PhpBB Database
+	* @param \phpbb\user                                              	$user				PhpBB User
+	* @param \phpbb\log\log                                           	$log				PhpBB Log
+	* @param \Symfony\Component\DependencyInjection\ContainerInterface	$container			PhpBB container loader
+	* @param \phpbb\request\request										$request			PhpBB request
+	* @param                                                          	$table_prefix		PhpBB table prefix
+	* @param                                                          	$phpbb_root_path	PhpBB root path
+	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container,  \phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
 		$this->db				=	$db;
@@ -52,6 +52,7 @@ class reminder
 		$this->user_loader		=	$user_loader;
 		$this->log              =	$log;
 		$this->container		=	$container;
+		$this->request			=	$request;
 		$this->table_prefix		=	$table_prefix;
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
@@ -88,7 +89,7 @@ class reminder
 				$topic_links = null;
 
 				// If there are topics then prepare them for the e-mail.
-				if ( $top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'] ) )
+				if ($top_user_topics = $topics->get_user_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$topic_links = $this->make_topics($top_user_topics);
 				}
@@ -97,7 +98,7 @@ class reminder
 				$forum_links = null;
 
 				// If there are topics then prepare the for the mail.
-				if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'] ) )
+				if ($top_forum_topics = $topics->get_forum_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$forum_links = $this->make_topics($top_forum_topics);
 				}
@@ -136,9 +137,12 @@ class reminder
 				$messenger = new \messenger(false);
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-				$messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
-				$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
-				$messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
+				// $messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
+				$messenger->headers('X-AntiAbuse: Username - ' . $this->config['server_name']);
+				$messenger->headers('X-AntiAbuse: User_id - 1');
+				// $messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
+				$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+
 
 				// mail content...
 				$messenger->from($this->config['board_contact']);
@@ -410,8 +414,9 @@ class reminder
 			// Set the user topic links first.
 			$topic_links = null;
 
+			$admin_fake_last_visit = strtotime('-' . $this->config['andreask_ium_interval'] .' days');
 			// If there are topics then prepare them for the e-mail.
-			if ($top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'], $sleeper['user_lastvisit'] ))
+			if ($top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'], $admin_fake_last_visit ))
 			{
 				$topic_links = $this->make_topics($top_user_topics);
 			}
@@ -420,7 +425,7 @@ class reminder
 			$forum_links = null;
 
 			// If there are topics then prepare the for the mail.
-			if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'], $sleeper['user_lastvisit'] ))
+			if ( $top_forum_topics = $topics->get_forum_top_topics( $sleeper['user_id'], $admin_fake_last_visit ))
 			{
 				$forum_links = $this->make_topics($top_forum_topics);
 			}
@@ -463,9 +468,11 @@ class reminder
 
 			// mail headers
 			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-			$messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
-			$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
-			$messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
+			// $messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
+			$messenger->headers('X-AntiAbuse: Username - ' . $this->config['server_name']);
+			$messenger->headers('X-AntiAbuse: User_id - 1');
+			// $messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
+			$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
 
 			// mail content...
 			$messenger->from($this->config['board_contact']);
