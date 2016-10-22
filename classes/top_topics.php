@@ -58,7 +58,7 @@ class top_topics {
 					GROUP BY topic_id
 					ORDER BY posts_count DESC';
 
-			$result = $this->db->sql_query($sql);
+			$result = $this->db->sql_query_limit($sql, 10);
 			$active_t_row = '';
 
 			while ($row = $this->db->sql_fetchrow($result))
@@ -79,6 +79,7 @@ class top_topics {
 					WHERE ' . $this->db->sql_in_set('topic_id', $active_t_row) .'
 					AND post_time > '. $this->user_lastvisit .'
 					GROUP BY forum_id, topic_id ORDER BY max(post_time) desc, count(post_id) desc';
+
 			$result = $this->db->sql_query_limit($sql, $this->config['andreask_ium_top_user_threads_count']);
 			$active_topics = '';
 
@@ -103,7 +104,7 @@ class top_topics {
 				}
 				else
 				{
-					// else complete the puzzle.
+					// else get the clean topic's title.
 					$sql = 'SELECT topic_title as title
 						FROM ' . TOPICS_TABLE . '
 						WHERE topic_id = ' . $topic['topic_id'];
@@ -130,12 +131,12 @@ class top_topics {
 		$this->set_id_and_date($id, $last_visit);
 
 		// Obtain most active topic of board
-		$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count
+		$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count, max(post_time) as last_post
 		FROM ' . POSTS_TABLE . '
 		WHERE post_postcount = 1
 		AND post_time > '. $this->user_lastvisit .'
 		GROUP BY forum_id, topic_id
-		ORDER BY posts_count DESC';
+		ORDER BY posts_count desc, last_post DESC';
 
 		// limit results to configuration
 		$result = $this->db->sql_query_limit($sql, $this->config['andreask_ium_top_forum_threads_count']);
