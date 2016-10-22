@@ -227,12 +227,12 @@ class main_module
 				{
 					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
-				if (!request_var('usernames', ''))
+				if (! $request->variable('usernames', ''))
 				{
 					trigger_error($user->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				$users = explode("\n", request_var('usernames', '', true));
+				$users = explode("\n", $request->variable('usernames', '', true));
 				$users = array_filter($users);
 				$users = array_map('trim', $users);
 				$users = array_unique($users);
@@ -255,7 +255,7 @@ class main_module
 
 			if ( $request->is_set_post('ignore'))
 			{
-				$user_ids = request_var('user_id', array(0));
+				$user_ids = $request->variable('user_id', array(0));
 				$remove = $phpbb_container->get('andreask.ium.classes.ignore_user');
 
 				foreach ($user_ids as $id)

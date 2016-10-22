@@ -39,4 +39,4 @@ Go to "ACP" > "Customise" > "Extensions" and enable the "Inactive User Manager" 
 
 ## License
 
-[GPLv2](licence.txt)
+[GPLv2](license.txt)

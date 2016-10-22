@@ -44,7 +44,7 @@ class reminder
 	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container,  \phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, \phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
 		$this->db				=	$db;
@@ -142,7 +142,6 @@ class reminder
 				$messenger->headers('X-AntiAbuse: User_id - 1');
 				// $messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
 				$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
-
 
 				// mail content...
 				$messenger->from($this->config['board_contact']);
@@ -542,16 +541,6 @@ class reminder
 			$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
 			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
 		}
-
 		return $topic_links;
-	}
-
-	// TODO Remove me!
-	public function dd($var)
-	{
-		echo "<pre>";
-		var_export($var);
-		echo "</pre>";
-		die();
 	}
 }
