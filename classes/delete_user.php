@@ -226,6 +226,7 @@ class delete_user
 
 	/**
 	 * This cleans up users on ext's table after a user has been requested for deletion.
+	 * It's mainly used by the listener.
 	 * @param  int $id array of user ids
 	 * @return null
 	 */
