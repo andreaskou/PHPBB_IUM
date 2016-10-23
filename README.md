@@ -4,7 +4,7 @@ phpBB Inactive User Manager is an Extension for [phpBB 3.1](https://www.phpbb.co
 
 ## Description
 
-phpBB Inactive User Manager will allow you to manager inactive users in your phpBB3 board.
+phpBB Inactive User Manager will allow you to manage inactive users in your phpBB3 board.
 The extension is in a very early stage but I will try to update as often as I can.
 Please let me know your ideas and thoughts.
 
