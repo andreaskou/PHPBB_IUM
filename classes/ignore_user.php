@@ -166,7 +166,7 @@ class ignore_user
 	public function update_user($user, $action, $user_id = false)
 	{
 		// NOTE is this redundant???
-		$shift_this = $this->get_user_username($user)''
+		$shift_this = $this->get_user_username($user);
 		$username = ($user_id === true) ? array_shift($shift_this) : $user;
 		$dont_send = $action ? 1 : 0;
 
