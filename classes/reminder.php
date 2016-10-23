@@ -63,6 +63,7 @@ class reminder
 	 * Send email to users in the list of stored $inactive_users (need to be populated by the set_users() function)
 	 * @param $limit ammount of email (users) to sent to
 	 */
+
 	public function send($limit)
 	{
 		$this->get_users( $limit );
@@ -190,9 +191,10 @@ class reminder
 	}
 
 	/**
-	 * Gets the users from database
-	 * @param null $limit limit the amount of results. (need to fix this)
+	 * Gets the users from database and loades them to inactive_users
+	 * @param int $limit amount of results. Default is null
 	 */
+
 	private function get_users($limit = null)
 	{
 		// if limit is not set use limit from configuration.
@@ -231,7 +233,7 @@ class reminder
 	}
 
 	/**
-	 * Sets users for $inactive_users
+	 * Setter for $inactive_users
 	 * @param $inactive_users
 	 */
 
@@ -332,6 +334,12 @@ class reminder
 		return $give_back;
 	}
 
+	/**
+	 * Get rows of users from ium_reminder table
+	 * @param  array $user_id User id(s)
+	 * @return array          rows of users
+	 */
+
 	private function get_from_ium_reminder($user_id)
 	{
 		$select_array = array(
@@ -356,6 +364,11 @@ class reminder
 		return $row;
 	}
 
+	/**
+	 * Get from database the board default language
+	 * @return string lang_iso of board
+	 */
+
 	private function get_board_lang()
 	{
 		$sql = 'SELECT lang_iso
@@ -371,11 +384,23 @@ class reminder
 		return $lang;
 	}
 
+	/**
+	 * Check if language file exist
+	 * @param  string $user_lang user language preference
+	 * @return bool		true or false
+	 */
+
 	public function lang_exists($user_lang)
 	{
 		$ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
 		return (bool) file_exists($ext_path . '/language/' . $user_lang);
 	}
+
+	/**
+	 * Sends selected reminder template to admin.
+	 * @param  string $id       id of admin that requests the template
+	 * @param  string $template requested template type
+	 */
 
 	public function send_to_admin($id, $template = null)
 	{
@@ -518,18 +543,26 @@ class reminder
 		unset( $this->inactive_users );
 	}
 
+	/**
+	 * Resets the counter of reminders this function is called by the listener.
+	 * @param string $id user_id of loged in user.
+	 */
+
 	public function reset_counter($id)
 	{
-		// if user is not in ium_reminder...
-		if (!$this->user_exist($id))
+		if ($this->user_exist($id))
 		{
-			return null;
+			// else reset counter and hope that user_lastvisit will update before ext query!
+			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0 WHERE user_id = ' . $id and remind_counter <> 0;
+			$this->db->sql_query($sql);
 		}
-
-		// else reset counter and hope that user_lastvisit will update before ext query!
-		$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0 WHERE user_id = ' . $id and remind_counter <> 0;
-		$this->db->sql_query($sql);
 	}
+
+	/**
+	 * Generates a formated string of topic title and link to topic.
+	 * @param  array $topics Must contain forum_id, topic_id
+	 * @return string
+	 */
 
 	public function make_topics($topics)
 	{
