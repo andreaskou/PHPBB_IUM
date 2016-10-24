@@ -400,6 +400,7 @@ class reminder
 	 * Sends selected reminder template to admin.
 	 * @param  string $id       id of admin that requests the template
 	 * @param  string $template requested template type
+	 * @return void
 	 */
 
 	public function send_to_admin($id, $template = null)
@@ -546,6 +547,7 @@ class reminder
 	/**
 	 * Resets the counter of reminders this function is called by the listener.
 	 * @param string $id user_id of loged in user.
+	 * @return void
 	 */
 
 	public function reset_counter($id)
@@ -575,5 +577,21 @@ class reminder
 			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
 		}
 		return $topic_links;
+	}
+
+	/**
+	 * Insert new user to ium_reminder (called from listener)
+	 * @param  [string] $id single user id of a newly registered user.
+	 * @return void
+	 */
+
+	public function new_user($id)
+	{
+		if (!$this->user_exist($id))
+		{
+			$sql = 'INSERT INTO ' . $this->table_prefix . $this->table_name . ' (user_id, username)
+			SELECT user_id, username from ' . USERS_TABLE .' WHERE user_id = ' . $id;
+			$this->db->sql_query($sql);
+		}
 	}
 }
