@@ -59,14 +59,12 @@ class listener implements EventSubscriberInterface
 		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'deletion action ' . $action, time());
 		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'deleted user_id ' . $id[0], time());
 	}
-	// If a user has registerd succesfuly add hit to the table.
+	// If a user has registerd succesfuly add him to the table.
 	// FIXME (I don't like this, need to simplify...)
 	public function update_table_ium_new_user($event)
 	{
 		$user_id = $event['user_id'];
 		$add = $this->container->get('andreask.ium.classes.reminder');
 		$add->new_user($user_id);
-		
-		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'user_id ' . $user_id, time());
 	}
 }
