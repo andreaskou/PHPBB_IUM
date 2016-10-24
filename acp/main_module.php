@@ -382,7 +382,7 @@ class main_module
 
 	private function inactive_users($type = null, $paginate = true, $limit = null, $start = null, $filters = null)
 	{
-		global $db, $table_prefix;
+		global $db, $config, $table_prefix;
 
 		if ($filters)
 		{
@@ -504,17 +504,18 @@ class main_module
 			FROM ' . USERS_TABLE . ' p
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
-			WHERE p.user_id not in
-			(SELECT ban_userid FROM ' . BANLIST_TABLE . ')
+			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
 			AND p.group_id
-			not in (1,4,5,6)' . $options . $sort;
+			not in (1,4,5,6)
+			AND p.user_regdate < DATE_SUB(NOW(), INTERVAL ' . $config['andreask_ium_interval'] . ' DAY) '
+			. $options . $sort;
 
 		// Run the query With pagination
 		if ($paginate)
 		{
 			$result = $db->sql_query_limit( $sql, $limit, $start );
 		}
-		// W/o pagination
+		// w/o pagination
 		else
 		{
 			$result = $db->sql_query($sql);
