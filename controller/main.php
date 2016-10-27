@@ -50,9 +50,7 @@ class main
 	{
 		$this->user->add_lang_ext('andreask/ium', 'user_self_delete_page');
 
-		// Don't forget to put this back!!!!!!!!
-		// if ($this->config['andreask_ium_enable'] == 0 || $this->config['andreask_ium_self_delete'] == 0)
-		if ($this->config['andreask_ium_self_delete'] == 0)
+		if ($this->config['andreask_ium_enable'] == 0 || $this->config['andreask_ium_self_delete'] == 0)
 		{
 			return $this->helper->error($this->user->lang('PAGE_NOT_EXIST'), 404);
 		}
