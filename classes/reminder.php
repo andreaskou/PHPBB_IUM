@@ -74,7 +74,7 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
-			$this->user->add_lang_ext('andreask/ium', 'body');
+			// $this->user->add_lang_ext('andreask/ium', 'body');
 			foreach ($this->inactive_users as $sleeper)
 			{
 				$user_row = $this->user_loader->get_user($sleeper['user_id']);
@@ -156,24 +156,23 @@ class reminder
 					$messenger->template('@andreask_ium/sleeper', $lang);
 					$messenger->assign_vars($template_ary);
 				}
-				// User has forsaken us! :(
 				else
 				{
+					// User has forsaken us! :(
 					$messenger->template('@andreask_ium/inactive', $lang);
 					$messenger->assign_vars($template_ary);
 				}
 
 				// Send mail...
 				$messenger->send();
-//				$messenger->save_queue();
 
 				// Update ext's table...
 				$this->update_ium_reminder($sleeper);
 				unset($topics);
 			}
 		}
-		// Log it and release the user list.
 
+		// Log it and release the user list.
 		if (phpbb_version_compare($this->config['version'], '3.2.0-dev', '>='))
 		{
 			// For phpBB 3.2.x
@@ -524,8 +523,8 @@ class reminder
 			$messenger->send();
 			unset($topics);
 		}
-		// Log it and release the user list.
 
+		// Log it and release the user list.
 		if (phpbb_version_compare($this->config['version'], '3.2.0-dev', '>='))
 		{
 			// For phpBB 3.2.x

@@ -111,13 +111,13 @@ class delete_user
 		}
 	}
 
-	/**
-	 * Updates ext's table and runs the delete_user to delete the user for board.
-	 * @param  int $id	array of user ids
-	 * @param  string $type	Can be only AUTO|ADMIN|USER AUTO for scheduler, ADMIN for admins approvals, USER for user request
-	 * @param  string $action retain|remove this is a parameter for delete_user to retain or delete user posts.
-	 * @return null
-	 */
+	 /**
+	  * Updates ext's table and runs the delete_user to delete the user for board.
+	  * @param  int  $id     Array of user ids
+	  * @param  String $type   Can be only AUTO|ADMIN|USER AUTO for scheduler, ADMIN for admins approvals, USER for user request
+	  * @param  String $action retain|remove this is a parameter for delete_user to retain or delete user posts
+	  * @return null
+	  */
 
 	private function update_and_log($id, $type, $action = null)
 	{
