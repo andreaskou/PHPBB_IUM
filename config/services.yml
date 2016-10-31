@@ -29,6 +29,7 @@ services:
         class: andreask\ium\classes\top_topics
         arguments:
             - '@config'
+            - '@service_container'
             - '@auth'
             - '@dbal.conn'
     andreask.ium.classes.delete_user:
