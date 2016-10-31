@@ -13,19 +13,31 @@
 
 namespace andreask\ium\classes;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class top_topics {
 
 	protected $user_id = null;
 	protected $user_lastvisit;
+	protected $container;
 	protected $db;
 	protected $config;
+	protected $config_text;
+	protected $exclude_forums;
 	protected $auth;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db)
+	public function __construct(\phpbb\config\config $config, ContainerInterface $container, \phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db)
 	{
-		$this->config	=	$config;
-		$this->auth		=	$auth;
-		$this->db		=	$db;
+		$this->config			=	$config;
+		$this->container		=	$container;
+		$this->config_text		=	$this->container->get('config_text');
+		$this->auth				=	$auth;
+		$this->db				=	$db;
+		$forum_list				=	$this->config_text->get('andreask_ium_ignore_forum','');
+		if ($forum_list != null)
+		{
+			$this->exclude_forums	=	explode(',', $forum_list);
+		}
 	}
 
 	// Set the iser_id
@@ -50,11 +62,20 @@ class top_topics {
 
 		if ( $this->user_post_count($this->user_id) > $this->config['andreask_ium_top_user_threads_count'])
 		{
+			if (!empty($this->exclude_forums))
+			{
+				$exclude = 'AND '. $this->db->sql_in_set('forum_id', $this->exclude_forums, true);
+			}
+			else
+			{
+				$exclude = '';
+			}
 			// Obtain most active topic for user
 			$sql = 'SELECT topic_id, count(post_id) as posts_count
 					FROM ' . POSTS_TABLE . '
 					WHERE poster_id = ' . $this->user_id . '
-					AND post_postcount = 1
+					AND post_postcount = 1 ' .
+					$exclude .'
 					GROUP BY topic_id
 					ORDER BY posts_count DESC';
 
@@ -130,11 +151,21 @@ class top_topics {
 		}
 		$this->set_id_and_date($id, $last_visit);
 
+		if (!empty($this->exclude_forums))
+		{
+			$exclude = 'AND '. $this->db->sql_in_set('forum_id', $this->exclude_forums, true);
+		}
+		else
+		{
+			$exclude = '';
+		}
+
 		// Obtain most active topic of board
 		$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count, max(post_time) as last_post
 		FROM ' . POSTS_TABLE . '
 		WHERE post_postcount = 1
-		AND post_time > '. $this->user_lastvisit .'
+		AND post_time > '. $this->user_lastvisit . ' '
+		. $exclude . '
 		GROUP BY forum_id, topic_id
 		ORDER BY posts_count desc, last_post DESC';
 
