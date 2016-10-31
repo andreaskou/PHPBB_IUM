@@ -23,8 +23,6 @@ class main_module
 	{
 		global $user, $template, $request, $config, $phpbb_container, $phpbb_root_path, $phpEx;
 		$config_text = $phpbb_container->get('config_text');
-		// global $config_text;
-
 
 		if ($mode == 'ium_settings')
 		{
@@ -87,7 +85,7 @@ class main_module
 				}
 			}
 
-			if  ( $request->is_set_post('include_forum'))
+			if ( $request->is_set_post('include_forum'))
 			{
 				if ( !check_form_key($form_key) )
 				{
@@ -611,46 +609,46 @@ class main_module
 	}
 
 	/**
-    * Build +subforum options taken from acp_permissions.
-    */
-    function build_subforum_options($forum_list)
-    {
-        global $user;
+	* Build +subforum options taken from acp_permissions.
+	*/
+	function build_subforum_options($forum_list)
+	{
+		global $user;
 
-        $s_options = '';
+		$s_options = '';
 
-        $forum_list = array_merge($forum_list);
+		$forum_list = array_merge($forum_list);
 
-        foreach ($forum_list as $key => $row)
-        {
-            if ($row['disabled'])
-            {
-                continue;
-            }
+		foreach ($forum_list as $key => $row)
+		{
+			if ($row['disabled'])
+			{
+				continue;
+			}
 
-            $s_options .= '<option value="' . $row['forum_id'] . '"' . (($row['selected']) ? ' selected="selected"' : '') . '>' . $row['padding'] . $row['forum_name'];
+			$s_options .= '<option value="' . $row['forum_id'] . '"' . (($row['selected']) ? ' selected="selected"' : '') . '>' . $row['padding'] . $row['forum_name'];
 
-            // We check if a branch is there...
-            $branch_there = false;
+			// We check if a branch is there...
+			$branch_there = false;
 
-            foreach (array_slice($forum_list, $key + 1) as $temp_row)
-            {
-                if ($temp_row['left_id'] > $row['left_id'] && $temp_row['left_id'] < $row['right_id'])
-                {
-                    $branch_there = true;
-                    break;
-                }
-                continue;
-            }
+			foreach (array_slice($forum_list, $key + 1) as $temp_row)
+			{
+				if ($temp_row['left_id'] > $row['left_id'] && $temp_row['left_id'] < $row['right_id'])
+				{
+					$branch_there = true;
+					break;
+				}
+				continue;
+			}
 
-            if ($branch_there)
-            {
-                $s_options .= ' [' . $user->lang['PLUS_SUBFORUMS'] . ']';
-            }
-            $s_options .= '</option>';
-        }
-        return $s_options;
-    }
+			if ($branch_there)
+			{
+				$s_options .= ' [' . $user->lang['PLUS_SUBFORUMS'] . ']';
+			}
+			$s_options .= '</option>';
+		}
+		return $s_options;
+	}
 
 	public function make_excluded_forums_list($forum_ids)
 	{
@@ -674,7 +672,8 @@ class main_module
 			{
 				$subforum = true;
 			}
-			else {
+			else
+			{
 				$subforum = false;
 			}
 

@@ -12,6 +12,7 @@
 */
 
 namespace andreask\ium\migrations;
+
 use phpbb\db\migration\migration;
 
 class release_0_9_1 extends migration

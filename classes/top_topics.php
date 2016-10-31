@@ -19,10 +19,7 @@ class top_topics {
 
 	protected $user_id = null;
 	protected $user_lastvisit;
-<<<<<<< HEAD
-=======
 	protected $container;
->>>>>>> testing
 	protected $db;
 	protected $config;
 	protected $config_text;
