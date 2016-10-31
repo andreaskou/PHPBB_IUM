@@ -21,8 +21,10 @@ class main_module
 {
 	public function main($id, $mode)
 	{
+		global $user, $template, $request, $config, $phpbb_container, $phpbb_root_path, $phpEx;
+		$config_text = $phpbb_container->get('config_text');
+		// global $config_text;
 
-		global $user, $template, $request, $config, $phpbb_container;
 
 		if ($mode == 'ium_settings')
 		{
@@ -46,7 +48,7 @@ class main_module
 				trigger_error($user->lang('INACTIVE_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
 			}
 
-			if ( $request->is_set_post('submit') )
+			if ( $request->is_set_post('submit_settings') )
 			{
 				// Check form key
 				if ( !check_form_key($form_key) )
@@ -58,6 +60,58 @@ class main_module
 				$this->update_config();
 				trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
 			}
+
+			if ( $request->is_set_post('exclude_forum') )
+			{
+				// Check form key
+				if ( !check_form_key($form_key) )
+				{
+					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
+				}
+
+				if ( $request->variable('subforum_id', '') == null )
+				{
+					trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
+				}
+
+				$already_excluded_forums = $config_text->get('andreask_ium_ignore_forum', '');
+				$new_forum = $this->sweap_sforums($request->variable('subforum_id', ''));
+
+				if (!empty($already_excluded_forums))
+				{
+					$config_text->set('andreask_ium_ignore_forum', $already_excluded_forums . ',' . $new_forum);
+				}
+				else
+				{
+					$config_text->set('andreask_ium_ignore_forum', $new_forum);
+				}
+			}
+
+			if  ( $request->is_set_post('include_forum'))
+			{
+				if ( !check_form_key($form_key) )
+				{
+					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
+				}
+
+				if ( $request->variable('excluded_forum', '') == null )
+				{
+					trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
+				}
+
+				$remove = explode(',', $this->sweap_sforums($request->variable('excluded_forum','')));
+				$conf_text_array = explode(',', $config_text->get('andreask_ium_ignore_forum',''));
+				$new_conf_array = array_diff( $conf_text_array, $remove);
+				$new_conf_text = implode(',', $new_conf_array);
+				$config_text->set('andreask_ium_ignore_forum', $new_conf_text);
+			}
+
+			include_once $phpbb_root_path . "includes/functions_admin." . $phpEx;
+			$ignore_id = explode(',', $config_text->get('andreask_ium_ignore_forum', ''));
+			$forum_list = make_forum_select(false, $ignore_id, true, false, false, false, true);
+			$included_forum_list = $this->build_subforum_options($forum_list);
+
+			$excluded_list = (array_filter($ignore_id)) ? $this->make_excluded_forums_list($ignore_id) : '<option disabled>' .$user->lang('EXCLUDED_EMPTY') . '</option>';
 
 			$template->assign_vars(array(
 					'ANDREASK_IUM_ENABLE'					=>	$config['andreask_ium_enable'],
@@ -73,6 +127,8 @@ class main_module
 					'ANDREASK_IUM_AUTO_DEL'					=>	$config['andreask_ium_auto_del'],
 					'ANDREASK_IUM_AUTO_DEL_DAYS'			=>	$config['andreask_ium_auto_del_days'],
 					'ANDREASK_IUM_TEST_EXPLAIN'				=>	$user->lang('ANDREASK_IUM_TEST_EMAIL_EXPLAIN', $user->data['user_email']),
+					'ANDREASK_IUM_EXCLUDE_FORUMS'			=>	$included_forum_list,
+					'ANDREASK_IUM_UNEXCLUDE_LIST'			=>	$excluded_list,
 			));
 		}
 
@@ -344,10 +400,6 @@ class main_module
 
 		$config->set('andreask_ium_enable', $request->variable('andreask_ium_enable', ''));
 		$config->set('andreask_ium_interval', $request->variable('andreask_ium_interval', ''));
-		$config->set('andreask_ium_top_user_threads', $request->variable('andreask_ium_top_user_threads', ''));
-		$config->set('andreask_ium_top_user_threads_count', $request->variable('andreask_ium_top_user_threads_count', ''));
-		$config->set('andreask_ium_top_forum_threads', $request->variable('andreask_ium_top_forum_threads', ''));
-		$config->set('andreask_ium_top_forum_threads_count', $request->variable('andreask_ium_top_forum_threads_count', ''));
 		$config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
 		$config->set('andreask_ium_email_limit', $request->variable('andreask_ium_email_limit', ''));
 		$config->set('andreask_ium_self_delete', $request->variable('andreask_ium_self_delete', ''));
@@ -355,6 +407,11 @@ class main_module
 		$config->set('andreask_ium_keep_posts', $request->variable('andreask_ium_keep_posts',''));
 		$config->set('andreask_ium_auto_del', $request->variable('andreask_ium_auto_del',''));
 		$config->set('andreask_ium_auto_del_days', $request->variable('andreask_ium_auto_del_days',''));
+		$config->set('andreask_ium_top_user_threads', $request->variable('andreask_ium_top_user_threads', ''));
+		$config->set('andreask_ium_top_user_threads_count', $request->variable('andreask_ium_top_user_threads_count', ''));
+		$config->set('andreask_ium_top_forum_threads', $request->variable('andreask_ium_top_forum_threads', ''));
+		$config->set('andreask_ium_top_forum_threads_count', $request->variable('andreask_ium_top_forum_threads_count', ''));
+
 	}
 
 	/**
@@ -551,5 +608,117 @@ class main_module
 		$db->sql_freeresult($result);
 
 		return array('results'	=>	$inactive_users,	'count'	=>	$count);
+	}
+
+	/**
+    * Build +subforum options taken from acp_permissions.
+    */
+    function build_subforum_options($forum_list)
+    {
+        global $user;
+
+        $s_options = '';
+
+        $forum_list = array_merge($forum_list);
+
+        foreach ($forum_list as $key => $row)
+        {
+            if ($row['disabled'])
+            {
+                continue;
+            }
+
+            $s_options .= '<option value="' . $row['forum_id'] . '"' . (($row['selected']) ? ' selected="selected"' : '') . '>' . $row['padding'] . $row['forum_name'];
+
+            // We check if a branch is there...
+            $branch_there = false;
+
+            foreach (array_slice($forum_list, $key + 1) as $temp_row)
+            {
+                if ($temp_row['left_id'] > $row['left_id'] && $temp_row['left_id'] < $row['right_id'])
+                {
+                    $branch_there = true;
+                    break;
+                }
+                continue;
+            }
+
+            if ($branch_there)
+            {
+                $s_options .= ' [' . $user->lang['PLUS_SUBFORUMS'] . ']';
+            }
+            $s_options .= '</option>';
+        }
+        return $s_options;
+    }
+
+	public function make_excluded_forums_list($forum_ids)
+	{
+		global $db;
+
+		$sql = 'SELECT forum_id, forum_name, left_id, right_id FROM ' . FORUMS_TABLE . '
+				WHERE ' . $db->sql_in_set('forum_id', $forum_ids) . ' ORDER BY left_id';
+		$result = $db->sql_query($sql);
+		$forums = '';
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$forums[] = $row;
+		}
+		$db->sql_freeresult($result);
+
+		$option = '';
+
+		foreach ($forums as $forum)
+		{
+			if ($forum['left_id'] < $forum['right_id'] - 1)
+			{
+				$subforum = true;
+			}
+			else {
+				$subforum = false;
+			}
+
+			$sub = ($subforum) ? '[+Subforums]' : '';
+			$option .= "<option value='{$forum['forum_id']}' >{$forum['forum_name']} {$sub}</option>";
+		}
+		return $option;
+	}
+
+	public function unexcluded_forums($forum_ids)
+	{
+
+	}
+
+	public function sweap_sforums($forum_id)
+	{
+		global $db;
+
+		$sql = 'SELECT left_id, right_id FROM ' . FORUMS_TABLE . ' WHERE FORUM_ID = ' . $forum_id;
+
+		$result = $db->sql_query($sql);
+
+		$subforums = $db->sql_fetchrow($result);
+
+		$db->sql_freeresult($result);
+
+		if ($subforums['left_id'] != $subforums['right_id'] - 1 )
+		{
+			$sql = 'SELECT forum_id FROM ' . FORUMS_TABLE . '
+				WHERE left_id >= ' . $subforums['left_id'] . '
+				AND right_id <= ' .$subforums['right_id'] . '
+				ORDER BY left_id';
+			$result = $db->sql_query($sql);
+			$puzzle = '';
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$puzzle[] = $row['forum_id'];
+			}
+			$db->sql_freeresult($result);
+			$puzzle = implode(',', $puzzle);
+
+			return $puzzle;
+		}
+
+		return $forum_id;
 	}
 }
