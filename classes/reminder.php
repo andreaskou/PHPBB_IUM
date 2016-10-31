@@ -44,7 +44,7 @@ class reminder
 	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container,  \phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, \phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
 		$this->db				=	$db;

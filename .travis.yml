@@ -1,8 +1,3 @@
-# safelist
-branches:
-  - master
-  - testing
-
 sudo: required
 
 language: php

@@ -15,7 +15,8 @@ namespace andreask\ium\classes;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class top_topics {
+class top_topics
+{
 
 	protected $user_id = null;
 	protected $user_lastvisit;
@@ -74,12 +75,8 @@ class top_topics {
 			$sql = 'SELECT topic_id, count(post_id) as posts_count
 					FROM ' . POSTS_TABLE . '
 					WHERE poster_id = ' . $this->user_id . '
-<<<<<<< HEAD
-					AND post_postcount = 1
-=======
 					AND post_postcount = 1 ' .
 					$exclude .'
->>>>>>> testing
 					GROUP BY topic_id
 					ORDER BY posts_count DESC';
 
@@ -152,9 +149,8 @@ class top_topics {
 		else if ($this->config['andreask_ium_top_forum_threads'] == 0)
 		{
 			return null;
-<<<<<<< HEAD
-=======
 		}
+
 		$this->set_id_and_date($id, $last_visit);
 
 		if (!empty($this->exclude_forums))
@@ -164,7 +160,6 @@ class top_topics {
 		else
 		{
 			$exclude = '';
->>>>>>> testing
 		}
 		$this->set_id_and_date($id, $last_visit);
 
@@ -172,12 +167,8 @@ class top_topics {
 		$sql = 'SELECT forum_id, topic_id, count(post_id) as posts_count, max(post_time) as last_post
 		FROM ' . POSTS_TABLE . '
 		WHERE post_postcount = 1
-<<<<<<< HEAD
-		AND post_time > '. $this->user_lastvisit .'
-=======
 		AND post_time > '. $this->user_lastvisit . ' '
 		. $exclude . '
->>>>>>> testing
 		GROUP BY forum_id, topic_id
 		ORDER BY posts_count desc, last_post DESC';
 
