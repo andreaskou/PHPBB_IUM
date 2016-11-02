@@ -272,8 +272,12 @@ class main_module
 				include_once $phpbb_root_path . "includes/functions." . $phpEx;
 
 				$delete = $phpbb_container->get('andreask.ium.classes.delete_user');
-				$mark = (isset($_REQUEST['mark'])) ? request_var('mark', array(0)) : array();
+				// depricated!
+				// $mark = (isset($_REQUEST['mark'])) ? request_var('mark', array(0)) : array();
+				$mark = (isset($_REQUEST['mark'])) ? $request->variable('mark', array(0)) : array();
 
+				var_dump($mark);
+				die();
 				$delete->delete($mark, 'admin');
 
 				trigger_error($user->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
