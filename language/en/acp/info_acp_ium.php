@@ -132,5 +132,16 @@ $lang = array_merge(
 	'THREE_YEARS'	=>	'Three Years',
 	'FIVE_YEARS'	=>	'Five Years',
 	'SEVEN_YEARS'	=>	'Seven Years',
-	'DECADE'		=>	'One Decade',)
+	'DECADE'		=>	'One Decade',
+
+	// Log
+	'SENT_REMINDER_TO_ADMIN'	=>	'Template "%1$s" was sent to "%2$s"',
+	'SENT_REMINDERS'			=>	'%s reminders were sent.',
+	'USERS_DELETED'				=>	'"%1$s" users were deleted, request type : "%2$s"',
+	'USER_DELETED'				=>	'User "%1$s" was deleted, request type : "%2$s"',
+	'SOMETHING_WRONG'			=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
+	'USER_SELF_DELETED'			=>	'A user was self deleted. Configuration for posts was set on "%s"',
+
+
+	)
 );
