@@ -81,8 +81,8 @@
     </fieldset>
     <fieldset>
         <p class="submit-buttons">
-            <input class="button1" type="submit" id="submit" name="submit_settings" value="{L_SUBMIT}" />&nbsp;
-            <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+            <input class="button1" type="submit" id="submit" name="submit_settings" value="{L_SUBMIT}" autofocus />&nbsp;
+            <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" autofocus />
         </p>
         {S_FORM_TOKEN}
     </fieldset>
@@ -97,7 +97,7 @@
                     <dd class="full"><select style="width: 100%;" id="sforum" name="subforum_id" size="6">{ANDREASK_IUM_EXCLUDE_FORUMS}</select></dd>
                 </dl>
                 <p class="submit-buttons">
-                    <input class="button2" type="submit" id="submit" name="exclude_forum" value="{{ lang('ANDREASK_IUM_EXCLUDE_FORUM') }}" />
+                    <input class="button2" type="submit" id="submit" name="exclude_forum" value="{{ lang('ANDREASK_IUM_EXCLUDE_FORUM') }}" autofocus />
                     {S_FORM_TOKEN}
                 </p>
             </fieldset>
@@ -112,7 +112,7 @@
     			    <dd class="full"><select style="width: 100%;" name="excluded_forum" size="6">{ANDREASK_IUM_UNEXCLUDE_LIST}</select></dd>
     		    </dl>
                 <p class="submit-buttons">
-        			<input type="submit" class="button2" name="include_forum" value="{{ lang('ANDREASK_IUM_INCLUDE_FORUM') }}" />
+        			<input type="submit" class="button2" name="include_forum" value="{{ lang('ANDREASK_IUM_INCLUDE_FORUM') }}" autofocus />
                     {S_FORM_TOKEN}
                 </p>
     		</fieldset>

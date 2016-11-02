@@ -68,7 +68,7 @@
 		<fieldset class="quick">
 			{S_HIDDEN_FIELDS}
 			{S_FORM_TOKEN}
-			<input class="button2" type="submit" name="add_users_options" value="{{ lang('ADD_IGNORE_USER') }}" />
+			<input class="button2" type="submit" name="add_users_options" value="{{ lang('ADD_IGNORE_USER') }}" autofocus />
 		</fieldset>
 	</form>
 	<form id="users" method="post" action="{U_ACTION}">
@@ -81,7 +81,7 @@
 		<fieldset class="quick">
 			{S_HIDDEN_FIELDS}
 			{S_FORM_TOKEN}
-			<input type="submit" class="button2" name="ignore[remove]" value="{{ lang('REMOVE_IGNORE_USER') }}" />
+			<input type="submit" class="button2" name="ignore[remove]" value="{{ lang('REMOVE_IGNORE_USER') }}" autofocus />
 		</fieldset>
 	</form>
 </div>
