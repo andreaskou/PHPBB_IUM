@@ -20,6 +20,7 @@ Also user can self delete his account (with or without the approval of the admin
 * Define by admin interval of days to consider a user as "sleeper"
 * Define by admin how many reminders (mails) per day to send
 * Option to include user's/forums top active topics in mail
+* Exclude/Include forums for the e-mail reminder.
 * Option to self delete for a user. (with or without admins approval)
 * Ignore users. List of users that the ext should not send reminders
 * In future release admin will be able to send reminders to individual inactive users
