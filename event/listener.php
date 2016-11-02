@@ -60,7 +60,6 @@ class listener implements EventSubscriberInterface
 		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'deleted user_id ' . $id[0], time());
 	}
 	// If a user has registerd succesfuly add him to the table.
-	// FIXME (I don't like this, need to simplify...)
 	public function update_table_ium_new_user($event)
 	{
 		$user_id = $event['user_id'];
