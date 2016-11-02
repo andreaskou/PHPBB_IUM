@@ -33,19 +33,21 @@ class main_module
 
 			add_form_key($form_key);
 
+			// Send sleeper template to admin
 			if ($request->is_set_post('send_sleeper'))
 			{
 				$mail_to_sleeper = $phpbb_container->get('andreask.ium.classes.reminder');
 				$mail_to_sleeper->send_to_admin($user->data['user_id'], 'send_sleeper');
 				trigger_error($user->lang('SLEEPER_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
 			}
+			// Send inactive template to admin
 			else if ($request->is_set_post('send_inactive'))
 			{
 				$mail_to_inactive = $phpbb_container->get('andreask.ium.classes.reminder');
 				$mail_to_inactive->send_to_admin($user->data['user_id'], 'send_inactive');
 				trigger_error($user->lang('INACTIVE_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
 			}
-
+			// Save settings
 			if ( $request->is_set_post('submit_settings') )
 			{
 				// Check form key
@@ -58,7 +60,7 @@ class main_module
 				$this->update_config();
 				trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
 			}
-
+			// Exclude forum(s)
 			if ( $request->is_set_post('exclude_forum') )
 			{
 				// Check form key
@@ -84,7 +86,7 @@ class main_module
 					$config_text->set('andreask_ium_ignore_forum', $new_forum);
 				}
 			}
-
+			// Include forum(s)
 			if ( $request->is_set_post('include_forum'))
 			{
 				if ( !check_form_key($form_key) )
@@ -104,11 +106,14 @@ class main_module
 				$config_text->set('andreask_ium_ignore_forum', $new_conf_text);
 			}
 
+			// To get the forum list we have to include functions_admin
 			include_once $phpbb_root_path . "includes/functions_admin." . $phpEx;
 			$ignore_id = explode(',', $config_text->get('andreask_ium_ignore_forum', ''));
+			// Get the forum list
 			$forum_list = make_forum_select(false, $ignore_id, true, false, false, false, true);
+			// Build option list from forums list
 			$included_forum_list = $this->build_subforum_options($forum_list);
-
+			// Get the excluded list, if not exist show somethin else instead.
 			$excluded_list = (array_filter($ignore_id)) ? $this->make_excluded_forums_list($ignore_id) : '<option disabled>' .$user->lang('EXCLUDED_EMPTY') . '</option>';
 
 			$template->assign_vars(array(
@@ -132,7 +137,6 @@ class main_module
 
 		if ($mode == 'ium_list')
 		{
-
 			$this->tpl_name = 'acp_ium_inactive_users';
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang('memberlist');
@@ -172,6 +176,7 @@ class main_module
 					. "&amp;sort_order=" . $sort_order;
 
 			// Long list probably should make shorter.
+			// IDEA perhaps just set number of days insted of this?
 			$option_ary = array('select' => 'SELECT',
 					'30d' => 'THIRTY_DAYS',
 					'60d' => 'SIXTY_DAYS',
@@ -238,9 +243,9 @@ class main_module
 				));
 			}
 		}
+
 		if ($mode == 'ium_approval_list')
 		{
-
 			global $phpbb_root_path, $phpEx;
 
 			$form_key = 'andreask_ium';
@@ -560,8 +565,7 @@ class main_module
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-			AND p.group_id
-			not in (1,4,5,6)
+			AND p.group_id not in (1,4,5,6)
 			AND p.user_regdate < DATE_SUB(NOW(), INTERVAL ' . $config['andreask_ium_interval'] . ' DAY) '
 			. $options . $sort;
 
@@ -609,8 +613,10 @@ class main_module
 	}
 
 	/**
-	* Build +subforum options taken from acp_permissions.
-	*/
+	 * Build options from forums list, function is same as acp_permissions of phpbb.
+	 * @param	array		$forum_list Need specific information from a function of phpbb
+	 * @return string		formated options list of forums
+	 */
 	function build_subforum_options($forum_list)
 	{
 		global $user;
@@ -650,6 +656,11 @@ class main_module
 		return $s_options;
 	}
 
+	/**
+	 * Creates the options for the excluded forums list
+	 * @param  array $forum_ids Forum id(s)
+	 * @return str   options for selection.
+	 */
 	public function make_excluded_forums_list($forum_ids)
 	{
 		global $db;
@@ -683,11 +694,11 @@ class main_module
 		return $option;
 	}
 
-	public function unexcluded_forums($forum_ids)
-	{
-
-	}
-
+	/**
+	 * Getter of left and right id's for forums
+	 * @param  int $forum_id Forum id
+	 * @return string  Comma separated forum id's
+	 */
 	public function sweap_sforums($forum_id)
 	{
 		global $db;
@@ -717,7 +728,7 @@ class main_module
 
 			return $puzzle;
 		}
-
 		return $forum_id;
 	}
+
 }
