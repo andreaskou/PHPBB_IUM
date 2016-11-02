@@ -75,9 +75,7 @@ class delete_user
 
 		if ( !$user_count == $users_to_delete )
 		{
-			// Assign language file
-			$this->user->add_lang_ext('andreask/ium', 'log');
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('SOMETHING_WRONG'), time());
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SOMETHING_WRONG', time());
 			return false;
 		}
 
@@ -138,9 +136,6 @@ class delete_user
 		// Never vorget to free the results!
 		$this->db->sql_freeresult($result);
 
-		// Assign language file
-		$this->user->add_lang_ext('andreask/ium', 'log');
-
 		// Include functions_user for the user_delete function
 		include_once( $this->phpbb_root_path . 'includes/functions_user.' . $this->php_ext );
 
@@ -150,15 +145,14 @@ class delete_user
 		if ( $type == 'auto')
 		{
 			user_delete($posts, $id);
-			// $this->clean_ium_table($id);
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USERS_DELETED',$req_to_del, $type), time());
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_DELETED',$users['username'], $type), time());
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users['username'], $type));
 			}
 		}
 
@@ -170,11 +164,11 @@ class delete_user
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USERS_DELETED',$req_to_del, $type), time());
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_DELETED',$users['username'], $type), time());
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users['username'], $type));
 			}
 		}
 
@@ -197,7 +191,7 @@ class delete_user
 				// Else delete the user...
 				user_delete($posts, $id);
 				// $this->clean_ium_table($id);
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $this->user->lang('USER_SELF_DELETED', $posts), time());
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_SELF_DELETED', time(), array($posts));
 			}
 		}
 	}

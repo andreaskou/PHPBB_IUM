@@ -173,19 +173,7 @@ class reminder
 		}
 
 		// Log it and release the user list.
-		if (phpbb_version_compare($this->config['version'], '3.2.0-dev', '>='))
-		{
-			// For phpBB 3.2.x
-			$lang = $this->container->get('language');
-			$lang->add_lang('log', 'andreask/ium');
-		}
-		else
-		{
-			// For phpBB 3.1.x
-			$lang = $this->container->get('user');
-			$lang->add_lang_ext('andreask/ium', 'log');
-		}
-		$this->log->add('admin', 54, $this->user->ip, $lang->lang('SENT_REMINDERS', sizeof($this->inactive_users)), time());
+		$this->log->add('admin', 54, $this->user->ip, 'SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
 		unset( $this->inactive_users );
 	}
 
@@ -525,21 +513,10 @@ class reminder
 		}
 
 		// Log it and release the user list.
-		if (phpbb_version_compare($this->config['version'], '3.2.0-dev', '>='))
-		{
-			// For phpBB 3.2.x
-			$lang = $this->container->get('language');
-			$lang->add_lang('log', 'andreask/ium');
-		}
-		else
-		{
-			// For phpBB 3.1.x
-			$lang = $this->container->get('user');
-			$lang->add_lang_ext('andreask/ium', 'log');
-		}
 
 		$template = explode('_', $template);
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $lang->lang('SENT_REMINDER_TO_ADMIN',$template[1] , $sleeper['user_email']), time());
+		$test = array_merge(array($template[1]), array($sleeper['user_email']));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDER_TO_ADMIN', time(), array($template[1],$sleeper['user_email']));
 		unset( $this->inactive_users );
 	}
 
