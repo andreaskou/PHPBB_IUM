@@ -275,9 +275,6 @@ class main_module
 				// depricated!
 				// $mark = (isset($_REQUEST['mark'])) ? request_var('mark', array(0)) : array();
 				$mark = (isset($_REQUEST['mark'])) ? $request->variable('mark', array(0)) : array();
-
-				var_dump($mark);
-				die();
 				$delete->delete($mark, 'admin');
 
 				trigger_error($user->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
