@@ -98,7 +98,7 @@ class ignore_user
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 
-		    $rows[] = $row;
+			$rows[] = $row;
 		}
 		// Always free the results
 		$this->db->sql_freeresult($result);
@@ -136,10 +136,10 @@ class ignore_user
 	}
 
 	/**
-	 *	Inserts "new" users to table ium_reminder
-     *	@param	array		User(s) with id and username
-	 *	@return null
-	 */
+	*	Inserts "new" users to table ium_reminder
+	*	@param	array		User(s) with id and username
+	*	@return null
+	*/
 	private function insert_user($user)
 	{
 		$insert_arr = array(
@@ -154,7 +154,7 @@ class ignore_user
 
 	 /**
 	  * Function update_user Updates existing users to table ium_reminder
-	  * @param  array  		$user    Usernames
+	  * @param  array  		$user	Usernames
 	  * @param  boolean		$action  true for set user to ignore false for unset ignore
 	  * @param  boolean 	$user_id use user_id instead of username
 	  * @return void
