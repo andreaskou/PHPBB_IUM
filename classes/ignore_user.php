@@ -136,13 +136,10 @@ class ignore_user
 	}
 
 	/**
-	 *
-	 *	Function insert_user Inserts "new" users to table ium_reminder
-	 *	@param array of user(s) with id and username
+	 *	Inserts "new" users to table ium_reminder
+ 	 *	@param	array		User(s) with id and username
 	 *	@return null
-	 *
 	 */
-
 	private function insert_user($user)
 	{
 		$insert_arr = array(
@@ -155,14 +152,13 @@ class ignore_user
 		$this->db->sql_query($sql);
 	}
 
-	/**
-	 *
-	 *	Function update_user Updates existing users to table ium_reminder
-	 *	@param $user array of user(s) username
-	 *	@param $action bool true for ignore false for don't ignore.
-	 *
-	 */
-
+	 /**
+	  * Function update_user Updates existing users to table ium_reminder
+	  * @param  array  		$user    Usernames
+	  * @param  boolean		$action  true for set user to ignore false for unset ignore
+	  * @param  boolean 	$user_id use user_id instead of username
+	  * @return void
+	  */
 	public function update_user($user, $action, $user_id = false)
 	{
 		// NOTE is this redundant???
