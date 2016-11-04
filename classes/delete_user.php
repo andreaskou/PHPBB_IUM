@@ -186,11 +186,10 @@ class delete_user
 						WHERE username="' . $users['username'] . '"';
 				$this->db->sql_query($sql);
 			}
+			// Else delete the user...
 			else
 			{
-				// Else delete the user...
 				user_delete($posts, $id);
-				// $this->clean_ium_table($id);
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_SELF_DELETED', time(), array($posts));
 			}
 		}
@@ -204,7 +203,7 @@ class delete_user
 	public function	auto_delete()
 	{
 		$sql = 'SELECT user_id FROM ' . $this->table_name . '
-				WHERE type="auto" and from_unixtime(request_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_auto_del_days'] . ' DAY)';
+				WHERE type="auto" AND from_unixtime(request_date) < (DATE_SUB(CURDATE(), INTERVAL ' . $this->config['andreask_ium_auto_del_days'] . ' DAY))';
 		$result = $this->db->sql_query($sql);
 
 		$users = '';
@@ -219,7 +218,7 @@ class delete_user
 	}
 
 	/**
-	 * This cleans up users on ext's table after a user has been requested for deletion.
+	 * This cleans up users on ext's table after a/some user(s) has been requested for deletion.
 	 * It's mainly used by the listener.
 	 * @param  int $id array of user ids
 	 * @return null
