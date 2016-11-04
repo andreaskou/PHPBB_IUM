@@ -2,7 +2,7 @@
    "name": "andreask/ium",
    "type": "phpbb-extension",
    "description": "Inactive User Manager for phpBB 3.1.x",
-   "version": "0.9.6",
+   "version": "0.9.7",
    "time": "2016-10-07",
    "license": "GPL-2.0",
    "authors": [{
