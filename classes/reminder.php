@@ -136,20 +136,19 @@ class reminder
 				}
 
 				$messenger = new \messenger(false);
+				$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : $user_instance->lang('ADMINISTRATOR');
+
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-				// $messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
-				$messenger->headers('X-AntiAbuse: Username - ' . $this->config['server_name']);
-				$messenger->headers('X-AntiAbuse: User_id - 1');
-				// $messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
+				$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
+				$messenger->headers('X-AntiAbuse: User_id - 2');
 				$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
 
 				// mail content...
 				$messenger->from($this->config['board_contact']);
 				$messenger->to($sleeper['user_email'], $sleeper['username']);
 
-				// Load template depending on the user
-
+				// Load email template depending on the user
 				if ($sleeper['user_lastvisit'] != 0)
 				{
 					// User never came back after registration...
@@ -479,11 +478,12 @@ class reminder
 			$messenger = new \messenger(false);
 
 			// mail headers
+
+			$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : $user_instance->lang('ADMINISTRATOR');
+
 			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-			// $messenger->headers('X-AntiAbuse: Username - ' . $this->user->data['username']);
-			$messenger->headers('X-AntiAbuse: Username - ' . $this->config['server_name']);
+			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username );
 			$messenger->headers('X-AntiAbuse: User_id - 1');
-			// $messenger->headers('X-AntiAbuse: User IP - ' . $this->user->ip);
 			$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
 
 			// mail content...
