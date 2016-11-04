@@ -137,7 +137,7 @@ class ignore_user
 
 	/**
 	 *	Inserts "new" users to table ium_reminder
- 	 *	@param	array		User(s) with id and username
+     *	@param	array		User(s) with id and username
 	 *	@return null
 	 */
 	private function insert_user($user)
