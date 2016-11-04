@@ -511,7 +511,8 @@ class main_module
 					case 'select':
 						break;
 				}
-				$options .= ' AND from_unixtime(p.user_lastvisit) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))';
+				$options .= ' AND from_unixtime(p.user_regdate) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . '))
+				 			 AND from_unixtime(p.user_lastvisit) < (DATE_SUB(CURDATE(), INTERVAL ' . $back . ')) ';
 			}
 
 				/**
@@ -566,11 +567,8 @@ class main_module
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-			AND p.group_id not in (1,4,5,6)
-			AND p.user_regdate < DATE_SUB(NOW(), INTERVAL ' . $config['andreask_ium_interval'] . ' DAY) '
-			. $options . $sort;
+			AND '. $db->sql_in_set('p.group_id', $ignore_group_ids, true) . $options . $sort;
 
-		// Run the query With pagination
 		if ($paginate)
 		{
 			$result = $db->sql_query_limit( $sql, $limit, $start );
