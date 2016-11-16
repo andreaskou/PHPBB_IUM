@@ -153,7 +153,7 @@ class ignore_user
 	}
 
 	 /**
-	  * Function update_user Updates existing users to table ium_reminder
+	  * Function update_user Updates dont_sent field on existing users on table ium_reminder
 	  * @param  array  		$user	Usernames
 	  * @param  boolean		$action  true for set user to ignore false for unset ignore
 	  * @param  boolean 	$user_id use user_id instead of username
@@ -161,7 +161,6 @@ class ignore_user
 	  */
 	public function update_user($user, $action, $user_id = false)
 	{
-		// NOTE is this redundant???
 		$shift_this = $this->get_user_username($user);
 		$username = ($user_id === true) ? array_shift($shift_this) : $user;
 		$dont_send = $action ? 1 : 0;
