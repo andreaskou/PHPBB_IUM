@@ -82,7 +82,6 @@ class delete_user
 		return true;
 	}
 
-	// XXX This is redundant!!!!
 	public function delete($ids, $request = 'auto', $posts = null)
 	{
 
@@ -122,8 +121,7 @@ class delete_user
 		$req_to_del = sizeof($id);
 
 		// Lets just keep the usernames for logging and have a count to verify later the delete later.
-		$sql = 'SELECT username
-		FROM ' . $this->table_name . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
+		$sql = 'SELECT username FROM ' . $this->table_name . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
@@ -160,7 +158,6 @@ class delete_user
 		{
 			$act = ($action != null) ? $action : $posts;
 			user_delete($act, $id);
-			// $this->clean_ium_table($id);
 
 			if ( $req_to_del > 1 )
 			{
