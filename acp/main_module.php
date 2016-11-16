@@ -460,7 +460,7 @@ class main_module
 			}
 			if ( $filters['ignore'])
 			{
-				$options .= ' AND r.dont_send = 1';
+				$options .= ' AND r.dont_send = 1 AND request_date = 0 ';
 			}
 
 			if ( $filters['count_back'] && $filters['count_back'] != $ignore )
