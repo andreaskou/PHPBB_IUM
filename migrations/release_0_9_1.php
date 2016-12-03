@@ -20,14 +20,14 @@ class release_0_9_1 extends migration
 
 	private $schema_name='ium_reminder';
 
-	public function effectively_installed()
-	{
-		// return $this->db_tools->sql_column_exists($this->table_prefix . $this->schema_name, 'random');
-	}
-
 	static public function depends_on()
 	{
 		return array('\andreask\ium\migrations\release_0_0_9');
+	}
+
+	public function effectively_installed()
+	{
+		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.5', '>=');
 	}
 
 	public function update_data()

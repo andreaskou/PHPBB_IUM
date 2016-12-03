@@ -22,7 +22,7 @@ class release_0_9_6 extends migration
 
 	public function effectively_installed()
 	{
-		// return $this->db_tools->sql_column_exists($this->table_prefix . $this->schema_name, 'random');
+		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.7', '>=');
 	}
 
 	static public function depends_on()
