@@ -98,7 +98,7 @@ class reminder
 				// Set the forum topic links first.
 				$forum_links = null;
 
-				// If there are topics then prepare the for the mail.
+				// If there are topics then prepare them for the e-mail.
 				if ($top_forum_topics = $topics->get_forum_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$forum_links = $this->make_topics($top_forum_topics);
@@ -132,7 +132,7 @@ class reminder
 				{
 					$link = PHP_EOL;
 					$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLOW_TO_DELETE', $link)));
+					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLLOW_TO_DELETE', $link)));
 				}
 
 				$messenger = new \messenger(false);
@@ -472,7 +472,7 @@ class reminder
 			{
 				$link = PHP_EOL;
 				$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLOW_TO_DELETE', $link)));
+				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLLOW_TO_DELETE', $link)));
 			}
 
 			$messenger = new \messenger(false);
@@ -531,7 +531,7 @@ class reminder
 		if ($this->user_exist($id))
 		{
 			// else reset counter and hope that user_lastvisit will update before ext query!
-			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0 WHERE user_id = ' . $id and remind_counter <> 0;
+			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0 WHERE user_id = '. $id .' and remind_counter <> 0';
 			$this->db->sql_query($sql);
 		}
 	}
