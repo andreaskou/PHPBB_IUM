@@ -24,5 +24,5 @@ if ( empty($lang) || !is_array($lang) )
 $lang = array_merge($lang, array(
 	'INCLUDE_USER_TOPICS'				=>	'Nachfolgend einige Links zu Themen, in denen du aktiv warst. %s',
 	'INCLUDE_FORUM_TOPICS'				=>	'Nachfolgend einige Links zu aktiven Themen im Forum seit deinem letzten Besuch. %s',
-	'FOLOW_TO_DELETE'					=>	'Klicke auf den Link, um deinen Zugang zu löschen. %s',
+	'FOLLOW_TO_DELETE'					=>	'Klicke auf den Link, um deinen Zugang zu löschen. %s',
 ));
