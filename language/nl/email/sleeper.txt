@@ -1,0 +1,21 @@
+Subject: We missen je!
+
+Hallo, {USERNAME}
+
+We zien dat je laatste bezoek aan ons forum {SITENAME}, was op "{LAST_VISIT}".
+Het is al een tijdje geleden, en we wouden je even laten weten dat we hopen om je snel eens terug te zien.
+
+Indien je jouw login vergeten bent kan je deze altijd opvragen via de volgende link.
+
+{FORGOT_PASS}
+
+Anders kan je altijd de beheerder van het forum bereiken via "{ADMIN_MAIL}".
+
+Hopelijk zien we je snel terug.
+
+{USR_TPC_LIST}
+
+{USR_FRM_LIST}
+
+
+{EMAIL_SIG}

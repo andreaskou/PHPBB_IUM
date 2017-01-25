@@ -1,0 +1,20 @@
+Subject: Was er een probleem?
+
+Hallo, {USERNAME}
+
+We zien dat je geregistreerd bent op : {REG_DATE}
+Maar sindsdien is er geen activiteit meer van jou.
+
+Indien je jouw login vergeten bent kan je deze altijd opvragen via de volgende link.
+
+{FORGOT_PASS}
+
+Indien je nooit een activatie link ontvangen hebt, gelieve dan op de volgende link te klikken zodat we een nieuwe mail kunnen verzenden.
+
+{SEND_ACT_AG}
+
+Anders kan je altijd de beheerder van het forum bereiken via {ADMIN_MAIL}.
+
+Hopelijk zien we je snel terug.
+
+{EMAIL_SIG}
