@@ -25,10 +25,10 @@ class add_data extends migration
 		return array('\phpbb\db\migration\data\v31x\v314');
 	}
 
-	public function effectively_installed()
-	{
-		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.0', '>=');
-	}
+	// public function effectively_installed()
+	// {
+	// 	return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.0', '>=');
+	// }
 
 	public function update_data()
 	{
@@ -45,7 +45,6 @@ class add_data extends migration
 			array('config.add', array('send_reminder_last_gc', 0, true)),
 			array('config.add', array('send_reminder_gc', (60 * 60 * 24))),
 			array('config.add', array('reminder_limit', 250)),
-
 			// Initial table population.
 			array('custom',
 				array(

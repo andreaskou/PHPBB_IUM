@@ -22,12 +22,12 @@ class add_module extends migration
 
 	static public function depends_on()
 	{
-		return array('\phpbb\db\migration\data\v31x\v314');
+		return array('\phpbb\db\migration\data\v31x\v316');
 	}
 
 	public function effectively_installed()
 	{
-		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.0', '>=');
+		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.1', '>=');
 	}
 
 	public function update_data()
