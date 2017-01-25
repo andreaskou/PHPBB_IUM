@@ -74,13 +74,24 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
-			// $this->user->add_lang_ext('andreask/ium', 'body');
 			foreach ($this->inactive_users as $sleeper)
 			{
-				$user_row = $this->user_loader->get_user($sleeper['user_id']);
-				$user_instance = new \phpbb\user('\phpbb\datetime');
-				$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
-				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+
+				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+				{
+					$user_row = $this->user_loader->get_user($sleeper['user_id']);
+					$lang_loader = new \phpbb\language\language_file_loader($this->phpbb_root_path, $this->php_ext);
+					$lang_instance = new \phpbb\language\language($lang_loader);
+					$user_instance = new \phpbb\user($lang_instance, '\phpbb\datetime');
+				}
+				else
+				{
+					$user_row = $this->user_loader->get_user($sleeper['user_id']);
+					$user_instance = new \phpbb\user('\phpbb\datetime');
+					$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
+					$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+				}
+
 				$user_instance->add_lang_ext('andreask/ium', 'body');
 
 				// Load top_topics class
@@ -172,6 +183,7 @@ class reminder
 		}
 
 		// Log it and release the user list.
+		$this->user->add_lang_ext('andreask/ium', 'log');
 		$this->log->add('admin', 54, $this->user->ip, 'SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
 		unset( $this->inactive_users );
 	}
@@ -404,7 +416,7 @@ class reminder
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
 
-		if ( $sleeper )
+		if ($sleeper)
 		{
 			if ( !class_exists('messenger') )
 			{
@@ -414,10 +426,20 @@ class reminder
 			$this->user->add_lang_ext('andreask/ium', 'body');
 
 			$user_row = $this->user_loader->get_user($sleeper['user_id']);
-			$user_instance = new \phpbb\user('\phpbb\datetime');
-			$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
-			$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
-			$user_instance->add_lang_ext('andreask/ium', 'body');
+
+			if (phpbb_version_compare($this->config['version'], '3.1.4', '<='))
+			{
+				$user_instance = new \phpbb\user('\phpbb\datetime');
+				$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
+				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+				$user_instance->add_lang_ext('andreask/ium', 'body');
+			}
+			if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+			{
+				$lang_loader = new \phpbb\language\language_file_loader($this->phpbb_root_path, $this->php_ext);
+				$lang_instance = new \phpbb\language\language($lang_loader);
+				$user_instance = new \phpbb\user($lang_instance, '\phpbb\datetime');
+			}
 
 			// Load top_topics class
 			$topics = $this->container->get('andreask.ium.classes.top_topics');
@@ -442,7 +464,7 @@ class reminder
 			}
 
 			// dirty fix for now, need to find a way for the templates.
-			$lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
+			$lang = ( $this->lang_exists( $this->user->lang_name ) ) ? $this->user->lang_name : $this->config['default_lang'];
 
 			// add template variables
 			$template_ary	=	array(
@@ -460,26 +482,26 @@ class reminder
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links ) ) );
+				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->user->lang('INCLUDE_USER_TOPICS'), $topic_links ) ) );
 			}
 			// If there are forum topics merge them with the template_ary
 			if (!is_null($forum_links))
 			{
-				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $user_instance->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
+				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $this->user->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
 			}
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
-			if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
+			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['random']))
 			{
 				$link = PHP_EOL;
 				$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLLOW_TO_DELETE', $link)));
+				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->user->lang('FOLLOW_TO_DELETE', $link)));
 			}
 
 			$messenger = new \messenger(false);
 
 			// mail headers
 
-			$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($user_instance->lang('ADMINISTRATOR'));
+			$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->user->lang('ADMINISTRATOR'));
 
 			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username );
