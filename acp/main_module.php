@@ -564,7 +564,7 @@ class main_module
 
 		$sql = 'SELECT p.username, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*
 			FROM ' . USERS_TABLE . ' p
-			LEFT OUTER JOIN ' . $table_name . ' r
+			RIGHT JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
 			AND '. $db->sql_in_set('p.group_id', $ignore_group_ids, true) . $options . $sort;
