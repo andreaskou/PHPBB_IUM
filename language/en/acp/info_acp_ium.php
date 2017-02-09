@@ -51,6 +51,8 @@ $lang = array_merge(
 	'SELECT_A_FORUM'						=>	'Please select a forum',
 	'EXCLUDED_EMPTY'						=>	'No excluded forums...',
 
+	// acp user overview add option
+	'USER_ADMIN_ANDREASK_IUM_USERS_OVERVIEW_OPTION'	=>	'Send Reminder',
 
 	// ACP configuration page Explanations
 	'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'If enabled, the extension will start sending reminders to "sleepers".',
