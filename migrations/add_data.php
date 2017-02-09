@@ -15,15 +15,19 @@ namespace andreask\ium\migrations;
 
 use phpbb\db\migration\migration;
 
+/**
+ * Add needed data to database of phpbb
+ */
+
 class add_data extends migration
 {
 
 	private $schema_name='ium_reminder';
 
-	static public function depends_on()
-	{
-		return array('\phpbb\db\migration\data\v31x\v314');
-	}
+	// static public function depends_on()
+	// {
+	// 	return array('\phpbb\db\migration\data\v31x\v314');
+	// }
 
 	// public function effectively_installed()
 	// {
@@ -76,7 +80,7 @@ class add_data extends migration
 		);
 	}
 
-	public function disabled_revert_schema()
+	public function revert_schema()
 	{
 		return array(
 			'drop_tables' => array(

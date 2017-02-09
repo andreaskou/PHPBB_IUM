@@ -22,7 +22,7 @@ class release_0_9_1 extends migration
 
 	static public function depends_on()
 	{
-		return array('\andreask\ium\migrations\release_0_0_9');
+		return array('\andreask\ium\migrations\release_0_9_0');
 	}
 
 	public function effectively_installed()
