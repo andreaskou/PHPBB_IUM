@@ -229,6 +229,7 @@ class main_module
 			// Assign row results to template var inactive
 			foreach ($rows as $row)
 			{
+				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('inactive', array(
 						'USERNAME' => $row['username'],
 						'JOINED' => $user->format_date($row['user_regdate']),
@@ -239,7 +240,8 @@ class main_module
 						'COUNT' => ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
 						'LAST_SENT_REMINDER' => ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
 						'REMINDER_DATE' => ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
-						'IGNORE_USER' => ($row['dont_send']) ? true : false
+						'IGNORE_USER' => ($row['dont_send']) ? true : false,
+						'LINK_TO_USER'	=> $link,
 				));
 			}
 		}
