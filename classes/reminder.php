@@ -66,7 +66,10 @@ class reminder
 
 	public function send($limit)
 	{
-		$this->get_users( $limit );
+		if (!$this->has_users())
+		{
+			$this->get_users( $limit );
+		}
 		if ( $this->has_users() )
 		{
 			if ( !class_exists('messenger') )
