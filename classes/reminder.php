@@ -64,12 +64,25 @@ class reminder
 	 * @param $limit ammount of email (users) to sent to
 	 */
 
-	public function send($limit)
+	public function send($limit, $single = false)
 	{
+
+		if ($single)
+		{
+			$user = array_shift($this->inactive_users);
+
+			if (!$this->user_exist($user['user_id']))
+			{
+				$this->new_user($user['user_id']);
+			}
+			$this->get_users($limit, $user['user_id']);
+		}
+
 		if (!$this->has_users())
 		{
-			$this->get_users( $limit );
+			$this->get_users($limit);
 		}
+
 		if ( $this->has_users() )
 		{
 			if ( !class_exists('messenger') )
@@ -196,23 +209,35 @@ class reminder
 	 * @param int $limit amount of results. Default is null
 	 */
 
-	private function get_users($limit = null)
+	private function get_users($limit = null, $user = false)
 	{
 		// if limit is not set use limit from configuration.
 		$limit = ($limit) ? 'limit ' . $limit : 'limit ' . $this->config['andreask_ium_email_limit'];
 		$table_name = $this->table_prefix . $this->table_name;
+		$sql_opt = '';
+
+		if ($user)
+		{
+			$sql_opt .= ' AND r.user_id = ' . $user;
+		}
+
+		if (!$user)
+		{
+			$sql_opt .= ' AND r.dont_send <> 1
+			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)
+			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)';
+		}
+
+		$sql_opt .= ' AND p.group_id NOT IN (1,4,5,6)';
 
 		// $sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
 		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*
 			FROM ' . USERS_TABLE . ' p
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
-			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')
-			AND p.group_id NOT IN (1,4,5,6)
-			AND r.dont_send <> 1
-			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)
-			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)
-			ORDER BY p.user_regdate ASC ' . $limit;
+			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')'
+			. $sql_opt .
+			' ORDER BY p.user_regdate ASC ' . $limit;
 
 		// Run the query
 		$result = $this->db->sql_query($sql);
@@ -241,6 +266,15 @@ class reminder
 	private function set_users($users)
 	{
 		$this->inactive_users = $users;
+	}
+
+	/**
+	 * Set user to send to a single user.
+	 * @param string $user user_id
+	 */
+	public function set_single($user)
+	{
+		$this->inactive_users = $user;
 	}
 
 	/**
