@@ -42,8 +42,8 @@ class listener implements EventSubscriberInterface
 			'core.login_box_redirect'				=>	'update_table_ium_reminder_counter',
 			'core.delete_user_after'				=>	'update_table_ium_reminder_user_deleted',
 			'core.user_add_after'					=>	'update_table_ium_new_user',
-			// 'core.acp_users_display_overview'		=>	'add_remind_user_option',
-			// 'core.acp_users_overview_run_quicktool'	=>	'remind_single_user',
+			'core.acp_users_display_overview'		=>	'add_remind_user_option',
+			'core.acp_users_overview_run_quicktool'	=>	'remind_single_user',
 		);
 	}
 
@@ -95,7 +95,8 @@ class listener implements EventSubscriberInterface
 	 */
 	public function add_remind_user_option($event)
 	{
-		if ($this->config['andreask_ium_enable'])
+		$user = $event['user_row'];
+		if ($this->config['andreask_ium_enable'] && (!in_array($user['group_id'], array(1,4,5,6))))
 		{
 			$option = $event['quick_tool_ary'];
 			$option['andreask_ium_remind'] = 'ANDREASK_IUM_USERS_OVERVIEW_OPTION';
@@ -110,10 +111,9 @@ class listener implements EventSubscriberInterface
 
 		if ($action == 'andreask_ium_remind')
 		{
-			// $remind = $this->container->get('andreask.ium.classes.reminder');
-			// $remind->set_user($user);
-			// $remind->send('1');
-			// $remind->user($user['user_id']);
+			$remind = $this->container->get('andreask.ium.classes.reminder');
+			$remind->set_single($user);
+			$remind->send(1, true);
 		}
 	}
 }
