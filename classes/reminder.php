@@ -404,7 +404,7 @@ class reminder
 	 * @return void
 	 */
 
-	public function send_to_admin($id, $template = null)
+	public function send_to_admin($id, $template)
 	{
 
 		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason
