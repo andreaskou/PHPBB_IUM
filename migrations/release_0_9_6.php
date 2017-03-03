@@ -22,7 +22,7 @@ class release_0_9_6 extends migration
 
 	public function effectively_installed()
 	{
-		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.7', '>=');
+		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.8', '>=');
 	}
 
 	static public function depends_on()
@@ -33,7 +33,7 @@ class release_0_9_6 extends migration
 	public function update_data()
 	{
 		return array(
-				array('config.add', array('andreask_ium_version',				'0.9.8')),
+				array('config.update', array('andreask_ium_version',				'0.9.8')),
 				array('config_text.add', array('andreask_ium_ignore_forum',	'')),
 		);
 	}
