@@ -218,18 +218,20 @@ class top_topics
 
 	private function user_post_count($user_id)
 	{
-		if ($user_id)
+		if (!$user_id)
 		{
-			$sql = 'SELECT user_posts AS post_count
-				FROM ' . USERS_TABLE . '
-				WHERE user_id = ' . $user_id;
-
-			$result = $this->db->sql_query($sql);
-			$post_count = (int) $this->db->sql_fetchfield('post_count');
-			$this->db->sql_freeresult($result);
-			return $post_count;
+			return false;
 		}
-		return false;
+
+		$sql = 'SELECT user_posts AS post_count
+			FROM ' . USERS_TABLE . '
+			WHERE user_id = ' . $user_id;
+
+		$result = $this->db->sql_query($sql);
+		$post_count = (int) $this->db->sql_fetchfield('post_count');
+		$this->db->sql_freeresult($result);
+
+		return $post_count;
 	}
 
 	private function user_access($forum_id)

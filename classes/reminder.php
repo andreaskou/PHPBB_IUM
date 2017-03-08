@@ -90,15 +90,19 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
+			if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+			{
+				$language = $this->container->get('language');
+			}
+
 			foreach ($this->inactive_users as $sleeper)
 			{
 
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
-					$user_row = $this->user_loader->get_user($sleeper['user_id']);
-					$lang_loader = new \phpbb\language\language_file_loader($this->phpbb_root_path, $this->php_ext);
-					$lang_instance = new \phpbb\language\language($lang_loader);
-					$user_instance = new \phpbb\user($lang_instance, '\phpbb\datetime');
+					$user_instance = $language;
+					$user_instance->set_user_language($sleeper['user_lang']);
+					$user_instance->add_lang('body','andreask/ium');
 				}
 				else
 				{
@@ -106,9 +110,8 @@ class reminder
 					$user_instance = new \phpbb\user('\phpbb\datetime');
 					$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 					$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+					$user_instance->add_lang_ext('andreask/ium', 'body');
 				}
-
-				$user_instance->add_lang_ext('andreask/ium', 'body');
 
 				// Load top_topics class
 				$topics = $this->container->get('andreask.ium.classes.top_topics');
@@ -132,7 +135,14 @@ class reminder
 				}
 
 				// dirty fix for now, need to find a way for the templates.
-				$lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
+				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+				{
+					$lang = ( $this->lang_exists($user_instance->get_used_language()) ) ? $user_instance->get_used_language() : $this->info['default_lang'];
+				}
+				else
+				{
+					$lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
+				}
 
 				// add template variables
 				$template_ary	=	array(
@@ -149,11 +159,11 @@ class reminder
 
 				if (!is_null($topic_links))
 				{
-					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links ) ) );
+					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
 				}
 				if (!is_null($forum_links))
 				{
-					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $user_instance->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
+					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
 				{
@@ -438,7 +448,7 @@ class reminder
 	 * @return void
 	 */
 
-	public function send_to_admin($id, $template = null)
+	public function send_to_admin($id, $template)
 	{
 
 		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason
@@ -519,12 +529,13 @@ class reminder
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->user->lang('INCLUDE_USER_TOPICS'), $topic_links ) ) );
+				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->user->lang('INCLUDE_USER_TOPICS'), $topic_links)));
 			}
 			// If there are forum topics merge them with the template_ary
 			if (!is_null($forum_links))
 			{
-				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $this->user->lang('INCLUDE_FORUM_TOPICS', $forum_links) ) );
+				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf($this->user->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
+				// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDER_TO_ADMIN', time(), array($template[1],$sleeper['user_email']));
 			}
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['random']))
