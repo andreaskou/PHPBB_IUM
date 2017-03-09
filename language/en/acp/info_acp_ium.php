@@ -117,6 +117,12 @@ $lang = array_merge(
 	'REQUEST_TYPE'			=>	'Request Type',
 	'APPROVE'				=>	'Approve',
 	'NO_USER_TYPED'			=>	'No user was typed',
+	'REGISTERED'			=>	'Registered',
+	'GUESTS'				=>	'Guests',
+	'REGISTERED_COPPA'		=>	'Registered COPPA',
+	'GLOBAL_MODERATORS'		=>	'Global Moderators',
+	'BOTS'					=>	'Bots',
+	'NEWLY_REGISTERED'		=>	'Newly Registered',
 	// Sort Lists
 	'COUNT_BACK'	=>	'<strong>FROM</strong> days/months/years interval and backwards',
 	'ACP_DESCENDING'	=>	'Descending order',
