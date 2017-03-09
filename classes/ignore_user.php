@@ -16,13 +16,15 @@ namespace andreask\ium\classes;
 class ignore_user
 {
 	protected $db; 				/** DBAL driver for database use */
+	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
 	protected $table_name;		/** Custome table for ease of use */
 
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, $ium_reminder_table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\log\log $log, $ium_reminder_table)
 	{
 		$this->db				=	$db;
 		$this->log				=	$log;
+		$this->config_text		=	$config_text;
 		$this->table_name		=	$ium_reminder_table;
 	}
 
@@ -94,12 +96,14 @@ class ignore_user
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);
 		$rows = [];
+
 		// Store in an array.
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 
 			$rows[] = $row;
 		}
+
 		// Always free the results
 		$this->db->sql_freeresult($result);
 		$clean = '';
@@ -138,7 +142,7 @@ class ignore_user
 	/**
 	*	Inserts "new" users to table ium_reminder
 	*	@param	array		User(s) with id and username
-	*	@return null
+	*	@return void
 	*/
 	private function insert_user($user)
 	{
@@ -189,5 +193,12 @@ class ignore_user
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 		return $row;
+	}
+
+	static function ignore_groups()
+	{
+
+		return 'I work!';
+
 	}
 }

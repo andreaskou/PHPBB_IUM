@@ -47,6 +47,7 @@ services:
         class: andreask\ium\classes\ignore_user
         arguments:
             - '@dbal.conn'
+            - '@config_text'
             - '@log'
             - '%andreask.ium.tables.reminder_table%'
     andreask.ium.controller:
