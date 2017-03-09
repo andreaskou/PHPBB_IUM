@@ -294,6 +294,7 @@ class main_module
 					trigger_error($user->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
+				// Users ingnore list
 				$users = explode("\n", $request->variable('usernames', '', true));
 				$users = array_filter($users);
 				$users = array_map('trim', $users);
@@ -307,10 +308,10 @@ class main_module
 				}
 				else
 				{
-					$not_found = implode(', ', array_map(function ($un)
-					{
-						return $un['username'];
-					} , $result));
+					$not_found = implode(', ', array_map(function($un)
+						{
+							return $un['username'];
+						} , $result));
 					trigger_error($user->lang('USER_NOT_FOUND', $not_found) . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 			}
@@ -324,6 +325,31 @@ class main_module
 				{
 						$remove->update_user($id, false, true);
 				}
+			}
+
+			// Group ignore list
+			$groups = $this->get_groups();
+			$ignored_groups = $config_text->get('andreask_ium_ignored_groups');
+			$s_defined_group_options = '';
+
+			foreach ($groups as $group)
+			{
+				$group_name = ($user->lang($group['group_name'])) ? $user->lang($group['group_name']) : $group['group_name'];
+				$selected = '';
+				if ($ignored_groups != false)
+				{
+					$selected = (in_array($group['group_id'], unserialize($ignored_groups))) ? ' selected="selected" ' : '';
+				}
+
+				$s_defined_group_options .= '<option value="' . $group['group_id'] . '"'. $selected .'>' . $group_name . '</option>';
+			}
+
+			if ( $request->is_set_post('ignore_group'))
+			{
+				$group_ids = $request->variable('group_id', array(0));
+				$ignore_groups = serialize($group_ids);
+				$config_text->set('andreask_ium_ignored_groups', $ignore_groups);
+				trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
 			}
 
 			$start = $request->variable('start', 0);
@@ -377,6 +403,7 @@ class main_module
 					'TOTAL_USERS'		=>	$approval_count,
 					'U_ACTION'			=>	$this->u_action,
 					'IGNORED_USER'		=>	$s_defined_user_options,
+					'IGNORED_GROUP'		=>	$s_defined_group_options,
 					'U_FIND_USERNAME'	=>	append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=add_user&amp;field=usernames&amp;select_single=true')
 				));
 
@@ -611,6 +638,26 @@ class main_module
 		$db->sql_freeresult($result);
 
 		return array('results'	=>	$inactive_users,	'count'	=>	$count);
+	}
+
+	private function get_groups()
+	{
+		global $db;
+
+		$sql = 'SELECT group_id, group_name
+				FROM ' . GROUPS_TABLE . '
+				ORDER BY group_id';
+
+		$result = $db->sql_query($sql);
+
+		$groups = [];
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$groups[] = $row;
+		}
+		$db->sql_freeresult($sql);
+
+		return $groups;
 	}
 
 	/**
