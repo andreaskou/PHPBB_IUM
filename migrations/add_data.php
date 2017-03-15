@@ -13,6 +13,9 @@
 
 namespace andreask\ium\migrations;
 
+use DateTime;
+use DatePeriod;
+use DateInterval;
 use phpbb\db\migration\migration;
 
 /**
@@ -91,14 +94,44 @@ class add_data extends migration
 
 	public function first_time_install()
 	{
+		global $phpbb_container;
+
 		if ( !$this->has_users() )
 		{
 			if ( $this->db_tools->sql_table_exists( $this->table_prefix . $this->schema_name ) )
 			{
+				// Current date
+				$present = new DateTime();
+				// Set interval
+				$interval = new DateInterval('P30D');
+				// Substract the interval of Days/Months/Years from present
+				$present->sub($interval);
+				// Convert past to timestamp
+				$past = strtotime($present->format("y-m-d h:i:s"));
+
+				$ignore_groups = $phpbb_container->get('auth');
+
+				// Get administrator user_ids
+				$administrators = $ignore_groups->acl_get_list(false, 'a_', false);
+				$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
+
+				// Get moderator user_ids
+				$moderators = $ignore_groups->acl_get_list(false, 'm_', false);
+				$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
+
+				// Merge them together
+				$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+
+				// Make an array of user_types to ignore
+				$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
+
 				$sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
-				SELECT user_id, username FROM `' . USERS_TABLE . '` u
-				WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
-				AND u.group_id NOT IN (1,4,5,6)';
+				SELECT user_id, username FROM ' . USERS_TABLE . ' p
+				WHERE p.user_lastvisit < '. $past . '
+				AND '. $this->db->sql_in_set('p.user_type', $ignore_users_extra, true) .'
+				AND '. $this->db->sql_in_set('p.user_id', $admin_mod_array, true) . '
+				AND p.user_id > ' . ANONYMOUS;
+
 				$result = $this->sql_query($sql);
 			}
 		}
