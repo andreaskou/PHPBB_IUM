@@ -48,6 +48,7 @@ services:
         arguments:
             - '@dbal.conn'
             - '@config_text'
+            - '@auth'
             - '@log'
             - '%andreask.ium.tables.reminder_table%'
     andreask.ium.controller:
