@@ -137,7 +137,7 @@ class reminder
 				// dirty fix for now, need to find a way for the templates.
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
-					$lang = ( $this->lang_exists($user_instance->get_used_language()) ) ? $user_instance->get_used_language() : $this->info['default_lang'];
+					$lang = ( $this->lang_exists($user_instance->get_used_language()) ) ? $user_instance->get_used_language() : $this->$config['default_lang'];
 				}
 				else
 				{
@@ -238,7 +238,8 @@ class reminder
 			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)';
 		}
 
-		$sql_opt .= ' AND p.group_id NOT IN (1,4,5,6)';
+		$ignore_groups = $this->container->get('andreask.ium.classes.ignore_user');
+		$must_ignore = $ignore_groups->ignore_groups();
 
 		// $sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
 		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*
@@ -246,7 +247,8 @@ class reminder
 			LEFT OUTER JOIN ' . $table_name . ' r
 			ON (p.user_id = r.user_id)
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')'
-			. $sql_opt .
+			. $sql_opt .' '
+			. $must_ignore .
 			' ORDER BY p.user_regdate ASC ' . $limit;
 
 		// Run the query
