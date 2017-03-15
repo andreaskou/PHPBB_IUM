@@ -5,6 +5,8 @@ services:
             - '@service_container'
             - '@user'
             - '@config'
+            - '@config_text'
+            - '@auth'
             - '@log'
         tags:
             - { name: event.listener }
