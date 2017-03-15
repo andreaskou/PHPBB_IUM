@@ -21,14 +21,18 @@ class listener implements EventSubscriberInterface
 
 	protected $log;
 	protected $config;
+	protected $config_text;
+	protected $auth;
 	protected $user;
 	protected $container;
 
-	public function __construct(ContainerInterface $container, \phpbb\user $user, \phpbb\config\config $config, \phpbb\log\log $log)
+	public function __construct(ContainerInterface $container, \phpbb\user $user, \phpbb\config\config $config,\phpbb\config\db_text $config_text,\phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
 		$this->container 	=	$container;
 		$this->user 		=	$user;
 		$this->config 		=	$config;
+		$this->config_text	=	$config_text;
+		$this->auth			=	$auth;
 		$this->log			=	$log;
 	}
 
@@ -44,6 +48,7 @@ class listener implements EventSubscriberInterface
 			'core.user_add_after'					=>	'update_table_ium_new_user',
 			'core.acp_users_display_overview'		=>	'add_remind_user_option',
 			'core.acp_users_overview_run_quicktool'	=>	'remind_single_user',
+			'core.add_log'							=>	'overright_log',
 		);
 	}
 
@@ -96,7 +101,20 @@ class listener implements EventSubscriberInterface
 	public function add_remind_user_option($event)
 	{
 		$user = $event['user_row'];
-		if ($this->config['andreask_ium_enable'] && (!in_array($user['group_id'], array(1,4,5,6))))
+		$admin = $this->auth->acl_get_list($user['user_id'], 'a_');
+		$admin = (!empty($admin[0]['a_'])) ? $admin[0]['a_'] : array();
+
+		$mod = $this->auth->acl_get_list($user['user_id'], 'm_');
+		$mod = (!empty($mod[0]['m_'])) ? $mod[0]['m_'] : array();
+
+		$array_merge = array_unique(array_merge($admin, $mod));
+		$ignored_groups = $this->config_text->get('andreask_ium_ignored_groups', 'empty');
+		$ignored_groups = unserialize($ignored_groups);
+
+		$ignore = $this->container->get('andreask.ium.classes.ignore_user');
+		$group_ids = $ignore->get_groups($user['user_id']);
+
+		if ($this->config['andreask_ium_enable'] && (empty($array_merge)) && (!array_intersect($group_ids, $ignored_groups)))
 		{
 			$option = $event['quick_tool_ary'];
 			$option['andreask_ium_remind'] = 'ANDREASK_IUM_USERS_OVERVIEW_OPTION';
@@ -114,6 +132,34 @@ class listener implements EventSubscriberInterface
 			$remind = $this->container->get('andreask.ium.classes.reminder');
 			$remind->set_single($user);
 			$remind->send(1, true);
+		}
+	}
+
+	public function overright_log($event)
+	{
+		$sql_ary =  $event['sql_ary'];
+		// Make sure we are getting the correct log...
+		$username = unserialize($sql_ary['log_data']);
+
+		if (!empty($username))
+		{
+			$username = array_shift($username);
+		}
+		if ($sql_ary['log_operation'] == 'SENT_REMINDERS' && (is_int($username)) && $username <= 1)
+		{
+			unset($sql_ary['log_type']);
+			$event['sql_ary'] = $sql_ary;
+		}
+
+		if ($sql_ary['log_operation'] == 'LOG_USER_USER_UPDATE')
+		{
+			// echo "<pre>";
+			// var_dump($event['sql_ary']);
+			// echo "<br/>";
+			// var_dump($sql_ary);
+			// echo "</pre>";
+			$sql_ary['log_operation'] = 'SENT_REMINDER_TO';
+			$event['sql_ary'] = $sql_ary;
 		}
 	}
 }
