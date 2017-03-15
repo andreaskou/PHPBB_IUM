@@ -18,12 +18,14 @@ class ignore_user
 	protected $db; 				/** DBAL driver for database use */
 	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
+	protected $auth;			/** Auth class to get admins and mods */
 	protected $table_name;		/** Custome table for ease of use */
 
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\log\log $log, $ium_reminder_table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log, $ium_reminder_table)
 	{
 		$this->db				=	$db;
 		$this->log				=	$log;
+		$this->auth				=	$auth;
 		$this->config_text		=	$config_text;
 		$this->table_name		=	$ium_reminder_table;
 	}
@@ -70,33 +72,31 @@ class ignore_user
 
 	public function ignore_user($username)
 	{
-		// Group ids that should be always ignored by the ext
-		$group_ids = [1,4,5,6];
-
 		/**
 		*	We have to check if the given users exist or not in custome table 'ium_reminder'
 		*	This is done by doing left join USERS_TABLE and ium_reminder. and selecting users
 		*	that are null (don't exist) on ium_reminder.
 		*/
 		$sql_array = array(
-			'SELECT'	=> 'u.user_id, u.username',
+			'SELECT'	=> 'p.user_id, p.username',
 			'FROM'		=> array(
-				USERS_TABLE =>	'u',
+				USERS_TABLE =>	'p',
 				),
 			'LEFT_JOIN' => array(
 				array(
 					'FROM'	=> array($this->table_name	=>	'r'),
-					'ON'	=>	'u.user_id = r.user_id',
+					'ON'	=>	'p.user_id = r.user_id',
 					)
 				),
-			'WHERE'	=> $this->db->sql_in_set('u.username', $username ) .
-			' AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) .
+			'WHERE'	=> $this->db->sql_in_set('p.username', $username ) .
+			$this->ignore_groups() .
 			' AND r.username is null');
 
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);
 		$rows = [];
 
+		// ' AND ' . $this->db->sql_in_set('p.group_id', $group_ids, true) .
 		// Store in an array.
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -157,7 +157,7 @@ class ignore_user
 	}
 
 	 /**
-	  * Function update_user Updates dont_sent field on existing users on table ium_reminder
+	  * Function Updates dont_sent field on existing users on table ium_reminder
 	  * @param  array  		$user	Usernames
 	  * @param  boolean		$action  true for set user to ignore false for unset ignore
 	  * @param  boolean 	$user_id use user_id instead of username
@@ -177,13 +177,10 @@ class ignore_user
 	}
 
 	/**
-	 *
 	 * Getter for username
 	 * @param string user_id
 	 * @return string username
-	 *
 	 */
-
 	private function get_user_username($id)
 	{
 		$sql_array = array('user_id' => $id);
@@ -195,10 +192,60 @@ class ignore_user
 		return $row;
 	}
 
-	static function ignore_groups()
+	/**
+	 * Returns a comlete string of user_type and user_id that should be ignored by the queries.
+	 * @return string Complete ignore statement for sql
+	 */
+	public function ignore_groups()
 	{
+		// Get administrator user_ids
+		$administrators = $this->auth->acl_get_list(false, 'a_', false);
+		$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
 
-		return 'I work!';
+		// Get moderator user_ids
+		$moderators = $this->auth->acl_get_list(false, 'm_', false);
+		$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
 
+		// Merge them together
+		$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+
+		// Ignored group_ids
+		$ignore = $this->config_text->get('andreask_ium_ignored_groups', '');
+		$ignore = unserialize($ignore);
+		if (!empty($ignore))
+		{
+			$ignore = ' AND ' . $this->db->sql_in_set('p.group_id', $ignore, true);
+		}
+		else
+		{
+			$ignore = '';
+		}
+
+		// Make an array of user_types to ignore
+		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
+
+		$text = ' AND '				. $this->db->sql_in_set('p.user_type', $ignore_users_extra, true) .'
+				  AND '				. $this->db->sql_in_set('p.user_id', $admin_mod_array, true) . '
+				  AND p.user_id > ' . ANONYMOUS . $ignore;
+
+		return $text;
+	}
+
+	public function get_groups($user_id)
+	{
+		$sql = 'SELECT group_id FROM ' . USER_GROUP_TABLE . '
+				WHERE user_id = ' . $user_id;
+
+		$result = $this->db->sql_query($sql);
+
+		$group_ids = '';
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$group_ids[] = $row['group_id'];
+		}
+
+		$this->db->sql_freeresult($result);
+
+		return $group_ids;
 	}
 }
