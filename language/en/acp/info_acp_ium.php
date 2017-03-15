@@ -117,6 +117,7 @@ $lang = array_merge(
 	'REQUEST_TYPE'			=>	'Request Type',
 	'APPROVE'				=>	'Approve',
 	'NO_USER_TYPED'			=>	'No user was typed',
+	'USER_NOT_FOUND'		=>	'User(s) %s not found.',
 	'REGISTERED'			=>	'Registered',
 	'GUESTS'				=>	'Guests',
 	'REGISTERED_COPPA'		=>	'Registered COPPA',
@@ -128,7 +129,7 @@ $lang = array_merge(
 	'ACP_DESCENDING'	=>	'Descending order',
 	'SORT_BY_SELECT'	=>	'Sort by',
 	'REQUEST_DATE'		=>	'Deletion Request date',
-	'SELECT'	=>	'Select D/M/Y',
+	'SELECT'		=>	'Select D/M/Y',
 	'THIRTY_DAYS'	=>	'Thirty Days',
 	'SIXTY_DAYS'	=>	'Sixty Days',
 	'NINETY_DAYS'	=>	'Ninety Days',
@@ -149,7 +150,7 @@ $lang = array_merge(
 	'USER_DELETED'				=>	'User "%1$s" was deleted, request type : "%2$s"',
 	'SOMETHING_WRONG'			=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
 	'USER_SELF_DELETED'			=>	'A user was self deleted. Configuration for posts was set on "%s"',
-
+	'SENT_REMINDER_TO'			=>	'A reminders was sent to user "%s"',
 
 	)
 );
