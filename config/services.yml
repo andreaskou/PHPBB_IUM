@@ -51,6 +51,12 @@ services:
             - '@auth'
             - '@log'
             - '%andreask.ium.tables.reminder_table%'
+    andreask.ium.classes.language_helper:
+        class: andreask\ium\classes\language_helper
+        arguments:
+            - '@user'
+            - '@service_container'
+            - '@config'
     andreask.ium.controller:
         class: andreask\ium\controller\main
         arguments:
