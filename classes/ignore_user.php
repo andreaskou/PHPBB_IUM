@@ -201,7 +201,7 @@ class ignore_user
 		// Get administrator user_ids
 		$administrators = $this->auth->acl_get_list(false, 'a_', false);
 		$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
-
+		
 		// Get moderator user_ids
 		$moderators = $this->auth->acl_get_list(false, 'm_', false);
 		$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
