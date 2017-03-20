@@ -13,6 +13,9 @@
 
 namespace andreask\ium\classes;
 
+use DateTime;
+use DatePeriod;
+use DateInterval;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class reminder
@@ -29,7 +32,7 @@ class reminder
 	protected $phpbb_root_path;
 	protected $php_ext;
 	protected $table_name;
-	protected $lang;
+	protected $language;
 
 	/**
 	*
@@ -57,6 +60,7 @@ class reminder
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
 		$this->table_name       =	'ium_reminder';
+		$this->language			=	$this->container->get('andreask.ium.classes.language_helper');
 	}
 
 	/**
@@ -90,28 +94,31 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
-			if (phpbb_version_compare($this->config['version'], '3.2', '>='))
-			{
-				$language = $this->container->get('language');
-			}
+			// if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+			// {
+			// 	$language = $this->container->get('language');
+			// }
 
 			foreach ($this->inactive_users as $sleeper)
 			{
+				$this->language->set_user_language($sleeper['user_lang'], $sleeper['user_timezone']);
+				$this->language->add_lang('andreask/ium', 'body');
 
-				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
-				{
-					$user_instance = $language;
-					$user_instance->set_user_language($sleeper['user_lang']);
-					$user_instance->add_lang('body','andreask/ium');
-				}
-				else
-				{
-					$user_row = $this->user_loader->get_user($sleeper['user_id']);
-					$user_instance = new \phpbb\user('\phpbb\datetime');
-					$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
-					$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
-					$user_instance->add_lang_ext('andreask/ium', 'body');
-				}
+				// if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+				// {
+				// 	$user_instance = $language;
+				// 	$user_instance->set_user_language($sleeper['user_lang']);
+				// 	$user_instance->add_lang('body','andreask/ium');
+				// }
+				// else
+				// {
+				// 	// XXX this is not doing anything...!
+				// 	// $user_row = $this->user_loader->get_user($sleeper['user_id']);
+				// 	$user_instance = new \phpbb\user('\phpbb\datetime');
+				// 	$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
+				// 	$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
+				// 	$user_instance->add_lang_ext('andreask/ium', 'body');
+				// }
 
 				// Load top_topics class
 				$topics = $this->container->get('andreask.ium.classes.top_topics');
@@ -137,11 +144,12 @@ class reminder
 				// dirty fix for now, need to find a way for the templates.
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
-					$lang = ( $this->lang_exists($user_instance->get_used_language()) ) ? $user_instance->get_used_language() : $this->$config['default_lang'];
+					$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->$config['default_lang'];
 				}
 				else
 				{
-					$lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
+					$lang = ( $this->lang_exists( $this->language->lang_name ) ) ? $this->language->lang_name : $this->config['default_lang'];
+					// $lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
 				}
 
 				// add template variables
@@ -159,21 +167,24 @@ class reminder
 
 				if (!is_null($topic_links))
 				{
-					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
+					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->language->lang('INCLUDE_USER_TOPICS'), $topic_links)));
+					// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
 				}
 				if (!is_null($forum_links))
 				{
-					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
+					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $this->language->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
+					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
 				{
 					$link = PHP_EOL;
 					$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLLOW_TO_DELETE', $link)));
+					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->language->lang('FOLLOW_TO_DELETE', $link)));
+					// $template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLLOW_TO_DELETE', $link)));
 				}
 
 				$messenger = new \messenger(false);
-				$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($user_instance->lang('ADMINISTRATOR'));
+				$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
 
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
@@ -233,15 +244,27 @@ class reminder
 
 		if (!$user)
 		{
+			// Current date
+			$present = new DateTime();
+
+			// Set interval
+			$back = 'P' . $this->config['andreask_ium_interval'] . 'D';
+			$interval = new DateInterval($back);
+
+			// Substract the interval of Days/Months/Years from present
+			$present->sub($interval);
+
+			// Convert past to timestamp
+			$past = strtotime($present->format("y-m-d h:i:s"));
+
 			$sql_opt .= ' AND r.dont_send <> 1
-			AND from_unixtime(r.reminder_sent_date) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)
-			AND from_unixtime(p.user_lastvisit) < DATE_SUB(NOW(), INTERVAL ' . $this->config['andreask_ium_interval'] . ' DAY)';
+			AND r.reminder_sent_date < '. $past . '
+			AND p.user_lastvisit < ' . $past;
 		}
 
 		$ignore_groups = $this->container->get('andreask.ium.classes.ignore_user');
 		$must_ignore = $ignore_groups->ignore_groups();
 
-		// $sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.remind_counter, r.previous_sent_date, r.reminder_sent_date, r.dont_send
 		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*
 			FROM ' . USERS_TABLE . ' p
 			LEFT OUTER JOIN ' . $table_name . ' r
@@ -255,7 +278,7 @@ class reminder
 		$result = $this->db->sql_query($sql);
 
 		// $row should hold the data you selected
-		$inactive_users = array();
+		$inactive_users = [];
 
 		// Store results to rows
 		while ($row = $this->db->sql_fetchrow($result))
@@ -476,7 +499,8 @@ class reminder
 
 			$user_row = $this->user_loader->get_user($sleeper['user_id']);
 
-			if (phpbb_version_compare($this->config['version'], '3.1.4', '<='))
+			// TODO create language helper class!!!!
+			if (phpbb_version_compare($this->config['version'], '3.1.10', '<='))
 			{
 				$user_instance = new \phpbb\user('\phpbb\datetime');
 				$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
@@ -537,7 +561,6 @@ class reminder
 			if (!is_null($forum_links))
 			{
 				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf($this->user->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
-				// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDER_TO_ADMIN', time(), array($template[1],$sleeper['user_email']));
 			}
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['random']))
