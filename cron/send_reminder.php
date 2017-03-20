@@ -26,7 +26,6 @@ class send_reminder extends \phpbb\cron\task\base
 	*
 	* @param \phpbb\config\config $config The config
 	*/
-
 	public function __construct(\phpbb\config\config $config, \phpbb\user $user, ContainerInterface $container)
 	{
 		$this->config		=	$config;
@@ -39,7 +38,6 @@ class send_reminder extends \phpbb\cron\task\base
 	*
 	* @return null
 	*/
-
 	public function run()
 	{
 		$reminder = $this->container->get('andreask.ium.classes.reminder');
@@ -63,7 +61,6 @@ class send_reminder extends \phpbb\cron\task\base
 	*
 	* @return bool
 	*/
-
 	public function should_run()
 	{
 		return $this->config['send_reminder_last_gc'] < (time() - $this->config['send_reminder_gc']);
@@ -72,7 +69,6 @@ class send_reminder extends \phpbb\cron\task\base
 	/**
 	* @return bool enable cron task if it's enabled in the ext.
 	*/
-
 	public function is_runnable()
 	{
 		return (bool) $this->config['andreask_ium_enable'];
