@@ -81,7 +81,7 @@ class top_topics
 					ORDER BY posts_count DESC';
 
 			$result = $this->db->sql_query_limit($sql, 10);
-			$active_t_row = '';
+			$active_t_row = [];
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
@@ -103,7 +103,7 @@ class top_topics
 					GROUP BY forum_id, topic_id ORDER BY max(post_time) desc, count(post_id) desc';
 
 			$result = $this->db->sql_query_limit($sql, $this->config['andreask_ium_top_user_threads_count']);
-			$active_topics = '';
+			$active_topics = [];
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
