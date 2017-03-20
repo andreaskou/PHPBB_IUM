@@ -199,8 +199,21 @@ class delete_user
 
 	public function	auto_delete()
 	{
+		// Current date
+		$present = new DateTime();
+
+		// Set interval
+		$back = 'P' . $this->config['andreask_ium_auto_del_day'] . 'D';
+		$interval = new DateInterval($back);
+
+		// Substract the interval of Days/Months/Years from present
+		$present->sub($interval);
+
+		// Convert past to timestamp
+		$past = strtotime($present->format("y-m-d h:i:s"));
+
 		$sql = 'SELECT user_id FROM ' . $this->table_name . '
-				WHERE type="auto" AND from_unixtime(request_date) < (DATE_SUB(CURDATE(), INTERVAL ' . $this->config['andreask_ium_auto_del_days'] . ' DAY))';
+				WHERE type="auto" AND request_date < ' . $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = '';
