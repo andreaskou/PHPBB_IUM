@@ -44,11 +44,17 @@ class ignore_user
 
 		foreach ($users as $user)
 		{
-			$sql = 'SELECT user_id from ' . USERS_TABLE . ' where username ="' . $this->db->sql_escape($user) . '"';
+			$sql = 'SELECT user_id, username FROM ' . USERS_TABLE . " WHERE username = '" . $this->db->sql_escape($user) . "'";
 			$result = $this->db->sql_query($sql);
+			$user_fetch = $this->db->sql_fetchrow($result);
 
 			// For any user that was not found, store them.
-			if (!$id = $this->db->sql_fetchrow($result))
+			if (!$user_fetch)
+			{
+				$not_exist[$not_exist_count]['username'] = $user;
+				$not_exist_count++;
+			}
+			else if ($user !== $user_fetch['username'])
 			{
 				$not_exist[$not_exist_count]['username'] = $user;
 				$not_exist_count++;
@@ -88,19 +94,16 @@ class ignore_user
 					'ON'	=>	'p.user_id = r.user_id',
 					)
 				),
-			'WHERE'	=> $this->db->sql_in_set('p.username', $username ) .
-			$this->ignore_groups() .
-			' AND r.username is null');
+			'WHERE'	=> $this->db->sql_in_set('p.username', $username ) . $this->ignore_groups()
+			. ' AND r.username is null');
 
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
 		$result = $this->db->sql_query($sql);
 		$rows = [];
 
-		// ' AND ' . $this->db->sql_in_set('p.group_id', $group_ids, true) .
 		// Store in an array.
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-
 			$rows[] = $row;
 		}
 
@@ -158,6 +161,7 @@ class ignore_user
 
 	 /**
 	  * Function Updates dont_sent field on existing users on table ium_reminder
+	  *
 	  * @param  array  		$user	Usernames
 	  * @param  boolean		$action  true for set user to ignore false for unset ignore
 	  * @param  boolean 	$user_id use user_id instead of username
@@ -165,8 +169,11 @@ class ignore_user
 	  */
 	public function update_user($user, $action, $user_id = false)
 	{
-		$shift_this = $this->get_user_username($user);
-		$username = ($user_id === true) ? array_shift($shift_this) : $user;
+		if ($user_id)
+		{
+			$username = $this->get_user_username($user);
+		}
+		$username = ($user_id) ? array_shift($username) : $user;
 		$dont_send = $action ? 1 : 0;
 
 		$data = array ('dont_send' => $dont_send);
@@ -185,10 +192,10 @@ class ignore_user
 	{
 		$sql_array = array('user_id' => $id);
 		$sql = 'SELECT USERNAME FROM ' . $this->table_name . ' WHERE user_id = ' . (int) $id;
-
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
+
 		return $row;
 	}
 
@@ -201,7 +208,7 @@ class ignore_user
 		// Get administrator user_ids
 		$administrators = $this->auth->acl_get_list(false, 'a_', false);
 		$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
-		
+
 		// Get moderator user_ids
 		$moderators = $this->auth->acl_get_list(false, 'm_', false);
 		$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
