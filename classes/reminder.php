@@ -94,31 +94,11 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
-			// if (phpbb_version_compare($this->config['version'], '3.2', '>='))
-			// {
-			// 	$language = $this->container->get('language');
-			// }
 
 			foreach ($this->inactive_users as $sleeper)
 			{
 				$this->language->set_user_language($sleeper['user_lang'], $sleeper['user_timezone']);
 				$this->language->add_lang('andreask/ium', 'body');
-
-				// if (phpbb_version_compare($this->config['version'], '3.2', '>='))
-				// {
-				// 	$user_instance = $language;
-				// 	$user_instance->set_user_language($sleeper['user_lang']);
-				// 	$user_instance->add_lang('body','andreask/ium');
-				// }
-				// else
-				// {
-				// 	// XXX this is not doing anything...!
-				// 	// $user_row = $this->user_loader->get_user($sleeper['user_id']);
-				// 	$user_instance = new \phpbb\user('\phpbb\datetime');
-				// 	$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
-				// 	$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
-				// 	$user_instance->add_lang_ext('andreask/ium', 'body');
-				// }
 
 				// Load top_topics class
 				$topics = $this->container->get('andreask.ium.classes.top_topics');
@@ -142,15 +122,7 @@ class reminder
 				}
 
 				// dirty fix for now, need to find a way for the templates.
-				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
-				{
-					$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->$config['default_lang'];
-				}
-				else
-				{
-					$lang = ( $this->lang_exists( $this->language->lang_name ) ) ? $this->language->lang_name : $this->config['default_lang'];
-					// $lang = ( $this->lang_exists( $user_instance->lang_name ) ) ? $user_instance->lang_name : $this->config['default_lang'];
-				}
+				$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->$config['default_lang'];
 
 				// add template variables
 				$template_ary	=	array(
@@ -495,24 +467,8 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
-			$this->user->add_lang_ext('andreask/ium', 'body');
-
-			$user_row = $this->user_loader->get_user($sleeper['user_id']);
-
-			// TODO create language helper class!!!!
-			if (phpbb_version_compare($this->config['version'], '3.1.10', '<='))
-			{
-				$user_instance = new \phpbb\user('\phpbb\datetime');
-				$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
-				$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
-				$user_instance->add_lang_ext('andreask/ium', 'body');
-			}
-			if (phpbb_version_compare($this->config['version'], '3.2', '>='))
-			{
-				$lang_loader = new \phpbb\language\language_file_loader($this->phpbb_root_path, $this->php_ext);
-				$lang_instance = new \phpbb\language\language($lang_loader);
-				$user_instance = new \phpbb\user($lang_instance, '\phpbb\datetime');
-			}
+			$this->language->set_user_language($sleeper['user_lang'], $sleeper['user_timezone']);
+			$this->language->add_lang('andreask/ium', 'body');
 
 			// Load top_topics class
 			$topics = $this->container->get('andreask.ium.classes.top_topics');
@@ -537,7 +493,7 @@ class reminder
 			}
 
 			// dirty fix for now, need to find a way for the templates.
-			$lang = ( $this->lang_exists( $this->user->lang_name ) ) ? $this->user->lang_name : $this->config['default_lang'];
+			$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->$config['default_lang'];
 
 			// add template variables
 			$template_ary	=	array(
@@ -555,26 +511,26 @@ class reminder
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->user->lang('INCLUDE_USER_TOPICS'), $topic_links)));
+				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->language->lang('INCLUDE_USER_TOPICS'), $topic_links)));
 			}
 			// If there are forum topics merge them with the template_ary
 			if (!is_null($forum_links))
 			{
-				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf($this->user->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
+				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf($this->language->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
 			}
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['random']))
 			{
 				$link = PHP_EOL;
 				$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->user->lang('FOLLOW_TO_DELETE', $link)));
+				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->language->lang('FOLLOW_TO_DELETE', $link)));
 			}
 
 			$messenger = new \messenger(false);
 
 			// mail headers
 
-			$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->user->lang('ADMINISTRATOR'));
+			$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
 
 			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username );
@@ -610,8 +566,7 @@ class reminder
 		// Log it and release the user list.
 
 		$template = explode('_', $template);
-		$test = array_merge(array($template[1]), array($sleeper['user_email']));
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDER_TO_ADMIN', time(), array($template[1],$sleeper['user_email']));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDER_TO_ADMIN', time(), array($template[1], $sleeper['user_email']));
 		unset( $this->inactive_users );
 	}
 
