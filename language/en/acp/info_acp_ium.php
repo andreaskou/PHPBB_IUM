@@ -45,11 +45,15 @@ $lang = array_merge(
 	'ANDREASK_IUM_TEST_EMAIL'				=>	'Sent test e-mail',
 	'ANDREASK_IUM_INCLUDED_FORUMS'			=>	'Included forums',
 	'ANDREASK_IUM_EXCLUDE_FORUM'			=>	'Exclude',
+	'ANDREASK_IUM_GROUP_IGNORE'				=>	'Ignore Groups',
 
-	'ANDREASK_IUM_EXCLUDED_FORUMS'			=>	'Excluded forums',
-	'ANDREASK_IUM_INCLUDE_FORUM'			=>	'Include',
-	'SELECT_A_FORUM'						=>	'Please select a forum',
-	'EXCLUDED_EMPTY'						=>	'No excluded forums...',
+	'ANDREASK_IUM_EXCLUDED_FORUMS'				=>	'Excluded forums',
+	'ANDREASK_IUM_INCLUDE_FORUM'				=>	'Include',
+	'SELECT_A_FORUM'							=>	'Please select a forum',
+	'EXCLUDED_EMPTY'							=>	'No excluded forums...',
+
+	'IUM_IGNORE_GROUP_MANAGMENT'				=>	'Group Managment',
+	'ANDREASK_IUM_UPDATE_IGNORE_LIST'			=>	'Ignore',
 
 	// acp user overview add option
 	'USER_ADMIN_ANDREASK_IUM_USERS_OVERVIEW_OPTION'	=>	'Send Reminder',
@@ -71,6 +75,8 @@ $lang = array_merge(
 	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'A test e-mail will be sent to "%s"',
 	'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Select a category or subcategory to <strong>exclude</strong> it from the top topics lists that are sent to the users',
 	'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Select a category or subcategory to <strong>include</strong> it from the top topics lists that are sent to the users',
+	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Here you can selecet which groupd(s) should be ignored by the extension. Please note that even though they <u>are not</u> selected here,</br>BOTS, ADMINISTRATORS, MODERATOROS and GUESTS are <b>ignored</b>. But it is still suggested to select the groups here as well!',
+	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Hold control (CTRL) (or &#8984; for mac) on the keyboard to select multiple groups.',
 
 	// configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for a certain amount of time.',
