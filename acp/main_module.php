@@ -86,16 +86,17 @@ class main_module
 					// trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				$already_excluded_forums = $config_text->get('andreask_ium_ignore_forum', '');
-				$new_forum = $this->sweap_sforums($request->variable('subforum_id', ''));
+				$already_excluded_forums_array = unserialize($config_text->get('andreask_ium_ignore_forum', ''));
+				$new_forum_array = $this->sweap_sforums($request->variable('subforum_id', ''));
 
 				if (!empty($already_excluded_forums))
 				{
-					$config_text->set('andreask_ium_ignore_forum', $already_excluded_forums . ',' . $new_forum);
+					$merge_forums = array_merge($already_excluded_forums, $new_forum_array);
+					$config_text->set('andreask_ium_ignore_forum', serialize($merge_forums));
 				}
 				else
 				{
-					$config_text->set('andreask_ium_ignore_forum', $new_forum);
+					$config_text->set('andreask_ium_ignore_forum', serialize($new_forum_array));
 				}
 			}
 			// Include forum(s)
@@ -113,19 +114,16 @@ class main_module
 					// trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				/**
-				* TODO Unserialize instead of explide
-				*/
-				$remove 			= explode(',', $this->sweap_sforums($request->variable('excluded_forum','')));
-				$conf_text_array 	= explode(',', $config_text->get('andreask_ium_ignore_forum',''));
-				$new_conf_array 	= array_diff( $conf_text_array, $remove);
-				$new_conf_text 		= implode(',', $new_conf_array);
+				$remove_array 		= $this->sweap_sforums($request->variable('excluded_forum',''));
+				$conf_text_array 	= unserialize($config_text->get('andreask_ium_ignore_forum',''));
+				$new_conf_array 	= array_diff( $conf_text_array, $remove_array);
+				$new_conf_text 		= serialize($new_conf_array);
 				$config_text->set('andreask_ium_ignore_forum', $new_conf_text);
 			}
 
 			// To get the forum list we have to include functions_admin
 			include_once $phpbb_root_path . "includes/functions_admin." . $phpEx;
-			$ignore_id = explode(',', $config_text->get('andreask_ium_ignore_forum', ''));
+			$ignore_id = unserialize($config_text->get('andreask_ium_ignore_forum', ''));
 			// Get the forum list
 			$forum_list = make_forum_select(false, $ignore_id, true, false, false, false, true);
 			// Build option list from forums list
@@ -361,7 +359,7 @@ class main_module
 			{
 				$group_name = ($language->lang($group['group_name'])) ? $language->lang($group['group_name']) : $group['group_name'];
 				$selected = '';
-				if ($ignored_groups != false)
+				if ($ignored_groups != null)
 				{
 					$selected = (in_array($group['group_id'], unserialize($ignored_groups))) ? ' selected="selected" ' : '';
 				}
@@ -702,7 +700,7 @@ class main_module
 		{
 			$groups[] = $row;
 		}
-		$db->sql_freeresult($sql);
+		$db->sql_freeresult($result);
 
 		return $groups;
 	}
@@ -784,13 +782,11 @@ class main_module
 			{
 				$subforum = false;
 			}
-			/**
-			 * TODO this needs fixing lang and user!!!
-			 */
 
 			$sub = ($subforum) ? '[' . $language->lang('PLUS_SUBFORUMS') . ']' : '';
 			$option .= "<option value='{$forum['forum_id']}' >{$forum['forum_name']} {$sub}</option>";
 		}
+
 		return $option;
 	}
 
@@ -811,10 +807,6 @@ class main_module
 
 		$db->sql_freeresult($result);
 
-		/**
-		 * TODO serialize instead of implode!
-		 */
-
 		if ($subforums['left_id'] != $subforums['right_id'] - 1 )
 		{
 			$sql = 'SELECT forum_id FROM ' .
@@ -829,11 +821,11 @@ class main_module
 				$puzzle[] = $row['forum_id'];
 			}
 			$db->sql_freeresult($result);
-			$puzzle = implode(',', $puzzle);
+			// $puzzle = implode(',', $puzzle);
 
 			return $puzzle;
 		}
-		return $forum_id;
+		return array($forum_id);
 	}
 
 }
