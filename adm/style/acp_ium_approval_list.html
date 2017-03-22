@@ -92,14 +92,14 @@
 	</fieldset>
 	<form id="groups" method="post" action="{U_ACTION}">
 		<fieldset>
-			<h1>{{ lang('IUM_IGNORE_GROUP_MANAGMENT') }}</h1>
+			<h3>{{ lang('IUM_IGNORE_GROUP_MANAGMENT') }}</h3>
 			<p>{{ lang('ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN') }}</p>
 			<dl>
 	            <dt><label for="andreask_group_ignore">{{ lang('ANDREASK_IUM_GROUP_IGNORE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_GROUP_IGNORE_EXPLAIN')}}</span></dt>
 	            <dd ><select style="width: 70%;" name="group_id[]" multiple="multiple" size="6">{IGNORED_GROUP}</select></dd>
 				<p class="submit-buttons" style="width: 70%">
 					<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" autofocus />
-					<input type="submit" class="button2 column2" name="ignore_group[remove]" value="{{ lang('UPDATE_IGNORE_LIST') }}" autofocus />
+					<input type="submit" class="button2 column2" name="ignore_group[remove]" value="{{ lang('ANDREASK_IUM_UPDATE_IGNORE_LIST') }}" autofocus />
 				</p>
 	        </dl>
 		</fieldset>
