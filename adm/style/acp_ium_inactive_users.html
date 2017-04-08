@@ -1,9 +1,9 @@
 <!-- INCLUDE overall_header.html -->
 <a id="maincontent"></a>
 
-<h1>{L_INACTIVE_USERS}</h1>
+<h1>{{ lang('INACTIVE_USERS') }}</h1>
 
-<p>{L_IUM_INACTIVE_USERS_EXPLAIN}</p>
+<p>{{ lang('IUM_INACTIVE_USERS_EXPLAIN') }}</p>
 
 <form id="inactive" method="post" action="{U_ACTION}">
 
@@ -16,21 +16,21 @@
 <table class="table1 zebra-table">
 <thead>
 <tr>
-	<th>{L_USERNAME}</th>
-	<th>{L_JOINED}</th>
-	<th>{L_LAST_VISIT}</th>
-	<th>{L_INACTIVE_DATE}</th>
-	<th>{L_IUM_INACTIVE_REASON}</th>
-	<th>{L_LAST_SENT_REMINDER}</th>
-	<th>{L_COUNT}</th>
-	<th>{L_REMINDER_DATE}</th>
+	<th>{{ lang('USERNAME') }}</th>
+	<th>{{ lang('JOINED') }}</th>
+	<th>{{ lang('LAST_VISIT') }}</th>
+	<th>{{ lang('INACTIVE_DATE') }}</th>
+	<th>{{ lang('IUM_INACTIVE_REASON') }}</th>
+	<th>{{ lang('LAST_SENT_REMINDER') }}</th>
+	<th>{{ lang('COUNT') }}</th>
+	<th>{{ lang('REMINDER_DATE') }}</th>
 </tr>
 </thead>
 <tbody>
 <!-- BEGIN inactive -->
 	<tr>
 		<td style="vertical-align: top;"><a href="{inactive.LINK_TO_USER}">{inactive.USERNAME}</a>
-		<!-- IF inactive.POSTS --><br />{L_POSTS}{L_COLON}   <strong>{inactive.POSTS}</strong><!-- ENDIF -->
+		<!-- IF inactive.POSTS --><br />{{ lang('POSTS') }}{{ lang('COLON') }}   <strong>{inactive.POSTS}</strong><!-- ENDIF -->
 		</td>
 		<td style="vertical-align: top;">{inactive.JOINED}</td>
 		<td style="vertical-align: top;">{inactive.LAST_VISIT}</td>
@@ -44,18 +44,18 @@
 	</tr>
 <!-- BEGINELSE -->
 	<tr>
-		<td colspan="6" style="text-align: center;">{L_NO_INACTIVE_USERS}</td>
+		<td colspan="6" style="text-align: center;">{{ lang('NO_INACTIVE_USERS') }}</td>
 	</tr>
 <!-- END inactive -->
 </tbody>
 </table>
-
+<p style="text-align: center;">{TOTAL_USERS_WITH_DAY}</p>
 <fieldset class="display-options">
-	{L_ACP_USERS_WITH_POSTS} <input class="checkbox" type="checkbox" name="with_posts" value="1" <!-- IF WITH_POSTS --> checked <!-- ENDIF --> /> &nbsp;
-	{L_COUNT_BACK}{L_COLON} &nbsp; <select name="count_back">{S_INACTIVE_OPTIONS}</select> &nbsp; <select name="sort_by">{S_IUM_SORT_BY}</select> &nbsp;
-	{L_ACP_DESCENDING} <input class="checkbox" type="checkbox" name="sort_order" value="1" <!-- IF SORT_ORDER --> checked <!-- ENDIF --> /> &nbsp;
-    <!-- IF .pagination -->&nbsp;{L_USERS_PER_PAGE}{L_COLON} <input class="inputbox autowidth" type="number" name="users_per_page" id="users_per_page" min="0" max="999" value="{USERS_PER_PAGE}" /><!-- ENDIF -->
-	<input class="button2" type="submit" value="{L_GO}" name="sort" />
+	{{ lang('ACP_USERS_WITH_POSTS') }} <input class="checkbox" type="checkbox" name="with_posts" value="1" <!-- IF WITH_POSTS --> checked <!-- ENDIF --> /> &nbsp;
+	{{ lang('COUNT_BACK') }}{{ lang('COLON') }} &nbsp; <select name="count_back">{S_INACTIVE_OPTIONS}</select> &nbsp; <select name="sort_by">{S_IUM_SORT_BY}</select> &nbsp;
+	{{ lang('ACP_DESCENDING') }} <input class="checkbox" type="checkbox" name="sort_order" value="1" <!-- IF SORT_ORDER --> checked <!-- ENDIF --> /> &nbsp;
+    <!-- IF .pagination -->&nbsp;{{ lang('USERS_PER_PAGE') }}{{ lang('COLON') }} <input class="inputbox autowidth" type="number" name="users_per_page" id="users_per_page" min="0" max="999" value="{USERS_PER_PAGE}" /><!-- ENDIF -->
+	<input class="button2" type="submit" value="{{ lang('GO') }}" name="sort" />
 </fieldset>
 
 <hr />
@@ -68,7 +68,7 @@
     <!-- IF AKSASDAS -->
 <fieldset class="quick">
 	<select name="action">{S_INACTIVE_OPTIONS}</select>
-	<input class="button2" type="submit" name="submit" value="{L_SUBMIT}" />
+	<input class="button2" type="submit" name="submit" value="{{ lang('SUBMIT') }}" />
 	{S_FORM_TOKEN}
 </fieldset>
     <!-- ENDIF -->
