@@ -245,6 +245,7 @@ class main_module
 				'WITH_POSTS' 			=> ($with_posts) ? true : false,
 				'SORT_ORDER' 			=> ($sort_order) ? true : false,
 				'USERS_PER_PAGE' 		=> $limit,
+				'TOTAL_USERS_WITH_DAY'	=> sprintf($language->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $language->lang($option_ary[$actions])))
 			));
 
 			// Assign row results to template var inactive
