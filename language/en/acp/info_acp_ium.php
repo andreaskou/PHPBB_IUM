@@ -79,7 +79,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Hold control (CTRL) (or &#8984; for mac) on the keyboard to select multiple groups.',
 
 	// configuration page Legend
-	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for a certain amount of time.',
+	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for the set amount of time here.',
 	'ACP_IUM_SETTINGS'	=>	'Inactive User Reminder Settings',
 	'ACP_IUM_MAIL_SETTINGS'	=>	'Reminder Settings',
 	'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Reminder Include Settings',
@@ -108,6 +108,7 @@ $lang = array_merge(
 	'REMINDER_DATE'	=>	'Last Reminder Sent',
 	'NO_REMINDER_SENT_YET'	=>	'Not sent any reminders yet',
 	'IUM_INACTIVE_REASON'	=>	'Status',
+	'TOTAL_USERS_WITH_DAY_AMOUNT'	=>	'<strong>%1$s</strong> User(s) in total <i>for the set interval</i> of "<strong>%2$s</strong>"',
 	// Delete approval page
 	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Deletion approval list',
 	'APPROVAL_LIST_PAGE_TITLE'	=> 'Deletion approval list',
