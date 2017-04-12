@@ -377,7 +377,7 @@ class main_module
 					'TOTAL_USERS'		=>	$approval_count,
 					'U_ACTION'			=>	$this->u_action,
 					'IGNORED_USER'		=>	$s_defined_user_options,
-					'U_FIND_USERNAME'	=>	append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=add_user&amp;field=usernames&amp;select_single=true')
+					'U_FIND_USERNAME'	=>	append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=add_user&amp;field=usernames')
 				));
 
 			foreach ($rows as $row)
