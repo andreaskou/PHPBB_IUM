@@ -14,7 +14,6 @@
 namespace andreask\ium\classes;
 
 use DateTime;
-use DatePeriod;
 use DateInterval;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -93,7 +92,6 @@ class reminder
 			{
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
-
 
 			foreach ($this->inactive_users as $sleeper)
 			{

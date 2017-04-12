@@ -26,7 +26,7 @@ class listener implements EventSubscriberInterface
 	protected $user;
 	protected $container;
 
-	public function __construct(ContainerInterface $container, \phpbb\user $user, \phpbb\config\config $config,\phpbb\config\db_text $config_text,\phpbb\auth\auth $auth, \phpbb\log\log $log)
+	public function __construct(ContainerInterface $container, \phpbb\user $user, \phpbb\config\config $config, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
 		$this->container 	=	$container;
 		$this->user 		=	$user;

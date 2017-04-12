@@ -14,7 +14,6 @@
 namespace andreask\ium\migrations;
 
 use DateTime;
-use DatePeriod;
 use DateInterval;
 use phpbb\db\migration\migration;
 

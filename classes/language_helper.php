@@ -16,7 +16,7 @@ class language_helper
 	protected 	$user;
 	public		$lang_name;
 
-	function __construct(\phpbb\user $user, ContainerInterface $container,\phpbb\config\config $config)
+	function __construct(\phpbb\user $user, ContainerInterface $container, \phpbb\config\config $config)
 	{
 		$this->container = $container;
 		$this->config = $config;
