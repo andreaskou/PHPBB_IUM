@@ -86,17 +86,17 @@ class main_module
 					// trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				$already_excluded_forums_array = unserialize($config_text->get('andreask_ium_ignore_forum', ''));
+				$already_excluded_forums_array = json_decode($config_text->get('andreask_ium_ignore_forum', ''));
 				$new_forum_array = $this->sweap_sforums($request->variable('subforum_id', ''));
 
 				if (!empty($already_excluded_forums))
 				{
 					$merge_forums = array_merge($already_excluded_forums, $new_forum_array);
-					$config_text->set('andreask_ium_ignore_forum', serialize($merge_forums));
+					$config_text->set('andreask_ium_ignore_forum', json_encode($merge_forums));
 				}
 				else
 				{
-					$config_text->set('andreask_ium_ignore_forum', serialize($new_forum_array));
+					$config_text->set('andreask_ium_ignore_forum', json_encode($new_forum_array));
 				}
 			}
 			// Include forum(s)
@@ -115,15 +115,15 @@ class main_module
 				}
 
 				$remove_array 		= $this->sweap_sforums($request->variable('excluded_forum',''));
-				$conf_text_array 	= unserialize($config_text->get('andreask_ium_ignore_forum',''));
+				$conf_text_array 	= json_decode($config_text->get('andreask_ium_ignore_forum',''));
 				$new_conf_array 	= array_diff( $conf_text_array, $remove_array);
-				$new_conf_text 		= serialize($new_conf_array);
+				$new_conf_text 		= json_encode($new_conf_array);
 				$config_text->set('andreask_ium_ignore_forum', $new_conf_text);
 			}
 
 			// To get the forum list we have to include functions_admin
 			include_once $phpbb_root_path . "includes/functions_admin." . $phpEx;
-			$ignore_id = unserialize($config_text->get('andreask_ium_ignore_forum', ''));
+			$ignore_id = json_decode($config_text->get('andreask_ium_ignore_forum', ''));
 			// Get the forum list
 			$forum_list = make_forum_select(false, $ignore_id, true, false, false, false, true);
 			// Build option list from forums list
@@ -362,7 +362,7 @@ class main_module
 				$selected = '';
 				if ($ignored_groups != null)
 				{
-					$selected = (in_array($group['group_id'], unserialize($ignored_groups))) ? ' selected="selected" ' : '';
+					$selected = (in_array($group['group_id'], json_decode($ignored_groups))) ? ' selected="selected" ' : '';
 				}
 
 				$s_defined_group_options .= '<option value="' . $group['group_id'] . '"'. $selected .'>' . $group_name . '</option>';
@@ -374,7 +374,7 @@ class main_module
 
 				if ($group_ids != 0)
 				{
-					$ignore_groups 	= serialize($group_ids);
+					$ignore_groups 	= json_encode($group_ids);
 					$config_text->set('andreask_ium_ignored_groups', $ignore_groups);
 					trigger_error($language->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
 				}
