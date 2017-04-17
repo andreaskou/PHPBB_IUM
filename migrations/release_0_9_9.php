@@ -13,8 +13,8 @@
 
 namespace andreask\ium\migrations;
 
-use phpbb\db\migration\migration;
-use phpbb\config;
+// use phpbb\db\migration\migration;
+// use phpbb\config;
 
 class release_0_9_9 extends \phpbb\db\migration\container_aware_migration
 {

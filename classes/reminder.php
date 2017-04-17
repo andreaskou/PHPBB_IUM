@@ -215,11 +215,11 @@ class reminder
 		if (!$user)
 		{
 			// Current date
-			$present = new DateTime();
+			$present = new \DateTime();
 
 			// Set interval
 			$back = 'P' . $this->config['andreask_ium_interval'] . 'D';
-			$interval = new DateInterval($back);
+			$interval = new \DateInterval($back);
 
 			// Substract the interval of Days/Months/Years from present
 			$present->sub($interval);
