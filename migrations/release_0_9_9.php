@@ -52,7 +52,7 @@ class release_0_9_9 extends \phpbb\db\migration\container_aware_migration
 		$user_ignore_list = $config_text->get('andreask_ium_ignore_forum');
 		if ($user_ignore_list)
 		{
-			var_dump($user_ignore_list);
+			// var_dump($user_ignore_list);
 		}
 	}
 }
