@@ -124,12 +124,22 @@ class main_module
 			// To get the forum list we have to include functions_admin
 			include_once $phpbb_root_path . "includes/functions_admin." . $phpEx;
 			$ignore_id = json_decode($config_text->get('andreask_ium_ignore_forum', ''));
+			if ($ignore_id)
+			{
+				$ignore_id = array_filter($ignore_id);
+				$excluded_list = $this->make_excluded_forums_list($ignore_id);
+			}
+			else
+			{
+				// Get the excluded list, if not exist show somethin else instead.
+				$excluded_list = '<option disabled>' .$language->lang('EXCLUDED_EMPTY') . '</option>';
+			}
+
 			// Get the forum list
 			$forum_list = make_forum_select(false, $ignore_id, true, false, false, false, true);
 			// Build option list from forums list
 			$included_forum_list = $this->build_subforum_options($forum_list);
-			// Get the excluded list, if not exist show somethin else instead.
-			$excluded_list = (array_filter($ignore_id)) ? $this->make_excluded_forums_list($ignore_id) : '<option disabled>' .$language->lang('EXCLUDED_EMPTY') . '</option>';
+			// $excluded_list = (array_filter($ignore_id)) ? $this->make_excluded_forums_list($ignore_id) : '<option disabled>' .$language->lang('EXCLUDED_EMPTY') . '</option>';
 
 			$template->assign_vars(array(
 				'ANDREASK_IUM_ENABLE'					=>	$config['andreask_ium_enable'],
