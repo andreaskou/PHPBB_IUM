@@ -100,9 +100,9 @@ class add_data extends migration
 			if ( $this->db_tools->sql_table_exists( $this->table_prefix . $this->schema_name ) )
 			{
 				// Current date
-				$present = new \DateTime();
+				$present = new DateTime();
 				// Set interval
-				$interval = new \DateInterval('P30D');
+				$interval = new DateInterval('P30D');
 				// Substract the interval of Days/Months/Years from present
 				$present->sub($interval);
 				// Convert past to timestamp
