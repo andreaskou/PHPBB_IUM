@@ -245,7 +245,7 @@ class ignore_user
 
 		$result = $this->db->sql_query($sql);
 
-		$group_ids = '';
+		$group_ids = [];
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$group_ids[] = $row['group_id'];
