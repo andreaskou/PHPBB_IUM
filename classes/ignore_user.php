@@ -218,7 +218,7 @@ class ignore_user
 
 		// Ignored group_ids
 		$ignore = $this->config_text->get('andreask_ium_ignored_groups', '');
-		$ignore = unserialize($ignore);
+		$ignore = json_decode($ignore);
 		if (!empty($ignore))
 		{
 			$ignore = ' AND ' . $this->db->sql_in_set('p.group_id', $ignore, true);

@@ -109,7 +109,7 @@ class listener implements EventSubscriberInterface
 
 		$array_merge = array_unique(array_merge($admin, $mod));
 		$ignored_groups = $this->config_text->get('andreask_ium_ignored_groups', 'empty');
-		$ignored_groups = unserialize($ignored_groups);
+		$ignored_groups = json_decode($ignored_groups);
 
 		$ignore = $this->container->get('andreask.ium.classes.ignore_user');
 		$group_ids = $ignore->get_groups($user['user_id']);
