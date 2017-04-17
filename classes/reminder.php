@@ -229,15 +229,16 @@ class reminder
 
 			$sql_opt .= ' AND r.dont_send <> 1
 			AND r.reminder_sent_date < '. $past . '
-			AND p.user_lastvisit < ' . $past;
+			AND p.user_lastvisit < ' . $past . '
+			AND p.user_regdate < ' . $past;
 		}
 
 		$ignore_groups = $this->container->get('andreask.ium.classes.ignore_user');
 		$must_ignore = $ignore_groups->ignore_groups();
 
 		$sql = 'SELECT p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*
-			FROM ' . USERS_TABLE . ' p
-			LEFT OUTER JOIN ' . $table_name . ' r
+			FROM ' . $table_name . ' r
+			RIGHT OUTER JOIN ' . USERS_TABLE . ' p
 			ON (p.user_id = r.user_id)
 			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')'
 			. $sql_opt .' '
