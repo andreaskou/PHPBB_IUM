@@ -581,10 +581,10 @@ class main_module
 						break;
 				}
 				// Current date
-				$present = new \DateTime();
+				$present = new DateTime();
 
 				// Set interval
-				$interval = new \DateInterval($back);
+				$interval = new DateInterval($back);
 
 				// Substract the interval of Days/Months/Years from present
 				$present->sub($interval);
