@@ -13,8 +13,8 @@
 
 namespace andreask\ium\acp;
 
-use DateTime;
-use DateInterval;
+use \DateTime;
+use \DateInterval;
 
 // use phpbb\log\null;
 
