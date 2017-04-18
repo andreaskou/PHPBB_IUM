@@ -13,8 +13,6 @@
 
 namespace andreask\ium\migrations;
 
-use \DateTime;
-use \DateInterval;
 use phpbb\db\migration\migration;
 
 /**
@@ -100,13 +98,6 @@ class add_data extends migration
 			if ( $this->db_tools->sql_table_exists( $this->table_prefix . $this->schema_name ) )
 			{
 				// Current date
-				$present = new DateTime();
-				// Set interval
-				$interval = new DateInterval('P30D');
-				// Substract the interval of Days/Months/Years from present
-				$present->sub($interval);
-				// Convert past to timestamp
-				$past = strtotime($present->format("y-m-d h:i:s"));
 
 				$ignore_groups = $phpbb_container->get('auth');
 
@@ -126,8 +117,7 @@ class add_data extends migration
 
 				$sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
 				SELECT user_id, username FROM ' . USERS_TABLE . ' p
-				WHERE p.user_lastvisit < '. $past . '
-				AND '. $this->db->sql_in_set('p.user_type', $ignore_users_extra, true) .'
+				WHERE '. $this->db->sql_in_set('p.user_type', $ignore_users_extra, true) .'
 				AND '. $this->db->sql_in_set('p.user_id', $admin_mod_array, true) . '
 				AND p.user_id > ' . ANONYMOUS;
 
