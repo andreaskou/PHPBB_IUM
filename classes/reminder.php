@@ -433,6 +433,11 @@ class reminder
 
 	public function lang_exists($user_lang)
 	{
+		if (!$user_lang)
+		{
+			return false;
+		}
+
 		$ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
 		return (bool) file_exists($ext_path . '/language/' . $user_lang);
 	}

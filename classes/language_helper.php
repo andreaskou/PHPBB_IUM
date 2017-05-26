@@ -14,6 +14,7 @@ class language_helper
 	protected 	$language;
 	protected 	$config;
 	protected 	$user;
+	protected	$version_check;
 	public		$lang_name;
 
 	function __construct(\phpbb\user $user, ContainerInterface $container, \phpbb\config\config $config)
@@ -21,8 +22,9 @@ class language_helper
 		$this->container = $container;
 		$this->config = $config;
 		$this->user = $user;
+		$this->version_check = (phpbb_version_compare($this->config['version'], '3.2', '>=')) ? phpbb_version_compare($this->config['version'], '3.2', '>=') : false;
 
-		if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+		if ($this->version_check)
 		{
 			$this->language = $this->container->get('language');
 		}
@@ -31,7 +33,7 @@ class language_helper
 
 	public function add_lang($path, $lang)
 	{
-		if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+		if ($this->version_check)
 		{
 			$this->language->add_lang($lang, $path);
 		}
@@ -44,7 +46,7 @@ class language_helper
 	public function lang()
 	{
 		$args = func_get_args();
-		if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+		if ($this->version_check)
 		{
 			return $this->language->lang(...$args);
 		}
@@ -56,7 +58,7 @@ class language_helper
 
 	public function set_user_language($lang, $tz = null)
 	{
-		if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+		if ($this->version_check)
 		{
 			$this->language->set_user_language($lang);
 		}
@@ -71,7 +73,7 @@ class language_helper
 
 	public function get_used_language()
 	{
-		if (phpbb_version_compare($this->config['version'], '3.2', '>='))
+		if ($this->version_check)
 		{
 			return $this->language->get_used_language();
 		}

@@ -13,10 +13,9 @@
 
 namespace andreask\ium\migrations;
 
-// use phpbb\db\migration\migration;
-// use phpbb\config;
+use phpbb\db\migration\migration;
 
-class release_0_9_9 extends \phpbb\db\migration\container_aware_migration
+class release_0_9_9 extends migration
 {
 
 	private $schema_name='ium_reminder';
@@ -37,22 +36,6 @@ class release_0_9_9 extends \phpbb\db\migration\container_aware_migration
 		return array(
 				array('config.update', array('andreask_ium_version',				'0.9.9')),
 				array('config_text.add', array('andreask_ium_ignored_groups', '')),
-				array('custom',
-					array(
-						array(
-							$this, 'convert_ignore_user_list_to_json_serial')
-						)),
 		);
-	}
-
-
-	public function convert_ignore_user_list_to_json_serial()
-	{
-		$config_text = $this->container->get('config_text');
-		$user_ignore_list = $config_text->get('andreask_ium_ignore_forum');
-		if ($user_ignore_list)
-		{
-			// var_dump($user_ignore_list);
-		}
 	}
 }
