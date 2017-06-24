@@ -52,6 +52,11 @@ $lang = array_merge(
 	'SELECT_A_FORUM'						=>	'Gelieve een forum te selecteren',
 	'EXCLUDED_EMPTY'						=>	'Geen uitgesloten forums...',
 
+	'IUM_IGNORE_GROUP_MANAGMENT'				=>	'Groep beheer',
+	'ANDREASK_IUM_UPDATE_IGNORE_LIST'			=>	'Negeer',
+
+	// acp user overview add option
+	'USER_ADMIN_ANDREASK_IUM_USERS_OVERVIEW_OPTION'	=>	'Zend herinnering',
 
 	// ACP configuration page Explanations
 	'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'Indien ingeschakeld zal de extensie herinneringen zenden naar de "slapers"".',
@@ -70,12 +75,13 @@ $lang = array_merge(
 	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'Een test e-mail zal verzonden worden naar "%s"',
 	'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Selecteer een subcategorie om <strong>uit te sluiten</strong> van de top topic lijst die verzonden wordt naar de gebruikers',
 	'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Selecteer een categorie of subcategorie om <strong>toe te voegen</strong> in de top topic lijst die verzonden wordt naar de gebruikers',
-
+	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Hier kan je selecteren welke groep(en) genegeerd moeten worden door de extensie. Houd er rekening mee dat hoewel ze <u>hier niet</u> gelelecteerd zijn,</br>BOTS, BEHEERDER, MODERATOROS en GASTEN <b>genegeerd</b> worden. Maar het wordt nog steeds aangeraden om hier ook de groepen te selecteren!',
+	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Houd de control toets (CTRL) (of &#8984; voor mac) ingedrukt op het toetsenbord om meerdere groepen te selecteren.',
 	// configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In deze lijst kan je de gebruikers zien die geregistreerd zijn maar waarvan de accounts inactief zijn en van gebruikers die het forum al een hele tijd niet meer bezocht hebben.',
 	'ACP_IUM_SETTINGS'	=>	'Inactieve Gebruikers Herinnering Instellingen',
 	'ACP_IUM_MAIL_SETTINGS'	=>	'Herinnering Instellingen',
-	'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Herinnering Toevoegings Instellingen',
+	'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Herinnering Include instellingen',
 	'ACP_IUM_DANGER'	=>	'Gevarenzone',
 	// configuration page
 	'INACTIVE_MAIL_SENT_TO'			=>	'Een e-mail voorbeeld voor inactieve gebruikers is verzonden naar "%s"',
@@ -116,6 +122,13 @@ $lang = array_merge(
 	'REQUEST_TYPE'			=>	'Aanvraag Type',
 	'APPROVE'				=>	'Goedkeuren',
 	'NO_USER_TYPED'			=>	'Geen gebruiker ingevuld',
+	'USER_NOT_FOUND'		=>	'Gebruiker(s) %s niet gevonden.',
+	'REGISTERED'			=>	'Geregistreerd',
+	'GUESTS'				=>	'Gasten',
+	'REGISTERED_COPPA'		=>	'Geregistreerde COPPA gebruikers',
+	'GLOBAL_MODERATORS'		=>	'Globale Moderators',
+	'BOTS'					=>	'Bots',
+	'NEWLY_REGISTERED'		=>	'Nieuw geregistreerde leden',
 	// Sort Lists
 	'COUNT_BACK'	=>	'<strong>VAN</strong> dagen/maanden/jaren tussentijd en omgekeerd',
 	'ACP_DESCENDING'	=>	'Aflopende volgorde',
@@ -142,7 +155,7 @@ $lang = array_merge(
 	'USER_DELETED'				=>	'Gebruiker "%1$s" werd verwijderd, aanvraag type : "%2$s"',
 	'SOMETHING_WRONG'			=>	'Er is iets mis gegaan met je aanvraag. De opgevraagde gebruikers om te verwijderen komen niet overeen met de gebruikers in de database',
 	'USER_SELF_DELETED'			=>	'Een gebruiker heeft zichzelf verwijderd. Configuratie van de posten stond op "%s"',
-
+	'SENT_REMINDER_TO'			=>	'Er werd een herinnering verzonden naar gebruiker "%s"',
 
 	)
 );
