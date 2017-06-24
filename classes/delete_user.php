@@ -246,4 +246,37 @@ class delete_user
 		$this->db->sql_query($sql);
 		$this->db->sql_affectedrows();
 	}
+
+/**
+ * This is a feature function, will send e-mails to users that is/will be deleted.
+ * Need to make a new branch!
+ *  @param  [type] $email    [description]
+ * @param  [type] $username [description]
+ * @param  [type] $request  [description]
+ * @return [type]           [description]
+ */
+	public function email_for_delition($email, $username, $request)
+	{
+
+		$messenger = new \messenger(false);
+		$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
+
+		// mail headers
+		$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
+		$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
+		$messenger->headers('X-AntiAbuse: User_id - 2');
+		// $messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+
+		// mail content...
+		$messenger->from($this->config['board_contact']);
+		$messenger->to($email, $username);
+
+		// Load email template depending on the request
+		$messenger->template('@andreask_ium/' . $request, $lang);
+		// $template_ary = [ 'something to assign perhaps?', 'Or not?' ];
+		// $messenger->assign_vars($template_ary);
+
+		// Send mail...
+		$messenger->send();
+	}
 }
