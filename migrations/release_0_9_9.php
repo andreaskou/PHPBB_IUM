@@ -35,7 +35,7 @@ class release_0_9_9 extends migration
 		$group_ids = array();
 		return array(
 				array('config.update', array('andreask_ium_version',				'0.9.9')),
-				array('config_text.add', array('andreask_ium_ignored_groups', '')),
+				array('config_text.add', array('andreask_ium_ignored_groups', '[]')),
 		);
 	}
 }
