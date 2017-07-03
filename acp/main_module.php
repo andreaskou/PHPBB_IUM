@@ -291,13 +291,15 @@ class main_module
 
 			if ( $request->is_set_post('approve') )
 			{
+
 				// Check form key
 				if ( !check_form_key($form_key) )
 				{
 					trigger_error($language->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				if (empty($_REQUEST['mark']))
+				// Check if any user is selected from the list
+				if ($request->variable('mark', array(0)) == null)
 				{
 					trigger_error($language->lang('NO_USER_SELECTED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
@@ -306,7 +308,7 @@ class main_module
 				include_once $phpbb_root_path . "includes/functions." . $phpEx;
 
 				$delete = $phpbb_container->get('andreask.ium.classes.delete_user');
-				$mark = (isset($_REQUEST['mark'])) ? $request->variable('mark', array(0)) : array();
+				$mark = $request->variable('mark', array(0));
 				$delete->delete($mark, 'admin');
 
 				trigger_error($language->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
