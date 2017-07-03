@@ -584,8 +584,8 @@ class reminder
 	{
 		if ($this->user_exist($id))
 		{
-			// else reset counter and hope that user_lastvisit will update before ext query!
-			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0 WHERE user_id = '. $id .' and remind_counter <> 0';
+			// else reset counter(s) and hope that user_lastvisit will update before ext query!
+			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0, request_date = 0, type = ""  WHERE user_id = '. $id;
 			$this->db->sql_query($sql);
 		}
 	}
