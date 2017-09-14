@@ -95,6 +95,7 @@ class reminder
 
 			foreach ($this->inactive_users as $sleeper)
 			{
+				// Better way but not acceptable by phpbb :(
 				$this->language->set_user_language($sleeper['user_lang'], $sleeper['user_timezone']);
 				$this->language->add_lang('andreask/ium', 'body');
 
@@ -120,7 +121,7 @@ class reminder
 				}
 
 				// dirty fix for now, need to find a way for the templates.
-				$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->$config['default_lang'];
+				$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->config['default_lang'];
 
 				// add template variables
 				$template_ary	=	array(
@@ -155,7 +156,7 @@ class reminder
 
 				$messenger = new \messenger(false);
 				$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
-
+				// $xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($user_instance->lang('ADMINISTRATOR'));
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 				$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
@@ -245,6 +246,9 @@ class reminder
 			. $must_ignore .
 			' ORDER BY p.user_regdate ASC ' . $limit;
 
+		// ini_set('xdebug.var_display_max_data', 1024);
+		// var_dump($sql);
+		// die();
 		// Run the query
 		$result = $this->db->sql_query($sql);
 
@@ -262,7 +266,7 @@ class reminder
 
 		// Store user so we can use them.
 		$this->set_users($inactive_users);
-	}
+		}
 
 	/**
 	 * Setter for $inactive_users
@@ -480,7 +484,8 @@ class reminder
 			// Set the user topic links first.
 			$topic_links = null;
 
-			$admin_fake_last_visit = strtotime('-' . $this->config['andreask_ium_interval'] .' days');
+			// $admin_fake_last_visit = strtotime('-' . $this->config['andreask_ium_interval'] .' days');
+			$admin_fake_last_visit = strtotime('-356 days');
 			// If there are topics then prepare them for the e-mail.
 			if ($top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'], $admin_fake_last_visit ))
 			{
@@ -497,7 +502,7 @@ class reminder
 			}
 
 			// dirty fix for now, need to find a way for the templates.
-			$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->$config['default_lang'];
+			$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->config['default_lang'];
 
 			// add template variables
 			$template_ary	=	array(
