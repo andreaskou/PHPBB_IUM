@@ -123,9 +123,11 @@ class main_module
 
 			// To get the forum list we have to include functions_admin
 			include_once $phpbb_root_path . "includes/functions_admin." . $phpEx;
-			$ignore_id = json_decode($config_text->get('andreask_ium_ignore_forum', ''));
-			if ($ignore_id)
+			$ignore_id = $config_text->get('andreask_ium_ignore_forum', '[]');
+
+			if ($ignore_id && $ignore_id != '[]')
 			{
+				$ignore_id = json_decode($ignore_id);
 				$ignore_id = array_filter($ignore_id);
 				$excluded_list = $this->make_excluded_forums_list($ignore_id);
 			}
@@ -158,6 +160,9 @@ class main_module
 				'ANDREASK_IUM_EXCLUDE_FORUMS'			=>	$included_forum_list,
 				'ANDREASK_IUM_UNEXCLUDE_LIST'			=>	$excluded_list,
 			));
+			$send = $phpbb_container->get('andreask.ium.classes.reminder');
+			$send->send(20);
+
 		}
 
 		if ($mode == 'ium_list')
