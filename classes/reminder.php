@@ -248,7 +248,6 @@ class reminder
 
 		// ini_set('xdebug.var_display_max_data', 1024);
 		// var_dump($sql);
-		// die();
 		// Run the query
 		$result = $this->db->sql_query($sql);
 

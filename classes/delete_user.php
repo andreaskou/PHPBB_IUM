@@ -161,7 +161,7 @@ class delete_user
 		{
 			$act = ($action != null) ? $action : $posts;
 			$this->email_for_delition($id, $type);
-			// user_delete($act, $id);
+			user_delete($act, $id);
 
 			if ( $req_to_del > 1 )
 			{
