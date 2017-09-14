@@ -48,7 +48,7 @@ class listener implements EventSubscriberInterface
 			'core.user_add_after'					=>	'update_table_ium_new_user',
 			'core.acp_users_display_overview'		=>	'add_remind_user_option',
 			'core.acp_users_overview_run_quicktool'	=>	'remind_single_user',
-			'core.add_log'							=>	'overright_log',
+			// 'core.add_log'							=>	'overwrite_log',
 		);
 	}
 
@@ -135,11 +135,12 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	public function overright_log($event)
+	public function overwrite_log($event)
 	{
 		$sql_ary =  $event['sql_ary'];
 		// Make sure we are getting the correct log...
 		$username = unserialize($sql_ary['log_data']);
+		// var_dump($event['mode']);
 
 		if (!empty($username))
 		{
@@ -147,17 +148,8 @@ class listener implements EventSubscriberInterface
 		}
 		if ($sql_ary['log_operation'] == 'SENT_REMINDERS' && (is_int($username)) && $username <= 1)
 		{
-			unset($sql_ary['log_type']);
-			$event['sql_ary'] = $sql_ary;
-		}
-
-		if ($sql_ary['log_operation'] == 'LOG_USER_USER_UPDATE')
-		{
-			// echo "<pre>";
-			// var_dump($event['sql_ary']);
-			// echo "<br/>";
-			// var_dump($sql_ary);
-			// echo "</pre>";
+			// unset($sql_ary['log_type']);
+			// $event['sql_ary'] = $sql_ary;
 			$sql_ary['log_operation'] = 'SENT_REMINDER_TO';
 			$event['sql_ary'] = $sql_ary;
 		}
