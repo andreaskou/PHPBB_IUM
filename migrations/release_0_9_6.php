@@ -34,7 +34,7 @@ class release_0_9_6 extends migration
 	{
 		return array(
 				array('config.update', array('andreask_ium_version',				'0.9.8')),
-				array('config_text.add', array('andreask_ium_ignore_forum',	'')),
+				array('config_text.add', array('andreask_ium_ignore_forum',	'[]')),
 		);
 	}
 }
