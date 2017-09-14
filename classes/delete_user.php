@@ -13,6 +13,8 @@
 
 namespace andreask\ium\classes;
 
+use \DateTime;
+use \DateInterval;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class delete_user
@@ -32,12 +34,12 @@ class delete_user
 	/**
 	 * Constructor
 	 *
-	 * @param \phpbb\config\config                                      $config                     PhpBB Config
-	 * @param \phpbb\db\driver\driver_interface                         $db                         PhpBB Database
-	 * @param \phpbb\log\log                                            $log						PhpBB Log
+	 * @param \phpbb\config\config                                      $config             PhpBB Config
+	 * @param \phpbb\db\driver\driver_interface                         $db                 PhpBB Database
+	 * @param \phpbb\log\log                                            $log								PhpBB Log
 	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $container					PhpBB container loader
-	 * @param                                                           $phpbb_root_path            PhpBB root path
-	 * @param                                                           $php_ext					Php extension
+	 * @param                                                           $phpbb_root_path    PhpBB root path
+	 * @param                                                           $php_ext						Php extension
 	 */
 
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, ContainerInterface $container, $ium_reminder_table, $phpbb_root_path, $php_ext)
@@ -128,10 +130,10 @@ class delete_user
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$users = $row;
+			$users[] = $row['username'];
 		}
 
-		// Never vorget to free the results!
+		// Never forget to free the results!
 		$this->db->sql_freeresult($result);
 
 		// Include functions_user for the user_delete function
@@ -142,30 +144,32 @@ class delete_user
 
 		if ( $type == 'auto')
 		{
-			user_delete($posts, $id);
+			$this->email_for_delition($id, $type);
+			// user_delete($posts, $id);
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users['username'], $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users[0], $type));
 			}
 		}
 
 		if ( $type == 'admin')
 		{
 			$act = ($action != null) ? $action : $posts;
-			user_delete($act, $id);
+			$this->email_for_delition($id, $type);
+			// user_delete($act, $id);
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users['username'], $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users[0], $type));
 			}
 		}
 
@@ -203,7 +207,7 @@ class delete_user
 		$present = new DateTime();
 
 		// Set interval
-		$back = 'P' . $this->config['andreask_ium_auto_del_day'] . 'D';
+		$back = 'P' . $this->config['andreask_ium_auto_del_days'] . 'D';
 		$interval = new DateInterval($back);
 
 		// Substract the interval of Days/Months/Years from present
@@ -216,7 +220,7 @@ class delete_user
 				WHERE type="auto" AND request_date < ' . $past;
 		$result = $this->db->sql_query($sql);
 
-		$users = '';
+		$users = [];
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -248,35 +252,60 @@ class delete_user
 	}
 
 /**
- * This is a feature function, will send e-mails to users that is/will be deleted.
+ * This is a feature function, will send e-mails to users that is being deleted.
  * Need to make a new branch!
- *  @param  [type] $email    [description]
- * @param  [type] $username [description]
- * @param  [type] $request  [description]
- * @return [type]           [description]
+ * @param  int		$user_ids	User ids of users
+ * @param  str		$request	String value of requested type for deletion (user, auto, admin).
+ * @return void
  */
-	public function email_for_delition($email, $username, $request)
+	public function email_for_delition($user_ids, $request)
 	{
+		if (!$this->user_exist($user_ids))
+		{
+			// Log the error!
+			return false;
+		}
 
-		$messenger = new \messenger(false);
-		$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
+		$sql = 'SELECT username, user_email, user_lang FROM '. USERS_TABLE .'
+						WHERE '. $this->db->sql_in_set('user_id', $user_ids);
+		$result = $this->db->sql_query($sql);
 
-		// mail headers
-		$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-		$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-		$messenger->headers('X-AntiAbuse: User_id - 2');
-		// $messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+		$users = [];
 
-		// mail content...
-		$messenger->from($this->config['board_contact']);
-		$messenger->to($email, $username);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$users[] = $row;
+		}
 
-		// Load email template depending on the request
-		$messenger->template('@andreask_ium/' . $request, $lang);
-		// $template_ary = [ 'something to assign perhaps?', 'Or not?' ];
-		// $messenger->assign_vars($template_ary);
+		$this->db->sql_freeresult($result);
 
-		// Send mail...
-		$messenger->send();
+		if ( !class_exists('messenger') )
+		{
+			include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
+		}
+
+		foreach($users as $user)
+		{
+			$messenger = new \messenger(false);
+			$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
+
+			// mail headers
+			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
+			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
+			$messenger->headers('X-AntiAbuse: User_id - 2');
+			// $messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+
+			// mail content...
+			$messenger->from($this->config['board_contact']);
+			$messenger->to($user['user_email'], $user['username']);
+
+			// Load email template depending on the request
+			$messenger->template('@andreask_ium/' . $request, $user['user_lang']);
+			$template_ary = array('USER_NAME' => $user['username']);
+			$messenger->assign_vars($template_ary);
+
+			// Send mail...
+			$messenger->send();
+		}
 	}
 }
