@@ -2,7 +2,7 @@ Subject: We've missed you!
 
 Hello, {USERNAME}
 
-We see that your last visit on our forum {SITENAME}, was on "{LAST_VISIT}".
+We see that your last visit on our forum {SITE_NAME}, was on "{LAST_VISIT}".
 It's been a while, and we would like you to know that we hope to see you again soon!
 
 In case you have forgot your credentials you can always retrieve them using the following link.
