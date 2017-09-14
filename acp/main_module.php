@@ -160,8 +160,8 @@ class main_module
 				'ANDREASK_IUM_EXCLUDE_FORUMS'			=>	$included_forum_list,
 				'ANDREASK_IUM_UNEXCLUDE_LIST'			=>	$excluded_list,
 			));
-			$send = $phpbb_container->get('andreask.ium.classes.reminder');
-			$send->send(20);
+			// $send = $phpbb_container->get('andreask.ium.classes.reminder');
+			// $send->send(20);
 
 		}
 
