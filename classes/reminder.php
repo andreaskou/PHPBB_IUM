@@ -155,7 +155,7 @@ class reminder
 				}
 
 				$messenger = new \messenger(false);
-				$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
+				$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->language->lang('ADMINISTRATOR');
 				// $xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($user_instance->lang('ADMINISTRATOR'));
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
@@ -540,13 +540,13 @@ class reminder
 
 			$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->language->lang('ADMINISTRATOR');
 
-			$messenger->headers('X-AntiAbuse: Board servername - ' . mail_encode($this->config['server_name']));
-			$messenger->headers('X-AntiAbuse: Username - ' . mail_encode($xhead_username));
+			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
+			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
 			$messenger->headers('X-AntiAbuse: User_id - 2');
 			$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
 
 			// mail content...
-			$messenger->from(mail_encode($this->config['board_contact']));
+			$messenger->from($this->config['board_contact']);
 			$messenger->to($sleeper['user_email'], $sleeper['username']);
 
 			// Load template depending on the user
