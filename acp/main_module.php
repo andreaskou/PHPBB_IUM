@@ -27,13 +27,12 @@ class main_module
 		global $user, $template, $request, $config, $phpbb_container, $phpbb_root_path, $phpEx;
 		$config_text = $phpbb_container->get('config_text');
 
-		$language = $phpbb_container->get('andreask.ium.classes.language_helper');
+		// $language = $phpbb_container->get('andreask.ium.classes.language_helper');
 
 		if ($mode == 'ium_settings')
 		{
 			$this->tpl_name 	= 'acp_ium_body';
-			$this->page_title 	= $language->lang('ACP_IUM_TITLE');
-			// $this->page_title 	= $user->lang('ACP_IUM_TITLE');
+			$this->page_title 	= $user->lang('ACP_IUM_TITLE');
 
 			$form_key = 'andreask_ium';
 
@@ -44,54 +43,49 @@ class main_module
 			{
 				$mail_to_sleeper = $phpbb_container->get('andreask.ium.classes.reminder');
 				$mail_to_sleeper->send_to_admin($user->data['user_id'], 'send_sleeper');
-				trigger_error($language->lang('SLEEPER_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
-				// trigger_error($user->lang('SLEEPER_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
+				trigger_error($user->lang('SLEEPER_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
 			}
 			// Send inactive template to admin
 			else if ($request->is_set_post('send_inactive'))
 			{
 				$mail_to_inactive = $phpbb_container->get('andreask.ium.classes.reminder');
 				$mail_to_inactive->send_to_admin($user->data['user_id'], 'send_inactive');
-				trigger_error($language->lang('INACTIVE_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
-				// trigger_error($user->lang('INACTIVE_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
+				trigger_error($user->lang('INACTIVE_MAIL_SENT_TO', $user->data['user_email']) . adm_back_link( $this->u_action ), E_USER_NOTICE);
 			}
+
 			// Save settings
 			if ( $request->is_set_post('submit_settings') )
 			{
 				// Check form key
 				if ( !check_form_key($form_key) )
 				{
-					trigger_error($language->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
-					// trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				// If everything is OK store the setting
 				$this->update_config();
-				trigger_error($language->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
-				// trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
+				trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
 			}
+
 			// Exclude forum(s)
 			if ( $request->is_set_post('exclude_forum') )
 			{
 				// Check form key
 				if ( !check_form_key($form_key) )
 				{
-					trigger_error($language->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
-					// trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				if ( $request->variable('subforum_id', '') == null )
 				{
-					trigger_error($language->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
-					// trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				$already_excluded_forums_array = json_decode($config_text->get('andreask_ium_ignore_forum', ''));
+				$already_excluded_forums_array = json_decode($config_text->get('andreask_ium_ignore_forum', '[]'));
 				$new_forum_array = $this->sweap_sforums($request->variable('subforum_id', ''));
-
-				if (!empty($already_excluded_forums))
+				if ($already_excluded_forums_array != null)
 				{
-					$merge_forums = array_merge($already_excluded_forums, $new_forum_array);
+					$merge_forums = array_merge($already_excluded_forums_array, $new_forum_array);
 					$config_text->set('andreask_ium_ignore_forum', json_encode($merge_forums));
 				}
 				else
@@ -99,49 +93,46 @@ class main_module
 					$config_text->set('andreask_ium_ignore_forum', json_encode($new_forum_array));
 				}
 			}
+
 			// Include forum(s)
 			if ( $request->is_set_post('include_forum'))
 			{
 				if ( !check_form_key($form_key) )
 				{
-					trigger_error($language->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
-					// trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				if ( $request->variable('excluded_forum', '') == null )
 				{
-					trigger_error($language->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
-					// trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				$remove_array 		= $this->sweap_sforums($request->variable('excluded_forum',''));
 				$conf_text_array 	= json_decode($config_text->get('andreask_ium_ignore_forum',''));
-				$new_conf_array 	= array_diff( $conf_text_array, $remove_array);
+				$new_conf_array 	= array_values(array_diff( $conf_text_array, $remove_array));
 				$new_conf_text 		= json_encode($new_conf_array);
 				$config_text->set('andreask_ium_ignore_forum', $new_conf_text);
 			}
 
 			// To get the forum list we have to include functions_admin
 			include_once $phpbb_root_path . "includes/functions_admin." . $phpEx;
-			$ignore_id = $config_text->get('andreask_ium_ignore_forum', '[]');
-
-			if ($ignore_id && $ignore_id != '[]')
+			$ignored_forum_ids_text = $config_text->get('andreask_ium_ignore_forum', '[]');
+			$ignored_forum_ids = json_decode($ignored_forum_ids_text);
+			if (!empty($ignored_forum_ids))
 			{
-				$ignore_id = json_decode($ignore_id);
-				$ignore_id = array_filter($ignore_id);
-				$excluded_list = $this->make_excluded_forums_list($ignore_id);
+				$excluded_list = $this->make_excluded_forums_list($ignored_forum_ids);
 			}
 			else
 			{
 				// Get the excluded list, if not exist show somethin else instead.
-				$excluded_list = '<option disabled>' .$language->lang('EXCLUDED_EMPTY') . '</option>';
+				$excluded_list = '<option disabled>' . $user->lang('EXCLUDED_EMPTY') . '</option>';
 			}
 
 			// Get the forum list
-			$forum_list = make_forum_select(false, $ignore_id, true, false, false, false, true);
+			$forum_list = make_forum_select(false, $ignored_forum_ids, true, false, false, false, true);
+
 			// Build option list from forums list
 			$included_forum_list = $this->build_subforum_options($forum_list);
-			// $excluded_list = (array_filter($ignore_id)) ? $this->make_excluded_forums_list($ignore_id) : '<option disabled>' .$language->lang('EXCLUDED_EMPTY') . '</option>';
 
 			$template->assign_vars(array(
 				'ANDREASK_IUM_ENABLE'					=>	$config['andreask_ium_enable'],
@@ -156,19 +147,17 @@ class main_module
 				'ANDREASK_IUM_KEEP_POSTS'				=>	$config['andreask_ium_keep_posts'],
 				'ANDREASK_IUM_AUTO_DEL'					=>	$config['andreask_ium_auto_del'],
 				'ANDREASK_IUM_AUTO_DEL_DAYS'			=>	$config['andreask_ium_auto_del_days'],
-				'ANDREASK_IUM_TEST_EXPLAIN'				=>	$language->lang('ANDREASK_IUM_TEST_EMAIL_EXPLAIN', $user->data['user_email']),
+				'ANDREASK_IUM_TEST_EXPLAIN'				=>	$user->lang('ANDREASK_IUM_TEST_EMAIL_EXPLAIN', $user->data['user_email']),
 				'ANDREASK_IUM_EXCLUDE_FORUMS'			=>	$included_forum_list,
 				'ANDREASK_IUM_UNEXCLUDE_LIST'			=>	$excluded_list,
 			));
-			// $send = $phpbb_container->get('andreask.ium.classes.reminder');
-			// $send->send(20);
-
 		}
 
 		if ($mode == 'ium_list')
 		{
 			$this->tpl_name = 'acp_ium_inactive_users';
-			$this->page_title = $language->lang('ACP_IUM_TITLE2');
+			// $this->page_title = $language->lang('ACP_IUM_TITLE2');
+			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang('memberlist');
 
 			$start 		= $request->variable('start', 0);
@@ -260,7 +249,7 @@ class main_module
 				'WITH_POSTS' 			=> ($with_posts) ? true : false,
 				'SORT_ORDER' 			=> ($sort_order) ? true : false,
 				'USERS_PER_PAGE' 		=> $limit,
-				'TOTAL_USERS_WITH_DAY'	=> sprintf($language->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $language->lang($option_ary[$actions])))
+				'TOTAL_USERS_WITH_DAY'	=> sprintf($user->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $user->lang($option_ary[$actions])))
 			));
 
 			// Assign row results to template var inactive
@@ -271,12 +260,12 @@ class main_module
 					'USERNAME' 				=> $row['username'],
 					'JOINED' 				=> $user->format_date($row['user_regdate']),
 					'POSTS' 				=> ($row['user_posts']) ? $row['user_posts'] : 0,
-					'LAST_VISIT' 			=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $language->lang('NEVER_CONNECTED'),
-					'INACTIVE_DATE' 		=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $language->lang('ACP_IUM_NODATE'),
-					'REASON' 				=> $language->lang('ACP_IUM_INACTIVE', (int) $row['user_inactive_reason']),
-					'COUNT' 				=> ($row['remind_counter']) ? $row['remind_counter'] : $language->lang('NO_REMINDER_COUNT'),
-					'LAST_SENT_REMINDER' 	=> ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $language->lang('NO_PREVIOUS_SENT_DATE'),
-					'REMINDER_DATE' 		=> ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $language->lang('NO_REMINDER_SENT_YET'),
+					'LAST_VISIT' 			=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
+					'INACTIVE_DATE' 		=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
+					'REASON' 				=> $user->lang('ACP_IUM_INACTIVE', (int) $row['user_inactive_reason']),
+					'COUNT' 				=> ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
+					'LAST_SENT_REMINDER' 	=> ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
+					'REMINDER_DATE' 		=> ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
 					'IGNORE_USER' 			=> ($row['dont_send']) ? true : false,
 					'LINK_TO_USER'			=> $link,
 				));
@@ -291,7 +280,7 @@ class main_module
 			add_form_key($form_key);
 
 			$this->tpl_name		= 'acp_ium_approval_list';
-			$this->page_title	= $language->lang('ACP_IUM_APPROVAL_LIST_TITLE');
+			$this->page_title	= $user->lang('ACP_IUM_APPROVAL_LIST_TITLE');
 			$user->add_lang('memberlist');
 
 			if ( $request->is_set_post('approve') )
@@ -300,13 +289,13 @@ class main_module
 				// Check form key
 				if ( !check_form_key($form_key) )
 				{
-					trigger_error($language->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				// Check if any user is selected from the list
 				if ($request->variable('mark', array(0)) == null)
 				{
-					trigger_error($language->lang('NO_USER_SELECTED') . adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('NO_USER_SELECTED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				// Else do your magic...
@@ -316,7 +305,7 @@ class main_module
 				$mark = $request->variable('mark', array(0));
 				$delete->delete($mark, 'admin');
 
-				trigger_error($language->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
+				trigger_error($user->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
 			}
 
 			if ( $request->is_set_post('add_users_options'))
@@ -324,11 +313,11 @@ class main_module
 				// Check form key
 				if ( !check_form_key($form_key) )
 				{
-					trigger_error($language->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 				if (! $request->variable('usernames', ''))
 				{
-					trigger_error($language->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
 				// Users ingnore list
@@ -353,7 +342,7 @@ class main_module
 						{
 							return $un['username'];
 						} , $result));
-					trigger_error($language->lang('USER_NOT_FOUND', $not_found) . adm_back_link( $this->u_action ), E_USER_WARNING);
+					trigger_error($user->lang('USER_NOT_FOUND', $not_found) . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 			}
 
@@ -375,7 +364,7 @@ class main_module
 
 			foreach ($groups as $group)
 			{
-				$group_name = ($language->lang($group['group_name'])) ? $language->lang($group['group_name']) : $group['group_name'];
+				$group_name = ($user->lang($group['group_name'])) ? $user->lang($group['group_name']) : $group['group_name'];
 				$selected = '';
 				if ($ignored_groups != null)
 				{
@@ -393,7 +382,7 @@ class main_module
 				{
 					$ignore_groups 	= json_encode($group_ids);
 					$config_text->set('andreask_ium_ignored_groups', $ignore_groups);
-					trigger_error($language->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
+					trigger_error($user->lang('CONFIG_UPDATED') . adm_back_link($this->u_action));
 				}
 			}
 
@@ -735,7 +724,6 @@ class main_module
 		$s_options = '';
 
 		$forum_list = array_merge($forum_list);
-		$language = $phpbb_container->get('andreask.ium.classes.language_helper');
 
 		foreach ($forum_list as $key => $row)
 		{
@@ -761,7 +749,7 @@ class main_module
 
 			if ($branch_there)
 			{
-				$s_options .= ' [' . $language->lang('PLUS_SUBFORUMS') . ']';
+				$s_options .= ' [' . $user->lang('PLUS_SUBFORUMS') . ']';
 			}
 			$s_options .= '</option>';
 		}
@@ -775,12 +763,12 @@ class main_module
 	 */
 	public function make_excluded_forums_list($forum_ids)
 	{
-		global $db, $phpbb_container;
-		$language = $phpbb_container->get('andreask.ium.classes.language_helper');
+		global $db, $phpbb_container, $user;
 
 		$sql = 'SELECT forum_id, forum_name, left_id, right_id FROM ' . FORUMS_TABLE . '
 				WHERE ' . $db->sql_in_set('forum_id', $forum_ids) . ' ORDER BY left_id';
 		$result = $db->sql_query($sql);
+
 		$forums = [];
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -801,10 +789,9 @@ class main_module
 				$subforum = false;
 			}
 
-			$sub = ($subforum) ? '[' . $language->lang('PLUS_SUBFORUMS') . ']' : '';
+			$sub = ($subforum) ? '[' . $user->lang('PLUS_SUBFORUMS') . ']' : '';
 			$option .= "<option value='{$forum['forum_id']}' >{$forum['forum_name']} {$sub}</option>";
 		}
-
 		return $option;
 	}
 
