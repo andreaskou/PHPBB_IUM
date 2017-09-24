@@ -2,3 +2,4 @@ vendor
 tests
 phpunit.xml
 .idea
+.package-lock.json
