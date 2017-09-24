@@ -145,7 +145,7 @@ class delete_user
 		if ( $type == 'auto')
 		{
 			$this->email_for_delition($id, $type);
-			// user_delete($posts, $id);
+			user_delete($posts, $id);
 
 			if ( $req_to_del > 1 )
 			{
