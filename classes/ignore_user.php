@@ -109,7 +109,7 @@ class ignore_user
 
 		// Always free the results
 		$this->db->sql_freeresult($result);
-		$clean = '';
+		$clean = [];
 
 		// If there are users that do not exist insert them.
 		if ($rows)
