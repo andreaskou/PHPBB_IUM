@@ -131,6 +131,8 @@ $lang = array_merge(
 	'GLOBAL_MODERATORS'		=>	'Global Moderators',
 	'BOTS'					=>	'Bots',
 	'NEWLY_REGISTERED'		=>	'Newly Registered',
+	'USER_SELECT'		=>	'Select',
+	'SELECT_AN_ACTION'		=>	'Select an Action',
 	// Sort Lists
 	'COUNT_BACK'	=>	'<strong>FROM</strong> days/months/years interval and backwards',
 	'ACP_DESCENDING'	=>	'Descending order',
