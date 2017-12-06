@@ -40,12 +40,30 @@
 <!-- END approval_list -->
 </tbody>
 </table>
-<fieldset class=" quick">
-	<p class="small"><a href="#" onclick="marklist('approval_list', 'mark', true); return false;">{L_MARK_ALL}</a>
-		&bull; <a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{L_UNMARK_ALL}</a></p>
-		<input class="button2" type="submit" name="approve" value="{{ lang('APPROVE') }}" />
+<fieldset class="quick">
+	<p class="small">	{{ lang('USERS_PER_PAGE') }}{{ lang('COLON') }} &nbsp;
+		<select name="users_per_page" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
+			<option value="20" <!-- IF USERS_PER_PAGE === 20 --> selected="selected" <!-- ENDIF -->>20</option>
+			<option value="50" <!-- IF USERS_PER_PAGE === 50 --> selected="selected" <!-- ENDIF -->>50</option>
+			<option value="100" <!-- IF USERS_PER_PAGE === 100 --> selected="selected" <!-- ENDIF -->>100</option>
+			<option value="200" <!-- IF USERS_PER_PAGE === 200 --> selected="selected" <!-- ENDIF -->>200</option>
+		</select>
+		&bull;
+		<a href="#" onclick="marklist('approval_list', 'mark', true); return false;">{L_MARK_ALL}</a>
+		&bull;
+		<a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{L_UNMARK_ALL}</a>
+	</p>
+	{{ lang('SELECT_AN_ACTION')}}
+	<select name="action">
+		<option value="none">{{ lang('SELECT_AN_ACTION') }}</option>
+		<option value="approve">{{ lang('APPROVE')}}</option>
+		<option value="reset">{{ lang('RESET')}}</option>
+	</select>
+	&nbsp;
+<!--		<input class="button2" type="submit" name="approve" value="{{ lang('APPROVE') }}" /> -->
+		<input class="button2" type="submit" value="{{ lang('SUBMIT') }}" name="do" />
 		{S_FORM_TOKEN}
-	</fieldset>
+</fieldset>
 <!-- IF .pagination -->
 	<div class="pagination">
 		<!-- INCLUDE pagination.html -->
