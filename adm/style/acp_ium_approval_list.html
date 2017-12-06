@@ -41,7 +41,7 @@
 </tbody>
 </table>
 <fieldset class="quick">
-	<p class="small">	{{ lang('USERS_PER_PAGE') }}{{ lang('COLON') }} &nbsp;
+	<p class="small">	{{ lang('USERS_PER_PAGE') }} {{ lang('COLON') }} &nbsp;
 		<select name="users_per_page" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
 			<option value="20" <!-- IF USERS_PER_PAGE === 20 --> selected="selected" <!-- ENDIF -->>20</option>
 			<option value="50" <!-- IF USERS_PER_PAGE === 50 --> selected="selected" <!-- ENDIF -->>50</option>
@@ -53,7 +53,7 @@
 		&bull;
 		<a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{L_UNMARK_ALL}</a>
 	</p>
-	{{ lang('SELECT_AN_ACTION')}}
+	{{ lang('OPTIONS')}} {{ lang('COLON')}}
 	<select name="action">
 		<option value="none">{{ lang('SELECT_AN_ACTION') }}</option>
 		<option value="approve">{{ lang('APPROVE')}}</option>
