@@ -586,12 +586,11 @@ class reminder
 
 	public function reset_counter($id)
 	{
-		if ($this->user_exist($id))
-		{
-			// else reset counter(s) and hope that user_lastvisit will update before ext query!
-			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0, request_date = 0, type = ""  WHERE user_id = '. $id;
-			$this->db->sql_query($sql);
-		}
+		$ids = (!is_array($id)) ? $ids[] = $id : $ids = $id;
+
+		// reset counter(s)!
+		$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0, request_date = 0, type = "" WHERE '. $this->db->sql_in_set('user_id', $ids);
+		$this->db->sql_query($sql);
 	}
 
 	/**
