@@ -308,6 +308,42 @@ class main_module
 				trigger_error($user->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
 			}
 
+			if ( $request->is_set_post('do') )
+			{
+				// Check form key
+				if ( !check_form_key($form_key) )
+				{
+					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
+				}
+
+				// Check if any user is selected from the list
+				if ($request->variable('mark', array(0)) == null)
+				{
+					trigger_error($user->lang('NO_USER_SELECTED') . adm_back_link( $this->u_action ), E_USER_WARNING);
+				}
+
+				// Else do your magic...
+ 				$action = $request->variable('action', 'none');
+				$mark = $request->variable('mark', array(0));
+				include_once $phpbb_root_path . "includes/functions." . $phpEx;
+
+				switch ($action)
+				{
+					case 'approve':
+						#$delete = $phpbb_container->get('andreask.ium.classes.delete_user');
+						#$delete->delete($mark, 'admin');
+						trigger_error($user->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
+						break;
+					case 'reset':
+						$update = $phpbb_container->get('andreask.ium.classes.reminder');
+						$update->reset_counter($mark);
+						trigger_error($user->lang('USERS_UPDATED') . adm_back_link($this->u_action), E_USER_NOTICE);
+						break;
+					case 'none':
+						break;
+				}
+			}
+
 			if ( $request->is_set_post('add_users_options'))
 			{
 				// Check form key
@@ -434,7 +470,7 @@ class main_module
 			// Assign template vars (including pagination)
 			$template->assign_vars(array(
 				'S_SELF_DELETE'		=>	$config['andreask_ium_approve_del'],
-				'PER_PAGE'			=>	$limit,
+				'USERS_PER_PAGE'	=>	$limit,
 				'TOTAL_USERS'		=>	$approval_count,
 				'U_ACTION'			=>	$this->u_action,
 				'IGNORED_USER'		=>	$s_defined_user_options,
