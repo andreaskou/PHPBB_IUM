@@ -330,14 +330,14 @@ class main_module
 				switch ($action)
 				{
 					case 'approve':
-						#$delete = $phpbb_container->get('andreask.ium.classes.delete_user');
-						#$delete->delete($mark, 'admin');
+						$delete = $phpbb_container->get('andreask.ium.classes.delete_user');
+						$delete->delete($mark, 'admin');
 						trigger_error($user->lang('DELETED_SUCCESSFULLY') . adm_back_link($this->u_action), E_USER_NOTICE);
 						break;
 					case 'reset':
 						$update = $phpbb_container->get('andreask.ium.classes.reminder');
 						$update->reset_counter($mark);
-						trigger_error($user->lang('USERS_UPDATED') . adm_back_link($this->u_action), E_USER_NOTICE);
+						trigger_error($user->lang('RESET_REMINDERS') . adm_back_link($this->u_action), E_USER_NOTICE);
 						break;
 					case 'none':
 						break;
