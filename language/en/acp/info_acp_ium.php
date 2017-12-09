@@ -133,6 +133,7 @@ $lang = array_merge(
 	'NEWLY_REGISTERED'		=>	'Newly Registered',
 	'USER_SELECT'		=>	'Select',
 	'SELECT_AN_ACTION'		=>	'Select an Action',
+	'RESET_REMINDERS'		=>	'Reset Was successful.',
 	// Sort Lists
 	'COUNT_BACK'	=>	'<strong>FROM</strong> days/months/years interval and backwards',
 	'ACP_DESCENDING'	=>	'Descending order',
