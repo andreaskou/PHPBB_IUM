@@ -284,28 +284,50 @@ class delete_user
 			include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 		}
 
+		$this->user->add_lang('common');
+		$interval_days_sum = $this->config['andreask_ium_interval'] * 3;
+
+		$messenger = new \messenger(false);
+		$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->user->lang('ADMINISTRATOR');
+
+		// $xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->user->lang('ADMINISTRATOR'));
+
+		// mail headers
+		$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
+		$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
+		$messenger->headers('X-AntiAbuse: User_id - 2');
+		// $messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+
+		// mail content...
+		$messenger->from($this->config['board_contact']);
+
 		foreach($users as $user)
 		{
-			$messenger = new \messenger(false);
-			$xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->language->lang('ADMINISTRATOR'));
-
-			// mail headers
-			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-			$messenger->headers('X-AntiAbuse: User_id - 2');
-			// $messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
-
-			// mail content...
-			$messenger->from($this->config['board_contact']);
+			$lang = ( $this->lang_exists($user['user_lang']) ) ? $user['user_lang'] : $this->config['default_lang'];
 			$messenger->to($user['user_email'], $user['username']);
 
 			// Load email template depending on the request
-			$messenger->template('@andreask_ium/' . $request, $user['user_lang']);
-			$template_ary = array('USER_NAME' => $user['username']);
+			$messenger->template('@andreask_ium/' . $request, $lang);
+			$template_ary = array(
+												'USER_NAME' => htmlspecialchars_decode($user['username']),
+												'INTERVAL_DAYS_SUM' => $interval_days_sum,
+											);
 			$messenger->assign_vars($template_ary);
 
 			// Send mail...
 			$messenger->send();
 		}
 	}
+
+	public function lang_exists($user_lang)
+	{
+		if (!$user_lang)
+		{
+			return false;
+		}
+
+		$ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
+		return (bool) file_exists($ext_path . '/language/' . $user_lang);
+	}
+
 }
