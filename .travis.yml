@@ -7,10 +7,6 @@ matrix:
   include:
     - php: 5.5
       env: DB=none;NOTESTS=1  
-    - php: 5.3.3
-      env: DB=mysqli
-    - php: 5.3
-      env: DB=mysqli # MyISAM
     - php: 5.4
       env: DB=mysqli
     - php: 5.4
