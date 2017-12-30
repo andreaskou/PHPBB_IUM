@@ -1,7 +1,7 @@
 # Opt into fully virtualized infrastructure
 # sudo: required
 
-sudo: require
+sudo: required
 dist: precise
 
 language: php
