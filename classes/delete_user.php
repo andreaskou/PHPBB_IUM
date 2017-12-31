@@ -290,8 +290,6 @@ class delete_user
 		$messenger = new \messenger(false);
 		$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->user->lang('ADMINISTRATOR');
 
-		// $xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($this->user->lang('ADMINISTRATOR'));
-
 		// mail headers
 		$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 		$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
