@@ -323,7 +323,7 @@ class main_module
 				}
 
 				// Else do your magic...
- 				$action = $request->variable('action', 'none');
+				$action = $request->variable('action', 'none');
 				$mark = $request->variable('mark', array(0));
 				include_once $phpbb_root_path . "includes/functions." . $phpEx;
 

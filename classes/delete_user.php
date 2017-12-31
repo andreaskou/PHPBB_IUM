@@ -301,7 +301,7 @@ class delete_user
 		// mail content...
 		$messenger->from($this->config['board_contact']);
 
-		foreach($users as $user)
+		foreach( $users as $user )
 		{
 			$lang = ( $this->lang_exists($user['user_lang']) ) ? $user['user_lang'] : $this->config['default_lang'];
 			$messenger->to($user['user_email'], $user['username']);
