@@ -52,9 +52,17 @@
 <p style="text-align: center;">{TOTAL_USERS_WITH_DAY}</p>
 <fieldset class="display-options">
 	{{ lang('ACP_USERS_WITH_POSTS') }} <input class="checkbox" type="checkbox" name="with_posts" value="1" <!-- IF WITH_POSTS --> checked <!-- ENDIF --> /> &nbsp;
-	{{ lang('COUNT_BACK') }}{{ lang('COLON') }} &nbsp; <select name="count_back">{S_INACTIVE_OPTIONS}</select> &nbsp; <select name="sort_by">{S_IUM_SORT_BY}</select> &nbsp;
+	{{ lang('COUNT_BACK') }}{{ lang('COLON') }} &nbsp; <select name="count_back" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{S_INACTIVE_OPTIONS}</select> &nbsp;
+	<select name="sort_by" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{S_IUM_SORT_BY}</select> &nbsp;
 	{{ lang('ACP_DESCENDING') }} <input class="checkbox" type="checkbox" name="sort_order" value="1" <!-- IF SORT_ORDER --> checked <!-- ENDIF --> /> &nbsp;
-    <!-- IF .pagination -->&nbsp;{{ lang('USERS_PER_PAGE') }}{{ lang('COLON') }} <input class="inputbox autowidth" type="number" name="users_per_page" id="users_per_page" min="0" max="999" value="{USERS_PER_PAGE}" /><!-- ENDIF -->
+    <!-- IF .pagination -->&nbsp;{{ lang('USERS_PER_PAGE') }}{{ lang('COLON') }}
+		<select name="users_per_page" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
+			<option value="20" <!-- IF USERS_PER_PAGE === 20 --> selected="selected" <!-- ENDIF -->>20</option>
+			<option value="50" <!-- IF USERS_PER_PAGE === 50 --> selected="selected" <!-- ENDIF -->>50</option>
+			<option value="100" <!-- IF USERS_PER_PAGE === 100 --> selected="selected" <!-- ENDIF -->>100</option>
+			<option value="200" <!-- IF USERS_PER_PAGE === 200 --> selected="selected" <!-- ENDIF -->>200</option>
+		</select>
+		<!-- ENDIF -->
 	<input class="button2" type="submit" value="{{ lang('GO') }}" name="sort" />
 </fieldset>
 

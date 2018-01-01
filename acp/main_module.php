@@ -161,7 +161,7 @@ class main_module
 			$user->add_lang('memberlist');
 
 			$start 		= $request->variable('start', 0);
-			$limit 		= $request->variable('users_per_page', 10);
+			$limit 		= $request->variable('users_per_page', 20);
 			$with_posts = $request->variable('with_posts', 0);
 			$actions 	= $request->variable('count_back', '30d');
 			if ($actions == 'select')
@@ -171,14 +171,14 @@ class main_module
 			$sort_by = $request->variable('sort_by', 'reg_date');
 			$sort_order = $request->variable('sort_order', 0);
 
-			// Keep the limit between 10 and 50
-			if ($limit > 50)
+			// Keep the limit between 20 and 200
+			if ($limit > 200)
 			{
-				$limit = 50;
+				$limit = 200;
 			}
-			else if ($limit < 10)
+			else if ($limit < 20)
 			{
-				$limit = 10;
+				$limit = 20;
 			}
 
 			// get the options to an array so that we pass them to the sql query
@@ -423,7 +423,7 @@ class main_module
 			}
 
 			$start = $request->variable('start', 0);
-			$limit = $request->variable('users_per_page', 10);
+			$limit = $request->variable('users_per_page', 20);
 
 			// get the options to an array so that we pass them to the sql query
 			$options = array(
