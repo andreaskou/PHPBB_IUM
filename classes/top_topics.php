@@ -37,7 +37,7 @@ class top_topics
 		$forum_list				=	$this->config_text->get('andreask_ium_ignore_forum','');
 		if ($forum_list != null)
 		{
-			$this->exclude_forums	=	explode(',', $forum_list);
+			$this->exclude_forums	=	array_map('intval', json_decode($forum_list, '[]'));
 		}
 	}
 
