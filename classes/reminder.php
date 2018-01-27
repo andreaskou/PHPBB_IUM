@@ -228,7 +228,7 @@ class reminder
 			// Convert past to timestamp
 			$past = strtotime($present->format("y-m-d h:i:s"));
 
-			$sql_opt .= ' AND r.dont_send <> 1
+			$sql_opt .= ' AND r.dont_send < 1
 			AND r.reminder_sent_date < '. $past . '
 			AND p.user_lastvisit < ' . $past . '
 			AND p.user_regdate < ' . $past;
@@ -247,8 +247,6 @@ class reminder
 
 		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$result = $this->db->sql_query($sql);
-		// ini_set('xdebug.var_display_max_data', 1024);
-		// var_dump($sql);
 
 		$inactive_users = [];
 
