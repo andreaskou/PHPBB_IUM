@@ -73,10 +73,11 @@ class ignore_user
 	 *  function ignore_user updates Custome table with existing or new users (in table).
 	 *	with the dont_send flag so they will be ignored by the reminder.
 	 *	@param	$username, array of username(s)
+	 *	@param	$mode, 1 (default) auto 2 admin
 	 *	@return	null
 	 */
 
-	public function ignore_user($username)
+	public function ignore_user($username, $mode = 1)
 	{
 		/**
 		*	We have to check if the given users exist or not in custome table 'ium_reminder'
@@ -118,7 +119,7 @@ class ignore_user
 			{
 				// Also store them for later.
 				$clean[] = $user['username'];
-				$this->insert_user($user);
+				$this->insert_user($user, $mode);
 			}
 			// Remove the users that we just inserted to the table from the users array.
 			$clean = array_diff($username, $clean);
@@ -129,7 +130,7 @@ class ignore_user
 		{
 			foreach ($clean as $user)
 			{
-				$this->update_user($user, true);
+				$this->update_user($user, $mode);
 			}
 		}
 		// if the above situation did not ocured just update, since all the users exist already.
@@ -137,7 +138,7 @@ class ignore_user
 		{
 			foreach ($username as $user)
 			{
-				$this->update_user($user, true);
+				$this->update_user($user, $mode);
 			}
 		}
 	}
@@ -147,12 +148,12 @@ class ignore_user
 	*	@param	array		User(s) with id and username
 	*	@return void
 	*/
-	private function insert_user($user)
+	private function insert_user($user, $mode)
 	{
 		$insert_arr = array(
 				'user_id' => $user['user_id'],
 				'username' => $this->db->sql_escape($user['username']),
-				'dont_send' => 1,
+				'dont_send' => $mode,
 			);
 
 		$sql = 'INSERT INTO ' . $this->table_name . ' ' .$this->db->sql_build_array('INSERT', $insert_arr);
@@ -174,7 +175,7 @@ class ignore_user
 			$username = $this->get_user_username($user);
 		}
 		$username = ($user_id) ? array_shift($username) : $user;
-		$dont_send = $action ? 1 : 0;
+		$dont_send = $action;
 
 		$data = array ('dont_send' => $dont_send);
 		$sql = 'UPDATE ' . $this->table_name . '
