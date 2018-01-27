@@ -79,7 +79,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Hold control (CTRL) (or &#8984; for mac) on the keyboard to select multiple groups.',
 
 	// configuration page Legend
-	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for the set amount of time here.',
+	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for the set amount of time here.<br>Username colors represent the ignore status. <span style="color: #DC143C;"><strong>Red</strong></span> -> Ignored by an administrator, <span style="color: #008000;"><strong>Green</strong></span> -> Auto Ignored, <span style="color: #000000;"><strong>Black</strong></span> -> Not ignored.',
 	'ACP_IUM_SETTINGS'	=>	'Inactive User Reminder Settings',
 	'ACP_IUM_MAIL_SETTINGS'	=>	'Reminder Settings',
 	'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Reminder Include Settings',
@@ -91,7 +91,8 @@ $lang = array_merge(
 	'SEND_INACTIVE'					=>	'Send Inactive template',
 	'PLUS_SUBFORUMS'				=>	'+Subforums',
 	// Sort by, options for the inactive users list
-	'ACP_IUM_INACTIVE'	=> array(	0	=>	'Active',
+	'ACP_IUM_INACTIVE'	=> array(
+									0	=>	'Active',
 									1	=>	'Registration pre-activation',
 									2	=>	'Profile change',
 									3	=>	'Admin deactivated',
@@ -110,6 +111,11 @@ $lang = array_merge(
 	'IUM_INACTIVE_REASON'	=>	'Status',
 	'TOTAL_USERS_WITH_DAY_AMOUNT'	=>	'<strong>%1$s</strong> User(s) in total <i>for the set interval</i> of "<strong>%2$s</strong>"',
 	// Delete approval page
+	'IGNORE_METHODE'	=> array(
+		0 =>	'Not ignored',
+		1 =>	'Auto',
+		2	=>	'Ignored by Admin',
+	),
 	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Deletion approval list',
 	'APPROVAL_LIST_PAGE_TITLE'	=> 'Deletion approval list',
 	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Approval list of users with a request for deleting their account',

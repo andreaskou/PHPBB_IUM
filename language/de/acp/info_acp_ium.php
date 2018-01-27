@@ -72,7 +72,8 @@ $lang = array_merge(
 	'SEND_SLEEPER'					=>	'Sendet ein Beispiel für Schläfer',
 	'SEND_INACTIVE'					=>	'Sendet ein Beispiel für inaktive Mitglieder',
 	// Sort by, options for the inactive users list
-	'ACP_IUM_INACTIVE'	=> array(	0	=>	'Aktiv',
+	'ACP_IUM_INACTIVE'	=> array(
+									0	=>	'Aktiv',
 									1	=>	'Registriert nicht aktiviert',
 									2	=>	'Profil gewechselt',
 									3	=>	'Vom Administrator deaktiviert',
