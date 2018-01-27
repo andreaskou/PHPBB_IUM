@@ -17,7 +17,8 @@
 <table class="table1 zebra-table">
 <thead>
 <tr>
-	<th>{L_USERNAME}</th>
+	<th>{{ lang('USERNAME') }}</th>
+	<th>{{ lang('IGNORE_METHODE')}}</th>
 	<th>{{ lang('REQUEST_DATE') }}</th>
 	<th>{{ lang('REQUEST_TYPE') }}</th>
 	<th>{{ lang('USER_SELECT') }}</th>
@@ -26,9 +27,10 @@
 <tbody>
 <!-- BEGIN approval_list -->
 	<tr>
-		<td style="vertical-align: top;"><a href="{approval_list.LINK_TO_USER}">{approval_list.USERNAME}</a>
+		<td style="vertical-align: top;"><a href="{approval_list.IGNORE_METHODE}" style = "color :{% if approval_list.IGNORE_METHODE == 1 %}#008000;{% elseif approval_list.IGNORE_METHODE == 2 %}#DC143C;{% else %}#000000;{% endif %}">{approval_list.USERNAME}</a>
 		<!-- IF approval_list.POSTS --><br />{L_POSTS}{L_COLON}<strong>{approval_list.POSTS}</strong><!-- ENDIF -->
 		</td>
+		<td style="vertical-align: top;">{approval_list.IGNORE_METHODE}</td>
 		<td style="vertical-align: top;">{approval_list.REQUEST_DATE}</td>
 		<td style="vertical-align: top;">{approval_list.TYPE}</td>
 		<td style="vertical-align: top;">&nbsp;<input type="checkbox" class="radio" name="mark[]" value="{approval_list.USER_ID}" />&nbsp;</td>
