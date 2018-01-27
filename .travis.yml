@@ -50,7 +50,7 @@ branches:
     - develop
 
 before_install:
-    - composer self-update 1.5.2 --rollback
+        #    - composer self-update 1.5.2 --rollback
 
 install:
   - travis/prepare-phpbb.sh $EXTNAME $PHPBB_BRANCH
