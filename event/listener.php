@@ -140,7 +140,6 @@ class listener implements EventSubscriberInterface
 		$sql_ary =  $event['sql_ary'];
 		// Make sure we are getting the correct log...
 		$username = unserialize($sql_ary['log_data']);
-		// var_dump($event['mode']);
 
 		if (!empty($username))
 		{
