@@ -135,21 +135,21 @@ class main_module
 			$included_forum_list = $this->build_subforum_options($forum_list);
 
 			$template->assign_vars(array(
-				'ANDREASK_IUM_ENABLE'					=>	$config['andreask_ium_enable'],
-				'ANDREASK_IUM_INTERVAL'					=>	$config['andreask_ium_interval'],
-				'ANDREASK_IUM_TOP_USER_THREADS'			=>	$config['andreask_ium_top_user_threads'],
-				'ANDREASK_IUM_TOP_USER_THREADS_COUNT'	=>	$config['andreask_ium_top_user_threads_count'],
-				'ANDREASK_IUM_TOP_FORUM_THREADS'		=>	$config['andreask_ium_top_forum_threads'],
+				'ANDREASK_IUM_ENABLE'										=>	$config['andreask_ium_enable'],
+				'ANDREASK_IUM_INTERVAL'									=>	$config['andreask_ium_interval'],
+				'ANDREASK_IUM_TOP_USER_THREADS'					=>	$config['andreask_ium_top_user_threads'],
+				'ANDREASK_IUM_TOP_USER_THREADS_COUNT'		=>	$config['andreask_ium_top_user_threads_count'],
+				'ANDREASK_IUM_TOP_FORUM_THREADS'				=>	$config['andreask_ium_top_forum_threads'],
 				'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT'	=>	$config['andreask_ium_top_forum_threads_count'],
-				'ANDREASK_IUM_EMAIL_LIMIT'				=>	$config['andreask_ium_email_limit'],
-				'ANDREASK_IUM_SELF_DELETE'				=>	$config['andreask_ium_self_delete'],
-				'ANDREASK_IUM_APPROVE_DEL'				=>	$config['andreask_ium_approve_del'],
-				'ANDREASK_IUM_KEEP_POSTS'				=>	$config['andreask_ium_keep_posts'],
-				'ANDREASK_IUM_AUTO_DEL'					=>	$config['andreask_ium_auto_del'],
-				'ANDREASK_IUM_AUTO_DEL_DAYS'			=>	$config['andreask_ium_auto_del_days'],
-				'ANDREASK_IUM_TEST_EXPLAIN'				=>	$user->lang('ANDREASK_IUM_TEST_EMAIL_EXPLAIN', $user->data['user_email']),
-				'ANDREASK_IUM_EXCLUDE_FORUMS'			=>	$included_forum_list,
-				'ANDREASK_IUM_UNEXCLUDE_LIST'			=>	$excluded_list,
+				'ANDREASK_IUM_EMAIL_LIMIT'							=>	$config['andreask_ium_email_limit'],
+				'ANDREASK_IUM_SELF_DELETE'							=>	$config['andreask_ium_self_delete'],
+				'ANDREASK_IUM_APPROVE_DEL'							=>	$config['andreask_ium_approve_del'],
+				'ANDREASK_IUM_KEEP_POSTS'								=>	$config['andreask_ium_keep_posts'],
+				'ANDREASK_IUM_AUTO_DEL'									=>	$config['andreask_ium_auto_del'],
+				'ANDREASK_IUM_AUTO_DEL_DAYS'						=>	$config['andreask_ium_auto_del_days'],
+				'ANDREASK_IUM_TEST_EXPLAIN'							=>	$user->lang('ANDREASK_IUM_TEST_EMAIL_EXPLAIN', $user->data['user_email']),
+				'ANDREASK_IUM_EXCLUDE_FORUMS'						=>	$included_forum_list,
+				'ANDREASK_IUM_UNEXCLUDE_LIST'						=>	$excluded_list,
 			));
 		}
 
@@ -160,10 +160,10 @@ class main_module
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang('memberlist');
 
-			$start 		= $request->variable('start', 0);
-			$limit 		= $request->variable('users_per_page', 20);
+			$start 			= $request->variable('start', 0);
+			$limit 			= $request->variable('users_per_page', 20);
 			$with_posts = $request->variable('with_posts', 0);
-			$actions 	= $request->variable('count_back', '30d');
+			$actions 		= $request->variable('count_back', '30d');
 			if ($actions == 'select')
 			{
 				$actions = '30d';
@@ -185,10 +185,10 @@ class main_module
 			$options = array(
 				'with_posts'	=>	$with_posts,
 				'count_back'	=>	$actions,
-				'sort_by'		=>	$sort_by,
+				'sort_by'			=>	$sort_by,
 				'sort_order'	=>	$sort_order,
 				'approval'		=>	null,
-				'ignore'		=>	false
+				'ignore'			=>	false
 			);
 
 			//base url for pagination, filtering and sorting
@@ -205,50 +205,50 @@ class main_module
 				'30d' 		=> 'THIRTY_DAYS',
 				'60d' 		=> 'SIXTY_DAYS',
 				'90d' 		=> 'NINETY_DAYS',
-				'4m' 		=> 'FOUR_MONTHS',
-				'6m' 		=> 'SIX_MONTHS',
-				'9m' 		=> 'NINE_MONTHS',
-				'1Y' 		=> 'ONE_YEAR',
-				'2Y' 		=> 'TWO_YEARS',
-				'3Y' 		=> 'THREE_YEARS',
-				'5Y' 		=> 'FIVE_YEARS',
-				'7Y' 		=> 'SEVEN_YEARS',
+				'4m' 			=> 'FOUR_MONTHS',
+				'6m' 			=> 'SIX_MONTHS',
+				'9m' 			=> 'NINE_MONTHS',
+				'1Y' 			=> 'ONE_YEAR',
+				'2Y' 			=> 'TWO_YEARS',
+				'3Y' 			=> 'THREE_YEARS',
+				'5Y' 			=> 'FIVE_YEARS',
+				'7Y' 			=> 'SEVEN_YEARS',
 				'10Y' 		=> 'DECADE',
 			);
 
 			// Sort by element
 			$sort_by_ary = array(
-				'select' 				=> 'SORT_BY_SELECT',
-				'username' 				=> 'USERNAME',
-				'posts' 				=> 'POSTS',
-				'reg_date' 				=> 'JOINED',
-				'last_visit' 			=> 'LAST_VISIT',
+				'select' 							=> 'SORT_BY_SELECT',
+				'username' 						=> 'USERNAME',
+				'posts' 							=> 'POSTS',
+				'reg_date' 						=> 'JOINED',
+				'last_visit' 					=> 'LAST_VISIT',
 				'last_sent_reminder'	=> 'LAST_SENT_REMINDER',
-				'count' 				=> 'COUNT',
-				'reminder_date' 		=> 'REMINDER_DATE',
+				'count' 							=> 'COUNT',
+				'reminder_date' 			=> 'REMINDER_DATE',
 			);
 
 			// Get the users list using get_inactive_users required parameters $limit $start
-			$rows 			= $this->get_inactive_users(true, $limit, $start, $options);
+			$rows 					= $this->get_inactive_users(true, $limit, $start, $options);
 			$inactive_count = $rows['count'];
-			$rows 			= $rows['results'];
+			$rows 					= $rows['results'];
 
 			// Load pagination
 			$pagination = $phpbb_container->get('pagination');
-			$start 		= $pagination->validate_start($start, $limit, $inactive_count);
+			$start 			= $pagination->validate_start($start, $limit, $inactive_count);
 			$pagination->generate_template_pagination($base_url, 'pagination', 'start', $inactive_count, $limit, $start);
 
 			// Assign template vars (including pagination)
 			$template->assign_vars(array(
-				'S_INACTIVE_USERS' 		=> true,
-				'S_INACTIVE_OPTIONS' 	=> build_select($option_ary, $actions),
-				'S_IUM_SORT_BY' 		=> build_select($sort_by_ary, $sort_by),
-				'COUNT_BACK' 			=> $options['count_back'],
-				'PER_PAGE' 				=> $limit,
-				'TOTAL_USERS' 			=> $inactive_count,
-				'WITH_POSTS' 			=> ($with_posts) ? true : false,
-				'SORT_ORDER' 			=> ($sort_order) ? true : false,
-				'USERS_PER_PAGE' 		=> $limit,
+				'S_INACTIVE_USERS' 			=> true,
+				'S_INACTIVE_OPTIONS' 		=> build_select($option_ary, $actions),
+				'S_IUM_SORT_BY' 				=> build_select($sort_by_ary, $sort_by),
+				'COUNT_BACK' 						=> $options['count_back'],
+				'PER_PAGE' 							=> $limit,
+				'TOTAL_USERS' 					=> $inactive_count,
+				'WITH_POSTS' 						=> ($with_posts) ? true : false,
+				'SORT_ORDER' 						=> ($sort_order) ? true : false,
+				'USERS_PER_PAGE' 				=> $limit,
 				'TOTAL_USERS_WITH_DAY'	=> sprintf($user->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $user->lang($option_ary[$actions])))
 			));
 
@@ -257,17 +257,17 @@ class main_module
 			{
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('inactive', array(
-					'USERNAME' 				=> $row['username'],
-					'JOINED' 				=> $user->format_date($row['user_regdate']),
-					'POSTS' 				=> ($row['user_posts']) ? $row['user_posts'] : 0,
-					'LAST_VISIT' 			=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
-					'INACTIVE_DATE' 		=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
-					'REASON' 				=> $user->lang('ACP_IUM_INACTIVE', (int) $row['user_inactive_reason']),
-					'COUNT' 				=> ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
+					'USERNAME' 						=> $row['username'],
+					'JOINED' 							=> $user->format_date($row['user_regdate']),
+					'POSTS' 							=> ($row['user_posts']) ? $row['user_posts'] : 0,
+					'LAST_VISIT' 					=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
+					'INACTIVE_DATE' 			=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
+					'REASON' 							=> $user->lang('ACP_IUM_INACTIVE', (int) $row['user_inactive_reason']),
+					'COUNT' 							=> ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
 					'LAST_SENT_REMINDER' 	=> ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
-					'REMINDER_DATE' 		=> ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
-					'IGNORE_USER' 			=> ($row['dont_send']) ? true : false,
-					'LINK_TO_USER'			=> $link,
+					'REMINDER_DATE' 			=> ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
+					'IGNORE_USER' 				=> $row['dont_send'],
+					'LINK_TO_USER'				=> $link,
 				));
 			}
 		}
@@ -370,7 +370,7 @@ class main_module
 				$result = $ignore->exist($users);
 				if ($result === true)
 				{
-					$ignore->ignore_user($users);
+					$ignore->ignore_user($users, 2);
 				}
 				else
 				{
@@ -429,10 +429,10 @@ class main_module
 			$options = array(
 				'with_posts'	=>	false,
 				'count_back'	=>	false,
-				'sort_by'		=>	'request_date',
+				'sort_by'			=>	'request_date',
 				'sort_order'	=>	false,
 				'approval'		=>	true,
-				'ignore'		=>	false,
+				'ignore'			=>	false,
 			);
 
 			//base url for pagination, filtering and sorting
@@ -446,10 +446,10 @@ class main_module
 			$opt_out = array(
 				'with_posts'	=> false,
 				'count_back'	=> false,
-				'sort_by'		=> 'username',
+				'sort_by'			=> 'username',
 				'sort_order'	=> true,
 				'approval'		=> false,
-				'ignore'		=> true,
+				'ignore'			=> 2,
 			);
 
 			$ignored 				= $this->get_inactive_users(false, $limit, $start, $opt_out);
@@ -471,8 +471,8 @@ class main_module
 			$template->assign_vars(array(
 				'S_SELF_DELETE'		=>	$config['andreask_ium_approve_del'],
 				'USERS_PER_PAGE'	=>	$limit,
-				'TOTAL_USERS'		=>	$approval_count,
-				'U_ACTION'			=>	$this->u_action,
+				'TOTAL_USERS'			=>	$approval_count,
+				'U_ACTION'				=>	$this->u_action,
 				'IGNORED_USER'		=>	$s_defined_user_options,
 				'IGNORED_GROUP'		=>	$s_defined_group_options,
 				'U_FIND_USERNAME'	=>	append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=add_user&amp;field=usernames')
@@ -483,12 +483,13 @@ class main_module
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars(
 					'approval_list', array(
-					'USER_ID'		=>	$row['user_id'],
-					'USERNAME'		=>	$row['username'],
-					'POSTS'			=>	($row['user_posts']) ? $row['user_posts'] : 0,
-					'REQUEST_DATE' 	=>	$user->format_date($row['request_date']),
-					'TYPE'			=>	$row['type'],
-					'LINK_TO_USER'	=>	$link
+					'USER_ID'					=>	$row['user_id'],
+					'USERNAME'				=>	$row['username'],
+					'POSTS'						=>	($row['user_posts']) ? $row['user_posts'] : 0,
+					'REQUEST_DATE' 		=>	$user->format_date($row['request_date']),
+					'TYPE'						=>	$row['type'],
+					'LINK_TO_USER'		=>	$link,
+					'IGNORE_METHODE'	=> $user->lang('IGNORE_METHODE', (int) $row['dont_send']),
 				));
 			}
 		}
@@ -502,18 +503,18 @@ class main_module
 	{
 		global $config, $request;
 
-		$config->set('andreask_ium_enable', 					$request->variable('andreask_ium_enable', ''));
-		$config->set('andreask_ium_interval', 					$request->variable('andreask_ium_interval', ''));
-		$config->set('andreask_ium_self_delete', 				$request->variable('andreask_ium_self_delete', ''));
-		$config->set('andreask_ium_email_limit', 				$request->variable('andreask_ium_email_limit', ''));
-		$config->set('andreask_ium_self_delete', 				$request->variable('andreask_ium_self_delete', ''));
-		$config->set('andreask_ium_approve_del', 				$request->variable('andreask_ium_delete_approve', ''));
-		$config->set('andreask_ium_keep_posts', 				$request->variable('andreask_ium_keep_posts',''));
-		$config->set('andreask_ium_auto_del', 					$request->variable('andreask_ium_auto_del',''));
-		$config->set('andreask_ium_auto_del_days', 				$request->variable('andreask_ium_auto_del_days',''));
-		$config->set('andreask_ium_top_user_threads', 			$request->variable('andreask_ium_top_user_threads', ''));
+		$config->set('andreask_ium_enable', 									$request->variable('andreask_ium_enable', ''));
+		$config->set('andreask_ium_interval', 								$request->variable('andreask_ium_interval', ''));
+		$config->set('andreask_ium_self_delete', 							$request->variable('andreask_ium_self_delete', ''));
+		$config->set('andreask_ium_email_limit', 							$request->variable('andreask_ium_email_limit', ''));
+		$config->set('andreask_ium_self_delete', 							$request->variable('andreask_ium_self_delete', ''));
+		$config->set('andreask_ium_approve_del', 							$request->variable('andreask_ium_delete_approve', ''));
+		$config->set('andreask_ium_keep_posts', 							$request->variable('andreask_ium_keep_posts',''));
+		$config->set('andreask_ium_auto_del', 								$request->variable('andreask_ium_auto_del',''));
+		$config->set('andreask_ium_auto_del_days', 						$request->variable('andreask_ium_auto_del_days',''));
+		$config->set('andreask_ium_top_user_threads', 				$request->variable('andreask_ium_top_user_threads', ''));
 		$config->set('andreask_ium_top_user_threads_count', 	$request->variable('andreask_ium_top_user_threads_count', ''));
-		$config->set('andreask_ium_top_forum_threads', 			$request->variable('andreask_ium_top_forum_threads', ''));
+		$config->set('andreask_ium_top_forum_threads', 				$request->variable('andreask_ium_top_forum_threads', ''));
 		$config->set('andreask_ium_top_forum_threads_count', 	$request->variable('andreask_ium_top_forum_threads_count', ''));
 
 	}
@@ -558,11 +559,14 @@ class main_module
 			{
 				$options .= ' AND (r.request_date <> 0 OR type in ("user", "auto"))';
 			}
-			if ( $filters['ignore'])
+			if ( $filters['ignore'] == 1)
 			{
 				$options .= ' AND r.dont_send = 1 AND request_date = 0 ';
 			}
-
+			if ( $filters['ignore'] == 2)
+			{
+				$options .= ' AND r.dont_send = 2 ';
+			}
 			if ( $filters['count_back'] && $filters['count_back'] != $ignore )
 			{
 				/**
