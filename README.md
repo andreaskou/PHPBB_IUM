@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/andreaskou/PHPBB_IUM.svg?branch=master)](https://travis-ci.org/andreaskou/PHPBB_IUM)
-# phpBB Inactive User Manager v 0.9.7-beta
+# phpBB Inactive User Manager v 1.0.0-rc
 
-phpBB Inactive User Manager is an Extension for [phpBB 3.1](https://www.phpbb.com/)
+phpBB Inactive User Manager is an Extension for [phpBB 3.1][phpBB 3.2](https://www.phpbb.com/)
 
 ## Description
 
@@ -23,7 +23,7 @@ Also user can self delete his account (with or without the approval of the admin
 * Exclude/Include forums for the e-mail reminder.
 * Option to self delete for a user. (with or without admins approval)
 * Ignore users. List of users that the ext should not send reminders
-* In future release admin will be able to send reminders to individual inactive users
+* Admin is able to send reminders to individual inactive users
 
 ## Installation
 
