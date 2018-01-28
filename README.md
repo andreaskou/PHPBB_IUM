@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/andreaskou/PHPBB_IUM.svg?branch=master)](https://travis-ci.org/andreaskou/PHPBB_IUM)
 # phpBB Inactive User Manager v 1.0.0-rc
 
-phpBB Inactive User Manager is an Extension for [phpBB 3.1][phpBB 3.2](https://www.phpbb.com/)
+phpBB Inactive User Manager is an Extension for [phpBB 3.1/3.2](https://www.phpbb.com/)
 
 ## Description
 
