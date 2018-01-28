@@ -339,6 +339,11 @@ class main_module
 						$update->reset_counter($mark);
 						trigger_error($user->lang('RESET_REMINDERS') . adm_back_link($this->u_action), E_USER_NOTICE);
 						break;
+					case 'dont_ignore':
+						$unignore = $phpbb_container->get('andreask.ium.classes.ignore_user');
+						$unignore->update_user($mark, 0, true);
+						trigger_error($user->lang('NOT_IGNORED') . adm_back_link($this->u_action), E_USER_NOTICE);
+						break;
 					case 'none':
 						break;
 				}
