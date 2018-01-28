@@ -116,6 +116,7 @@ $lang = array_merge(
 		1 =>	'Auto',
 		2	=>	'Ignored by Admin',
 	),
+	'IGNORE_METHODES'	=>	'Ignore type',
 	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Deletion approval list',
 	'APPROVAL_LIST_PAGE_TITLE'	=> 'Deletion approval list',
 	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Approval list of users with a request for deleting their account',
@@ -139,6 +140,8 @@ $lang = array_merge(
 	'NEWLY_REGISTERED'		=>	'Newly Registered',
 	'USER_SELECT'		=>	'Select',
 	'SELECT_AN_ACTION'		=>	'Select an Action',
+	'DONT_IGNORE'		=>	'Don’t Ignore',
+	'NOT_IGNORED'		=>	'User(s) not Ignored any more.',
 	'RESET_REMINDERS'		=>	'Reset Was successful.',
 	// Sort Lists
 	'COUNT_BACK'	=>	'<strong>FROM</strong> days/months/years interval and backwards',
