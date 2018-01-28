@@ -174,30 +174,38 @@ class ignore_user
 		{
 			$username = $this->get_user_username($user);
 		}
-		$username = ($user_id) ? array_shift($username) : $user;
+		$username = ($user_id) ? $username : $user;
+		// $username = ($user_id) ? array_shift($username) : $user;
 		$dont_send = $action;
 
-		$data = array ('dont_send' => $dont_send);
+		$data = array ('dont_send' => $action);
 		$sql = 'UPDATE ' . $this->table_name . '
 				SET ' . $this->db->sql_build_array('UPDATE', $data) . '
-				WHERE username = "' . $username . '"';
+				WHERE '. $this->db->sql_in_set('username', $username);
 		$this->db->sql_query($sql);
 	}
 
 	/**
 	 * Getter for username
-	 * @param string user_id
+	 * @param int user_id
 	 * @return string username
 	 */
 	private function get_user_username($id)
 	{
-		$sql_array = array('user_id' => $id);
-		$sql = 'SELECT USERNAME FROM ' . $this->table_name . ' WHERE user_id = ' . (int) $id;
+
+		$sql = 'SELECT username
+							FROM ' . $this->table_name . '
+							WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
-		$row = $this->db->sql_fetchrow($result);
+
+		$usernames = [];
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$usernames[] = $row['username'];
+		}
 		$this->db->sql_freeresult($result);
 
-		return $row;
+		return $usernames;
 	}
 
 	/**
