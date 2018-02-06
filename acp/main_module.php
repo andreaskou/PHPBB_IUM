@@ -494,7 +494,7 @@ class main_module
 					'REQUEST_DATE' 		=>	$user->format_date($row['request_date']),
 					'TYPE'						=>	$row['type'],
 					'LINK_TO_USER'		=>	$link,
-					'IGNORE_METHODE'	=> $user->lang('IGNORE_METHODE', (int) $row['dont_send']),
+					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', (int) $row['dont_send']),
 				));
 			}
 		}
