@@ -29,7 +29,7 @@
 <tbody>
 <!-- BEGIN inactive -->
 	<tr>
-		<td style="vertical-align: top;"><strong><a href="{inactive.LINK_TO_USER}">{inactive.USERNAME}</a></strong>
+		<td style="vertical-align: top;"><strong><a href="{inactive.LINK_TO_USER}" style="color :{% if inactive.IGNORE_USER == 1 %}#008000;{% elseif inactive.IGNORE_USER == 2 %}#DC143C;{% else %}#000000;{% endif %}">{inactive.USERNAME}</a></strong>
 		{% if inactive.POSTS %}<br />{{ lang('POSTS') }}{{ lang('COLON') }}<strong>{inactive.POSTS}</strong>{% endif %}
 		</td>
 		<td style="vertical-align: top;">{inactive.JOINED}</td>
