@@ -27,7 +27,7 @@
 <tbody>
 <!-- BEGIN approval_list -->
 	<tr>
-		<td style="vertical-align: top;"><a href="{approval_list.LINK_TO_USER}" style = "color :{% if approval_list.IGNORE_METHODE == 1 %}#008000;{% elseif approval_list.IGNORE_METHODE == 2 %}#DC143C;{% else %}#000000;{% endif %}">{approval_list.USERNAME}</a>
+		<td style="vertical-align: top;"><a href="{approval_list.LINK_TO_USER}">{approval_list.USERNAME}</a>
 		<!-- IF approval_list.POSTS --><br />{L_POSTS}{L_COLON}<strong>{approval_list.POSTS}</strong><!-- ENDIF -->
 		</td>
 		<td style="vertical-align: top;">{approval_list.IGNORE_METHODE}</td>
