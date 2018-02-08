@@ -29,12 +29,13 @@ class main
 	protected $request;
 	protected $helper;
 	protected $template;
+	protected	$delete_user;
 	protected $container;
 	protected $table_name;
 	protected $u_action;
 	protected $language;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, ContainerInterface $container, $ium_table)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user, ContainerInterface $container, $ium_table)
 	{
 		$this->config       =   $config;
 		$this->db           =   $db;
@@ -42,6 +43,7 @@ class main
 		$this->request      =   $request;
 		$this->helper       =   $helper;
 		$this->template     =   $template;
+		$this->delete_user	=		$delete_user;
 		$this->container    =   $container;
 		$this->table_name   =   $ium_table;
 		$this->u_action     =   append_sid(generate_board_url() . '/' . $this->user->page['page']);
@@ -86,7 +88,8 @@ class main
 			}
 
 			// Request to delete user...
-			$delete_me = $this->container->get('andreask.ium.classes.delete_user');
+			// $delete_me = $this->container->get('andreask.ium.classes.delete_user');
+			$delete_me = $this->delete_user;
 			$delete_me->delete($this->user->data['user_id'], 'user');
 
 			// log out user.

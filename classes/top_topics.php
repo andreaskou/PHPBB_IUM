@@ -13,25 +13,21 @@
 
 namespace andreask\ium\classes;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class top_topics
 {
 
 	protected $user_id = null;
 	protected $user_lastvisit;
-	protected $container;
 	protected $db;
 	protected $config;
 	protected $config_text;
 	protected $exclude_forums;
 	protected $auth;
 
-	public function __construct(\phpbb\config\config $config, ContainerInterface $container, \phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db)
+	public function __construct(\phpbb\config\config $config,\phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db)
 	{
 		$this->config			=	$config;
-		$this->container		=	$container;
-		$this->config_text		=	$this->container->get('config_text');
+		$this->config_text		=	$config_text;
 		$this->auth				=	$auth;
 		$this->db				=	$db;
 		$forum_list				=	$this->config_text->get('andreask_ium_ignore_forum','');

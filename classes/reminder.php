@@ -26,6 +26,8 @@ class reminder
 	protected $user_loader;
 	protected $log;
 	protected $container;
+	protected	$top_topics;
+	protected $ignore_user;
 	protected $request;
 	protected $table_prefix;
 	protected $phpbb_root_path;
@@ -46,7 +48,7 @@ class reminder
 	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, \phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
 		$this->db				=	$db;
@@ -54,6 +56,8 @@ class reminder
 		$this->user_loader		=	$user_loader;
 		$this->log              =	$log;
 		$this->container		=	$container;
+		$this->top_topics		= $top_topics;
+		$this->ignore_user	= $ignore_user;
 		$this->request			=	$request;
 		$this->table_prefix		=	$table_prefix;
 		$this->php_ext          =	$php_ext;
@@ -100,7 +104,7 @@ class reminder
 				$this->language->add_lang('andreask/ium', 'body');
 
 				// Load top_topics class
-				$topics = $this->container->get('andreask.ium.classes.top_topics');
+				$topics = $this->top_topics;
 
 				// Set the user topic links first.
 				$topic_links = null;
@@ -234,7 +238,7 @@ class reminder
 			AND p.user_regdate < ' . $past;
 		}
 
-		$ignore_groups = $this->container->get('andreask.ium.classes.ignore_user');
+		$ignore_groups = $this->ignore_user;
 		$must_ignore = $ignore_groups->ignore_groups();
 
 		$sql_ary = array(
@@ -474,7 +478,7 @@ class reminder
 			$this->language->add_lang('andreask/ium', 'body');
 
 			// Load top_topics class
-			$topics = $this->container->get('andreask.ium.classes.top_topics');
+			$topics = $this->top_topics;
 
 			// Set the user topic links first.
 			$topic_links = null;

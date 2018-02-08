@@ -13,24 +13,24 @@
 
 namespace andreask\ium\cron;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class send_reminder extends \phpbb\cron\task\base
 {
 	protected	$config;
 	protected	$user;
-	protected	$container;
+	protected $reminder;
+	protected $delete;
 
 	/**
 	* Constructor.
 	*
 	* @param \phpbb\config\config $config The config
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\user $user, ContainerInterface $container)
+	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \andreask\ium\classes\reminder $reminder, \andreask\ium\classes\delete_user $delete)
 	{
 		$this->config		=	$config;
 		$this->user			=	$user;
-		$this->container	=	$container;
+		$this->reminder	= $reminder;
+		$this->delete		= $delete;
 	}
 
 	/**
@@ -40,7 +40,8 @@ class send_reminder extends \phpbb\cron\task\base
 	*/
 	public function run()
 	{
-		$reminder = $this->container->get('andreask.ium.classes.reminder');
+		// $reminder = $this->container->get('andreask.ium.classes.reminder');
+		$reminder = $this->reminder;
 		$reminder->send($this->config['andreask_ium_email_limit']);
 
 		// Update last run datetime stamp
@@ -49,7 +50,8 @@ class send_reminder extends \phpbb\cron\task\base
 		// autodelete users if active
 		if ($this->config['andreask_ium_auto_del'])
 		{
-			$delete_user = $this->container->get('andreask.ium.classes.delete_user');
+			// $delete_user = $this->container->get('andreask.ium.classes.delete_user');
+			$delete_user = $this->delete;
 			$delete_user->auto_delete();
 		}
 	}
