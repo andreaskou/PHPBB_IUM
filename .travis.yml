@@ -48,6 +48,7 @@ branches:
   only:
     - master
     - develop
+    - escape_string
 
 before_install:
         #    - composer self-update 1.5.2 --rollback
