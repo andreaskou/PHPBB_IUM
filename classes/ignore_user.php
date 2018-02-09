@@ -250,7 +250,7 @@ class ignore_user
 	public function get_groups($user_id)
 	{
 		$sql = 'SELECT group_id FROM ' . USER_GROUP_TABLE . '
-				WHERE user_id = ' . $user_id;
+				WHERE user_id = ' . (int) $user_id;
 
 		$result = $this->db->sql_query($sql);
 

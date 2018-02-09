@@ -863,8 +863,8 @@ class main_module
 		{
 			$sql = 'SELECT forum_id FROM ' .
 					FORUMS_TABLE . '
-					WHERE left_id >= ' . $subforums['left_id'] . '
-					AND right_id <= ' .$subforums['right_id'] . '
+					WHERE left_id >= ' . (int) $subforums['left_id'] . '
+					AND right_id <= ' . (int) $subforums['right_id'] . '
 					ORDER BY left_id';
 			$result = $db->sql_query($sql);
 			$puzzle = [];

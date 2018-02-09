@@ -70,7 +70,7 @@ class top_topics
 			// Obtain most active topic for user
 			$sql = 'SELECT topic_id, count(post_id) as posts_count
 					FROM ' . POSTS_TABLE . '
-					WHERE poster_id = ' . $this->user_id . '
+					WHERE poster_id = ' . (int) $this->user_id . '
 					AND post_postcount = 1 ' .
 					$exclude .'
 					GROUP BY topic_id
@@ -125,7 +125,7 @@ class top_topics
 					// else get the clean topic's title.
 					$sql = 'SELECT topic_title as title
 						FROM ' . TOPICS_TABLE . '
-						WHERE topic_id = ' . $topic['topic_id'];
+						WHERE topic_id = ' . (int) $topic['topic_id'];
 
 					$result = $this->db->sql_query($sql);
 					$topic['topic_title'] = (string) htmlspecialchars_decode($this->db->sql_fetchfield('title'));
@@ -196,7 +196,7 @@ class top_topics
 				// else complete the puzzle.
 				$sql = 'SELECT topic_title as title
 					FROM ' . TOPICS_TABLE . '
-					WHERE topic_id = ' . $topic['topic_id'];
+					WHERE topic_id = ' . (int) $topic['topic_id'];
 
 				$result = $this->db->sql_query($sql);
 				$topic['topic_title'] = (string) htmlspecialchars_decode($this->db->sql_fetchfield('title'));
@@ -221,7 +221,7 @@ class top_topics
 
 		$sql = 'SELECT user_posts AS post_count
 			FROM ' . USERS_TABLE . '
-			WHERE user_id = ' . $user_id;
+			WHERE user_id = ' . (int) $user_id;
 
 		$result = $this->db->sql_query($sql);
 		$post_count = (int) $this->db->sql_fetchfield('post_count');

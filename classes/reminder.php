@@ -337,7 +337,7 @@ class reminder
 			}
 
 			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET ' . $this->db->sql_build_array('UPDATE', $update_arr) .
-					' WHERE user_id = ' . $user['user_id'];
+					' WHERE user_id = ' . (int) $user['user_id'];
 			$this->db->sql_query($sql);
 		}
 
@@ -368,7 +368,7 @@ class reminder
 	{
 		$sql = 'SELECT COUNT(user_id) as user_count
 		FROM ' . $this->table_prefix . $this->table_name . '
-		WHERE user_id = ' . $user_id;
+		WHERE user_id = ' . (int) $user_id;
 
 		$result = $this->db->sql_query($sql);
 		$give_back = (bool) $this->db->sql_fetchfield('user_count');
@@ -623,7 +623,7 @@ class reminder
 		if (!$this->user_exist($id))
 		{
 			$sql = 'INSERT INTO ' . $this->table_prefix . $this->table_name . ' (user_id, username)
-			SELECT user_id, username from ' . USERS_TABLE .' WHERE user_id = ' . $id;
+			SELECT user_id, username from ' . USERS_TABLE .' WHERE user_id = ' . (int) $id;
 			$this->db->sql_query($sql);
 		}
 	}
