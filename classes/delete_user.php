@@ -178,9 +178,9 @@ class delete_user
 								'request_date'	=>	time(),
 								'type'			=>	'user',
 							);
-				$sql = 'UPDATE ' . $this->table_name . '
-						SET '. $this->db->sql_build_array('UPDATE', $sql_array) .'
-						WHERE username="' . $users['username'] . '"';
+				$sql = "UPDATE " . $this->table_name . "
+						SET ". $this->db->sql_build_array('UPDATE', $sql_array) ."
+						WHERE username= '" . $this->db->sql_ecape($users['username']) . "'";
 				$this->db->sql_query($sql);
 			}
 			// Else delete the user...

@@ -848,8 +848,10 @@ class main_module
 	public function sweap_sforums($forum_id)
 	{
 		global $db;
-
-		$sql = 'SELECT left_id, right_id FROM ' . FORUMS_TABLE . ' WHERE FORUM_ID = ' . $forum_id;
+		$sql_arry = array('FORUM_ID' => (int) $forum_id);
+		$sql = 'SELECT left_id, right_id
+						FROM ' . FORUMS_TABLE . '
+						WHERE ' . $db->sql_build_array('SELECT', $sql_arry);
 
 		$result = $db->sql_query($sql);
 
