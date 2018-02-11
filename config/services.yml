@@ -69,5 +69,4 @@ services:
             - '@controller.helper'
             - '@template'
             - '@andreask.ium.classes.delete_user'
-            - '@service_container'
             - '%andreask.ium.tables.reminder_table%'
