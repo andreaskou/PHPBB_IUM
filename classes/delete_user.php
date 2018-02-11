@@ -180,7 +180,7 @@ class delete_user
 							);
 				$sql = "UPDATE " . $this->table_name . "
 						SET ". $this->db->sql_build_array('UPDATE', $sql_array) ."
-						WHERE username= '" . $this->db->sql_ecape($users['username']) . "'";
+						WHERE user_id = " . (int) $id;
 				$this->db->sql_query($sql);
 			}
 			// Else delete the user...
@@ -213,7 +213,7 @@ class delete_user
 		$past = strtotime($present->format("y-m-d h:i:s"));
 
 		$sql = 'SELECT user_id FROM ' . $this->table_name . '
-				WHERE type="auto" AND request_date < ' . $past;
+				WHERE type="auto" AND request_date < ' . (int) $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
