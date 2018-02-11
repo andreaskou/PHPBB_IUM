@@ -16,18 +16,12 @@ namespace andreask\ium\acp;
 use \DateTime;
 use \DateInterval;
 
-// use phpbb\log\null;
-
-//use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class main_module
 {
 	public function main($id, $mode)
 	{
 		global $user, $template, $request, $config, $phpbb_container, $phpbb_root_path, $phpEx;
 		$config_text = $phpbb_container->get('config_text');
-
-		// $language = $phpbb_container->get('andreask.ium.classes.language_helper');
 
 		if ($mode == 'ium_settings')
 		{
@@ -156,7 +150,6 @@ class main_module
 		if ($mode == 'ium_list')
 		{
 			$this->tpl_name = 'acp_ium_inactive_users';
-			// $this->page_title = $language->lang('ACP_IUM_TITLE2');
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang('memberlist');
 
