@@ -19,7 +19,7 @@ if (empty($lang) || !is_array($lang)) {
 }
 
 $lang = array_merge($lang, array(
-	'INCLUDE_USER_TOPICS' => 'Debajo tiene algunos enlaces a temas en los que ha estado activo. %s',
-	'INCLUDE_FORUM_TOPICS' => 'Debajo tiene algunos enlaces a los temas mas activos del foro. %s',
-	'FOLLOW_TO_DELETE' => 'Pulse en el siguiente enlace para eliminar su cuenta. %s',
+	'INCLUDE_USER_TOPICS' => 'A sota te alguns enllaços a temes als quals ha estat actiu. %s',
+	'INCLUDE_FORUM_TOPICS' => 'A sota te alguns enllaços al temes mes actius del fòrum. %s',
+	'FOLLOW_TO_DELETE' => 'Pulsi al següen enllaç per eliminar el se compte. %s',
 	));
