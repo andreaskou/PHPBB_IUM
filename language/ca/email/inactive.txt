@@ -1,0 +1,20 @@
+Subject: Ha tingut algun problema?
+
+Hola, {USERNAME}
+
+Hem vist que s'ha registrat el: {REG_DATE}
+Però desde llavors no ha realitzat cap acció a la web.
+
+En cas d'haver perdut les seves credencials sempre pot recuperar-les fent ús del següent enllaç:
+
+{FORGOT_PASS}
+
+Si usted mai va rebre el correu d'activació pulsi el següent enllaç pero tornar-lo a enviar:
+
+{SEND_ACT_AG}
+
+En cas contrari, sempre pot contactar amb el administrador del fòrum fent servir el següent correu: {ADMIN_MAIL}
+
+Esperem tornar a veure'l aviat.
+
+{EMAIL_SIG}
