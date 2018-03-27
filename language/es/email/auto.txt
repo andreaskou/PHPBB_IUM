@@ -1,0 +1,13 @@
+Subject: Su usuario ha sido eliminado de {SITENAME}.
+
+Hola, {USER_NAME}
+
+Lamentamos comunicarle que su cuenta ha sido eliminada.
+
+La razón es que no ha entrado en el foro {SITENAME} por mas de {INTERVAL_DAYS_SUM} días.
+
+Si lo desa, puede registrarse de nuevo.
+
+Esperamos verle de nuevo pronto.
+
+{EMAIL_SIG}

@@ -1,0 +1,21 @@
+Subject: ¡Le echamos de menos!
+
+Hola, {USERNAME}
+
+Vemos que su última visita a nuestro foro, {SITE_NAME}, fué el "{LAST_VISIT}".
+Hace ya mucho tiempo, y nos gustaría que supiera que esperamos volver a verle pronto
+
+En caso de haber olvidado sus credenciales siempre puede recuperarlas usando el siguiente enlace:
+
+{FORGOT_PASS}
+
+De lo contrario, siempre puede contactar con el administrador del foro usando el siguiente correo: {ADMIN_MAIL}
+
+Esperamos verle de nuevo.
+
+{USR_TPC_LIST}
+
+{USR_FRM_LIST}
+
+
+{EMAIL_SIG}
