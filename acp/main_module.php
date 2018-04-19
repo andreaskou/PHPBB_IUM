@@ -349,7 +349,7 @@ class main_module
 				{
 					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
-				if (! $request->variable('usernames', ''))
+				if ( !$request->variable('usernames', ''))
 				{
 					trigger_error($user->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
