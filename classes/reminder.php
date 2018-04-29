@@ -102,7 +102,6 @@ class reminder
 					$lang_file_loader = new \phpbb\language\language_file_loader($this->phpbb_root_path, $this->php_ext);
 					$user_instance = new \phpbb\language\language($lang_file_loader);
 					$user_instance->set_user_language($sleeper['user_lang']);
-					$user_instance->add_lang('body','andreask/ium');
 				}
 				else
 				{
@@ -110,7 +109,6 @@ class reminder
 					$user_instance = new \phpbb\user('\phpbb\datetime');
 					$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 					$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
-					$user_instance->add_lang_ext('andreask/ium', 'body');
 				}
 
 				// Load top_topics class
@@ -487,7 +485,6 @@ class reminder
 
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
-		$this->user->add_lang_ext('andreask/ium', 'body');
 
 		if ($sleeper)
 		{
