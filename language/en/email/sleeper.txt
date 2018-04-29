@@ -12,9 +12,21 @@ In case you have forgot your credentials you can always retrieve them using the 
 Else, you can always contact the administrator of the forum on this e-mail "{ADMIN_MAIL}".
 Hope to see you back again.
 
+<!-- IF USR_TPC_LIST -->
+Below some links to topics that you've been active.
+
 {USR_TPC_LIST}
+<!-- ENDIF -->
+
+<!-- IF USR_FRM_LIST -->
+Below some links to the most active topics of the board.
 
 {USR_FRM_LIST}
+<!-- ENDIF -->
 
+<!-- IF SELF_DELETE_LINK -->
+Click on the following link to delete your account.
+{SELF_DELETE_LINK}
+<!-- ENDIF -->
 
 {EMAIL_SIG}
