@@ -93,6 +93,7 @@ $lang = array_merge(
 	// Sort by, options for the inactive users list
 	'ACP_IUM_INACTIVE'	=> array(
 									0	=>	'Active',
+									// Rest of reasons are not active because they are checked via constants.php
 									1	=>	'Registration pre-activation',
 									2	=>	'Profile change',
 									3	=>	'Admin deactivated',
