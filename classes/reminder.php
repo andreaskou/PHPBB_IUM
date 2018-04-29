@@ -33,7 +33,6 @@ class reminder
 	protected $phpbb_root_path;
 	protected $php_ext;
 	protected $table_name;
-	protected $language;
 
 	/**
 	*
@@ -63,7 +62,6 @@ class reminder
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
 		$this->table_name       =	'ium_reminder';
-		$this->language			=	$this->container->get('andreask.ium.classes.language_helper');
 	}
 
 	/**
@@ -97,17 +95,12 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
-			// TEST!
-			if (phpbb_version_compare($this->config['version'], '3.2', '>='))
-			{
-				$language = $this->container->get('language');
-			}
-
 			foreach ($this->inactive_users as $sleeper)
 			{
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
-					$user_instance = $language;
+					$lang_file_loader = new \phpbb\language\language_file_loader($this->phpbb_root_path, $this->php_ext);
+					$user_instance = new \phpbb\language\language($lang_file_loader);
 					$user_instance->set_user_language($sleeper['user_lang']);
 					$user_instance->add_lang('body','andreask/ium');
 				}
@@ -161,29 +154,33 @@ class reminder
 					'REG_DATE'		=>	date('d-m-Y', $sleeper['user_regdate']),
 					'SIGNATURE'		=>	$this->config['board_email_sig'],
 					'ADMIN_MAIL'	=>	$this->config['board_contact'],
-					'URL'			=>	generate_board_url(),
+					'URL'					=>	generate_board_url(),
 				);
 
 				if (!is_null($topic_links))
 				{
 					// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->language->lang('INCLUDE_USER_TOPICS'), $topic_links)));
-					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
+					// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
+					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => $topic_links));
+
 				}
 				if (!is_null($forum_links))
 				{
 					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $this->language->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
-					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
+					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
+					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
 				{
 					$link = PHP_EOL;
 					$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->language->lang('FOLLOW_TO_DELETE', $link)));
-					// $template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $user_instance->lang('FOLLOW_TO_DELETE', $link)));
+					// $template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->language->lang('FOLLOW_TO_DELETE', $link)));
+					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
 
 				$messenger = new \messenger(false);
-				$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->language->lang('ADMINISTRATOR');
+				// $xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->language->lang('ADMINISTRATOR');
+				$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $user_instance->lang('ADMINISTRATOR');
 				// $xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($user_instance->lang('ADMINISTRATOR'));
 				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
@@ -490,6 +487,7 @@ class reminder
 
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
+		$this->user->add_lang_ext('andreask/ium', 'body');
 
 		if ($sleeper)
 		{
@@ -497,9 +495,6 @@ class reminder
 			{
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
-
-			$this->language->set_user_language($sleeper['user_lang'], $sleeper['user_timezone']);
-			$this->language->add_lang('andreask/ium', 'body');
 
 			// Load top_topics class
 			$topics = $this->top_topics;
@@ -525,7 +520,7 @@ class reminder
 			}
 
 			// dirty fix for now, need to find a way for the templates.
-			$lang = ( $this->lang_exists($this->language->get_used_language()) ) ? $this->language->get_used_language() : $this->config['default_lang'];
+			$lang = ( $this->lang_exists($this->user->user_lang) ) ? $this->user->user_lang : $this->config['default_lang'];
 
 			// add template variables
 			$template_ary	=	array(
@@ -543,26 +538,28 @@ class reminder
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->language->lang('INCLUDE_USER_TOPICS'), $topic_links)));
+				// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
+				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' =>  $topic_links));
 			}
+
 			// If there are forum topics merge them with the template_ary
 			if (!is_null($forum_links))
 			{
-				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf($this->language->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
+				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
 			}
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['random']))
 			{
 				$link = PHP_EOL;
 				$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->language->lang('FOLLOW_TO_DELETE', $link)));
+				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
 			$messenger = new \messenger(false);
 
 			// mail headers
 
-			$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->language->lang('ADMINISTRATOR');
+			$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->user->lang('ADMINISTRATOR');
 
 			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
@@ -628,10 +625,9 @@ class reminder
 		$topic_links = '';
 		foreach ($topics as $item)
 		{
-			$topic_links .= PHP_EOL;
-			$topic_links .= PHP_EOL;
 			$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
-			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
+			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
+			$topic_links .= PHP_EOL;
 		}
 		return $topic_links;
 	}
