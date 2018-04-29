@@ -244,10 +244,33 @@ class main_module
 				'USERS_PER_PAGE' 				=> $limit,
 				'TOTAL_USERS_WITH_DAY'	=> sprintf($user->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $user->lang($option_ary[$actions])))
 			));
-
+			$user->add_lang('common');
 			// Assign row results to template var inactive
+			// inactive_reasons is constant!!! OMG!!!!!!!!1
 			foreach ($rows as $row)
 			{
+				// $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_UNKNOWN'];
+          switch ($row['user_inactive_reason'])
+          {
+						case 0:
+						$row['user_inactive_reason'] = $user->lang('ACP_IUM_INACTIVE', 0);
+						break;
+            case INACTIVE_REGISTER:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_REGISTER'];
+            break;
+
+            case INACTIVE_PROFILE:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_PROFILE'];
+            break;
+
+            case INACTIVE_MANUAL:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_MANUAL'];
+            break;
+
+            case INACTIVE_REMIND:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_REMIND'];
+            break;
+          }
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('inactive', array(
 					'USERNAME' 						=> $row['username'],
@@ -255,7 +278,7 @@ class main_module
 					'POSTS' 							=> ($row['user_posts']) ? $row['user_posts'] : 0,
 					'LAST_VISIT' 					=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
 					'INACTIVE_DATE' 			=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
-					'REASON' 							=> $user->lang('ACP_IUM_INACTIVE', (int) $row['user_inactive_reason']),
+					'REASON' 							=> $row['user_inactive_reason'],
 					'COUNT' 							=> ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
 					'LAST_SENT_REMINDER' 	=> ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
 					'REMINDER_DATE' 			=> ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
