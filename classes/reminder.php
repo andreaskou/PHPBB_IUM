@@ -25,7 +25,6 @@ class reminder
 	protected $user;
 	protected $user_loader;
 	protected $log;
-	protected $container;
 	protected	$top_topics;
 	protected $ignore_user;
 	protected $request;
@@ -47,14 +46,13 @@ class reminder
 	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, ContainerInterface $container, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
 		$this->db				=	$db;
 		$this->user				=	$user;
 		$this->user_loader		=	$user_loader;
 		$this->log              =	$log;
-		$this->container		=	$container;
 		$this->top_topics		= $top_topics;
 		$this->ignore_user	= $ignore_user;
 		$this->request			=	$request;
