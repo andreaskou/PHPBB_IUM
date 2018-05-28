@@ -240,9 +240,9 @@ class ignore_user
 		// Make an array of user_types to ignore
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
-		$text = ' AND '				. $this->db->sql_in_set('p.user_type', $ignore_users_extra, true) .'
-				  AND '				. $this->db->sql_in_set('p.user_id', $admin_mod_array, true) . '
-				  AND p.user_id > ' . ANONYMOUS . $ignore;
+		$text = ' AND '	. $this->db->sql_in_set('p.user_type', $ignore_users_extra, true) .'
+				  		AND '	. $this->db->sql_in_set('p.user_id', $admin_mod_array, true) .'
+							AND p.user_inactive_reason not in ('. INACTIVE_MANUAL .') AND p.user_id > ' . ANONYMOUS . $ignore;
 
 		return $text;
 	}
