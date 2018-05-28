@@ -21,7 +21,6 @@ services:
             - '@user'
             - '@user_loader'
             - '@log'
-            - '@service_container'
             - '@andreask.ium.classes.top_topics'
             - '@andreask.ium.classes.ignore_user'
             - '@request'
