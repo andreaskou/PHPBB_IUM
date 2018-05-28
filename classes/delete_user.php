@@ -15,7 +15,6 @@ namespace andreask\ium\classes;
 
 use \DateTime;
 use \DateInterval;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class delete_user
 {
@@ -26,7 +25,6 @@ class delete_user
 	protected $user;
 	protected $user_loader;
 	protected $log;
-	protected $container;
 	protected $table_name;
 	protected $phpbb_root_path;
 	protected $php_ext;
@@ -37,18 +35,16 @@ class delete_user
 	 * @param \phpbb\config\config                                      $config             PhpBB Config
 	 * @param \phpbb\db\driver\driver_interface                         $db                 PhpBB Database
 	 * @param \phpbb\log\log                                            $log								PhpBB Log
-	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $container					PhpBB container loader
 	 * @param                                                           $phpbb_root_path    PhpBB root path
 	 * @param                                                           $php_ext						Php extension
 	 */
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, ContainerInterface $container, $ium_reminder_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, $ium_reminder_table, $phpbb_root_path, $php_ext)
 	{
 		$this->config			=	$config;
 		$this->db				=	$db;
 		$this->user				=	$user;
 		$this->log				=	$log;
-		$this->container		=	$container;
 		$this->php_ext			=	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
 		$this->table_name		=	$ium_reminder_table;
@@ -182,9 +178,9 @@ class delete_user
 								'request_date'	=>	time(),
 								'type'			=>	'user',
 							);
-				$sql = 'UPDATE ' . $this->table_name . '
-						SET '. $this->db->sql_build_array('UPDATE', $sql_array) .'
-						WHERE username="' . $users['username'] . '"';
+				$sql = "UPDATE " . $this->table_name . "
+						SET ". $this->db->sql_build_array('UPDATE', $sql_array) ."
+						WHERE user_id = " . (int) $id;
 				$this->db->sql_query($sql);
 			}
 			// Else delete the user...
@@ -217,7 +213,7 @@ class delete_user
 		$past = strtotime($present->format("y-m-d h:i:s"));
 
 		$sql = 'SELECT user_id FROM ' . $this->table_name . '
-				WHERE type="auto" AND request_date < ' . $past;
+				WHERE type="auto" AND request_date < ' . (int) $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = [];

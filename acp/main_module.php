@@ -16,18 +16,12 @@ namespace andreask\ium\acp;
 use \DateTime;
 use \DateInterval;
 
-// use phpbb\log\null;
-
-//use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class main_module
 {
 	public function main($id, $mode)
 	{
 		global $user, $template, $request, $config, $phpbb_container, $phpbb_root_path, $phpEx;
 		$config_text = $phpbb_container->get('config_text');
-
-		// $language = $phpbb_container->get('andreask.ium.classes.language_helper');
 
 		if ($mode == 'ium_settings')
 		{
@@ -156,7 +150,6 @@ class main_module
 		if ($mode == 'ium_list')
 		{
 			$this->tpl_name = 'acp_ium_inactive_users';
-			// $this->page_title = $language->lang('ACP_IUM_TITLE2');
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang('memberlist');
 
@@ -251,10 +244,33 @@ class main_module
 				'USERS_PER_PAGE' 				=> $limit,
 				'TOTAL_USERS_WITH_DAY'	=> sprintf($user->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $user->lang($option_ary[$actions])))
 			));
-
+			$user->add_lang('common');
 			// Assign row results to template var inactive
+			// inactive_reasons is constant!!! OMG!!!!!!!!1
 			foreach ($rows as $row)
 			{
+				// $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_UNKNOWN'];
+          switch ($row['user_inactive_reason'])
+          {
+						case 0:
+						$row['user_inactive_reason'] = $user->lang('ACP_IUM_INACTIVE', 0);
+						break;
+            case INACTIVE_REGISTER:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_REGISTER'];
+            break;
+
+            case INACTIVE_PROFILE:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_PROFILE'];
+            break;
+
+            case INACTIVE_MANUAL:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_MANUAL'];
+            break;
+
+            case INACTIVE_REMIND:
+              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_REMIND'];
+            break;
+          }
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('inactive', array(
 					'USERNAME' 						=> $row['username'],
@@ -262,7 +278,7 @@ class main_module
 					'POSTS' 							=> ($row['user_posts']) ? $row['user_posts'] : 0,
 					'LAST_VISIT' 					=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
 					'INACTIVE_DATE' 			=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
-					'REASON' 							=> $user->lang('ACP_IUM_INACTIVE', (int) $row['user_inactive_reason']),
+					'REASON' 							=> $row['user_inactive_reason'],
 					'COUNT' 							=> ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
 					'LAST_SENT_REMINDER' 	=> ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
 					'REMINDER_DATE' 			=> ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
@@ -356,7 +372,7 @@ class main_module
 				{
 					trigger_error($user->lang('FORM_INVALID') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
-				if (! $request->variable('usernames', ''))
+				if ( !$request->variable('usernames', ''))
 				{
 					trigger_error($user->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
@@ -848,8 +864,10 @@ class main_module
 	public function sweap_sforums($forum_id)
 	{
 		global $db;
-
-		$sql = 'SELECT left_id, right_id FROM ' . FORUMS_TABLE . ' WHERE FORUM_ID = ' . $forum_id;
+		$sql_arry = array('FORUM_ID' => (int) $forum_id);
+		$sql = 'SELECT left_id, right_id
+						FROM ' . FORUMS_TABLE . '
+						WHERE ' . $db->sql_build_array('SELECT', $sql_arry);
 
 		$result = $db->sql_query($sql);
 
@@ -861,8 +879,8 @@ class main_module
 		{
 			$sql = 'SELECT forum_id FROM ' .
 					FORUMS_TABLE . '
-					WHERE left_id >= ' . $subforums['left_id'] . '
-					AND right_id <= ' .$subforums['right_id'] . '
+					WHERE left_id >= ' . (int) $subforums['left_id'] . '
+					AND right_id <= ' . (int) $subforums['right_id'] . '
 					ORDER BY left_id';
 			$result = $db->sql_query($sql);
 			$puzzle = [];

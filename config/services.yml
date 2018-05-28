@@ -7,7 +7,8 @@ services:
         arguments:
             - '@config'
             - '@user'
-            - '@service_container'
+            - '@andreask.ium.classes.reminder'
+            - '@andreask.ium.classes.delete_user'
         calls:
             - [set_name, [cron.task.ium_send_reminder]]
         tags:
@@ -20,7 +21,8 @@ services:
             - '@user'
             - '@user_loader'
             - '@log'
-            - '@service_container'
+            - '@andreask.ium.classes.top_topics'
+            - '@andreask.ium.classes.ignore_user'
             - '@request'
             - '%core.table_prefix%'
             - '%core.root_path%'
@@ -29,7 +31,7 @@ services:
         class: andreask\ium\classes\top_topics
         arguments:
             - '@config'
-            - '@service_container'
+            - '@config_text'
             - '@auth'
             - '@dbal.conn'
     andreask.ium.classes.delete_user:
@@ -39,7 +41,6 @@ services:
             - '@dbal.conn'
             - '@user'
             - '@log'
-            - '@service_container'
             - '%andreask.ium.tables.reminder_table%'
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -66,5 +67,5 @@ services:
             - '@request'
             - '@controller.helper'
             - '@template'
-            - '@service_container'
+            - '@andreask.ium.classes.delete_user'
             - '%andreask.ium.tables.reminder_table%'
