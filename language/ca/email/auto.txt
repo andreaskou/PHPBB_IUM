@@ -1,0 +1,13 @@
+Subject: El seu usuari ha estat eliminat de {SITENAME}.
+
+Hola, {USER_NAME}
+
+Lamentem comunicar-li que la seva compta ha sigut eliminada.
+
+La raó és que no ha entrat al forum {SITENAME} per mes de {INTERVAL_DAYS_SUM} díes.
+
+Si ho dessitja, pot inscru-re's de nou.
+
+Esperem tornar a veure'l aviat.
+
+{EMAIL_SIG}

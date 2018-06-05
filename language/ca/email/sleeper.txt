@@ -1,0 +1,21 @@
+Subject: El trobem a faltar!
+
+Hola, {USERNAME}
+
+Veiem que la seva ultima visita al nostre fòrum, {SITE_NAME}, va ser el "{LAST_VISIT}".
+Fa ja molt de temps, i ens agradaría que sapigués que esperem tornar a veure'l aviat.
+
+En cas d'haver oblidat les seves credencials sempre pot recuperar-les fent ús del següent enllaç:
+
+{FORGOT_PASS}
+
+En cas contrari, sempre pot contactar amb el administrador del fòrum fent servir el següent correu: {ADMIN_MAIL}
+
+Esperem tornar a veure'l aviat.
+
+{USR_TPC_LIST}
+
+{USR_FRM_LIST}
+
+
+{EMAIL_SIG}
