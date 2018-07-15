@@ -40,7 +40,6 @@ class main
 		$this->helper       =   $helper;
 		$this->template     =   $template;
 		$this->delete_user	=		$delete_user;
-		$this->container    =   $container;
 		$this->table_name   =   $ium_table;
 		$this->u_action     =   append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
