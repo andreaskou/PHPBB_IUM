@@ -119,7 +119,7 @@ class delete_user
 		$req_to_del = sizeof($id);
 
 		// Lets just keep the usernames for logging and have a count to verify later the delete later.
-		$sql = 'SELECT username FROM ' . $this->table_name . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
+		$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
@@ -175,10 +175,10 @@ class delete_user
 			{
 				// store for approval and add user to the list.
 				$sql_array = array(
-								'request_date'	=>	time(),
-								'type'			=>	'user',
+								'ium_request_date'	=>	time(),
+								'ium_type'			=>	$type,
 							);
-				$sql = "UPDATE " . $this->table_name . "
+				$sql = "UPDATE " . USERS_TABLE . "
 						SET ". $this->db->sql_build_array('UPDATE', $sql_array) ."
 						WHERE user_id = " . (int) $id;
 				$this->db->sql_query($sql);
@@ -212,8 +212,8 @@ class delete_user
 		// Convert past to timestamp
 		$past = strtotime($present->format("y-m-d h:i:s"));
 
-		$sql = 'SELECT user_id FROM ' . $this->table_name . '
-				WHERE type="auto" AND request_date < ' . (int) $past;
+		$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
+				WHERE ium_type="auto" AND ium_request_date < ' . (int) $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
@@ -227,26 +227,6 @@ class delete_user
 		$this->delete($users);
 	}
 
-	/**
-	 * This cleans up users on ext's table after a/some user(s) has been requested for deletion.
-	 * It's mainly used by the listener.
-	 * @param  int $id array of user ids
-	 * @return null
-	 */
-
-	public function clean_ium_table($id)
-	{
-		if (!is_array($id))
-		{
-			$id = (array) $id;
-		}
-
-		$sql_in_array = $id;
-		$sql = 'DELETE FROM ' . $this->table_name .' WHERE ' . $this->db->sql_in_set('user_id', $sql_in_array);
-		$this->db->sql_query($sql);
-		$this->db->sql_affectedrows();
-	}
-
 /**
  * This is a feature function, will send e-mails to users that is being deleted.
  * Need to make a new branch!
@@ -256,11 +236,6 @@ class delete_user
  */
 	public function email_for_delition($user_ids, $request)
 	{
-		if (!$this->user_exist($user_ids))
-		{
-			// Log the error!
-			return false;
-		}
 
 		$sql = 'SELECT username, user_email, user_lang FROM '. USERS_TABLE .'
 						WHERE '. $this->db->sql_in_set('user_id', $user_ids);
@@ -323,5 +298,4 @@ class delete_user
 		$ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
 		return (bool) file_exists($ext_path . '/language/' . $user_lang);
 	}
-
 }
