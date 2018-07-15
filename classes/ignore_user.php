@@ -84,22 +84,29 @@ class ignore_user
 		*	This is done by doing left join USERS_TABLE and ium_reminder. and selecting users
 		*	that are null (don't exist) on ium_reminder.
 		*/
-		$sql_array = array(
-			'SELECT'	=> 'p.user_id, p.username',
-			'FROM'		=> array(
-				USERS_TABLE =>	'p',
-				),
-			'LEFT_JOIN' => array(
-				array(
-					'FROM'	=> array($this->table_name	=>	'r'),
-					'ON'	=>	'p.user_id = r.user_id',
-					)
-				),
-			'WHERE'	=> $this->db->sql_in_set('p.username', $username ) . $this->ignore_groups()
-			. ' AND r.username is null');
 
-		$sql = $this->db->sql_build_query('SELECT', $sql_array);
-		$result = $this->db->sql_query($sql);
+		$sql_query = 'SELECT user_id, username
+									FROM ' . USERS_TABLE . ' WHERE ' .
+									$this->db->sql_in_set('username', $username ) . $this->ignore_groups();
+
+
+		// $sql_array = array(
+		// 	'SELECT'	=> 'p.user_id, p.username',
+		// 	'FROM'		=> array(
+		// 		USERS_TABLE =>	'p',
+		// 		),
+		// 	'LEFT_JOIN' => array(
+		// 		array(
+		// 			'FROM'	=> array($this->table_name	=>	'r'),
+		// 			'ON'	=>	'p.user_id = r.user_id',
+		// 			)
+		// 		),
+		// 	'WHERE'	=> $this->db->sql_in_set('p.username', $username ) . $this->ignore_groups()
+		// 	. ' AND username is null');
+
+		// $sql = $this->db->sql_build_query('SELECT', $sql_array);
+		// $result = $this->db->sql_query($sql);
+		$result = $this->db->sql_query($sql_query);
 		$rows = [];
 
 		// Store in an array.
@@ -112,56 +119,15 @@ class ignore_user
 		$this->db->sql_freeresult($result);
 		$clean = [];
 
-		// If there are users that do not exist insert them.
-		if ($rows)
-		{
-			foreach ($rows as $key => $user)
-			{
-				// Also store them for later.
-				$clean[] = $user['username'];
-				$this->insert_user($user, $mode);
-			}
-			// Remove the users that we just inserted to the table from the users array.
-			$clean = array_diff($username, $clean);
-		}
-
-		// If there are any users left and since they already exist, update them
-		if (!empty($clean))
-		{
-			foreach ($clean as $user)
-			{
-				$this->update_user($user, $mode);
-			}
-		}
 		// if the above situation did not ocured just update, since all the users exist already.
-		else
+		foreach ($rows as $user)
 		{
-			foreach ($username as $user)
-			{
-				$this->update_user($user, $mode);
-			}
+			$this->update_user($user, $mode);
 		}
-	}
-
-	/**
-	*	Inserts "new" users to table ium_reminder
-	*	@param	array		User(s) with id and username
-	*	@return void
-	*/
-	private function insert_user($user, $mode)
-	{
-		$insert_arr = array(
-				'user_id' => $user['user_id'],
-				'username' => $this->db->sql_escape($user['username']),
-				'dont_send' => $mode,
-			);
-
-		$sql = 'INSERT INTO ' . $this->table_name . ' ' .$this->db->sql_build_array('INSERT', $insert_arr);
-		$this->db->sql_query($sql);
 	}
 
 	 /**
-	  * Function Updates dont_sent field on existing users on table ium_reminder
+	  * Function Updates dont_sent field on users table
 	  *
 	  * @param  array  		$user	Usernames
 	  * @param  boolean		$action  true for set user to ignore false for unset ignore
@@ -178,8 +144,8 @@ class ignore_user
 		// $username = ($user_id) ? array_shift($username) : $user;
 		$dont_send = $action;
 
-		$data = array ('dont_send' => $action);
-		$sql = 'UPDATE ' . $this->table_name . '
+		$data = array ('ium_dont_send' => $action);
+		$sql = 'UPDATE ' . USERS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $data) . '
 				WHERE '. $this->db->sql_in_set('username', $username);
 		$this->db->sql_query($sql);
@@ -194,7 +160,7 @@ class ignore_user
 	{
 
 		$sql = 'SELECT username
-							FROM ' . $this->table_name . '
+							FROM ' . USERS_TABLE . '
 							WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
@@ -209,7 +175,7 @@ class ignore_user
 	}
 
 	/**
-	 * Returns a comlete string of user_type and user_id that should be ignored by the queries.
+	 * Returns a complete string of user_type and user_id that should be ignored by the queries.
 	 * @return string Complete ignore statement for sql
 	 */
 	public function ignore_groups()
@@ -230,7 +196,7 @@ class ignore_user
 		$ignore = json_decode($ignore);
 		if (!empty($ignore))
 		{
-			$ignore = ' AND ' . $this->db->sql_in_set('p.group_id', $ignore, true);
+			$ignore = ' AND ' . $this->db->sql_in_set('group_id', $ignore, true);
 		}
 		else
 		{
@@ -240,9 +206,9 @@ class ignore_user
 		// Make an array of user_types to ignore
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
-		$text = ' AND '	. $this->db->sql_in_set('p.user_type', $ignore_users_extra, true) .'
-				  		AND '	. $this->db->sql_in_set('p.user_id', $admin_mod_array, true) .'
-							AND p.user_inactive_reason not in ('. INACTIVE_MANUAL .') AND p.user_id > ' . ANONYMOUS . $ignore;
+		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
+				  		AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) .'
+							AND user_inactive_reason not in ('. INACTIVE_MANUAL .') AND user_id > ' . ANONYMOUS . $ignore;
 
 		return $text;
 	}
