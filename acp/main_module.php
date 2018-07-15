@@ -185,7 +185,8 @@ class main_module
 			);
 
 			//base url for pagination, filtering and sorting
-			$base_url = $this->u_action 	. "&amp;users_per_page="	. $limit
+			$base_url = $this->u_action
+											. "&amp;users_per_page="	. $limit
 											. "&amp;with_posts=" 		. $with_posts
 											. "&amp;count_back=" 		. $actions
 											. "&amp;sort_by=" 			. $sort_by
@@ -246,31 +247,32 @@ class main_module
 			));
 			$user->add_lang('common');
 			// Assign row results to template var inactive
-			// inactive_reasons is constant!!! OMG!!!!!!!!1
 			foreach ($rows as $row)
 			{
 				// $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_UNKNOWN'];
           switch ($row['user_inactive_reason'])
           {
 						case 0:
-						$row['user_inactive_reason'] = $user->lang('ACP_IUM_INACTIVE', 0);
+							$row['user_inactive_reason'] = $user->lang('ACP_IUM_INACTIVE', 0);
 						break;
-            case INACTIVE_REGISTER:
-              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_REGISTER'];
+
+						case INACTIVE_REGISTER:
+              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_REGISTER');
             break;
 
             case INACTIVE_PROFILE:
-              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_PROFILE'];
+              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_PROFILE');
             break;
 
             case INACTIVE_MANUAL:
-              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_MANUAL'];
+              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_MANUAL');
             break;
 
             case INACTIVE_REMIND:
-              $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_REMIND'];
+              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_REMIND');
             break;
           }
+
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('inactive', array(
 					'USERNAME' 						=> $row['username'],
@@ -279,10 +281,10 @@ class main_module
 					'LAST_VISIT' 					=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
 					'INACTIVE_DATE' 			=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
 					'REASON' 							=> $row['user_inactive_reason'],
-					'COUNT' 							=> ($row['remind_counter']) ? $row['remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
-					'LAST_SENT_REMINDER' 	=> ($row['previous_sent_date']) ? $user->format_date($row['previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
-					'REMINDER_DATE' 			=> ($row['reminder_sent_date']) ? $user->format_date($row['reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
-					'IGNORE_USER' 				=> $row['dont_send'],
+					'COUNT' 							=> ($row['ium_remind_counter']) ? $row['ium_remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
+					'LAST_SENT_REMINDER' 	=> ($row['ium_previous_sent_date']) ? $user->format_date($row['ium_previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
+					'REMINDER_DATE' 			=> ($row['ium_reminder_sent_date']) ? $user->format_date($row['ium_reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
+					'IGNORE_USER' 				=> $row['ium_dont_send'],
 					'LINK_TO_USER'				=> $link,
 				));
 			}
@@ -407,7 +409,6 @@ class main_module
 			{
 				$user_ids 	= $request->variable('user_id', array(0));
 				$remove 	= $phpbb_container->get('andreask.ium.classes.ignore_user');
-
 				foreach ($user_ids as $id)
 				{
 						$remove->update_user($id, false, true);
@@ -507,10 +508,10 @@ class main_module
 					'USER_ID'					=>	$row['user_id'],
 					'USERNAME'				=>	$row['username'],
 					'POSTS'						=>	($row['user_posts']) ? $row['user_posts'] : 0,
-					'REQUEST_DATE' 		=>	$user->format_date($row['request_date']),
-					'TYPE'						=>	$row['type'],
+					'REQUEST_DATE' 		=>	$user->format_date($row['ium_request_date']),
+					'TYPE'						=>	$row['ium_type'],
 					'LINK_TO_USER'		=>	$link,
-					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', (int) $row['dont_send']),
+					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', (int) $row['ium_dont_send']),
 				));
 			}
 		}
@@ -574,19 +575,19 @@ class main_module
 
 			if ( $filters['with_posts'] )
 			{
-				$options .= ' AND p.user_posts <> 0';
+				$options .= ' AND user_posts <> 0';
 			}
 			if ( $filters['approval'])
 			{
-				$options .= ' AND (r.request_date <> 0 OR type in ("user", "auto"))';
+				$options .= ' AND (ium_request_date <> 0 OR ium_type in ("user", "auto"))';
 			}
 			if ( $filters['ignore'] == 1)
 			{
-				$options .= ' AND r.dont_send = 1 AND request_date = 0 ';
+				$options .= ' AND ium_dont_send = 1 AND ium_request_date = 0 ';
 			}
 			if ( $filters['ignore'] == 2)
 			{
-				$options .= ' AND r.dont_send = 2 ';
+				$options .= ' AND ium_dont_send = 2 ';
 			}
 			if ( $filters['count_back'] && $filters['count_back'] != $ignore )
 			{
@@ -649,7 +650,7 @@ class main_module
 				// Convert past to timestamp
 				$past = strtotime($present->format("y-m-d h:i:s"));
 
-				$options .= ' AND p.user_regdate < ' . $past . ' AND p.user_lastvisit < ' . $past;
+				$options .= ' AND user_regdate < ' . $past . ' AND user_lastvisit < ' . $past;
 			}
 
 				/**
@@ -663,31 +664,31 @@ class main_module
 					switch ($filters['sort_by'])
 					{
 						case 'username':
-							$sort .= 'p.username';
+							$sort .= 'username';
 							break;
 						case 'reg_date':
-							$sort .= 'p.user_regdate';
+							$sort .= 'user_regdate';
 							break;
 						case 'last_visit':
-							$sort .= 'p.user_lastvisit';
+							$sort .= 'user_lastvisit';
 							break;
 						case 'posts':
-							$sort .= 'p.user_posts';
+							$sort .= 'user_posts';
 							break;
 						case 'last_sent_reminder':
-							$sort .= 'r.previous_sent_date';
+							$sort .= 'ium_previous_sent_date';
 							break;
 						case 'count':
-							$sort .= 'r.remind_counter';
+							$sort .= 'ium_remind_counter';
 							break;
 						case 'reminder_date':
-							$sort .= 'r.reminder_sent_date';
+							$sort .= 'ium_reminder_sent_date';
 							break;
 						case 'request_date':
-							$sort .= 'r.request_date';
+							$sort .= 'ium_request_date';
 							break;
 						case 'select':
-							$sort .= 'p.user_regdate';
+							$sort .= 'user_regdate';
 							break;
 					}
 					if ($filters['sort_order'] === 1)
@@ -703,11 +704,9 @@ class main_module
 		$ignore_groups 	= $phpbb_container->get('andreask.ium.classes.ignore_user');
 		$must_ignore 	= $ignore_groups->ignore_groups();
 
-		$sql = 'SELECT p.username, p.user_regdate, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*
-			FROM ' . USERS_TABLE . ' p
-			RIGHT JOIN ' . $table_name . ' r
-			ON (p.user_id = r.user_id)
-			WHERE p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')'
+		$sql = 'SELECT user_id, username, user_regdate, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type, ium_request_type
+			FROM ' . USERS_TABLE . '
+			WHERE user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')'
 			. $must_ignore
 			. $options
 			. $sort;
