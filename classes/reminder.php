@@ -39,8 +39,7 @@ class reminder
 	* @param \phpbb\db\driver\driver_interface                        	$db					PhpBB Database
 	* @param \phpbb\user                                              	$user				PhpBB User
 	* @param \phpbb\log\log                                           	$log				PhpBB Log
-	* @param \Symfony\Component\DependencyInjection\ContainerInterface	$container			PhpBB container loader
-	* @param \phpbb\request\request										$request			PhpBB request
+	* @param \phpbb\request\request																			$request			PhpBB request
 	* @param                                                          	$table_prefix		PhpBB table prefix
 	* @param                                                          	$phpbb_root_path	PhpBB root path
 	* @param                                                          	$php_ext			Php file extension
@@ -49,17 +48,16 @@ class reminder
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
-		$this->db				=	$db;
-		$this->user				=	$user;
-		$this->user_loader		=	$user_loader;
+		$this->db								=	$db;
+		$this->user							=	$user;
+		$this->user_loader			=	$user_loader;
 		$this->log              =	$log;
-		$this->top_topics		= $top_topics;
-		$this->ignore_user	= $ignore_user;
-		$this->request			=	$request;
-		$this->table_prefix		=	$table_prefix;
+		$this->top_topics				= $top_topics;
+		$this->ignore_user			= $ignore_user;
+		$this->request					=	$request;
+		$this->table_prefix			=	$table_prefix;
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
-		$this->table_name       =	'ium_reminder';
 	}
 
 	/**
@@ -73,11 +71,6 @@ class reminder
 		if ($single)
 		{
 			$user = array_shift($this->inactive_users);
-
-			if (!$this->user_exist($user['user_id']))
-			{
-				$this->new_user($user['user_id']);
-			}
 			$this->get_users($limit, $user['user_id']);
 		}
 
@@ -206,7 +199,7 @@ class reminder
 				$messenger->send();
 
 				// Update ext's table...
-				$this->update_ium_reminder($sleeper);
+				$this->update_user($sleeper);
 				unset($topics);
 			}
 		}
@@ -226,12 +219,12 @@ class reminder
 	{
 		// if limit is not set use limit from configuration.
 		$limit = ($limit) ? 'limit ' . $limit : 'limit ' . $this->config['andreask_ium_email_limit'];
-		$table_name = $this->table_prefix . $this->table_name;
+		// $table_name = $this->table_prefix . $this->table_name;
 		$sql_opt = '';
 
 		if ($user)
 		{
-			$sql_opt .= ' AND r.user_id = ' . $user;
+			$sql_opt .= ' AND user_id = ' . $user;
 		}
 
 		if (!$user)
@@ -249,24 +242,20 @@ class reminder
 			// Convert past to timestamp
 			$past = strtotime($present->format("y-m-d h:i:s"));
 
-			$sql_opt .= ' AND r.dont_send < 1
-			AND r.reminder_sent_date < '. $past . '
-			AND p.user_lastvisit < ' . $past . '
-			AND p.user_regdate < ' . $past;
+			$sql_opt .= ' AND ium_dont_send < 1
+			AND ium_reminder_sent_date < '. $past . '
+			AND user_lastvisit < ' . $past . '
+			AND user_regdate < ' . $past;
 		}
 
 		$ignore_groups = $this->ignore_user;
 		$must_ignore = $ignore_groups->ignore_groups();
 
-		$sql_ary = array(
-			'SELECT' => 'p.user_id, p.username, p.user_email, p.user_lang, p.user_dateformat, p.user_regdate,p.user_timezone, p.user_posts, p.user_lastvisit, p.user_inactive_time, p.user_inactive_reason, r.*',
-			'FROM' => array (	$table_name => 'r',
-												USERS_TABLE =>	'p'
-											),
-			'WHERE'	=>	'p.user_id = r.user_id AND p.user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ') ' . $sql_opt .' ' . $must_ignore .' ORDER BY p.user_regdate ASC ' . $limit
-		);
+		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type, ium_request_type
+								FROM '. USERS_TABLE . '
+								WHERE user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ') ' . $sql_opt . ' ' . $must_ignore .'
+								ORDER BY user_regdate ASC ' . $limit;
 
-		$sql = $this->db->sql_build_query('SELECT', $sql_ary);
 		$result = $this->db->sql_query($sql);
 
 		$inactive_users = [];
@@ -318,61 +307,42 @@ class reminder
 	 * @param $user single user
 	 */
 
-	private function update_ium_reminder($user)
+	private function update_user($user)
 	{
-		// Does the user exists in ium_reminder?
-		// If he does update the row...
+		// Update user ium info for the reminder
 
-		if ( $this->user_exist($user['user_id']) )
+		$update_arr = array('ium_reminder_sent_date' => time());
+		$counter = ($user['ium_remind_counter'] + 1);
+
+		if ( $user['ium_remind_counter'] == 0 )
 		{
-			$update_arr = array('reminder_sent_date' => time());
-			$counter = ($user['remind_counter'] + 1);
-
-			if ( $user['remind_counter'] == 0 )
-			{
-				$merge = array('remind_counter' => $counter);
-				$update_arr = array_merge($update_arr, $merge);
-			}
-			else if ( $user['remind_counter'] == 1 )
-			{
-				$random_md5	= md5(uniqid($user['user_email'], true));
-				$merge = array('previous_sent_date'	=>	$user['reminder_sent_date'],
-					'remind_counter'	=>	$counter,
-					'random'			=>	$random_md5,
-					);
-				$update_arr = array_merge($update_arr, $merge);
-			}
-			else if ( $user['remind_counter'] == 2 )
-			{
-				$merge = array('previous_sent_date' =>	$user['reminder_sent_date'],
-					'remind_counter'	=>	$counter,
-					'request_date'		=>	time(),
-					'type'				=>	'auto',
-					'dont_send'			=>	1,
-					);
-				$update_arr = array_merge($update_arr, $merge);
-			}
-
-			$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET ' . $this->db->sql_build_array('UPDATE', $update_arr) .
-					' WHERE user_id = ' . (int) $user['user_id'];
-			$this->db->sql_query($sql);
+			$merge = array('ium_remind_counter' => $counter);
+			$update_arr = array_merge($update_arr, $merge);
+		}
+		else if ( $user['ium_remind_counter'] == 1 )
+		{
+			$random_md5	= md5(uniqid($user['user_email'], true));
+			$merge = array('ium_previous_sent_date'	=>	$user['ium_reminder_sent_date'],
+				'ium_remind_counter'	=>	$counter,
+				'ium_random'			=>	$random_md5,
+				);
+			$update_arr = array_merge($update_arr, $merge);
+		}
+		else if ( $user['ium_remind_counter'] >= 2 )
+		{
+			$merge = array('ium_previous_sent_date' =>	$user['ium_reminder_sent_date'],
+				'ium_remind_counter'	=>	$counter,
+				'ium_request_date'		=>	time(),
+				'ium_type'				=>	'auto',
+				'ium_dont_send'			=>	1,
+				);
+			$update_arr = array_merge($update_arr, $merge);
 		}
 
-		// User does not exist in the table let's add him.
-		else
-		{
+		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $update_arr) . '
+						WHERE user_id = ' . (int) $user['user_id'];
 
-			$insert_arr = array(
-				'user_id' => $user['user_id'],
-				'username' => $user['username'],
-				'remind_counter' => 1,
-				'previous_sent_date' => 0,
-				'reminder_sent_date' => time(),
-			);
-
-			$sql = 'INSERT INTO ' . $this->table_prefix . $this->table_name . $this->db->sql_build_array('INSERT', $insert_arr);
-			$this->db->sql_query($sql);
-		}
+		$this->db->sql_query($sql);
 	}
 
 	/**
@@ -401,29 +371,29 @@ class reminder
 	 * @return array          rows of users
 	 */
 
-	private function get_from_ium_reminder($user_id)
-	{
-		$select_array = array(
-			'user_id' => $user_id,
-		);
-
-		// Create the SQL statement
-		$sql = 'SELECT username, remind_counter, previous_sent_date, reminder_sent_date, dont_send
-		FROM ' . $this->table_prefix . $this->table_name . '
-		WHERE ' . $this->db->sql_build_array('SELECT', $select_array);
-
-		// Run the query
-		$result = $this->db->sql_query($sql);
-
-		// $row should hold the data you selected
-		$row = $this->db->sql_fetchrow($result);
-
-		// Be sure to free the result after a SELECT query
-		$this->db->sql_freeresult($result);
-
-		// Show we got the result we were looking for
-		return $row;
-	}
+	// private function get_from_ium_reminder($user_id)
+	// {
+	// 	$select_array = array(
+	// 		'user_id' => $user_id,
+	// 	);
+	//
+	// 	// Create the SQL statement
+	// 	$sql = 'SELECT username, remind_counter, previous_sent_date, reminder_sent_date, dont_send
+	// 	FROM ' . $this->table_prefix . $this->table_name . '
+	// 	WHERE ' . $this->db->sql_build_array('SELECT', $select_array);
+	//
+	// 	// Run the query
+	// 	$result = $this->db->sql_query($sql);
+	//
+	// 	// $row should hold the data you selected
+	// 	$row = $this->db->sql_fetchrow($result);
+	//
+	// 	// Be sure to free the result after a SELECT query
+	// 	$this->db->sql_freeresult($result);
+	//
+	// 	// Show we got the result we were looking for
+	// 	return $row;
+	// }
 
 	/**
 	 * Get from database the board default language
@@ -605,7 +575,7 @@ class reminder
 		$ids = (!is_array($id)) ? $ids[] = $id : $ids = $id;
 
 		// reset counter(s)!
-		$sql = 'UPDATE ' . $this->table_prefix . $this->table_name . ' SET remind_counter = 0, request_date = 0, type = "" WHERE '. $this->db->sql_in_set('user_id', $ids);
+		$sql = 'UPDATE ' . USERS_TABLE . ' SET ium_remind_counter = 0, ium_request_date = 0, ium_type = "" WHERE '. $this->db->sql_in_set('user_id', $ids);
 		$this->db->sql_query($sql);
 	}
 
@@ -632,14 +602,4 @@ class reminder
 	 * @param  [string] $id single user id of a newly registered user.
 	 * @return void
 	 */
-
-	public function new_user($id)
-	{
-		if (!$this->user_exist($id))
-		{
-			$sql = 'INSERT INTO ' . $this->table_prefix . $this->table_name . ' (user_id, username)
-			SELECT user_id, username from ' . USERS_TABLE .' WHERE user_id = ' . (int) $id;
-			$this->db->sql_query($sql);
-		}
-	}
 }
