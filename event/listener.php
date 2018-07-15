@@ -14,7 +14,6 @@
 namespace andreask\ium\event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class listener implements EventSubscriberInterface
 {
@@ -24,16 +23,16 @@ class listener implements EventSubscriberInterface
 	protected $config_text;
 	protected $auth;
 	protected $user;
-	protected $container;
 
-	public function __construct(ContainerInterface $container, \phpbb\user $user, \phpbb\config\config $config, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
+	public function __construct($reminder, $ignore_user, \phpbb\user $user, \phpbb\config\config $config, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
-		$this->container 	=	$container;
-		$this->user 		=	$user;
-		$this->config 		=	$config;
+		$this->reminder			= $reminder;
+		$this->ignore_user	= $ignore_user;
+		$this->user 				=	$user;
+		$this->config 			=	$config;
 		$this->config_text	=	$config_text;
-		$this->auth			=	$auth;
-		$this->log			=	$log;
+		$this->auth					=	$auth;
+		$this->log					=	$log;
 	}
 
 	/**
@@ -43,9 +42,7 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.login_box_redirect'				=>	'update_table_ium_reminder_counter',
-			'core.delete_user_after'				=>	'update_table_ium_reminder_user_deleted',
-			'core.user_add_after'					=>	'update_table_ium_new_user',
+			'core.login_box_redirect'				=>	'update_ium_reminder_counter',
 			'core.acp_users_display_overview'		=>	'add_remind_user_option',
 			'core.acp_users_overview_run_quicktool'	=>	'remind_single_user',
 			// 'core.add_log'							=>	'overwrite_log',
@@ -57,40 +54,11 @@ class listener implements EventSubscriberInterface
 	 * @param  array $event user_id of user to reset the counter for.
 	 * @return void
 	 */
-	public function update_table_ium_reminder_counter($event)
+	public function update_ium_reminder_counter($event)
 	{
-		$update = $this->container->get('andreask.ium.classes.reminder');
-		$update->reset_counter($this->user->data['user_id']);
-	}
-
-	/**
-	 * Remove user from ium table when a user is deleted (by admin or by the ext)
-	 * @param  array $event user_id(s)
-	 * @return void
-	 */
-	public function update_table_ium_reminder_user_deleted($event)
-	{
-		$id = $event['user_ids'];
-
-		$delete = $this->container->get('andreask.ium.classes.delete_user');
-		$delete->clean_ium_table($id);
-
-		// Example for debugging...
-		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'deletion mode ' . $mode, time());
-		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'deletion action ' . $action, time());
-		// $this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'deleted user_id ' . $id[0], time());
-	}
-
-	/**
-	 * If a user has registerd succesfuly add him to the table.
-	 * @param  array $event user_id of the user to update in the table.
-	 * @return void
-	 */
-	public function update_table_ium_new_user($event)
-	{
-		$user_id = $event['user_id'];
-		$add = $this->container->get('andreask.ium.classes.reminder');
-		$add->new_user($user_id);
+		// XXX replace container!!!!
+		// $update = $this->container->get('andreask.ium.classes.reminder');
+		$this->reminder->reset_counter($this->user->data['user_id']);
 	}
 
 	/**
@@ -111,8 +79,8 @@ class listener implements EventSubscriberInterface
 		$ignored_groups = $this->config_text->get('andreask_ium_ignored_groups', '[]' );
 		$ignored_groups = json_decode($ignored_groups);
 
-		$ignore = $this->container->get('andreask.ium.classes.ignore_user');
-		$group_ids = $ignore->get_groups($user['user_id']);
+		// $ignore = $this->container->get('andreask.ium.classes.ignore_user');
+		$group_ids = $this->ignore_user->get_groups($user['user_id']);
 
 		if ($this->config['andreask_ium_enable'] && (empty($array_merge)) && (!array_intersect($group_ids, $ignored_groups)))
 		{
@@ -129,9 +97,9 @@ class listener implements EventSubscriberInterface
 
 		if ($action == 'andreask_ium_remind')
 		{
-			$remind = $this->container->get('andreask.ium.classes.reminder');
-			$remind->set_single($user);
-			$remind->send(1, true);
+			// $remind = $this->container->get('andreask.ium.classes.reminder');
+			$this->reminder->set_single($user);
+			$this->reminder->send(1, true);
 		}
 	}
 
