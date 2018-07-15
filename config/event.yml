@@ -2,7 +2,8 @@ services:
     andreask.ium.listener:
         class: andreask\ium\event\listener
         arguments:
-            - '@service_container'
+            - '@andreask.ium.classes.reminder'
+            - '@andreask.ium.classes.ignore_user'
             - '@user'
             - '@config'
             - '@config_text'
