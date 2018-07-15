@@ -25,12 +25,12 @@ class send_reminder extends \phpbb\cron\task\base
 	*
 	* @param \phpbb\config\config $config The config
 	*/
-	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \andreask\ium\classes\reminder $reminder, \andreask\ium\classes\delete_user $delete)
+	public function __construct(\phpbb\config\config $config, \phpbb\user $user, \andreask\ium\classes\reminder $reminder, \andreask\ium\classes\delete_user $delete_user)
 	{
-		$this->config		=	$config;
-		$this->user			=	$user;
-		$this->reminder	= $reminder;
-		$this->delete		= $delete;
+		$this->config				=	$config;
+		$this->user					=	$user;
+		$this->reminder			= $reminder;
+		$this->delete_user	= $delete_user;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class send_reminder extends \phpbb\cron\task\base
 		if ($this->config['andreask_ium_auto_del'])
 		{
 			// $delete_user = $this->container->get('andreask.ium.classes.delete_user');
-			$delete_user = $this->delete;
+			$delete_user = $this->delete_user;
 			$delete_user->auto_delete();
 		}
 	}
