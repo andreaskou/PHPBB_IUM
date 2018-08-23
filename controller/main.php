@@ -73,7 +73,7 @@ class main
 				$this->helper->error($this->user->lang('FORM_INVALID') . $this->usr_back_link( $this->u_action ), 403);
 			}
 			// Make sure confirm is selected
-				if ( $this->request->variable('self_delete_verify', '') != 1)
+			if ( $this->request->variable('self_delete_verify', '') != 1)
 			{
 				return $this->helper->message($this->user->lang('HAVE_TO_VERIFY') . $this->usr_back_link( $this->u_action ));
 			}
