@@ -25,7 +25,6 @@ class delete_user
 	protected $user;
 	protected $user_loader;
 	protected $log;
-	protected $table_name;
 	protected $phpbb_root_path;
 	protected $php_ext;
 
@@ -39,7 +38,7 @@ class delete_user
 	 * @param                                                           $php_ext						Php extension
 	 */
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, $ium_reminder_table, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\log\log $log, $phpbb_root_path, $php_ext)
 	{
 		$this->config			=	$config;
 		$this->db				=	$db;
@@ -47,7 +46,6 @@ class delete_user
 		$this->log				=	$log;
 		$this->php_ext			=	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
-		$this->table_name		=	$ium_reminder_table;
 	}
 
 	private function user_exist($id)
@@ -176,7 +174,7 @@ class delete_user
 				// store for approval and add user to the list.
 				$sql_array = array(
 								'ium_request_date'	=>	time(),
-								'ium_type'			=>	$type,
+								'ium_type'					=>	$type,
 							);
 				$sql = "UPDATE " . USERS_TABLE . "
 						SET ". $this->db->sql_build_array('UPDATE', $sql_array) ."
