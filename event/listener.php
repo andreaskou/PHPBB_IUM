@@ -56,8 +56,6 @@ class listener implements EventSubscriberInterface
 	 */
 	public function update_ium_reminder_counter($event)
 	{
-		// XXX replace container!!!!
-		// $update = $this->container->get('andreask.ium.classes.reminder');
 		$this->reminder->reset_counter($this->user->data['user_id']);
 	}
 
@@ -79,7 +77,6 @@ class listener implements EventSubscriberInterface
 		$ignored_groups = $this->config_text->get('andreask_ium_ignored_groups', '[]' );
 		$ignored_groups = json_decode($ignored_groups);
 
-		// $ignore = $this->container->get('andreask.ium.classes.ignore_user');
 		$group_ids = $this->ignore_user->get_groups($user['user_id']);
 
 		if ($this->config['andreask_ium_enable'] && (empty($array_merge)) && (!array_intersect($group_ids, $ignored_groups)))
@@ -97,7 +94,6 @@ class listener implements EventSubscriberInterface
 
 		if ($action == 'andreask_ium_remind')
 		{
-			// $remind = $this->container->get('andreask.ium.classes.reminder');
 			$this->reminder->set_single($user);
 			$this->reminder->send(1, true);
 		}
