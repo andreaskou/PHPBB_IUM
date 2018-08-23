@@ -126,7 +126,8 @@ class reminder
 				// dirty fix for now, need to find a way for the templates.
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
-					$lang = ( $this->lang_exists($user_instance->get_used_language()) ) ? $user_instance->get_used_language() : $this->info['default_lang'];
+					// $lang = ( $this->lang_exists($user_instance->get_used_language()) ) ? $user_instance->get_used_language() : $this->info['default_lang'];
+					$lang = ( $this->lang_exists($sleeper['user_lang']) ) ? $sleeper['user_lang'] : $this->info['default_lang'];
 				}
 				else
 				{
@@ -148,22 +149,17 @@ class reminder
 
 				if (!is_null($topic_links))
 				{
-					// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $this->language->lang('INCLUDE_USER_TOPICS'), $topic_links)));
-					// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
 					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => $topic_links));
 
 				}
 				if (!is_null($forum_links))
 				{
-					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $this->language->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
-					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => sprintf( $user_instance->lang('INCLUDE_FORUM_TOPICS'), $forum_links)));
 					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
 				}
-				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['random'] != 0 )
+				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['ium_random'] )
 				{
 					$link = PHP_EOL;
-					$link .= generate_board_url() . "/ium/" . $sleeper['random'];
-					// $template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $this->language->lang('FOLLOW_TO_DELETE', $link)));
+					$link .= generate_board_url() . "/ium/" . $sleeper['ium_random'];
 					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
 
@@ -219,7 +215,6 @@ class reminder
 	{
 		// if limit is not set use limit from configuration.
 		$limit = ($limit) ? 'limit ' . $limit : 'limit ' . $this->config['andreask_ium_email_limit'];
-		// $table_name = $this->table_prefix . $this->table_name;
 		$sql_opt = '';
 
 		if ($user)
@@ -513,10 +508,10 @@ class reminder
 				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
 			}
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
-			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['random']))
+			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['ium_random']))
 			{
 				$link = PHP_EOL;
-				$link .= generate_board_url() . "/ium/" . $sleeper['random'];
+				$link .= generate_board_url() . "/ium/" . $sleeper['ium_random'];
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
