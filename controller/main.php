@@ -28,10 +28,9 @@ class main
 	protected $helper;
 	protected $template;
 	protected	$delete_user;
-	protected $table_name;
 	protected $u_action;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user, $ium_table)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user)
 	{
 		$this->config       =   $config;
 		$this->db           =   $db;
@@ -40,7 +39,6 @@ class main
 		$this->helper       =   $helper;
 		$this->template     =   $template;
 		$this->delete_user	=		$delete_user;
-		$this->table_name   =   $ium_table;
 		$this->u_action     =   append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
 
@@ -75,14 +73,14 @@ class main
 				$this->helper->error($this->user->lang('FORM_INVALID') . $this->usr_back_link( $this->u_action ), 403);
 			}
 			// Make sure confirm is selected
-			if ( $this->request->variable('self_delete_verify', '') != 1)
+				if ( $this->request->variable('self_delete_verify', '') != 1)
 			{
 				return $this->helper->message($this->user->lang('HAVE_TO_VERIFY') . $this->usr_back_link( $this->u_action ));
 			}
 
 			// Request to delete user...
 			$delete_me = $this->delete_user;
-			$delete_me->delete($this->user->data['user_id'], 'user');
+			$delete_me->delete(array($this->user->data['user_id']), 'user');
 
 			// log out user.
 			$board_url = generate_board_url(). '/ucp.php?mode=logout&sid='. $this->user->session_id;
@@ -104,14 +102,13 @@ class main
 
 	private function user_check($user, $random)
 	{
-
 		$sql_arr = array(
 			'user_id'   => (int) $user,
-			'random'    =>  $random
+			'ium_random'    =>  $random
 		);
 
-		$sql = 'SELECT user_id, random
-				FROM ' . $this->table_name . '
+		$sql = 'SELECT user_id, ium_random
+				FROM ' . USERS_TABLE . '
 				WHERE ' . $this->db->sql_build_array('SELECT', $sql_arr);
 		$result = $this->db->sql_query($sql);
 		$valid = (bool) $this->db->sql_fetchrow($result);
