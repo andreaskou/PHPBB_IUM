@@ -699,7 +699,7 @@ class main_module
 		}
 
 		// Create the SQL statement
-		$table_name = $table_prefix . 'ium_reminder';
+		// $table_name = $table_prefix . 'ium_reminder';
 
 		$ignore_groups 	= $phpbb_container->get('andreask.ium.classes.ignore_user');
 		$must_ignore 	= $ignore_groups->ignore_groups();
