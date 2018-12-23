@@ -363,6 +363,7 @@ class main_module
 						trigger_error($user->lang('NOT_IGNORED') . adm_back_link($this->u_action), E_USER_NOTICE);
 						break;
 					case 'none':
+						trigger_error($user->lang('SELECT_ACTION') . adm_back_link($this->u_action), E_USER_WARNING);
 						break;
 				}
 			}
