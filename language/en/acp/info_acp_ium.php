@@ -123,6 +123,7 @@ $lang = array_merge(
 	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Approval list of users with a request for deleting their account',
 	'NO_REQUESTS'			=> 'No requests yet',
 	'NO_USER_SELECTED'		=>	'No user selected.',
+	'SELECT_ACTION'			=>	'Please select an action',
 	'IUM_MANAGMENT'			=>	'Inactive User Managment',
 	'IGNORE_USER_LIST'		=>	'Add users to ignore list',
 	'IGNORED_USERS_LIST'	=>	'List of users that are ignored',
