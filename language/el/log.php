@@ -22,9 +22,10 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
-	'SENT_REMINDERS'		=>	'%s reminders were sent.',
-	'USERS_DELETED'			=>	'"%1s" users were deleted, request type : "%2s"',
-	'USER_DELETED'			=>	'User "%1s" was deleted, request type : "%2s"',
-	'SOMETHING_WRONG'		=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
-	'USER_SELF_DELETED'		=>	'A user was self deleted. Configuration for posts was set on "%s"',
+	'SENT_REMINDERS'		=>	'Εστάλησαν %s υπενθυμίσεις.',
+	'USERS_DELETED' => '"%1$s" μέλη διεγράφησαν "<b>%2$s"</b>, τύπος αιτήματος : "<b>%3$s</b>"',
+	'USER_DELETED' => '"Το μέλος "<b>%1$s</b>" διεγράφη, τύπος αιτήματος :"<b>%2$s</b>"',
+	'SOMETHING_WRONG' => 'Κάτι δεν πείγε καλά με το αίτημά σας. Τα ζητούμενα μέλη για διαγραφή δεν ταιριάζουν με τα πραγματικά μέλη στη βάση δεδομένων',
+	'USER_SELF_DELETED' => 'Ένα μέλος διεγράφη αυτόματα. Η ρύθμηση για τις δημοσιεύσεις έχει οριστεί ως "%s"',
+	'SENT_REMINDER_TO' => 'Εστάλησαν υπενθυμίσεις στο χρήστη "% s"',
 ));
