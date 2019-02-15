@@ -23,7 +23,7 @@ if ( empty($lang) || !is_array($lang) )
 
 $lang = array_merge($lang, array(
 	'USER_SELF_DELETE_TITLE'		=>  'Self deletion page.',
-	'USER_SELF_DELETE_EXPLAIN'		=>  'By checking the verify box and clicking on the confirm button you accept to delete your user account in this forum.<br/>All your posts will remain intact but you will no longer be able to connect with your username/password.<br/>If you create an account with the same username previous post will not be connected with the new acount.',
+	'USER_SELF_DELETE_EXPLAIN'		=>  'By checking the verify box and clicking on the confirm button you accept to delete your user account in this forum.<br/>All your posts will remain intact but you will no longer be able to connect with your username/password.<br/>If you create an account with the same username previous post will not be connected with the new account.',
 	'USER_SELF_DELETE_VERIFY'		=>  'I understand the consequencies and I verify',
 	'HAVE_TO_LOGIN'					=>  'we are sorry, but you have to login to see this page.',
 	'HAVE_TO_VERIFY'				=>  'Please check the verification box.',
