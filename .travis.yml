@@ -2,7 +2,7 @@
 # sudo: required
 
 sudo: required
-dist: precise
+# dist: precise
 
 language: php
 
