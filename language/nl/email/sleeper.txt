@@ -9,13 +9,24 @@ Indien je jouw login vergeten bent kan je deze altijd opvragen via de volgende l
 
 {FORGOT_PASS}
 
-Anders kan je altijd de beheerder van het forum bereiken via "{ADMIN_MAIL}".
+Anders kunt u altijd contact opnemen met de beheerder van het forum op deze e-mail "{ADMIN_MAIL}".
+We hopen je snel terug te zien.
 
-Hopelijk zien we je snel terug.
+<!-- IF USR_TPC_LIST -->
+Hieronder enkele links naar onderwerpen die u actief heeft bezocht.
 
 {USR_TPC_LIST}
+<!-- ENDIF -->
+
+<!-- IF USR_FRM_LIST -->
+Hieronder enkele links naar de meest actieve onderwerpen van het forum.
 
 {USR_FRM_LIST}
+<!-- ENDIF -->
 
+<!-- IF SELF_DELETE_LINK -->
+Klik op de volgende link om uw account te verwijderen.
+{SELF_DELETE_LINK}
+<!-- ENDIF -->
 
 {EMAIL_SIG}
