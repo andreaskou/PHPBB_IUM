@@ -4,7 +4,7 @@
     "description": "Inactive User Manager/Reminder for phpBB",
     "version": "1.0.1-rc2",
     "time": "2016-10-07",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-only",
     "authors": [{
         "name": "Andreas Kourtidis",
         "email": "akourtidis@gmail.com",
