@@ -166,7 +166,11 @@ $lang = array_merge(
 
 	// Log
 	'SENT_REMINDER_TO_ADMIN'	=>	'Template "%1$s" was sent to "%2$s"',
-	'SENT_REMINDERS'			=>	'%s reminders were sent.',
+	'SENT_REMINDERS'			=>	array(
+			0	=>	'No reminders was sent',
+			1	=>	'%s reminder was sent.',
+			2	=>	'%s reminders were sent.',
+	),
 	'USERS_DELETED'				=>	'"%1$s" users were deleted "<b>%2$s"</b>, request type : "<b>%3$s</b>"',
 	'USER_DELETED'				=>	'User "<b>%1$s</b>" was deleted, request type : "<b>%2$s</b>"',
 	'SOMETHING_WRONG'			=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
