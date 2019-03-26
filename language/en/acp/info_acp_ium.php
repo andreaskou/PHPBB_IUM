@@ -169,13 +169,12 @@ $lang = array_merge(
 	'SENT_REMINDERS'			=>	array(
 			0	=>	'No reminders was sent',
 			1	=>	'%s reminder was sent.',
-			2	=>	'%s reminders were sent.',
+			2	=>	'%s reminders were sent.'
 	),
 	'USERS_DELETED'				=>	'"%1$s" users were deleted "<b>%2$s"</b>, request type : "<b>%3$s</b>"',
 	'USER_DELETED'				=>	'User "<b>%1$s</b>" was deleted, request type : "<b>%2$s</b>"',
 	'SOMETHING_WRONG'			=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
 	'USER_SELF_DELETED'			=>	'A user was self deleted. Configuration for posts was set on "%s"',
 	'SENT_REMINDER_TO'			=>	'A reminders was sent to user "%s"',
-
-	)
+)
 );
