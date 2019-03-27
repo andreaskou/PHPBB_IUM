@@ -166,7 +166,10 @@ $lang = array_merge(
 
 	// Log
 	'SENT_REMINDER_TO_ADMIN'	=>	'Le modèle "%1$s" a été envoyé à "%2$s"',
-	'SENT_REMINDERS'			=>	'%s rappels ont été envoyés.',
+	'SENT_REMINDERS' => array(
+                         0 => 'Aucun rappel n’a été envoyé',
+                         1 => '%s rappel a été envoyé.',
+                         2 => '%s rappels ont été envoyés.'),
 	'USERS_DELETED'				=>	'"%1$s" Les utilisateurs ont été supprimés "<b>%2$s"</b>, type de demande: "<b>%3$s</b>"',
 	'USER_DELETED'				=>	'L’utilisateur "<b>%1$s</b>" a été supprimé. Type de demande: "<b>%2$s</b>"',
 	'SOMETHING_WRONG'			=>	'Quelque chose n’allait pas avec votre demande. Les utilisateurs demandés pour la suppression ne correspondaient pas aux utilisateurs réels de la base de données',

@@ -29,7 +29,7 @@ $lang = array_merge(
 	'ACP_IUM_TITLE'	=>	'IUM-Erweiterung',
 	'ACP_IUM_TITLE2'	=> 'Inaktive Userliste',
 	'ACP_IUM_APPROVAL_LIST'	=> 'Ignorieren/Löschen Bestätigungsliste',
-
+	
 	// ACP configuration page
 	'ANDREASK_IUM_ENABLE'	=>	'Erweiterte Inaktive Nutzer-Erinnerung anschalten',
 	'ANDREASK_IUM_INTERVAL'	=>	'Intervall',
@@ -52,10 +52,10 @@ $lang = array_merge(
 	'ANDREASK_IUM_INCLUDE_FORUM'				=>	'Einbeziehen',
 	'SELECT_A_FORUM'							=>	'Bitte wähle ein Forum aus',
 	'EXCLUDED_EMPTY'							=>	'Keine ausgeschlossenen Foren ...',
-
+	
 	'IUM_IGNORE_GROUP_MANAGMENT'				=>	'Gruppenmanagement',
 	'ANDREASK_IUM_UPDATE_IGNORE_LIST'			=>	'Ignorieren',
-
+	
 	// acp user overview add option
 	'USER_ADMIN_ANDREASK_IUM_USERS_OVERVIEW_OPTION'	=>	'Erinnerung senden',
 
@@ -76,24 +76,24 @@ $lang = array_merge(
 	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'Eine Test-E-Mail wird gesendet an "%s"',
 	'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Wählen Sie eine Kategorie oder Unterkategorie aus, die <strong>nicht</strong> an Benutzer gesendet werden sollen.',
 	'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Wählen Sie eine Kategorie oder Unterkategorie aus, die an Benutzer gesendet werden sollen.',
-	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Hier können Sie auswählen, welche Gruppe(n) von der Erweiterung ignoriert werden soll(en). Bitte beachten Sie, dass <b> BOTS, ADMINISTRATORS, MODERATOROS und GUESTS </b> ignoriert werden, auch wenn sie hier nicht ausgewählt sind. Es wird jedoch empfohlen, auch hier diese Gruppen auszuwählen!',
+	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Hier können Sie auswählen, welche Gruppe(n) von der Erweiterung ignoriert werden soll(en). Bitte beachten Sie, dass <b> Bots, Administratoren, Globale Moderatoren und Gäste </b> ignoriert werden, auch wenn sie hier nicht ausgewählt sind. Es wird jedoch empfohlen, auch hier diese Gruppen auszuwählen!',
 	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Halte die Strg-Taste (oder ⌘ für Mac) auf der Tastatur gedrückt, um mehrere Gruppen auszuwählen',
 
-
+	
 	// configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In dieser Liste kannst du die Benutzer sehen, die sich registriert haben, aber deren Zugänge inaktiv sind und diejenigen, die das Forum über einen definierten Zeitraum nicht besucht haben.',
 	'ACP_IUM_SETTINGS'	=>	'Einstellungen Inaktive Benutzer-Erinnerung',
 	'ACP_IUM_MAIL_SETTINGS'	=>	'Erinnerungseinstellungen',
 	'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Einstellungen für die Einfügung in die Erinnerung',
 	'ACP_IUM_DANGER'	=>	'Gefahrenbereich',
-
+	
 	// configuration page
 	'INACTIVE_MAIL_SENT_TO'			=>	'Eine Beispielmail für inaktive Benutzer wurde an "%s" gesendet',
 	'SLEEPER_MAIL_SENT_TO'			=>	'Eine Beispielmail für schlafende Benutzer wurde an "%s" gesendet',
 	'SEND_SLEEPER'					=>	'Sendet ein Beispiel für Schläfer',
 	'SEND_INACTIVE'					=>	'Sendet ein Beispiel für inaktive Benutzer',
 	'PLUS_SUBFORUMS'				=>	'+Unterforen',
-
+	
 	// Sort by, options for the inactive users list
 	'ACP_IUM_INACTIVE'	=> array(
 									0	=>	'Aktiv',
@@ -103,7 +103,7 @@ $lang = array_merge(
 									4	=>	'Dauerhaft gesperrt',
 									5	=>	'Zeitweilig gesperrt'),
 	'NEVER_CONNECTED'	=>	'Das Benutzer hat sich nie angemeldet',
-
+	
 	// Inactive users list page
 	'ACP_IUM_NODATE'	=>	'Das Benutzer ist <strong>nicht</strong> deaktiviert',
 	'ACP_USERS_WITH_POSTS'	=>	'Zeige nur Benutzer mit Beiträgen',
@@ -112,11 +112,35 @@ $lang = array_merge(
 	'COUNT'	=>	'Anzahl der Erinnerungsmails',
 	'NO_PREVIOUS_SENT_DATE'	=> 'Keine Erinnerungsmails geschickt',
 	'REMINDER_DATE'	=>	'Letzte Erinnerung geschickt am',
-	'NO_REMINDER_SENT_YET'	=>	'Noch keine Erinnerungsmails geschickt',
-
+	'NO_REMINDER_SENT_YET'	=>	'Noch keine Erinnerungsmails geschickt',	
 	'IUM_INACTIVE_REASON'	=>	'Status',
-
+	'TOTAL_USERS_WITH_DAY_AMOUNT'	=>	'<strong>%1$s</strong> Benutzer insgesamt <i> im gewählten Intervall</i> von "<strong>%2$s</strong>"',
+	
+	
 	// Delete approval page
+	'IGNORE_METHODES'	=>	'Ausschluss',	
+	'IGNORE_METHODE'	=> array(
+		0 =>	'Eingeschlossen',
+		1 =>	'Automatisch',
+		2	=>	'Vom Administrator ausgeschlossen',
+	),
+	'REQUEST_TYPE'			=>	'Löschantrag',
+	'USER_SELECT'		=>	'Auswahl',
+	'SELECT_AN_ACTION'		=>	'Aktion auswählen',	
+	'SELECT_ACTION'			=>	'Bitte eine Aktion auswählen',
+	
+	
+	'REGISTERED'			=>	'Registrierte Benutzer',
+	'GUESTS'				=>	'Gäste',
+	'REGISTERED_COPPA'		=>	'Registrierte COPPA-Benutzer',
+	'GLOBAL_MODERATORS'		=>	'Globale Moderatoren',
+	'BOTS'					=>	'Bots',
+	'NEWLY_REGISTERED'		=>	'Kürzlich registrierte Benutzer',
+	
+ 	'IGNORED_USERS_LIST'	=>	'Liste der ausgeschlossenen Benutzer',	
+	'DONT_IGNORE'		=>	'Einschliessen',	
+	'NOT_IGNORED'		=>	'Benutzer werden nicht mehr ignoriert.',
+
 	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Überprüfung der Löschanträge',
 	'APPROVAL_LIST_PAGE_TITLE'	=> 'Überprüfung der Löschanträge',
 	'IUM_APPROVAL_LIST_EXPLAIN'	=> 'Liste der Benutzer, die eine Löschung beantragt haben',
@@ -124,14 +148,16 @@ $lang = array_merge(
 	'NO_USER_SELECTED'		=>	'Keine Benutzer markiert.',
 	'IUM_MANAGMENT'			=>	'Management der inaktiven Benutzer',
 	'IGNORE_USER_LIST'		=>	'Benutzer ausschliessen',
-	'IGNORED_USERS_LIST'	=>	'Liste der ignorierten Benutzer',
+	
 	'ADD_IGNORE_USER'		=>	'Der Liste hinzufügen',
 	'REMOVE_IGNORE_USER'	=>	'Von der Liste entfernen',
 	'DELETED_SUCCESSFULLY'	=>	'Erfolgreich gelöscht.',
-	'REQUEST_TYPE'			=>	'Anfragetyp',
-	'APPROVE'				=>	'Bestätigen',
-	'NO_USER_TYPED'			=>	'Kein Benutzer wurde eingestuft',
-
+	
+	'APPROVE'				=>	'Benutzer löschen',
+	'NO_USER_TYPED'			=>	'Kein Benutzer eingegeben!',
+	'USER_NOT_FOUND'		=>	'Benutzer %s nicht gefunden!',
+	'RESET_REMINDERS'		=>	'Erfolgreich zurückgesetzt.',
+	
 	// Sort Lists
 	'COUNT_BACK'	=>	'im Intervall <strong>VON</strong> Tagen/Monaten/Jahren und zurück',
 	'ACP_DESCENDING'	=>	'Absteigend',
@@ -149,5 +175,17 @@ $lang = array_merge(
 	'THREE_YEARS'	=>	'drei Jahre',
 	'FIVE_YEARS'	=>	'fünf Jahre',
 	'SEVEN_YEARS'	=>	'sieben Jahre',
-	'DECADE'		=>'ein Jahrzehnt',)
+	'DECADE'		=>'ein Jahrzehnt',
+
+	// Log
+	'SENT_REMINDER_TO_ADMIN'	=>	'Vorlage "%1$s" wurde an "%2$s" gesendet',
+	'SENT_REMINDERS'			=>	'%s Erinnerung(en) wurden gesendet.',
+	'USERS_DELETED'				=>	'"%1$s" Benutzer wurden gelöscht"<b>%2$s"</b>, Löschantrag: "<b>%3$s</b>"',
+	'USER_DELETED'				=>	'Benutzer "<b>%1$s</b>" wurde gelöscht, Löschantrag: "<b>%2$s</b>"',
+	'SOMETHING_WRONG'			=>	'Mit Ihrer Anfrage war etwas nicht in Ordnung. Die zum Löschen angeforderten Benutzer stimmten nicht mit den tatsächlichen Benutzern in der Datenbank überein!',
+	'USER_SELF_DELETED'			=>	'Ein Benutzer hat sich selbst gelöscht. Konfiguration für Beiträge war auf "%s" eingestellt',
+	'SENT_REMINDER_TO'			=>	'Eine Erinnerung wurde an Benutzer "%s" gesendet.',
+
+	)
+
 );
