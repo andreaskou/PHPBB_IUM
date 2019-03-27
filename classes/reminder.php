@@ -201,7 +201,6 @@ class reminder
 		}
 
 		// Log it and release the user list.
-		$this->user->add_lang_ext('andreask/ium', 'log');
 		$this->log->add('admin', 54, $this->user->ip, 'SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
 		unset( $this->inactive_users );
 	}
