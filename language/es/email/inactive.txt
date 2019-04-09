@@ -1,0 +1,20 @@
+Asunto: ¿Hubo algún problema?
+
+Hola, {USERNAME}
+
+Vemos que te has registrado en : {REG_DATE}
+Pero desde entonces no ha habido actividad.
+
+En caso de que haya perdido sus credenciales, puede recuperarlas desde el siguiente enlace.
+
+{FORGOT_PASS}
+
+Si nunca recibió el correo electrónico de activación, haga clic en el siguiente enlace para enviar un nuevo correo de activación.
+
+{SEND_ACT_AG}
+
+De lo contrario, siempre puedes contactar con el administrador del foro. {ADMIN_MAIL}.
+
+Esperamos volver a verte pronto.
+
+{EMAIL_SIG}
