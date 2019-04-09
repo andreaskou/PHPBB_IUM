@@ -201,7 +201,7 @@ class reminder
 		}
 
 		// Log it and release the user list.
-		$this->log->add('admin', 54, $this->user->ip, 'SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
 		unset( $this->inactive_users );
 	}
 
