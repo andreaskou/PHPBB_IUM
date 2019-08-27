@@ -1,8 +1,8 @@
-Subject: We've missed you!
+Subject: Ci sei mancato!
 
 Ciao, {USERNAME}
 
-Abbiamo constatato che la tua ultima visita al sito {SITE_NAME} è stata il  "{LAST_VISIT}".
+Abbiamo constatato che la tua ultima visita al sito {SITE_NAME} è stata il "{LAST_VISIT}".
 
 E' passato parecchio tempo, e vorremmo farti sapere che speriamo di rivederti presto!
 
