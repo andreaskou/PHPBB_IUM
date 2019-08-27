@@ -1,0 +1,33 @@
+Subject: Ci sei mancato!
+
+Ciao, {USERNAME}
+
+Abbiamo constatato che la tua ultima visita al sito {SITE_NAME} è stata il "{LAST_VISIT}".
+
+E' passato parecchio tempo, e vorremmo farti sapere che speriamo di rivederti presto!
+
+Nel caso avessi smarrito le tue credenziali, puoi recuperarle in qualsiasi momemto usando i collegamenti sottostanti.
+
+{FORGOT_PASS}
+
+Se necessario, puoi sempre contattare l'amministratore del forum all'indirizzo di posta elettronica "{ADMIN_MAIL}".
+
+
+<!-- IF USR_TPC_LIST -->
+Di seguito alcuni link a discussioni a cui hai partecipato
+
+{USR_TPC_LIST}
+<!-- ENDIF -->
+
+<!-- IF USR_FRM_LIST -->
+Di seguito alcuni link alle discussioni più attive.
+
+{USR_FRM_LIST}
+<!-- ENDIF -->
+
+<!-- IF SELF_DELETE_LINK -->
+Fai click sul link seguente per cancellare il tuo account
+{SELF_DELETE_LINK}
+<!-- ENDIF -->
+
+{EMAIL_SIG}

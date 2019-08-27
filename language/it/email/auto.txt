@@ -1,0 +1,11 @@
+Subject: Il tuo account è stato cancellato da {SITENAME}.
+
+Ciao, {USER_NAME}
+
+Il tuo account è stato cancellato.
+
+La ragione per questa cancellazione è che non hai eseguito il login da più di {INTERVAL_DAYS_SUM} giorni su "{SITENAME}".
+
+Se lo desideri, puoi registrarti nuovamente
+
+{EMAIL_SIG}
