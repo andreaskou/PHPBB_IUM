@@ -211,7 +211,7 @@ class delete_user
 		$past = strtotime($present->format("y-m-d h:i:s"));
 
 		$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
-				WHERE ium_type="auto" AND ium_request_date < ' . (int) $past;
+				WHERE '. $this->db->sql_in_set('ium_type', 'auto') .' AND ium_request_date < ' . (int) $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
@@ -263,7 +263,6 @@ class delete_user
 		$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 		$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
 		$messenger->headers('X-AntiAbuse: User_id - 2');
-		// $messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
 
 		// mail content...
 		$messenger->from($this->config['board_contact']);
