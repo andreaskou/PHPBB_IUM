@@ -15,7 +15,6 @@ namespace andreask\ium\classes;
 
 use \DateTime;
 use \DateInterval;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class reminder
 {
@@ -25,37 +24,39 @@ class reminder
 	protected $user;
 	protected $user_loader;
 	protected $log;
-	protected	$top_topics;
+	protected $top_topics;
 	protected $ignore_user;
 	protected $request;
 	protected $table_prefix;
 	protected $phpbb_root_path;
 	protected $php_ext;
 	protected $table_name;
+	protected $controller_helper;
 
 	/**
 	*
-	* @param \phpbb\config\config                                     	$config				PhpBB Config
+	* @param \phpbb\config\config 										$config				PhpBB Config
 	* @param \phpbb\db\driver\driver_interface                        	$db					PhpBB Database
 	* @param \phpbb\user                                              	$user				PhpBB User
 	* @param \phpbb\log\log                                           	$log				PhpBB Log
-	* @param \phpbb\request\request																			$request			PhpBB request
+	* @param \phpbb\request\request										$request			PhpBB request
 	* @param                                                          	$table_prefix		PhpBB table prefix
 	* @param                                                          	$phpbb_root_path	PhpBB root path
 	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, \phpbb\controller\helper $controller_helper, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
-		$this->db								=	$db;
-		$this->user							=	$user;
-		$this->user_loader			=	$user_loader;
+		$this->db				=	$db;
+		$this->user				=	$user;
+		$this->user_loader		=	$user_loader;
 		$this->log              =	$log;
-		$this->top_topics				= $top_topics;
-		$this->ignore_user			= $ignore_user;
-		$this->request					=	$request;
-		$this->table_prefix			=	$table_prefix;
+		$this->top_topics		=	$top_topics;
+		$this->ignore_user		=	$ignore_user;
+		$this->request			=	$request;
+		$this->table_prefix		=	$table_prefix;
+		$this->ctrl_helper		=	$controller_helper;
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
 	}
@@ -67,7 +68,6 @@ class reminder
 
 	public function send($limit, $single = false)
 	{
-
 		if ($single)
 		{
 			$user = array_shift($this->inactive_users);
@@ -126,8 +126,7 @@ class reminder
 				// dirty fix for now, need to find a way for the templates.
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
-					// $lang = ( $this->lang_exists($user_instance->get_used_language()) ) ? $user_instance->get_used_language() : $this->info['default_lang'];
-					$lang = ( $this->lang_exists($sleeper['user_lang']) ) ? $sleeper['user_lang'] : $this->info['default_lang'];
+					$lang = ( $this->lang_exists($sleeper['user_lang']) ) ? $sleeper['user_lang'] : $this->config['default_lang'];
 				}
 				else
 				{
@@ -144,7 +143,7 @@ class reminder
 					'REG_DATE'		=>	date('d-m-Y', $sleeper['user_regdate']),
 					'SIGNATURE'		=>	$this->config['board_email_sig'],
 					'ADMIN_MAIL'	=>	$this->config['board_contact'],
-					'URL'					=>	generate_board_url(),
+					'URL'			=>	generate_board_url(),
 				);
 
 				if (!is_null($topic_links))
@@ -159,7 +158,7 @@ class reminder
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['ium_random'] )
 				{
 					$link = PHP_EOL;
-					$link .= generate_board_url() . "/ium/" . $sleeper['ium_random'];
+					$link .= generate_board_url() . $this->ctrl_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null);
 					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
 
@@ -218,7 +217,7 @@ class reminder
 
 		if ($user)
 		{
-			$sql_opt .= ' AND user_id = ' . $user;
+			$sql_opt .= ' AND user_id = ' . (int) $user;
 		}
 
 		if (!$user)
@@ -247,10 +246,10 @@ class reminder
 
 		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type, ium_request_type
 								FROM '. USERS_TABLE . '
-								WHERE user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ') ' . $sql_opt . ' ' . $must_ignore .'
-								ORDER BY user_regdate ASC ' . $limit;
+								WHERE '. $this->db->sql_in_set('user_id', '(SELECT ban_userid FROM '. BANLIST_TABLE .')', true) . $sql_opt . ' ' . $must_ignore .'
+								ORDER BY user_regdate ASC';
 
-		$result = $this->db->sql_query($sql);
+		$result = ($limit) ? $this->db->sql_query_limit($sql, $limit) : $this->db-sql_query($sql);
 
 		$inactive_users = [];
 
@@ -340,76 +339,6 @@ class reminder
 	}
 
 	/**
-	 * Check if user exist in ium_reminder
-	 * @param $user_id	User id to search.
-	 * @return bool
-	 */
-
-	private function user_exist($user_id)
-	{
-		$sql = 'SELECT COUNT(user_id) as user_count
-		FROM ' . $this->table_prefix . $this->table_name . '
-		WHERE user_id = ' . (int) $user_id;
-
-		$result = $this->db->sql_query($sql);
-		$give_back = (bool) $this->db->sql_fetchfield('user_count');
-		$this->db->sql_freeresult($result);
-
-		// Return true if user found:
-		return $give_back;
-	}
-
-	/**
-	 * Get rows of users from ium_reminder table
-	 * @param  array $user_id User id(s)
-	 * @return array          rows of users
-	 */
-
-	// private function get_from_ium_reminder($user_id)
-	// {
-	// 	$select_array = array(
-	// 		'user_id' => $user_id,
-	// 	);
-	//
-	// 	// Create the SQL statement
-	// 	$sql = 'SELECT username, remind_counter, previous_sent_date, reminder_sent_date, dont_send
-	// 	FROM ' . $this->table_prefix . $this->table_name . '
-	// 	WHERE ' . $this->db->sql_build_array('SELECT', $select_array);
-	//
-	// 	// Run the query
-	// 	$result = $this->db->sql_query($sql);
-	//
-	// 	// $row should hold the data you selected
-	// 	$row = $this->db->sql_fetchrow($result);
-	//
-	// 	// Be sure to free the result after a SELECT query
-	// 	$this->db->sql_freeresult($result);
-	//
-	// 	// Show we got the result we were looking for
-	// 	return $row;
-	// }
-
-	/**
-	 * Get from database the board default language
-	 * @return string lang_iso of board
-	 */
-
-	private function get_board_lang()
-	{
-		$sql = 'SELECT lang_iso
-				FROM ' . LANG_TABLE;
-		$result = $this->db->sql_query($sql);
-
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$lang = $row;
-		}
-		$this->db->sql_freeresult($result);
-
-		return $lang;
-	}
-
-	/**
 	 * Check if language file exist
 	 * @param  string $user_lang user language preference
 	 * @return bool		true or false
@@ -437,7 +366,7 @@ class reminder
 	{
 
 		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason
-				FROM ' . USERS_TABLE . ' WHERE user_id = '. $id ;
+				FROM ' . USERS_TABLE . ' WHERE user_id = '. (int) $id ;
 
 		// Run the query
 		$result = $this->db->sql_query($sql);
@@ -461,7 +390,6 @@ class reminder
 			// Set the user topic links first.
 			$topic_links = null;
 
-			// $admin_fake_last_visit = strtotime('-' . $this->config['andreask_ium_interval'] .' days');
 			$admin_fake_last_visit = strtotime('-356 days');
 			// If there are topics then prepare them for the e-mail.
 			if ($top_user_topics = $topics->get_user_top_topics( $sleeper['user_id'], $admin_fake_last_visit ))
@@ -510,7 +438,7 @@ class reminder
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['ium_random']))
 			{
 				$link = PHP_EOL;
-				$link .= generate_board_url() . "/ium/" . $sleeper['ium_random'];
+				$link .= generate_board_url() . $this->ctrl_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null);
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
