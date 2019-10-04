@@ -403,7 +403,7 @@ class main_module
 				{
 					$not_found = implode(', ', array_map(function($un)
 						{
-							return $un['username'];
+							return $un;
 						} , $result));
 					trigger_error($user->lang('USER_NOT_FOUND', $not_found) . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}

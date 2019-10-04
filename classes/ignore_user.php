@@ -37,34 +37,22 @@ class ignore_user
 
 	public function exist($users)
 	{
-		$user_list = [];
-		$not_exist = [];
-		$user_count = 0;
-		$not_exist_count = 0;
 
-		foreach ($users as $user)
+		$sql = 'SELECT user_id, username FROM '. USERS_TABLE .' WHERE '. $this->db->sql_in_set('username', $users);
+		$result = $this->db->sql_query($sql);
+		$users_found = $this->db->sql_fetchrowset($result);
+
+		foreach ($users_found as $key => $user)
 		{
-			$sql = 'SELECT user_id, username FROM ' . USERS_TABLE . " WHERE username = '" . $this->db->sql_escape($user) . "'";
-			$result = $this->db->sql_query($sql);
-			$user_fetch = $this->db->sql_fetchrow($result);
-
-			// For any user that was not found, store them.
-			if (!$user_fetch)
+			if (($key = array_search($user['username'], $users )) !== null)
 			{
-				$not_exist[$not_exist_count]['username'] = $user;
-				$not_exist_count++;
+				unset($users[$key]);
 			}
-			else if ($user !== $user_fetch['username'])
-			{
-				$not_exist[$not_exist_count]['username'] = $user;
-				$not_exist_count++;
-			}
-
-			$this->db->sql_freeresult($result);
 		}
-		if ($not_exist)
+
+		if ($users)
 		{
-			return $not_exist;
+			return $users;
 		}
 		return true;
 	}
@@ -86,30 +74,13 @@ class ignore_user
 		*/
 
 		$sql_query = 'SELECT user_id, username
-									FROM ' . USERS_TABLE . ' WHERE ' .
-									$this->db->sql_in_set('username', $username ) . $this->ignore_groups();
+						FROM ' . USERS_TABLE . ' WHERE ' .
+						$this->db->sql_in_set('username', $username ) . $this->ignore_groups();
 
-
-		// $sql_array = array(
-		// 	'SELECT'	=> 'p.user_id, p.username',
-		// 	'FROM'		=> array(
-		// 		USERS_TABLE =>	'p',
-		// 		),
-		// 	'LEFT_JOIN' => array(
-		// 		array(
-		// 			'FROM'	=> array($this->table_name	=>	'r'),
-		// 			'ON'	=>	'p.user_id = r.user_id',
-		// 			)
-		// 		),
-		// 	'WHERE'	=> $this->db->sql_in_set('p.username', $username ) . $this->ignore_groups()
-		// 	. ' AND username is null');
-
-		// $sql = $this->db->sql_build_query('SELECT', $sql_array);
-		// $result = $this->db->sql_query($sql);
 		$result = $this->db->sql_query($sql_query);
-		$rows = [];
 
 		// Store in an array.
+		$rows = [];
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$rows[] = $row;
@@ -117,9 +88,7 @@ class ignore_user
 
 		// Always free the results
 		$this->db->sql_freeresult($result);
-		$clean = [];
 
-		// if the above situation did not ocured just update, since all the users exist already.
 		foreach ($rows as $user)
 		{
 			$this->update_user($user, $mode);
@@ -141,7 +110,6 @@ class ignore_user
 			$username = $this->get_user_username($user);
 		}
 		$username = ($user_id) ? $username : $user;
-		// $username = ($user_id) ? array_shift($username) : $user;
 		$dont_send = $action;
 
 		$data = array ('ium_dont_send' => $action);
@@ -207,8 +175,8 @@ class ignore_user
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
 		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
-				  		AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) .'
-							AND user_inactive_reason not in ('. INACTIVE_MANUAL .') AND user_id > ' . ANONYMOUS . $ignore;
+				  AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) .'
+				  AND ' . $this->db->sql_in_set('user_inactive_reason', INACTIVE_MANUAL, true) .' AND user_id > ' . ANONYMOUS . $ignore;
 
 		return $text;
 	}
