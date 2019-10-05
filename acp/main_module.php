@@ -280,17 +280,17 @@ class main_module
 
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('inactive', array(
-					'USERNAME' 						=> $row['username'],
-					'JOINED' 							=> $user->format_date($row['user_regdate']),
-					'POSTS' 							=> ($row['user_posts']) ? $row['user_posts'] : 0,
-					'LAST_VISIT' 					=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
-					'INACTIVE_DATE' 			=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
-					'REASON' 							=> $row['user_inactive_reason'],
-					'COUNT' 							=> ($row['ium_remind_counter']) ? $row['ium_remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
+					'USERNAME' 				=> $row['username'],
+					'JOINED' 				=> $user->format_date($row['user_regdate']),
+					'POSTS' 				=> ($row['user_posts']) ? $row['user_posts'] : 0,
+					'LAST_VISIT' 			=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
+					'INACTIVE_DATE' 		=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
+					'REASON' 				=> $row['user_inactive_reason'],
+					'COUNT' 				=> ($row['ium_remind_counter']) ? $row['ium_remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
 					'LAST_SENT_REMINDER' 	=> ($row['ium_previous_sent_date']) ? $user->format_date($row['ium_previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
-					'REMINDER_DATE' 			=> ($row['ium_reminder_sent_date']) ? $user->format_date($row['ium_reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
-					'IGNORE_USER' 				=> $row['ium_dont_send'],
-					'LINK_TO_USER'				=> $link,
+					'REMINDER_DATE' 		=> ($row['ium_reminder_sent_date']) ? $user->format_date($row['ium_reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
+					'IGNORE_USER' 			=> $row['ium_dont_send'],
+					'LINK_TO_USER'			=> $link,
 				));
 			}
 		}
