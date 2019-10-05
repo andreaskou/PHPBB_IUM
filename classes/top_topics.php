@@ -21,7 +21,7 @@ class top_topics
 	protected $db;
 	protected $config;
 	protected $config_text;
-	protected $exclude_forums;
+	protected $excluded_forums;
 	protected $auth;
 
 	public function __construct(\phpbb\config\config $config,\phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db)
@@ -30,11 +30,6 @@ class top_topics
 		$this->config_text		=	$config_text;
 		$this->auth				=	$auth;
 		$this->db				=	$db;
-		$forum_list				=	$this->config_text->get('andreask_ium_ignore_forum','');
-		if ($forum_list != null)
-		{
-			$this->exclude_forums	=	array_map('intval', json_decode($forum_list, '[]'));
-		}
 	}
 
 	// Set the iser_id
@@ -59,9 +54,10 @@ class top_topics
 
 		if ( $this->user_post_count($this->user_id) > $this->config['andreask_ium_top_user_threads_count'])
 		{
-			if (!empty($this->exclude_forums))
+			$this->exclude_forums();
+			if (!empty($this->excluded_forums))
 			{
-				$exclude = 'AND '. $this->db->sql_in_set('forum_id', $this->exclude_forums, true);
+				$exclude = 'AND '. $this->db->sql_in_set('forum_id', $this->excluded_forums, true);
 			}
 			else
 			{
@@ -112,7 +108,6 @@ class top_topics
 			{
 				return null;
 			}
-
 			foreach ($active_topics as $key => &$topic)
 			{
 				if ( !$this->user_access($topic['forum_id']) )
@@ -120,16 +115,30 @@ class top_topics
 					// delete if user does not have access to the topic any more, I just couldn't find a better place to do this.
 					unset($active_topics[$key]);
 				}
-				else
-				{
-					// else get the clean topic's title.
-					$sql = 'SELECT topic_title as title
-						FROM ' . TOPICS_TABLE . '
-						WHERE topic_id = ' . (int) $topic['topic_id'];
+			}
+			if($active_topics)
+			{
+				$topic_ids = array_column($active_topics, 'topic_id');
 
-					$result = $this->db->sql_query($sql);
-					$topic['topic_title'] = (string) htmlspecialchars_decode($this->db->sql_fetchfield('title'));
-					$this->db->sql_freeresult($result);
+				// else get the clean topic's title.
+				$sql = 'SELECT topic_id, topic_title
+				FROM ' . TOPICS_TABLE . '
+				WHERE '. $this->db->sql_in_set('topic_id', $topic_ids);
+
+				$result = $this->db->sql_query($sql);
+				$topic_titles = $this->db->sql_fetchrowset($result);
+
+				$this->db->sql_freeresult($result);
+
+				foreach ($active_topics as $key => $topics)
+				{
+					foreach ($topic_titles as $title)
+					{
+						if($topics['topic_id'] == $title['topic_id'])
+						{
+							$active_topics[$key]['topic_title'] = (string) htmlspecialchars_decode($title['topic_title']);
+						}
+					}
 				}
 			}
 			return $active_topics;
@@ -148,10 +157,10 @@ class top_topics
 		}
 
 		$this->set_id_and_date($id, $last_visit);
-
-		if (!empty($this->exclude_forums))
+		$this->exclude_forums();
+		if (!empty($this->excluded_forums))
 		{
-			$exclude = 'AND '. $this->db->sql_in_set('forum_id', $this->exclude_forums, true);
+			$exclude = 'AND '. $this->db->sql_in_set('forum_id', $this->excluded_forums, true);
 		}
 		else
 		{
@@ -191,18 +200,34 @@ class top_topics
 				// delete if user does not have access to the topic any more, I just couldn't find a better place to do this.
 				unset($active_t_row[$key]);
 			}
-			else
-			{
-				// else complete the puzzle.
-				$sql = 'SELECT topic_title as title
-					FROM ' . TOPICS_TABLE . '
-					WHERE topic_id = ' . (int) $topic['topic_id'];
-
-				$result = $this->db->sql_query($sql);
-				$topic['topic_title'] = (string) htmlspecialchars_decode($this->db->sql_fetchfield('title'));
-				$this->db->sql_freeresult($result);
-			}
 		}
+
+		if (empty($active_t_row))
+		{
+			return null;
+		}
+
+		$topic_ids = array_column($active_t_row, 'topic_id');
+
+			// else complete the puzzle.
+			$sql = 'SELECT topic_id, topic_title
+			FROM ' . TOPICS_TABLE . '
+			WHERE ' . $this->db->sql_in_set('topic_id', $topic_ids);
+
+			$result = $this->db->sql_query($sql);
+			$active_t_titles =  $this->db->sql_fetchrowset($result);
+			$this->db->sql_freeresult($result);
+
+			foreach ($active_t_row as $key => $row)
+			{
+				foreach ($active_t_titles as $title)
+				{
+					if ($row['topic_id'] == $title['topic_id'])
+					{
+						$active_t_row[$key]['topic_title'] = (string) htmlspecialchars_decode($title['topic_title']);
+					}
+				}
+			}
 		return $active_t_row;
 	}
 
@@ -235,5 +260,14 @@ class top_topics
 		$data = $this->auth->obtain_user_data($this->user_id);
 		$this->auth->acl($data);
 		return $this->auth->acl_get('f_read', $forum_id);
+	}
+
+	private function exclude_forums()
+	{
+		$forum_list	=	$this->config_text->get('andreask_ium_ignore_forum','');
+		if ($forum_list != null)
+		{
+			$this->excluded_forums	=	array_map('intval', json_decode($forum_list, '[]'));
+		}
 	}
 }
