@@ -68,9 +68,8 @@ class ignore_user
 	public function ignore_user($username, $mode = 1)
 	{
 		/**
-		*	We have to check if the given users exist or not in custome table 'ium_reminder'
-		*	This is done by doing left join USERS_TABLE and ium_reminder. and selecting users
-		*	that are null (don't exist) on ium_reminder.
+		*	We have to check if the given users exist or not
+		*	This is done by looking USERS_TABLE. And selecting users
 		*/
 
 		$sql_query = 'SELECT user_id, username
@@ -79,20 +78,11 @@ class ignore_user
 
 		$result = $this->db->sql_query($sql_query);
 
-		// Store in an array.
-		$rows = [];
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$rows[] = $row;
-		}
-
+		$user = $this->db->sql_fetchrowset($result);
 		// Always free the results
 		$this->db->sql_freeresult($result);
 
-		foreach ($rows as $user)
-		{
-			$this->update_user($user, $mode);
-		}
+		$this->update_user($user, $mode);
 	}
 
 	 /**
@@ -109,13 +99,17 @@ class ignore_user
 		{
 			$username = $this->get_user_username($user);
 		}
-		$username = ($user_id) ? $username : $user;
-		$dont_send = $action;
+		else
+		{
+			$username = array_column($user, 'username');
+		}
 
+		$dont_send = $action;
 		$data = array ('ium_dont_send' => $action);
 		$sql = 'UPDATE ' . USERS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $data) . '
 				WHERE '. $this->db->sql_in_set('username', $username);
+
 		$this->db->sql_query($sql);
 	}
 
