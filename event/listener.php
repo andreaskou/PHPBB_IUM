@@ -23,6 +23,8 @@ class listener implements EventSubscriberInterface
 	protected $config_text;
 	protected $auth;
 	protected $user;
+	protected $reminder;
+	protected $ignore_user;
 
 	public function __construct($reminder, $ignore_user, \phpbb\user $user, \phpbb\config\config $config, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
