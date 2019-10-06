@@ -163,10 +163,7 @@ class reminder
 				}
 
 				$messenger = new \messenger(false);
-				// $xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->language->lang('ADMINISTRATOR');
 				$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $user_instance->lang('ADMINISTRATOR');
-				// $xhead_username = ($this->config['board_contact_name']) ? mail_encode($this->config['board_contact_name']) : mail_encode($user_instance->lang('ADMINISTRATOR'));
-				// mail headers
 				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 				$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
 				$messenger->headers('X-AntiAbuse: User_id - 2');
