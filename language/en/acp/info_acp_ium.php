@@ -46,6 +46,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_INCLUDED_FORUMS'			=>	'Included forums',
 	'ANDREASK_IUM_EXCLUDE_FORUM'			=>	'Exclude',
 	'ANDREASK_IUM_GROUP_IGNORE'				=>	'Ignore Groups',
+	'EMAILS'								=>	'E-mails',
 
 	'ANDREASK_IUM_EXCLUDED_FORUMS'				=>	'Excluded forums',
 	'ANDREASK_IUM_INCLUDE_FORUM'				=>	'Include',
