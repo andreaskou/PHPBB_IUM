@@ -27,6 +27,7 @@ class main_module
 		{
 			$this->tpl_name 	= 'acp_ium_body';
 			$this->page_title 	= $user->lang('ACP_IUM_TITLE');
+			$user->add_lang_ext('andreask/ium', 'acp_ium_config');
 
 			$form_key = 'andreask_ium';
 
@@ -156,7 +157,9 @@ class main_module
 		{
 			$this->tpl_name = 'acp_ium_inactive_users';
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
+			$user->add_lang_ext('andreask/ium', 'inactive_user_list');
 			$user->add_lang('memberlist');
+
 
 			$start 			= $request->variable('start', 0);
 			$limit 			= $request->variable('users_per_page', 20);
@@ -305,6 +308,8 @@ class main_module
 			$this->tpl_name		= 'acp_ium_approval_list';
 			$this->page_title	= $user->lang('ACP_IUM_APPROVAL_LIST_TITLE');
 			$user->add_lang('memberlist');
+			$user->add_lang_ext('andreask/ium', 'ignore_delete_list');
+
 
 			if ( $request->is_set_post('approve') )
 			{
