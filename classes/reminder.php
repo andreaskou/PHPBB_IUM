@@ -404,7 +404,7 @@ class reminder
 			}
 
 			// dirty fix for now, need to find a way for the templates.
-			$lang = ( $this->lang_exists($this->user->user_lang) ) ? $this->user->user_lang : $this->config['default_lang'];
+			$lang = ( $this->lang_exists($this->user->data['user_lang']) ) ? $this->user->data['user_lang'] : $this->config['default_lang'];
 
 			// add template variables
 			$template_ary	=	array(
