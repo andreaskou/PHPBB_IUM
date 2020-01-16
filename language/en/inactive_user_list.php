@@ -69,6 +69,5 @@ $lang = array_merge(
 	'FIVE_YEARS'	=>	'Five Years',
 	'SEVEN_YEARS'	=>	'Seven Years',
 	'DECADE'		=>	'One Decade',
-
-)
+	)
 );

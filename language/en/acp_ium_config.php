@@ -43,7 +43,6 @@ $lang = array_merge(
 		'ACP_IUM_MAIL_INCLUDE_SETTINGS'	=>	'Reminder Include Settings',
 		'ACP_IUM_DANGER'	=>	'Danger Area',
 
-
         'ANDREASK_IUM_EXCLUDED_FORUMS'				=>	'Excluded forums',
         'ANDREASK_IUM_INCLUDE_FORUM'				=>	'Include',
         'SELECT_A_FORUM'							=>	'Please select a forum',
@@ -60,7 +59,6 @@ $lang = array_merge(
 		'ANDREASK_IUM_SELF_DELETE_EXPLAIN'	=>	'If enabled, a link to a page "<strong>board_url/ium/{random_key}</strong>" will be included to user and they will be able to self delete their account.',
 		'ANDREASK_IUM_DELETE_APPROVE_EXPLAIN'	=>	'If enabled all self delete request will have to be approved by the administrator.',
 		'ANDREASK_IUM_KEEP_POSTS_EXPLAIN'	=>	'"Yes" will delete user but will <strong>keep</strong> the post, "No" will delete the posts of the user as well.',
-		'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'	=>	'Here you can manage the users that you want to ignore (don\'t send reminder) or remove them from the ignore list.<br/><strong>Each user in a new line.</strong><br/>Note, the following groups are <strong>ignored by default</strong> : 1. GUESTS, 4. GLOBAL_MODERATORS, 5. ADMINISTRATOR and 6. BOTS',
 		'ANDREASK_IUM_AUTO_DEL_EXPLAIN'			=>	'Users will be autodeleted after a given amount of days if they do not return after the 3 reminders.',
 		'ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN'	=>	'Amount of days to wait until auto delete a user after the requested day.',
 		'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'A test e-mail will be sent to "%s"',
