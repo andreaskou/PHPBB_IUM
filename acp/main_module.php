@@ -770,11 +770,7 @@ class main_module
 
 		$result = $db->sql_query($sql);
 
-		$groups = [];
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$groups[] = $row;
-		}
+		$groups = $db->sql_fetchrowset($result);
 		$db->sql_freeresult($result);
 
 		return $groups;
