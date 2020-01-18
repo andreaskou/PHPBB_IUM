@@ -19,15 +19,13 @@ class ignore_user
 	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
 	protected $auth;			/** Auth class to get admins and mods */
-	protected $table_name;		/** Custome table for ease of use */
 
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log, $ium_reminder_table)
+	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
 		$this->db				=	$db;
 		$this->log				=	$log;
 		$this->auth				=	$auth;
 		$this->config_text		=	$config_text;
-		$this->table_name		=	$ium_reminder_table;
 	}
 
 	/**
