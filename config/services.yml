@@ -1,5 +1,4 @@
 imports:
-    - { resource: tables.yml }
     - { resource: event.yml }
 services:
     andreask.ium.cron.send_reminder:
@@ -51,7 +50,6 @@ services:
             - '@config_text'
             - '@auth'
             - '@log'
-            - '%andreask.ium.tables.reminder_table%'
     andreask.ium.controller:
         class: andreask\ium\controller\main
         arguments:
@@ -62,4 +60,3 @@ services:
             - '@controller.helper'
             - '@template'
             - '@andreask.ium.classes.delete_user'
-            - '%andreask.ium.tables.reminder_table%'
