@@ -21,14 +21,14 @@ class main
 	 *
 	 */
 
-	protected $config;
-	protected $db;
-	protected $user;
-	protected $request;
-	protected $helper;
-	protected $template;
+	protected	$config;
+	protected	$db;
+	protected	$user;
+	protected	$request;
+	protected	$helper;
+	protected	$template;
 	protected	$delete_user;
-	protected $u_action;
+	protected	$u_action;
 
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user)
 	{
@@ -38,7 +38,7 @@ class main
 		$this->request      =   $request;
 		$this->helper       =   $helper;
 		$this->template     =   $template;
-		$this->delete_user	=		$delete_user;
+		$this->delete_user	=	$delete_user;
 		$this->u_action     =   append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
 
