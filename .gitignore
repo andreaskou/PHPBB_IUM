@@ -1,3 +1,5 @@
 vendor
 tests
 phpunit.xml
+package-lock.json
+travis
