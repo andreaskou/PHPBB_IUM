@@ -1,0 +1,10 @@
+Subject: U bent verwijderd uit {SITENAME}.
+
+Hallo, {USER_NAME}
+
+Het spijt ons, maar je account is verwijderd!
+De reden voor het verwijderen is dat u zich langer dan {INTERVAL_DAYS_SUM} dagen niet hebt aangemeld bij "{SITENAME}".
+Als je wilt, kun je je opnieuw aanmelden.
+We hopen je snel weer te zien.
+
+{EMAIL_SIG}

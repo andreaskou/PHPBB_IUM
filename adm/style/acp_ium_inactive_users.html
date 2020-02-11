@@ -1,9 +1,9 @@
 <!-- INCLUDE overall_header.html -->
 <a id="maincontent"></a>
 
-<h1>{L_INACTIVE_USERS}</h1>
+<h1>{{ lang('INACTIVE_USERS') }}</h1>
 
-<p>{L_IUM_INACTIVE_USERS_EXPLAIN}</p>
+<p>{{ lang('IUM_INACTIVE_USERS_EXPLAIN') }}</p>
 
 <form id="inactive" method="post" action="{U_ACTION}">
 
@@ -16,27 +16,27 @@
 <table class="table1 zebra-table">
 <thead>
 <tr>
-	<th>{L_USERNAME}</th>
-	<th>{L_JOINED}</th>
-	<th>{L_LAST_VISIT}</th>
-	<th>{L_INACTIVE_DATE}</th>
-	<th>{L_IUM_INACTIVE_REASON}</th>
-	<th>{L_LAST_SENT_REMINDER}</th>
-	<th>{L_COUNT}</th>
-	<th>{L_REMINDER_DATE}</th>
+	<th>{{ lang('USERNAME') }}</th>
+	<th>{{ lang('JOINED') }}</th>
+	<th>{{ lang('LAST_VISIT') }}</th>
+	<th>{{ lang('INACTIVE_DATE') }}</th>
+	<th>{{ lang('IUM_INACTIVE_REASON') }}</th>
+	<th>{{ lang('LAST_SENT_REMINDER') }}</th>
+	<th>{{ lang('COUNT') }}</th>
+	<th>{{ lang('REMINDER_DATE') }}</th>
 </tr>
 </thead>
 <tbody>
 <!-- BEGIN inactive -->
 	<tr>
-		<td style="vertical-align: top;"><a href="{inactive.LINK_TO_USER}">{inactive.USERNAME}</a>
-		<!-- IF inactive.POSTS --><br />{L_POSTS}{L_COLON}   <strong>{inactive.POSTS}</strong><!-- ENDIF -->
+		<td style="vertical-align: top;"><strong><a href="{inactive.LINK_TO_USER}" style="color :{% if inactive.IGNORE_USER == 1 %}#008000;{% elseif inactive.IGNORE_USER == 2 %}#DC143C;{% else %}#000000;{% endif %}">{inactive.USERNAME}</a></strong>
+		{% if inactive.POSTS %}<br />{{ lang('POSTS') }}{{ lang('COLON') }}<strong>{inactive.POSTS}</strong>{% endif %}
 		</td>
 		<td style="vertical-align: top;">{inactive.JOINED}</td>
 		<td style="vertical-align: top;">{inactive.LAST_VISIT}</td>
        	<td style="vertical-align: top;">{inactive.INACTIVE_DATE}</td>
 		<td style="vertical-align: top;">{inactive.REASON}
-			<!-- IF inactive.REMINDED --><br />{inactive.REMINDED_EXPLAIN}<!-- ENDIF -->
+			{% if inactive.REMINDED %}<br />{inactive.REMINDED_EXPLAIN}{% endif %}
 		</td>
 		<td style="vertical-align: top;">{inactive.LAST_SENT_REMINDER}</td>
 		<td style="vertical-align: top;">{inactive.COUNT}</td>
@@ -44,36 +44,34 @@
 	</tr>
 <!-- BEGINELSE -->
 	<tr>
-		<td colspan="6" style="text-align: center;">{L_NO_INACTIVE_USERS}</td>
+		<td colspan="6" style="text-align: center;">{{ lang('NO_INACTIVE_USERS') }}</td>
 	</tr>
 <!-- END inactive -->
 </tbody>
 </table>
-
+<p style="text-align: center;">{TOTAL_USERS_WITH_DAY}</p>
 <fieldset class="display-options">
-	{L_ACP_USERS_WITH_POSTS} <input class="checkbox" type="checkbox" name="with_posts" value="1" <!-- IF WITH_POSTS --> checked <!-- ENDIF --> /> &nbsp;
-	{L_COUNT_BACK}{L_COLON} &nbsp; <select name="count_back">{S_INACTIVE_OPTIONS}</select> &nbsp; <select name="sort_by">{S_IUM_SORT_BY}</select> &nbsp;
-	{L_ACP_DESCENDING} <input class="checkbox" type="checkbox" name="sort_order" value="1" <!-- IF SORT_ORDER --> checked <!-- ENDIF --> /> &nbsp;
-    <!-- IF .pagination -->&nbsp;{L_USERS_PER_PAGE}{L_COLON} <input class="inputbox autowidth" type="number" name="users_per_page" id="users_per_page" min="0" max="999" value="{USERS_PER_PAGE}" /><!-- ENDIF -->
-	<input class="button2" type="submit" value="{L_GO}" name="sort" />
+	{{ lang('ACP_USERS_WITH_POSTS') }} <input class="checkbox" type="checkbox" name="with_posts" value="1" <!-- IF WITH_POSTS --> checked <!-- ENDIF --> /> &nbsp;
+	{{ lang('COUNT_BACK') }}{{ lang('COLON') }} &nbsp; <select name="count_back" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{S_INACTIVE_OPTIONS}</select> &nbsp;
+	<select name="sort_by" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{S_IUM_SORT_BY}</select> &nbsp;
+	{{ lang('ACP_DESCENDING') }} <input class="checkbox" type="checkbox" name="sort_order" value="1" <!-- IF SORT_ORDER --> checked <!-- ENDIF --> /> &nbsp;
+    <!-- IF .pagination -->&nbsp;{{ lang('USERS_PER_PAGE') }}{{ lang('COLON') }}
+		<select name="users_per_page" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
+			<option value="20" <!-- IF USERS_PER_PAGE === 20 --> selected="selected" <!-- ENDIF -->>20</option>
+			<option value="50" <!-- IF USERS_PER_PAGE === 50 --> selected="selected" <!-- ENDIF -->>50</option>
+			<option value="100" <!-- IF USERS_PER_PAGE === 100 --> selected="selected" <!-- ENDIF -->>100</option>
+			<option value="200" <!-- IF USERS_PER_PAGE === 200 --> selected="selected" <!-- ENDIF -->>200</option>
+		</select>
+		<!-- ENDIF -->
+	<input class="button2" type="submit" value="{{ lang('GO') }}" name="sort" />
 </fieldset>
 
 <hr />
-
 <!-- IF .pagination -->
 	<div class="pagination">
 		<!-- INCLUDE pagination.html -->
 	</div>
 <!-- ENDIF -->
-    <!-- IF AKSASDAS -->
-<fieldset class="quick">
-	<select name="action">{S_INACTIVE_OPTIONS}</select>
-	<input class="button2" type="submit" name="submit" value="{L_SUBMIT}" />
-	{S_FORM_TOKEN}
-</fieldset>
-    <!-- ENDIF -->
-
-
 </form>
 
 <!-- INCLUDE overall_footer.html -->

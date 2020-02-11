@@ -13,9 +13,21 @@ In jedem Fall kannst du immer den Administrator des Forums unter dieser E-Mail "
 
 Wir hoffen, dich bald wiederzusehen.
 
+<!-- IF USR_TPC_LIST -->
+Nachfolgend einige Links zu Themen, bei denen Du aktiv warst.
+
 {USR_TPC_LIST}
+<!-- ENDIF -->
+
+<!-- IF USR_FRM_LIST -->
+Nachfolgend einige Links zu den aktivsten Themen des Boards.
 
 {USR_FRM_LIST}
+<!-- ENDIF -->
 
+<!-- IF SELF_DELETE_LINK -->
+Klicken Sie auf den folgenden Link, um Ihr Konto zu löschen.
+{SELF_DELETE_LINK}
+<!-- ENDIF -->
 
 {EMAIL_SIG}

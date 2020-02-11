@@ -1,0 +1,20 @@
+Subject: Y a t-il un probleme?
+
+Bonjour, {USERNAME}
+
+Nous voyons que vous vous etes inscrit a: {REG_DATE}
+Mais depuis lors, il n'y a eu aucune activite.
+
+Si vous avez perdu vos identifiants, vous pouvez les recuperer a partir du lien suivant.
+
+{FORGOT_PASS}
+
+Si vous n'avez jamais recu l'e-mail d'activation, veuillez cliquer sur le lien suivant pour envoyer un nouveau courrier d'activation.
+
+{SEND_ACT_AG}
+
+Sinon, vous pouvez toujours contacter l'administrateur du forum {ADMIN_MAIL}.
+
+Nous esperons vous revoir bientot.
+
+{EMAIL_SIG}

@@ -22,18 +22,6 @@ use phpbb\db\migration\migration;
 class add_data extends migration
 {
 
-	private $schema_name='ium_reminder';
-
-	// static public function depends_on()
-	// {
-	// 	return array('\phpbb\db\migration\data\v31x\v314');
-	// }
-
-	// public function effectively_installed()
-	// {
-	// 	return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.0', '>=');
-	// }
-
 	public function update_data()
 	{
 		return array(
@@ -45,68 +33,67 @@ class add_data extends migration
 			array('config.add', array('andreask_ium_top_forum_threads_count', 5)),
 			array('config.add', array('andreask_ium_email_limit', 250)),
 			array('config.add', array('andreask_ium_self_delete', 0)),
+			// 0.9.0
+			array('config.add', array('andreask_ium_version',   '1.1.0')),
+			array('config.add', array('andreask_ium_keep_posts',    1)),
+			array('config.add', array('andreask_ium_approve_del',   1)),
+			// 0.9.1
+			array('config.add', array('andreask_ium_auto_del',		0)),
+			array('config.add', array('andreask_ium_auto_del_days', 7)),
+			// 0.9.6
+			array('config_text.add', array('andreask_ium_ignore_forum',	'[]')),
+			// 0.9.9
+			array('config_text.add', array('andreask_ium_ignored_groups', '[]')),
 			// cron config
 			array('config.add', array('send_reminder_last_gc', 0, true)),
 			array('config.add', array('send_reminder_gc', (60 * 60 * 24))),
 			array('config.add', array('reminder_limit', 250)),
-			// Initial table population.
-			array('custom',
-				array(
-					array(
-						$this, 'first_time_install'))),
 			);
 	}
 
+  static public function depends_on()
+  {
+    return array('\phpbb\db\migration\data\v310\gold');
+  }
+
 	public function update_schema()
+  {
+    return array(
+      'add_columns' => array(
+				$this->table_prefix . 'users' => array(
+          'ium_remind_counter' => array('UINT', 0),
+          'ium_previous_sent_date' => array('TIMESTAMP', 0),
+          'ium_reminder_sent_date' => array('TIMESTAMP', 0),
+          'ium_dont_send' => array('UINT', 0),
+					'ium_request_date'	=> array('TIMESTAMP', 0),
+					'ium_random'	=> array('VCHAR:255', 0),
+          'ium_type'	=> array('VCHAR:10', ''),
+					'ium_request_date'	=> array('TIMESTAMP', 0),
+					'ium_request_type'	=> array('VCHAR:10', ''),
+					'ium_random'	=> array('VCHAR:255', 0),
+				),
+			),
+    );
+  }
+
+	public function revert_schema()
 	{
 		return array(
-			'add_tables' => array(
-				$this->table_prefix . $this->schema_name => array(
-					'COLUMNS' => array(
-						'id' => array('UINT', null, 'auto_increment'),
-							'user_id' => array('UINT', 0),
-							'username' => array('VCHAR', ''),
-							'remind_counter' => array('UINT', '0'),
-							'previous_sent_date' => array('TIMESTAMP', 0),
-							'reminder_sent_date' => array('TIMESTAMP', 0),
-							'dont_send' => array('UINT', 0),
-					),
-					'PRIMARY_KEY' => 'id',
-					'KEYS' => array(
-							'type' => array('UNIQUE', array('user_id'))
-					),
+			'drop_columns' => array(
+				$this->table_prefix . 'users' => array(
+					'ium_remind_counter',
+					'ium_previous_sent_date',
+					'ium_reminder_sent_date',
+					'ium_dont_send',
+					'ium_request_date',
+					'ium_random',
+					'ium_type',
+					'ium_request_date',
+					'ium_request_type',
+					'ium_random',
 				),
 			),
 		);
 	}
 
-	public function revert_schema()
-	{
-		return array(
-			'drop_tables' => array(
-				$this->table_prefix . $this->schema_name
-				),
-		);
-	}
-
-	public function first_time_install()
-	{
-		if ( !$this->has_users() )
-		{
-			if ( $this->db_tools->sql_table_exists( $this->table_prefix . $this->schema_name ) )
-			{
-				$sql = 'INSERT INTO ' . $this->table_prefix . $this->schema_name . ' (user_id, username)
-				SELECT user_id, username FROM `' . USERS_TABLE . '` u
-				WHERE from_unixtime(u.user_lastvisit) < DATE_SUB(NOW(), INTERVAL 30 DAY)
-				AND u.group_id NOT IN (1,4,5,6)';
-				$result = $this->sql_query($sql);
-			}
-		}
-	}
-
-	private function has_users()
-	{
-		$result = $this->db->get_row_count($this->table_prefix . $this->schema_name);
-		return (bool) $result;
-	}
 }

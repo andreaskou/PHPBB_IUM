@@ -18,17 +18,15 @@ use phpbb\db\migration\migration;
 class add_module extends migration
 {
 
-	private $schema_name='ium_reminder';
-
 	static public function depends_on()
 	{
 		return array('\phpbb\db\migration\data\v31x\v316');
 	}
 
-	public function effectively_installed()
-	{
-		return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.1', '>=');
-	}
+	// public function effectively_installed()
+	// {
+	// 	return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.1', '>=');
+	// }
 
 	public function update_data()
 	{

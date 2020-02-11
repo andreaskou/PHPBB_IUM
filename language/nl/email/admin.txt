@@ -1,0 +1,10 @@
+Subject: U bent verwijderd van {SITENAME} door de beheerder
+
+Hallo, {USER_NAME}
+
+Het spijt ons zeer, maar uw account is verwijderd door de beheerder!
+De reden voor het verwijderen is dat u zich langer dan {INTERVAL_DAYS_SUM} dagen niet hebt aangemeld bij "{SITENAME}".
+Als je wilt, kun je je opnieuw aanmelden.
+We hopen je snel weer te zien.
+
+{EMAIL_SIG}

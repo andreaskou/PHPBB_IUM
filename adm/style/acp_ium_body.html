@@ -7,8 +7,8 @@
         <legend>{{ lang('ACP_IUM_SETTINGS') }}</legend>
         <dl>
             <dt><label for="andreask_ium_enable">{{ lang('ANDREASK_IUM_ENABLE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" name="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" name="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TEST_EMAIL') ~ lang('COLON') }}</label><br/><span>{ANDREASK_IUM_TEST_EXPLAIN}</span></dt>
@@ -22,11 +22,11 @@
         <legend>{{ lang('ACP_IUM_MAIL_SETTINGS') }}</legend>
         <dl>
             <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_INTERVAL_EXPLAIN')}}</span></dt>
-            <dd><input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="999" /> days </dd>
+            <dd><input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="999" /> {{ lang('DAYS') }} </dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_email_limit">{{ lang('ANDREASK_IUM_EMAIL_LIMIT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN')}}</span></dt>
-            <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500" /> e-mails </dd>
+            <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500" /> {{ lang('EMAILS')}} </dd>
         </dl>
     </fieldset>
     <fieldset>

@@ -13,8 +13,6 @@
 
 namespace andreask\ium\controller;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 class main
 {
 	/**
@@ -23,17 +21,16 @@ class main
 	 *
 	 */
 
-	protected $config;
-	protected $db;
-	protected $user;
-	protected $request;
-	protected $helper;
-	protected $template;
-	protected $container;
-	protected $table_name;
-	protected $u_action;
+	protected	$config;
+	protected	$db;
+	protected	$user;
+	protected	$request;
+	protected	$helper;
+	protected	$template;
+	protected	$delete_user;
+	protected	$u_action;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, ContainerInterface $container, $ium_table)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user)
 	{
 		$this->config       =   $config;
 		$this->db           =   $db;
@@ -41,8 +38,7 @@ class main
 		$this->request      =   $request;
 		$this->helper       =   $helper;
 		$this->template     =   $template;
-		$this->container    =   $container;
-		$this->table_name   =   $ium_table;
+		$this->delete_user	=	$delete_user;
 		$this->u_action     =   append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
 
@@ -83,14 +79,14 @@ class main
 			}
 
 			// Request to delete user...
-			$delete_me = $this->container->get('andreask.ium.classes.delete_user');
-			$delete_me->delete($this->user->data['user_id'], 'user');
+			$delete_me = $this->delete_user;
+			$delete_me->delete(array($this->user->data['user_id']), 'user');
 
 			// log out user.
 			$board_url = generate_board_url(). '/ucp.php?mode=logout&sid='. $this->user->session_id;
 			$message = ($this->config['andreask_ium_approve_del']) ? $this->user->lang('NEEDS_APPROVAL', htmlspecialchars_decode($this->config['sitename'])) : $this->user->lang('USER_SELF_DELETE_SUCCESS', htmlspecialchars_decode($this->config['sitename']));
 
-			// meta_refresh has to run before return because after return nothing is going to run...
+			// meta_refresh (redirect) has to run before return because after return nothing is going to run...
 			meta_refresh(5, $board_url );
 
 			return $this->helper->message( $this->user->lang( $message ));
@@ -106,13 +102,13 @@ class main
 
 	private function user_check($user, $random)
 	{
-
 		$sql_arr = array(
-			'user_id'   => $user,
-			'random'    => $random);
+			'user_id'   => (int) $user,
+			'ium_random'    =>  $random
+		);
 
-		$sql = 'SELECT user_id, random
-				FROM ' . $this->table_name . '
+		$sql = 'SELECT user_id, ium_random
+				FROM ' . USERS_TABLE . '
 				WHERE ' . $this->db->sql_build_array('SELECT', $sql_arr);
 		$result = $this->db->sql_query($sql);
 		$valid = (bool) $this->db->sql_fetchrow($result);

@@ -1,0 +1,10 @@
+Subject: You have been deleted from {SITENAME} by the administrator
+
+Hello, {USER_NAME}
+
+We're verry sorry, but your account has been deleted by the administrator!
+The reason for the deletion is that you have not logged in for more than {INTERVAL_DAYS_SUM} days to "{SITENAME}".
+If you like, you can sign up again.
+We hope to see you again soon.
+
+{EMAIL_SIG}
