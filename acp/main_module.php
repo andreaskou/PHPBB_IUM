@@ -170,6 +170,10 @@ class main_module
 				$actions = '30d';
 			}
 			$sort_by = $request->variable('sort_by', 'reg_date');
+			if ($sort_by == 'select')
+			{
+				$sort_by = 'reg_date';
+			}
 			$sort_order = $request->variable('sort_order', 0);
 
 			// Keep the limit between 20 and 200
