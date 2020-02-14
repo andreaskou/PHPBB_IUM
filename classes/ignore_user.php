@@ -15,13 +15,15 @@ namespace andreask\ium\classes;
 
 class ignore_user
 {
+	protected $user;			/** User for the language */
 	protected $db; 				/** DBAL driver for database use */
 	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
 	protected $auth;			/** Auth class to get admins and mods */
 
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
+	public function __construct(\phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
+		$this->user				=	$user;
 		$this->db				=	$db;
 		$this->log				=	$log;
 		$this->auth				=	$auth;
@@ -47,8 +49,7 @@ class ignore_user
 				unset($users[$key]);
 			}
 		}
-
-		if ($users)
+		if (!empty($users))
 		{
 			return $users;
 		}
@@ -80,7 +81,17 @@ class ignore_user
 		// Always free the results
 		$this->db->sql_freeresult($result);
 
-		$this->update_user($user, $mode);
+		$so_user 		= sizeof($user);
+		$so_username 	= sizeof($username);
+
+		if (!empty($user) && $so_user == $so_username)
+		{
+			$this->update_user($user, $mode);
+		}
+		else
+		{
+			trigger_error($this->user->lang('USER_EXIST_IN_IGNORED_GROUP', $test) . adm_back_link( $this->u_action ), E_USER_WARNING);
+		}
 	}
 
 	 /**
