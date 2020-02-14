@@ -46,6 +46,7 @@ services:
     andreask.ium.classes.ignore_user:
         class: andreask\ium\classes\ignore_user
         arguments:
+            - '@user'
             - '@dbal.conn'
             - '@config_text'
             - '@auth'
