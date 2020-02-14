@@ -59,6 +59,8 @@ $lang = array_merge(
     	'DONT_IGNORE'			=>	'Μην αγνοείται',
     	'NOT_IGNORED'			=>	'Ο/οι χρήστης/ες δεν αγνοήται/ούνται πια.',
     	'RESET_REMINDERS'		=>	'Η επαναφορά ήταν επιτυχής.',
+		'USER_EXIST_IN_IGNORED_GROUP'	=>	'Ο/οι χρήστης(ες) υπάρχη(ουν) ήδη σε μία λίστα υπο εξαίρεση.',
+
 
     	'IUM_IGNORE_GROUP_MANAGMENT'				=>	'Διαχείριση Ομάδων',
     	'ANDREASK_IUM_UPDATE_IGNORE_LIST'			=>	'Αγνόηση',
