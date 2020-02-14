@@ -2,13 +2,13 @@ Subject: {SITENAME}: Gab es ein Problem {USERNAME}?
 
 Hallo {USERNAME},
 
-Sie haben sich bei {SITENAME} am {REG_DATE} registriert, doch seitdem gab es keine Aktivität.
+Sie haben sich bei {SITE_NAME} am {REG_DATE} registriert, doch seitdem gab es keine weitere Aktivitäten von Ihnen.
 
-Wenn Sie Ihre Zugangsdaten vergessen haben, dann können Sie diese unter nachfolgendem Link zurückerlangen:
+Wenn Sie Ihre Zugangsdaten vergessen haben, dann können Sie sie unter nachfolgendem Link zurückholen:
 
 {FORGOT_PASS}
 
-Wenn Sie die Aktivierungsmail niemals bekommen haben, dann klicken Sie bitte auf den nachfolgenden Link, um eine neue Aktivierungsmail anzufordern.
+Wenn Sie die Aktivierungsmail niemals bekommen haben, dann klicke bitte Sie auf den nachfolgenden Link, um eine neue Aktivierungsmail anzufordern.
 
 {SEND_ACT_AG}
 
