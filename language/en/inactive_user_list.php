@@ -48,14 +48,11 @@ $lang = array_merge(
 
     // configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for the set amount of time here.<br>Username colors represent the ignore status. <span style="color: #DC143C;"><strong>Red</strong></span> -> Ignored by an administrator, <span style="color: #008000;"><strong>Green</strong></span> -> Auto Ignored, <span style="color: #000000;"><strong>Black</strong></span> -> Not ignored.',
-	'ACP_IUM_SETTINGS'	=>	'Inactive User Reminder Settings',
-	'ACP_IUM_MAIL_SETTINGS'	=>	'Reminder Settings',
 
     // Sort Lists
 	'COUNT_BACK'	=>	'<strong>FROM</strong> days/months/years interval and backwards',
 	'ACP_DESCENDING'	=>	'Descending order',
 	'SORT_BY_SELECT'	=>	'Sort by',
-	'REQUEST_DATE'		=>	'Deletion Request date',
 	'SELECT'		=>	'Select D/M/Y',
 	'THIRTY_DAYS'	=>	'Thirty Days',
 	'SIXTY_DAYS'	=>	'Sixty Days',

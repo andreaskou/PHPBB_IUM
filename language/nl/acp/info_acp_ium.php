@@ -75,7 +75,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'Er wordt een test mail verzonden naar "%s"',
 	'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Selecteer een categorie of subcategorie om <strong>uit te sluiten</strong> in de lijsten met top onderwerpen die naar de gebruikers worden verzonden',
 	'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Selecteer een categorie of subcategorie <strong>op te nemen</strong> in de lijst met top onderwerpen die naar de gebruikers wordt verzonden',
-	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Hier kun je selecteren welke groepen moeten worden genegeerd door de extensie. Hoewel ze <u>hier niet</u> geselecteerd zijn zullen </> BOTS, BEHEERDERS, MODERATOROS en GASTEN <b>genegeerd</ b> worden. Maar het is nog steeds aan te raden om hier ook de groepen te selecteren!',
+	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Hier kun je selecteren welke groepen moeten worden genegeerd door de extensie. Hoewel ze <u>hier niet</u> geselecteerd zijn zullen </> BOTS, BEHEERDERS, MODERATORS en GASTEN <b>genegeerd</ b> worden. Maar het is nog steeds aan te raden om hier ook de groepen te selecteren!',
 	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Houd de control (CTRL) (of &#8984; voor mac) op het toetsenbord ingedrukt om meerdere groepen te selecteren.',
 
 	// configuratiepagina Legenda
