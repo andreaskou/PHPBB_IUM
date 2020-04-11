@@ -75,7 +75,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'Un email de test sera envoyé à "%s"',
 	'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Sélectionnez une catégorie ou une sous-catégorie à <strong> exclure </ strong> des listes de sujets les plus populaires envoyées aux utilisateurs',
 	'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Sélectionnez une catégorie ou une sous-catégorie à <strong> inclure </ strong> dans les listes de sujets supérieurs envoyées aux utilisateurs',
-	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Vous pouvez sélectionner ici le ou les groupes qui doivent être ignorés par l’extension. Veuillez noter que même s’ils <u> ne sont pas </ u> sélectionnés ici, </ br> BOTS, ADMINISTRATORS, MODERATOROS et GUESTS sont <b> ignorés </ b>. Mais il est toujours suggéré de sélectionner les groupes ici aussi!',
+	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Vous pouvez sélectionner ici le ou les groupes qui doivent être ignorés par l’extension. Veuillez noter que même s’ils <u> ne sont pas </ u> sélectionnés ici, </ br> BOTS, ADMINISTRATORS, MODERATORS et GUESTS sont <b> ignorés </ b>. Mais il est toujours suggéré de sélectionner les groupes ici aussi!',
 	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Maintenez le contrôle enfoncé (CTRL) (ou mac pour mac) sur le clavier pour sélectionner plusieurs groupes.',
 
 	// légende de la page de configuration

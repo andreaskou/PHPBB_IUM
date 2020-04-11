@@ -90,7 +90,7 @@ class ignore_user
 		}
 		else
 		{
-			trigger_error($this->user->lang('USER_EXIST_IN_IGNORED_GROUP', $test) . adm_back_link( $this->u_action ), E_USER_WARNING);
+			trigger_error($this->user->lang('USER_EXIST_IN_IGNORED_GROUP') . adm_back_link( $this->u_action ), E_USER_WARNING);
 		}
 	}
 

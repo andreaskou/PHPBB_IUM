@@ -24,6 +24,9 @@ if (empty( $lang) || !is_array($lang) )
 $lang = array_merge(
 		$lang, array(
         // ACP configuration page
+		'ACP_IUM_SETTINGS'	=>	'Inactive User Reminder Settings',
+		'ACP_IUM_MAIL_SETTINGS'	=>	'Reminder Settings',
+
         'ANDREASK_IUM_ENABLE'	=>	'Enable Advanced Inactive User Reminder ',
         'ANDREASK_IUM_INTERVAL'	=>	'Interval ',
         'ANDREASK_IUM_EMAIL_LIMIT'	=>	'Limit E-mails ',

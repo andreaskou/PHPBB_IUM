@@ -65,7 +65,7 @@ $lang = array_merge(
     	'IUM_IGNORE_GROUP_MANAGMENT'				=>	'Διαχείριση Ομάδων',
     	'ANDREASK_IUM_UPDATE_IGNORE_LIST'			=>	'Αγνόηση',
 
-    	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Εδώ μπορείτε να επιλέξετε ποιες ομάδες πρέπει να αγνοηθούν από την επέκταση. Λάβετε υπόψη ότι αν και <u>δεν έχουν επιλεγεί</u>,</b> BOTS, ADMINISTRATORS, MODERATOROS και GUESTS <b>αγνοούνται</b>. Αλλά εξακολουθεί να προτείνεται να επιλέξετε τις ομάδες και εδώ!',
+    	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Εδώ μπορείτε να επιλέξετε ποιες ομάδες πρέπει να αγνοηθούν από την επέκταση. Λάβετε υπόψη ότι αν και <u>δεν έχουν επιλεγεί</u>,</b> BOTS, ADMINISTRATORS, MODERATORS και GUESTS <b>αγνοούνται</b>. Αλλά εξακολουθεί να προτείνεται να επιλέξετε τις ομάδες και εδώ!',
     	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'			=>	'Κρατήστε τον πλήκτρο (CTRL) (ή &#8984; για mac) στο πληκτρολόγιο για να επιλέξετε περισσότερες από μία ομάδες.',
 		'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'			=>	'Εδώ μπορείτε να διαχειριστείτε τα μέλη που θέλετε να αγνοήσετε (μην σταλεί υπενθύμιση) ή να τους αφαιρέσετε από τη λίστα αυτή.<br/><strong>Κάθε μέλος σε νέα γραμμή.</Strong><br/>Σημείωση, οι ακόλουθες ομάδες <strong>αγνοούνται από προεπιλογή</strong>: 1. GUESTS, 4. GLOBAL_MODERATORS, 5. ADMINISTRATOR και 6. BOTS',
 		'ANDREASK_IUM_GROUP_IGNORE'					=>	'Αγνοήστε ομάδες',

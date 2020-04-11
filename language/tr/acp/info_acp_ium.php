@@ -75,7 +75,7 @@ $lang = array_merge(
 	'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'"%s" adresine bir test e-postası gönderilecek',
 	'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Kullanıcılara gönderilen en üst konu başlıkları listesinden <strong> hariç tutmak </strong> için bir kategori veya alt kategori seçin',
 	'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Kullanıcılara gönderilen en üst konu başlıkları listesine <strong> dahil etmek </strong> için bir kategori veya alt kategori seçin',
-	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Burada, hangi grupların uzantı tarafından göz ardı edileceğini seçebilirsiniz. Lütfen burada <u>seçilmemelerine</u> rağmen, </br> BOTS, ADMINISTRATORS, MODERATOROS ve GUESTS <b>dikkate alınmadığını</b> unutmayın. Ancak yine de burada grupları seçmeniz önerilir!',
+	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Burada, hangi grupların uzantı tarafından göz ardı edileceğini seçebilirsiniz. Lütfen burada <u>seçilmemelerine</u> rağmen, </br> BOTS, ADMINISTRATORS, MODERATORS ve GUESTS <b>dikkate alınmadığını</b> unutmayın. Ancak yine de burada grupları seçmeniz önerilir!',
 	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'		=>	'Birden fazla grup seçmek için klavyede kontrolü (CTRL) (veya mac için &#8984;) basılı tutun.',
 
 	// configuration page Legend
