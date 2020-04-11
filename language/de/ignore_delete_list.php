@@ -65,9 +65,9 @@ $lang = array_merge(
 	'ANDREASK_IUM_UPDATE_IGNORE_LIST'			=>	'Ignorieren',
 	'ANDREASK_IUM_GROUP_IGNORE'					=>	'Ignoriere Gruppen',
 
-	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Hier kannst Du auswählen, welche Gruppe(n) von der Erweiterung ignoriert werden sollen. Bitte beachte, dass, auch wenn sie <u>nicht</u> hier ausgewählt werden,</br>BOTS, ADMINISTRATOREN, MODERATOREN und GÄSTE <b>Ignoriert</b> werden. Es wird aber trotzdem vorgeschlagen, auch hier die Gruppen auszuwählen!',
+	'ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN'	=>	'Hier kannst du auswählen, welche Gruppe(n) von der Erweiterung ignoriert werden sollen. Bitte beachte, dass, auch wenn sie <u>nicht</u> hier ausgewählt werden,</br>BOTS, ADMINISTRATOREN, MODERATOREN und GÄSTE <b>Ignoriert</b> werden. Es wird aber trotzdem vorgeschlagen, auch hier die Gruppen auszuwählen!',
 	'ANDREASK_IUM_GROUP_IGNORE_EXPLAIN'			=>	'Halte die Steuerung (CTRL) (oder &#8984; auf dem Mac) auf der Tastatur gedrückt, um mehrere Gruppen auszuwählen.',
-	'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'			=>	'Hier kannst Du die Benutzer verwalten, die Du ignorieren (keine Erinnerung senden) oder aus der Ignorieren-Liste entfernen möchtest. <br/><strong>Jeder Benutzer in einer neuen Zeile.</strong><br/>Beachte, die folgenden Gruppen werden <strong> standardmäßig ignoriert</strong> : 1. Gäste, 2. Globale Moderatoren, 3. Administratoren und 4. Bots',
+	'ANDREASK_IUM_IGNORE_LIST_EXPLAIN'			=>	'Hier kannst du die Benutzer verwalten, die du ignorieren (keine Erinnerung senden) oder aus der Ignorieren-Liste entfernen möchtest. <br/><strong>Jeder Benutzer in einer neuen Zeile.</strong><br/>Beachte, die folgenden Gruppen werden <strong> standardmäßig ignoriert</strong> : 1. Gäste, 2. Globale Moderatoren, 3. Administratoren und 4. Bots',
 
 	)
 );

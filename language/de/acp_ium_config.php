@@ -52,7 +52,7 @@ $lang = array_merge($lang, array(
 	// ACP configuration page Explanations
 	'ANDREASK_IUM_ENABLE_EXPLAIN'					=>	'Falls aktiviert, beginnt die Erweiterung mit dem Senden von Erinnerungen an "Schläfer".',
 	'ANDREASK_IUM_INTERVAL_EXPLAIN'					=>	'Es handelt sich um das Intervall von Tagen, die zurückgerechnet werden müssen, um einen Benutzer als "Schläfer" zu erkennen. Empfohlen wird ein Intervall von 30 Tagen',
-	'ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN'				=>	'Anzahl der Erinnerungen, die <b>pro Tag</b> versendet werden können . Empfohlen wird ein Wert von ~250. Erkundige Dich aber bei Deinem Provider nach einer eventuellen Beschränkung der Anzahl von E-Mails pro Tag',
+	'ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN'				=>	'Anzahl der Erinnerungen, die <b>pro Tag</b> versendet werden können . Empfohlen wird ein Wert von ~250. Erkundige dich aber bei Deinem Provider nach einer eventuellen Beschränkung der Anzahl von E-Mails pro Tag',
 	'ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN'			=>	'Wenn diese Option aktiviert ist, enthält die E-Mail die wichtigsten, aktiven Themen des Benutzers seit seinem letzten Besuch.',
 	'ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN'	=>	'Anzahl der Top-Themen der Benutzer, die in die E-Mail aufgenommen werden sollten.',
 	'ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN'		=>	'Wenn aktiviert, enthält die E-Mail die wichtigsten Themen des Boards seit dem letzten Besuch des Benutzers.',

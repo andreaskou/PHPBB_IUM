@@ -5,16 +5,16 @@ Hallo {USERNAME},
 Dein letzter Besuch beim Forum  {SITENAME} war am "{LAST_VISIT}".
 Das ist schon eine Weile her und wir hoffen Dich bald wiederzusehen!
 
-Im Fall, dass Du Deine Zugangsdaten vergessen hast, so kannst Du sie immer unter dem nachfolgenden Link zurückerlangen:
+Im Fall, dass du Deine Zugangsdaten vergessen hast, so kannst du sie immer unter dem nachfolgenden Link zurückerlangen:
 
 {FORGOT_PASS}
 
-In jedem Fall kannst Du immer den Administrator des Forums unter dieser E-Mail "{ADMIN_MAIL}" kontaktieren.
+In jedem Fall kannst du immer den Administrator des Forums unter dieser E-Mail "{ADMIN_MAIL}" kontaktieren.
 
-Wir hoffen, Dich bald wiederzusehen.
+Wir hoffen, dich bald wiederzusehen.
 
 <!-- IF USR_TPC_LIST -->
-Nachfolgend einige Links zu Themen, bei denen Du aktiv warst.
+Nachfolgend einige Links zu Themen, bei denen du aktiv warst.
 
 {USR_TPC_LIST}
 <!-- ENDIF -->
@@ -26,7 +26,7 @@ Nachfolgend einige Links zu den aktivsten Themen des Boards.
 <!-- ENDIF -->
 
 <!-- IF SELF_DELETE_LINK -->
-Klicke auf den folgenden Link, um Dein Konto zu löschen.
+Klicke auf den folgenden Link, um dein Konto zu löschen.
 {SELF_DELETE_LINK}
 <!-- ENDIF -->
 

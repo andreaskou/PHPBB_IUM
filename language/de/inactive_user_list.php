@@ -47,7 +47,7 @@ $lang = array_merge(
 	'TOTAL_USERS_WITH_DAY_AMOUNT'		=>	'<strong>%1$s</strong> Benutzer insgesamt <i>für das eingestellte Intervall</i> von "<strong>%2$s</strong>"',
 
 	// configuration page Legend
-	'IUM_INACTIVE_USERS_EXPLAIN'		=>	'In dieser Liste kannst Du die Benutzer sehen, die sich registriert haben, aber deren Konten inaktiv sind, sowie diejenigen, die das Forum für die eingestellte Zeitspanne nicht besucht haben.<br>Die Farben der Benutzernamen stellen den Ignorier Status dar. <span style="color: #DC143C;"><strong>Rot</strong></span> -> Von einem Administrator ignoriert, <span style="color: #008000;"><strong>Grün</strong></span> -> Auto Ignoriert, <span style="color: #000000;"><strong>Schwarz</strong></span> -> Nicht ignoriert.',
+	'IUM_INACTIVE_USERS_EXPLAIN'		=>	'In dieser Liste kannst du die Benutzer sehen, die sich registriert haben, aber deren Konten inaktiv sind, sowie diejenigen, die das Forum für die eingestellte Zeitspanne nicht besucht haben.<br>Die Farben der Benutzernamen stellen den Ignorier Status dar. <span style="color: #DC143C;"><strong>Rot</strong></span> -> Von einem Administrator ignoriert, <span style="color: #008000;"><strong>Grün</strong></span> -> Auto Ignoriert, <span style="color: #000000;"><strong>Schwarz</strong></span> -> Nicht ignoriert.',
 
 	// Sort Lists
 	'COUNT_BACK'						=>	'<strong>VON</strong> Tagen/Monaten/Jahren Intervall und rückwärts',
