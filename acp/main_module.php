@@ -524,7 +524,7 @@ class main_module
 					'REQUEST_DATE' 		=>	$user->format_date($row['ium_request_date']),
 					'TYPE'						=>	$row['ium_type'],
 					'LINK_TO_USER'		=>	$link,
-					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', (int) $row['ium_dont_send']),
+					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', $row['ium_dont_send']),
 				));
 			}
 		}
