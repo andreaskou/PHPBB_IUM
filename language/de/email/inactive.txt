@@ -4,7 +4,7 @@ Hallo {USERNAME},
 
 Du hast dich bei {SITE_NAME} am {REG_DATE} registriert, doch seitdem gab es keine weitere Aktivitäten von dir.
 
-Wenn Du Deine Zugangsdaten vergessen hast, dann kannst du sie unter nachfolgendem Link zurückholen:
+Wenn du deine Zugangsdaten vergessen hast, dann kannst du sie unter nachfolgendem Link zurückholen:
 
 {FORGOT_PASS}
 
