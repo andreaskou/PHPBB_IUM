@@ -80,7 +80,6 @@ class delete_user
 
 	public function delete($ids, $request = 'auto', $posts = null)
 	{
-
 		if (!$this->user_exist($ids))
 		{
 			return false;
@@ -171,6 +170,7 @@ class delete_user
 		{
 			if ( $this->config['andreask_ium_approve_del'] )
 			{
+				$id = implode("", $id);
 				// store for approval and add user to the list.
 				$sql_array = array(
 								'ium_request_date'	=>	time(),
