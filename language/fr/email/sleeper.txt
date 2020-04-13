@@ -1,21 +1,19 @@
-Subject: Inactivite sur le forum
+Sujet: Vous nous avez manqué!
 
-Hello, {USERNAME}
+Bonjour, {USERNAME}
 
-Nous voyons que votre derniere visite sur notre forum {SITE_NAME}, etait le : "{LAST_VISIT}".
-Cela fait longtemps et nous aimerions que vous sachiez que nous esperons vous voir
-encore bientot!
-Lien du forum : 
+Votre dernière visite sur notre forum {SITE_NAME}, était le "{LAST_VISIT}".
+Cela fait un moment, et nous aimerions que vous sachiez que nous espérons vous revoir bientôt!
 
-Si vous avez oublie vos identifiants, vous pouvez toujours les recuperer en utilisant
-le lien suivant :
+Si vous avez oublié vos informations d'identification, vous pouvez toujours les récupérer en utilisant le lien suivant.
+
 {FORGOT_PASS}
 
 Sinon, vous pouvez toujours contacter l'administrateur du forum sur cet e-mail "{ADMIN_MAIL}".
-En esperant vous revoir.
+Au plaisir de vous revoir.
 
 <!-- IF USR_TPC_LIST -->
-Ci-dessous quelques liens vers des sujets sur lesquels vous avez ete actif
+Ci-dessous quelques liens vers les sujets où vous avez été actifs.
 
 {USR_TPC_LIST}
 <!-- ENDIF -->
@@ -27,7 +25,7 @@ Ci-dessous quelques liens vers les sujets les plus actifs du forum.
 <!-- ENDIF -->
 
 <!-- IF SELF_DELETE_LINK -->
-Cliquez sur le lien suivant pour supprimer votre compte.
+Cliquez sur le lien ci-dessous pour supprimer votre compte.
 {SELF_DELETE_LINK}
 <!-- ENDIF -->
 

@@ -1,20 +1,20 @@
-Subject: Y a t-il un probleme?
+Sujet: que ce passe t'il ?
 
 Bonjour, {USERNAME}
 
-Nous voyons que vous vous etes inscrit a: {REG_DATE}
-Mais depuis lors, il n'y a eu aucune activite.
+Nous constatons que vous vous êtes inscrit sur : {REG_DATE}
+Mais depuis lors, il n'y a pas eu d'activité.
 
-Si vous avez perdu vos identifiants, vous pouvez les recuperer a partir du lien suivant.
+Si vous avez perdu vos informations d'identification, vous pouvez les récupérer à partir du lien suivant.
 
 {FORGOT_PASS}
 
-Si vous n'avez jamais recu l'e-mail d'activation, veuillez cliquer sur le lien suivant pour envoyer un nouveau courrier d'activation.
+Si vous n'avez jamais reçu l'e-mail d'activation, veuillez cliquer sur le lien suivant pour envoyer un nouveau mail d'activation.
 
 {SEND_ACT_AG}
 
 Sinon, vous pouvez toujours contacter l'administrateur du forum {ADMIN_MAIL}.
 
-Nous esperons vous revoir bientot.
+Nous espérons que nous vous reverrons bientôt.
 
 {EMAIL_SIG}
