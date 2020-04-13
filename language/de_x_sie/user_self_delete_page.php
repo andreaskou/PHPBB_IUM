@@ -22,13 +22,13 @@ if ( empty($lang) || !is_array($lang) )
 }
 
 $lang = array_merge($lang, array(
-	'USER_SELF_DELETE_TITLE'			=>  'Selbstlöschungsseite',
-	'USER_SELF_DELETE_EXPLAIN'		=>  'Mit der Auswahl des Überprüfungskästchens und dem Klicken des Bestätigungsbuttons akzeptieren Sie Ihren Nutzerzugang in diesem Forum zu löschen.<br/>Ihre Beiträge bleiben bestehen, aber Sie werden nicht mehr in der Lage sein sich mit Ihrem Nutzernamen und dem Passwort anzumelden.<br/>Wenn Sie sich mit demselben Nutzernamen neu registrieren, werden die alten Beiträge nicht mit dem neuen Nutzer verknüpft.',
-	'USER_SELF_DELETE_VERIFY'		=>  'Ich verstehe die Folgen und bestätige',
+	'USER_SELF_DELETE_TITLE'		=>  'Seite zur Selbstlöschung.',
+	'USER_SELF_DELETE_EXPLAIN'		=>  'Indem Sie das Kontrollkästchen aktivieren und auf die Schaltfläche "Bestätigen" klicken, erklärst Sie sich damit einverstanden, Ihr Benutzerkonto in diesem Forum zu löschen.<br/>Alle Ihre Beiträge bleiben erhalten, aber Sie können sich nicht mehr mit Ihrem Benutzernamen/Passwort anmelden.<br/>Wenn Sie ein neues Konto mit dem gleichen Benutzernamen erstellen, werden die vorherigen Beiträge nicht mit dem neuen Konto verbunden.',
+	'USER_SELF_DELETE_VERIFY'		=>  'Ich verstehe die Konsequenzen und bestätige',
 	'HAVE_TO_LOGIN'					=>  'Es tut uns leid, aber Sie müssen sich einloggen, um diese Seite zu sehen.',
-	'HAVE_TO_VERIFY'				=>  'Bitte wählen Sie das Überprüfungskästchen aus.',
-	'PAGE_NOT_EXIST'				=>  'Es tut uns leid.<br/><br/>Aber die Selbstlöschung ist deaktiviert.<br/>Wenn Sie zufällig auf dieser Seite gelandet sind, überprüfen Sie bitte die URL in Ihrem Browser.<br/>Wenn Sie einem Link aus einer erhaltenen E-Mail gefolgt sind, dann benachrichtigen Sie bitte den Administrator des Forums.',
-	'NEEDS_APPROVAL'				=>  'Wir bedauern es sehr, dass Sie sich entschieden haben %s zu verlassen. Ihr Kontolöschungsantrag muss noch überprüft werden, das kann mitunter etwas dauern. In drei Sekunden werden Sie zur Startseite weitergeleitet.',
-	'USER_SELF_DELETE_SUCCESS'		=>	'Wir bedauern es sehr, dass Sie sich entschieden haben %s zu verlasse. Ihr Konto wurde gelöscht. In drei Sekunden werden Sie zur Startseite weitergeleitet.',
-	'INVALID_LINK_OR_USER'			=>	'ungültiger Link oder ungültiger Nutzer...',
+	'HAVE_TO_VERIFY'				=>  'Bitte markieren Sie das Kontrollkästchen.',
+	'PAGE_NOT_EXIST'				=>  'Wir entschuldigen uns sehr für die Unannehmlichkeiten.<br/><br/>Aber die Selbstlöschung ist deaktiviert.<br/>Falls Sie versehentlich auf diese Seite gelangt sind, überprüfen Sie bitte die von Ihnen in Ihren Browser eingegebene URL.<br/>Wenn Sie einem Link aus einer E-Mail gefolgt sind, die Sie von uns erhalten haben, wende Sie sich bitte an den Administrator der Seite.',
+	'NEEDS_APPROVAL'				=>	'Wir bedauern es sehr, dass Sie sich entschieden haben %s zu verlassen. Bitte beachten Sie, dass Ihr Konto noch nicht gelöscht ist, es muss erst genehmigt werden. Bitte geben Sie uns etwas Zeit für diese Aktion. In 3 Sekunden werden Sie auf unsere Homepage weitergeleitet.',
+	'USER_SELF_DELETE_SUCCESS'		=>	'Wir bedauern es sehr, dass Sie sich entschieden haben %s zu verlassen. Ihr Konto wurde gelöscht. In 3 Sekunden werden Sie auf unsere Homepage weitergeleitet.',
+	'INVALID_LINK_OR_USER'			=>	'ungültige Kombination aus Link und/oder Benutzer...',
 ));
