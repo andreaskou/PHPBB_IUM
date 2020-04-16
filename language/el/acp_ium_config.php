@@ -46,6 +46,8 @@ $lang = array_merge(
     	'ANDREASK_IUM_INCLUDE_FORUM'				=>	'Συμπερίληψη',
     	'SELECT_A_FORUM'							=>	'Παρακαλώ επιλέξτε ένα φόρουμ',
     	'EXCLUDED_EMPTY'							=>	'Δεν υπάρχουν εξαιρούμενα φόρουμ...',
+		'ACP_IUM_SETTINGS'             =>  'Ρυθμίσεις υπενθύμισης ανενεργού μέλους',
+		'ACP_IUM_MAIL_SETTINGS'        =>  'Ρυθμίσεις υπενθύμισης',
 
         // ACP configuration page Explanations
     	'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'Αν είναι ενεργοποιημέν, η επέκταση θα αρχίσει να στέλνει υπενθυμίσεις στους "κοιμισμένους".',

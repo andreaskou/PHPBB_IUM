@@ -48,14 +48,12 @@ $lang = array_merge(
 
         // configuration page Legend
     	'IUM_INACTIVE_USERS_EXPLAIN'   =>  'Σε αυτή τη λίστα μπορείτε να δείτε τα μέλη που έχουν εγγραφεί αλλά οι λογαριασμοί των οποίων είναι ανενεργοί και εκείνοι που δεν έχουν επισκεφτεί το φόρουμ για το καθορισμένο χρονικό διάστημα εδώ. <span style="color: #DC143C;"><strong>Κόκκινο</strong></span> -> Αγνοείται από διαχειριστή, <span style="color: #008000;"><strong>Πράσινο</strong></span> -> Αγνοείται αυτόματα, <span style="color: #000000;"><strong>Μαύρο</strong></span> -> Δεν αγνοείται.',
-    	'ACP_IUM_SETTINGS'             =>  'Ρυθμίσεις υπενθύμισης ανενεργού μέλους',
-    	'ACP_IUM_MAIL_SETTINGS'        =>  'Ρυθμίσεις υπενθύμισης',
+
 
         // Sort Lists
     	'COUNT_BACK'       =>  '<strong>ΑΠΟ</strong> ημέρες/μήνες/έτη πριν και προς τα πίσω',
     	'ACP_DESCENDING'   =>  'Φθίνουσα σειρά',
     	'SORT_BY_SELECT'   =>  'Ταξινόμηση κατά',
-    	'REQUEST_DATE'     =>  'Ημερομηνία αιτήματος διαγραφής',
     	'SELECT'           =>  'Επιλέξτε D/M/Y',
     	'THIRTY_DAYS'      =>  'Τριάντα ημέρες',
     	'SIXTY_DAYS'       =>  'Εξήντα ημέρες',

@@ -60,6 +60,8 @@ $lang = array_merge(
     	'NOT_IGNORED'			=>	'Ο/οι χρήστης/ες δεν αγνοήται/ούνται πια.',
     	'RESET_REMINDERS'		=>	'Η επαναφορά ήταν επιτυχής.',
 		'USER_EXIST_IN_IGNORED_GROUP'	=>	'Ο/οι χρήστης(ες) υπάρχη(ουν) ήδη σε μία λίστα υπο εξαίρεση.',
+		'REQUEST_DATE'			=>  'Ημερομηνία αιτήματος διαγραφής',
+
 
 
     	'IUM_IGNORE_GROUP_MANAGMENT'				=>	'Διαχείριση Ομάδων',
