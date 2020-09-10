@@ -13,8 +13,8 @@
         <dl>
             <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TEST_EMAIL') ~ lang('COLON') }}</label><br/><span>{ANDREASK_IUM_TEST_EXPLAIN}</span></dt>
             <dd>
-                <input class="button2" type="submit" id="submit" name="send_sleeper" value="{{lang('SEND_SLEEPER')}}" /> &nbsp;
-                <input class="button2" type="submit" id="submit" name="send_inactive" value="{{lang('SEND_INACTIVE')}}" />
+                <input class="button2" type="submit" id="send_sleeper" name="send_sleeper" value="{{lang('SEND_SLEEPER')}}" /> &nbsp;
+                <input class="button2" type="submit" id="send_inactive" name="send_inactive" value="{{lang('SEND_INACTIVE')}}" />
             </dd>
         </dl>
     </fieldset>
@@ -81,7 +81,7 @@
     </fieldset>
     <fieldset>
         <p class="submit-buttons">
-            <input class="button1" type="submit" id="submit" name="submit_settings" value="{L_SUBMIT}" autofocus />&nbsp;
+            <input class="button1" type="submit" id="submit_settings" name="submit_settings" value="{L_SUBMIT}" autofocus />&nbsp;
             <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" autofocus />
         </p>
         {S_FORM_TOKEN}
@@ -97,7 +97,7 @@
                     <dd class="full"><select style="width: 100%;" id="sforum" name="subforum_id" size="6">{ANDREASK_IUM_EXCLUDE_FORUMS}</select></dd>
                 </dl>
                 <p class="submit-buttons">
-                    <input class="button2" type="submit" id="submit" name="exclude_forum" value="{{ lang('ANDREASK_IUM_EXCLUDE_FORUM') }}" autofocus />
+                    <input class="button2" type="submit" id="exclude_forum" name="exclude_forum" value="{{ lang('ANDREASK_IUM_EXCLUDE_FORUM') }}" autofocus />
                     {S_FORM_TOKEN}
                 </p>
             </fieldset>
