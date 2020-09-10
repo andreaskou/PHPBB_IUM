@@ -113,7 +113,6 @@ class ignore_user
 			$username = array_column($user, 'username');
 		}
 
-		$dont_send = $action;
 		$data = array ('ium_dont_send' => $action);
 		$sql = 'UPDATE ' . USERS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $data) . '
