@@ -29,8 +29,10 @@ class main
 	protected	$template;
 	protected	$delete_user;
 	protected	$u_action;
+	protected	$php_root;
+	protected	$php_ext;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user, $php_root, $php_ext)
 	{
 		$this->config       =   $config;
 		$this->db           =   $db;
@@ -39,6 +41,8 @@ class main
 		$this->helper       =   $helper;
 		$this->template     =   $template;
 		$this->delete_user	=	$delete_user;
+		$this->$php_root	=	$php_root;
+		$this->php_ext		=	$php_ext;
 		$this->u_action     =   append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
 
@@ -54,7 +58,7 @@ class main
 		// Check to see if user is logged in.
 		if ($this->user->data['user_id'] == ANONYMOUS)
 		{
-			return $this->helper->error(login_box('', $this->user->lang('HAVE_TO_LOGIN')), 403);
+			login_box('', $this->user->lang('HAVE_TO_LOGIN'));
 		}
 
 		if (! $this->user_check( $this->user->data['user_id'], $random ) )
@@ -83,7 +87,7 @@ class main
 			$delete_me->delete(array($this->user->data['user_id']), 'user');
 
 			// log out user.
-			$board_url = generate_board_url(). '/ucp.php?mode=logout&sid='. $this->user->session_id;
+			$board_url = append_sid("{$this->php_root}ucp.$this->php_ext", 'mode=logout', true, $this->user->session_id);
 			$message = ($this->config['andreask_ium_approve_del']) ? $this->user->lang('NEEDS_APPROVAL', htmlspecialchars_decode($this->config['sitename'])) : $this->user->lang('USER_SELF_DELETE_SUCCESS', htmlspecialchars_decode($this->config['sitename']));
 
 			// meta_refresh (redirect) has to run before return because after return nothing is going to run...
@@ -97,7 +101,7 @@ class main
 					'U_ACTION'  => $this->u_action
 				));
 
-		return $this->helper->render('ium_user_remove.html', $this->user->lang('USER_SELF_DELETE_TITLE'));
+		return $this->helper->render('@andreask_ium/ium_user_remove.html', $this->user->lang('USER_SELF_DELETE_TITLE'));
 	}
 
 	private function user_check($user, $random)
