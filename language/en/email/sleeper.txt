@@ -16,17 +16,21 @@ Hope to see you back again.
 Below some links to topics that you've been active.
 
 {USR_TPC_LIST}
+
 <!-- ENDIF -->
 
 <!-- IF USR_FRM_LIST -->
 Below some links to the most active topics of the board.
 
 {USR_FRM_LIST}
+
 <!-- ENDIF -->
 
 <!-- IF SELF_DELETE_LINK -->
 Click on the following link to delete your account.
+
 {SELF_DELETE_LINK}
+
 <!-- ENDIF -->
 
 {EMAIL_SIG}

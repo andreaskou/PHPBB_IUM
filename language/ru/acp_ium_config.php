@@ -70,8 +70,8 @@ $lang = array_merge(
 		// configuration page
 		'INACTIVE_MAIL_SENT_TO'			=>	'Шаблон Inactive был отправлен на "%s"',
 		'SLEEPER_MAIL_SENT_TO'			=>	'Шаблон Sleeper был отправлен на "%s"',
-		'SEND_SLEEPER'					=>	'Отправить шаблон \'Sleeper\' ',
-		'SEND_INACTIVE'					=>	'Отправить шаблон \'Inactive\' ',
+		'SEND_SLEEPER'					=>	'Отправить шаблон ’Sleeper’ ',
+		'SEND_INACTIVE'					=>	'Отправить шаблон ’Inactive’ ',
 		'PLUS_SUBFORUMS'				=>	'+подкатегории',
 
     )

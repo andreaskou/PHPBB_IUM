@@ -42,7 +42,7 @@ $lang = array_merge(
 	),
 	'USERS_DELETED'				=>	'"%1$s" kullanıcıları silindi "<b>%2$s"</b>, istek türü: "<b>%3$s</b>',
 	'USER_DELETED'				=>	'"<b>%1$s</b>" adlı kullanıcı silindi, istek türü: "<b>%2$s</b>"',
-	'SOMETHING_WRONG'			=>	'İsteğinizle ilgili bir sorun vardı. Silmek için istenen kullanıcılar veritabanındaki gerçek kullanıcılarla eşleşmedi',
+	'DELETE_REQUEST_DONT_MATCH'			=>	'İsteğinizle ilgili bir sorun vardı. Silmek için istenen kullanıcılar veritabanındaki gerçek kullanıcılarla eşleşmedi',
 	'USER_SELF_DELETED'			=>	'Bir kullanıcı kendisini silindi. Gönderiler için yapılandırma "%s" olarak ayarlandı',
 	'SENT_REMINDER_TO'			=>	'"%s" kullanıcısına bir hatırlatma gönderildi',
 	)
