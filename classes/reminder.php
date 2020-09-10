@@ -56,7 +56,7 @@ class reminder
 		$this->ignore_user		=	$ignore_user;
 		$this->request			=	$request;
 		$this->table_prefix		=	$table_prefix;
-		$this->ctrl_helper		=	$controller_helper;
+		$this->controller_helper=	$controller_helper;
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
 	}
@@ -157,21 +157,17 @@ class reminder
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['ium_random'] )
 				{
-					$link = PHP_EOL;
-					$link .= generate_board_url() . $this->ctrl_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null);
+					$link = $this->controller_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
 
 				$messenger = new \messenger(false);
-				$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $user_instance->lang('ADMINISTRATOR');
-				$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-				$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-				$messenger->headers('X-AntiAbuse: User_id - 2');
-				$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+				// $xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $user_instance->lang('ADMINISTRATOR');
+				$messenger->anti_abuse_headers($this->config, $this->user);
 
 				// mail content...
 				$messenger->from($this->config['board_contact']);
-				$messenger->to($sleeper['user_email'], $sleeper['username']);
+				$messenger->to($sleeper['user_email'], htmlspecialchars_decode($sleeper['username']));
 
 				// Load email template depending on the user
 				if ($sleeper['user_lastvisit'] != 0)
@@ -209,7 +205,7 @@ class reminder
 	private function get_users($limit = null, $user = false)
 	{
 		// if limit is not set use limit from configuration.
-		$limit = ($limit) ? 'limit ' . $limit : 'limit ' . $this->config['andreask_ium_email_limit'];
+		$limit = ($limit) ? $limit : $this->config['andreask_ium_email_limit'];
 		$sql_opt = '';
 
 		if ($user)
@@ -246,7 +242,7 @@ class reminder
 								WHERE '. $this->db->sql_in_set('user_id', '(SELECT ban_userid FROM '. BANLIST_TABLE .')', true) . $sql_opt . ' ' . $must_ignore .'
 								ORDER BY user_regdate ASC';
 
-		$result = ($limit) ? $this->db->sql_query_limit($sql, $limit) : $this->db-sql_query($sql);
+		$result = $this->db->sql_query_limit($sql, $limit);
 
 		$inactive_users = [];
 
@@ -422,7 +418,6 @@ class reminder
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => sprintf( $user_instance->lang('INCLUDE_USER_TOPICS'), $topic_links)));
 				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' =>  $topic_links));
 			}
 
@@ -434,8 +429,7 @@ class reminder
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['ium_random']))
 			{
-				$link = PHP_EOL;
-				$link .= generate_board_url() . $this->ctrl_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null);
+				$link = $this->controller_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
@@ -447,7 +441,7 @@ class reminder
 
 			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-			$messenger->headers('X-AntiAbuse: User_id - 2');
+			$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
 			$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
 
 			// mail content...
@@ -494,7 +488,7 @@ class reminder
 		$ids = (!is_array($id)) ? $ids[] = $id : $ids = $id;
 
 		// reset counter(s)!
-		$sql = 'UPDATE ' . USERS_TABLE . ' SET ium_remind_counter = 0, ium_request_date = 0, ium_type = "" WHERE '. $this->db->sql_in_set('user_id', $ids);
+		$sql = "UPDATE " . USERS_TABLE . " SET ium_remind_counter = 0, ium_request_date = 0, ium_type ='' WHERE ". $this->db->sql_in_set('user_id', $ids);
 		$this->db->sql_query($sql);
 	}
 
@@ -509,16 +503,9 @@ class reminder
 		$topic_links = '';
 		foreach ($topics as $item)
 		{
-			$topic_links .= '"' . $item['topic_title'] . '"' . PHP_EOL;
-			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'] . PHP_EOL;
-			$topic_links .= PHP_EOL;
+			$topic_links .= '"' . $item['topic_title'] . '"';
+			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
 		}
 		return $topic_links;
 	}
-
-	/**
-	 * Insert new user to ium_reminder (called from listener)
-	 * @param  [string] $id single user id of a newly registered user.
-	 * @return void
-	 */
 }
