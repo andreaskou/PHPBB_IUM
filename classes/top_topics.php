@@ -257,9 +257,10 @@ class top_topics
 
 	private function user_access($forum_id)
 	{
-		$data = $this->auth->obtain_user_data($this->user_id);
-		$this->auth->acl($data);
-		return $this->auth->acl_get('f_read', $forum_id);
+		$new_auth = new \phpbb\auth\auth;
+		$data = $new_auth->obtain_user_data($this->user_id);
+		$new_auth->acl($data);
+		return $new_auth->acl_get('f_read', $forum_id);
 	}
 
 	private function exclude_forums()
@@ -267,7 +268,7 @@ class top_topics
 		$forum_list	=	$this->config_text->get('andreask_ium_ignore_forum','');
 		if ($forum_list != null)
 		{
-			$this->excluded_forums	=	array_map('intval', json_decode($forum_list, '[]'));
+			$this->excluded_forums	=	array_map('intval', json_decode($forum_list, true));
 		}
 	}
 }
