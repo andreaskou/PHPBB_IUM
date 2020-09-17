@@ -60,5 +60,6 @@ services:
             - '@request'
             - '@template'
             - '@andreask.ium.classes.delete_user'
+            - '@service_container'
             - '%core.root_path%'
             - '%core.php_ext%'

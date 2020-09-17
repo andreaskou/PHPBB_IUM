@@ -13,6 +13,8 @@
 
 namespace andreask\ium\controller;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 class main
 {
 	/**
@@ -28,11 +30,12 @@ class main
 	protected	$helper;
 	protected	$template;
 	protected	$delete_user;
+	protected	$container;
 	protected	$u_action;
 	protected	$php_root;
 	protected	$php_ext;
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user, $php_root, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user, ContainerInterface $container, $php_root, $php_ext)
 	{
 		$this->config       =   $config;
 		$this->db           =   $db;
@@ -40,15 +43,16 @@ class main
 		$this->request      =   $request;
 		$this->template     =   $template;
 		$this->delete_user	=	$delete_user;
-		$this->$php_root	=	$php_root;
+		$this->container	=	$container;
+		$this->php_root		=	$php_root;
 		$this->php_ext		=	$php_ext;
 		$this->u_action     =   append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
 
 	public function handle($random)
 	{
-		global $phpbb_container;
-		$this->controller_helper = $phpbb_container->get('controller.helper');
+		$this->controller_helper = $this->container->get('controller.helper');
+		var_dump($this->php_ext);
 
 
 		$this->user->add_lang_ext('andreask/ium', 'user_self_delete_page');
