@@ -31,7 +31,7 @@ class reminder
 	protected $phpbb_root_path;
 	protected $php_ext;
 	protected $table_name;
-	protected $controller_helper;
+	protected $routing_helper;
 
 	/**
 	*
@@ -45,7 +45,7 @@ class reminder
 	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, \phpbb\controller\helper $controller_helper, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, \phpbb\routing\helper $routing_helper, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
 		$this->db				=	$db;
@@ -56,7 +56,7 @@ class reminder
 		$this->ignore_user		=	$ignore_user;
 		$this->request			=	$request;
 		$this->table_prefix		=	$table_prefix;
-		$this->controller_helper=	$controller_helper;
+		$this->routing_helper	=	$routing_helper;
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
 	}
@@ -157,7 +157,7 @@ class reminder
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['ium_random'] )
 				{
-					$link = $this->controller_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
+					$link = $this->routing_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
 
@@ -429,7 +429,7 @@ class reminder
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['ium_random']))
 			{
-				$link = $this->controller_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
+				$link = $this->routing_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
