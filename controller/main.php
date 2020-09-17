@@ -52,9 +52,6 @@ class main
 	public function handle($random)
 	{
 		$this->controller_helper = $this->container->get('controller.helper');
-		var_dump($this->php_ext);
-
-
 		$this->user->add_lang_ext('andreask/ium', 'user_self_delete_page');
 
 		if ($this->config['andreask_ium_enable'] == 0 || $this->config['andreask_ium_self_delete'] == 0)
