@@ -71,12 +71,12 @@ class main_module
 					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				if ( $request->variable('subforum_id', 0 ) == null )
+				if ( $request->variable('subforum_id', 0 ) == 0 )
 				{
 					trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				$already_excluded_forums_array = json_decode($config_text->get('andreask_ium_ignore_forum'), '[]');
+				$already_excluded_forums_array = json_decode($config_text->get('andreask_ium_ignore_forum'), true);
 				$new_forum_array = $this->sweap_sforums($request->variable('subforum_id', 0));
 				if ($already_excluded_forums_array != null)
 				{
@@ -97,7 +97,7 @@ class main_module
 					trigger_error($user->lang('FORM_INVALID'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				if ( $request->variable('excluded_forum', 0) == null )
+				if ( $request->variable('excluded_forum', 0) == 0 )
 				{
 					trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
@@ -261,29 +261,28 @@ class main_module
 			// Assign row results to template var inactive
 			foreach ($rows as $row)
 			{
-				// $row['user_inactive_reason'] = $user->lang['INACTIVE_REASON_UNKNOWN'];
-          switch ($row['user_inactive_reason'])
-          {
-						case 0:
-							$row['user_inactive_reason'] = $user->lang('ACP_IUM_INACTIVE', 0);
-						break;
+				switch ($row['user_inactive_reason'])
+				{
+					case 0:
+						$row['user_inactive_reason'] = $user->lang('ACP_IUM_INACTIVE', 0);
+					break;
 
-						case INACTIVE_REGISTER:
-              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_REGISTER');
-            break;
+					case INACTIVE_REGISTER:
+						$row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_REGISTER');
+					break;
 
-            case INACTIVE_PROFILE:
-              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_PROFILE');
-            break;
+					case INACTIVE_PROFILE:
+						$row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_PROFILE');
+					break;
 
-            case INACTIVE_MANUAL:
-              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_MANUAL');
-            break;
+					case INACTIVE_MANUAL:
+						$row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_MANUAL');
+					break;
 
-            case INACTIVE_REMIND:
-              $row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_REMIND');
-            break;
-          }
+					case INACTIVE_REMIND:
+						$row['user_inactive_reason'] = $user->lang('INACTIVE_REASON_REMIND');
+					break;
+				}
 
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars('inactive', array(
@@ -304,8 +303,6 @@ class main_module
 
 		if ($mode == 'ium_approval_list')
 		{
-			global $phpbb_root_path, $phpEx;
-
 			$form_key = 'andreask_ium';
 			add_form_key($form_key);
 
@@ -317,7 +314,6 @@ class main_module
 
 			if ( $request->is_set_post('approve') )
 			{
-
 				// Check form key
 				if ( !check_form_key($form_key) )
 				{
@@ -325,7 +321,7 @@ class main_module
 				}
 
 				// Check if any user is selected from the list
-				if ($request->variable('mark', array(0)) == null)
+				if ($request->variable('mark', array(0)) == 0)
 				{
 					trigger_error($user->lang('NO_USER_SELECTED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
@@ -355,7 +351,6 @@ class main_module
 				// Else do your magic...
 				$action = $request->variable('action', 'none');
 				$mark = $request->variable('mark', array(0));
-				include_once $phpbb_root_path . "includes/functions." . $phpEx;
 
 				switch ($action)
 				{
@@ -410,10 +405,7 @@ class main_module
 				}
 				else
 				{
-					$not_found = implode(', ', array_map(function($un)
-						{
-							return $un;
-						} , $result));
+					$not_found = implode(', ', $result);
 					trigger_error($user->lang('USER_NOT_FOUND', $not_found) . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 			}
@@ -554,7 +546,6 @@ class main_module
 	}
 
 	/**
-	* XXX redundant???
 	* Getter for inactive users
 	* @param int $limit Used for pagination in sql query to limit the numbers of rows.
 	* @param int $start Used for pagination in sql query to say where to start from.
@@ -565,7 +556,7 @@ class main_module
 
 	public function get_inactive_users($paginate = true, $limit = null, $start = null, $filters = null)
 	{
-		return $this->inactive_users(null, $paginate, $limit, $start, $filters);
+		return $this->inactive_users($paginate, $limit, $start, $filters);
 	}
 
 	/**
@@ -576,9 +567,9 @@ class main_module
 	* @return array result of query and total amount of the result.
 	*/
 
-	private function inactive_users($type = null, $paginate = true, $limit = null, $start = null, $filters = null)
+	private function inactive_users($paginate = true, $limit = null, $start = null, $filters = null)
 	{
-		global $db, $config, $table_prefix, $phpbb_container;
+		global $db, $phpbb_container;
 
 		if ($filters)
 		{
@@ -831,7 +822,7 @@ class main_module
 	 */
 	public function make_excluded_forums_list($forum_ids)
 	{
-		global $db, $phpbb_container, $user;
+		global $db, $user;
 
 		$sql = 'SELECT forum_id, forum_name, left_id, right_id FROM ' . FORUMS_TABLE . '
 				WHERE ' . $db->sql_in_set('forum_id', $forum_ids) . ' ORDER BY left_id';

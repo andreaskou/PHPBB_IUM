@@ -113,7 +113,6 @@ class ignore_user
 			$username = array_column($user, 'username');
 		}
 
-		$dont_send = $action;
 		$data = array ('ium_dont_send' => $action);
 		$sql = 'UPDATE ' . USERS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $data) . '
@@ -167,7 +166,20 @@ class ignore_user
 		$ignore = json_decode($ignore);
 		if (!empty($ignore))
 		{
-			$ignore = ' AND ' . $this->db->sql_in_set('group_id', $ignore, true);
+			$sql_ary = array(
+				'SELECT'	=>	'user_id',
+				'FROM'		=> array(USER_GROUP_TABLE => 'gr'),
+				'WHERE'		=> $this->db->sql_in_set('group_id', $ignore)
+			);
+			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+			$result = $this->db->sql_query($sql);
+			$users = [];
+			while ( $user = $this->db->sql_fetchrow($result))
+			{
+				$users[]= $user['user_id'];
+			}
+			$this->db->sql_freeresult($result);
+			$ignore = ' AND ' . $this->db->sql_in_set('user_id', $users, true );
 		}
 		else
 		{

@@ -19,7 +19,6 @@ use \DateInterval;
 class delete_user
 {
 
-	protected $inactive_users = [];
 	protected $config;
 	protected $db;
 	protected $user;
@@ -71,7 +70,7 @@ class delete_user
 
 		if ( !$user_count == $users_to_delete )
 		{
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SOMETHING_WRONG', time());
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DELETE_REQUEST_DONT_MATCH', time());
 			return false;
 		}
 
@@ -130,7 +129,10 @@ class delete_user
 		$this->db->sql_freeresult($result);
 
 		// Include functions_user for the user_delete function
-		include_once( $this->phpbb_root_path . 'includes/functions_user.' . $this->php_ext );
+		if (!function_exists('user_get_id_name'))
+		{
+			include_once( $this->phpbb_root_path . 'includes/functions_user.' . $this->php_ext );
+		}
 
 		// Use config to determin if posts shuld be kept or deleted. or perhaps admin want's them specifically deleted.
 		$posts = ( $this->config['andreask_ium_keep_posts'] ) ? 'retain' : 'remove';
@@ -174,7 +176,7 @@ class delete_user
 				// store for approval and add user to the list.
 				$sql_array = array(
 								'ium_request_date'	=>	time(),
-								'ium_type'					=>	$type,
+								'ium_type'			=>	$type,
 							);
 				$sql = "UPDATE " . USERS_TABLE . "
 						SET ". $this->db->sql_build_array('UPDATE', $sql_array) ."
@@ -197,6 +199,7 @@ class delete_user
 
 	public function	auto_delete()
 	{
+		
 		// Current date
 		$present = new DateTime();
 
@@ -253,7 +256,6 @@ class delete_user
 			include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 		}
 
-		$this->user->add_lang('common');
 		$interval_days_sum = $this->config['andreask_ium_interval'] * 3;
 
 		$messenger = new \messenger(false);
@@ -262,7 +264,7 @@ class delete_user
 		// mail headers
 		$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 		$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-		$messenger->headers('X-AntiAbuse: User_id - 2');
+		$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
 
 		// mail content...
 		$messenger->from($this->config['board_contact']);

@@ -41,7 +41,7 @@ $lang = array_merge($lang, array(
 	),
 	'USERS_DELETED'				=>	'"%1$s" Benutzer wurden gelöscht "<b>%2$s"</b>, Anfragetyp : "<b>%3$s</b>"',
 	'USER_DELETED'				=>	'Benutzer "<b>%1$s</b>" wurde gelöscht, Anfragetyp : "<b>%2$s</b>"',
-	'SOMETHING_WRONG'			=>	'Irgendetwas stimmte nicht mit Ihrer Anfrage. Angeforderte Benutzer zum Löschen stimmten nicht mit den tatsächlichen Benutzern in der Datenbank überein.',
+	'DELETE_REQUEST_DONT_MATCH'			=>	'Irgendetwas stimmte nicht mit Ihrer Anfrage. Angeforderte Benutzer zum Löschen stimmten nicht mit den tatsächlichen Benutzern in der Datenbank überein.',
 	'USER_SELF_DELETED'			=>	'Ein Benutzer hat sich selbst gelöscht. Konfiguration für Beiträge war gesetzt auf "%s"',
 	'SENT_REMINDER_TO'			=>	'Es wurde eine Erinnerung an den Benutzer "%s" gesendet.',
 ));
