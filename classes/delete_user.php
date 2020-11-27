@@ -70,7 +70,7 @@ class delete_user
 
 		if ( !$user_count == $users_to_delete )
 		{
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DELETE_REQUEST_DONT_MATCH', time());
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_DELETE_REQUEST_DONT_MATCH', time());
 			return false;
 		}
 
@@ -144,11 +144,11 @@ class delete_user
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users[0], $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USER_DELETED', time(), array($users[0], $type));
 			}
 		}
 
@@ -160,11 +160,11 @@ class delete_user
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users[0], $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USER_DELETED', time(), array($users[0], $type));
 			}
 		}
 
@@ -187,7 +187,7 @@ class delete_user
 			else
 			{
 				user_delete($posts, $id);
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_SELF_DELETED', time(), array($posts));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USER_SELF_DELETED', time(), array($posts));
 			}
 		}
 	}

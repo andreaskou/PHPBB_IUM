@@ -111,11 +111,11 @@ class listener implements EventSubscriberInterface
 		{
 			$username = array_shift($username);
 		}
-		if ($sql_ary['log_operation'] == 'SENT_REMINDERS' && (is_int($username)) && $username <= 1)
+		if ($sql_ary['log_operation'] == 'LOG_SENT_REMINDERS' && (is_int($username)) && $username <= 1)
 		{
 			// unset($sql_ary['log_type']);
 			// $event['sql_ary'] = $sql_ary;
-			$sql_ary['log_operation'] = 'SENT_REMINDER_TO';
+			$sql_ary['log_operation'] = 'LOG_SENT_REMINDER_TO';
 			$event['sql_ary'] = $sql_ary;
 		}
 	}
