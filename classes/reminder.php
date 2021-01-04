@@ -503,8 +503,9 @@ class reminder
 		$topic_links = '';
 		foreach ($topics as $item)
 		{
-			$topic_links .= '"' . $item['topic_title'] . '"';
+			$topic_links .= '"' . $item['topic_title'] . '"' . "\r\n";
 			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
+			$topic_links .= "\r\n\r\n";
 		}
 		return $topic_links;
 	}
