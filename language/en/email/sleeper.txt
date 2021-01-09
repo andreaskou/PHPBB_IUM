@@ -14,16 +14,24 @@ Hope to see you back again.
 
 <!-- IF USR_TPC_LIST -->
 Below some links to topics that you've been active.
+<!-- BEGIN USR_TPC_LIST -->
+{% for user_topics in USR_TPC_LIST %}
+    "{{ user_topics.title }}"
+    {{ user_topics.url }}
 
-{USR_TPC_LIST}
-
+{% endfor %}
+<!-- END USR_TPC_LIST -->
 <!-- ENDIF -->
 
 <!-- IF USR_FRM_LIST -->
 Below some links to the most active topics of the board.
 
-{USR_FRM_LIST}
-
+<!-- BEGIN USR_FRM_LIST -->
+{% for forum_topics in USR_FRM_LIST %}
+    "{{ forum_topics.title }}"
+    {{ forum_topics.url }}
+{% endfor %}
+<!-- END USR_FRM_LIST -->
 <!-- ENDIF -->
 
 <!-- IF SELF_DELETE_LINK -->
