@@ -147,13 +147,11 @@ class reminder
 
 				if (!is_null($topic_links))
 				{
-					// $template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => $topic_links));
-					$messenger->assign_block_vars('USR_TPC_LIST', $topic_links);
+					$messenger->assign_vars(['USR_TPC_LIST' => $topic_links,]);
 				}
 				if (!is_null($forum_links))
 				{
-					// $template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
-					$messenger->assign_block_vars('USR_FRM_LIST', $forum_links);
+					$messenger->assign_vars(['USR_FRM_LIST' => $forum_links,]);
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['ium_random'] )
 				{
