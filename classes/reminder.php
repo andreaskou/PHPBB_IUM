@@ -416,7 +416,7 @@ class reminder
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				$messenger->assign_vars(['USR_TPC_LIST' => $forum_links,]);
+				$messenger->assign_vars(['USR_TPC_LIST' => $topic_links,]);
 			}
 
 			// If there are forum topics merge them with the template_ary
