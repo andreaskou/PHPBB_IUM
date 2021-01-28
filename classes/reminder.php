@@ -411,17 +411,20 @@ class reminder
 				'URL'			=>	generate_board_url(),
 			);
 
+			$messenger = new \messenger(false);
+
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' =>  $topic_links));
+				$messenger->assign_vars(['USR_TPC_LIST' => $forum_links,]);
 			}
 
 			// If there are forum topics merge them with the template_ary
 			if (!is_null($forum_links))
 			{
-				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
+				$messenger->assign_vars(['USR_FRM_LIST' => $forum_links,]);
 			}
+
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['ium_random']))
 			{
@@ -429,16 +432,8 @@ class reminder
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
-			$messenger = new \messenger(false);
-
 			// mail headers
-
-			$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->user->lang('ADMINISTRATOR');
-
-			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-			$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
-			$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+			$messenger->anti_abuse_headers($this->config, $this->user);
 
 			// mail content...
 			$messenger->from($this->config['board_contact']);
@@ -462,7 +457,7 @@ class reminder
 			$messenger->assign_vars($template_ary);
 
 			// Send mail...
-			// $messenger->send();
+			$messenger->send();
 			unset($topics);
 		}
 
