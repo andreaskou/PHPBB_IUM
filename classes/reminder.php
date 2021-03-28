@@ -189,7 +189,7 @@ class reminder
 		}
 
 		// Log it and release the user list.
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
 		unset( $this->inactive_users );
 	}
 
@@ -464,7 +464,7 @@ class reminder
 		// Log it and release the user list.
 
 		$template = explode('_', $template);
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDER_TO_ADMIN', time(), array($template[1], $sleeper['user_email']));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDER_TO_ADMIN', time(), array($template[1], $sleeper['user_email']));
 		unset( $this->inactive_users );
 	}
 
