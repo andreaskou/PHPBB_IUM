@@ -198,11 +198,11 @@ class main_module
 
 			//base url for pagination, filtering and sorting
 			$base_url = $this->u_action
-											. "&amp;users_per_page="	. $limit
-											. "&amp;with_posts=" 		. $with_posts
-											. "&amp;count_back=" 		. $actions
-											. "&amp;sort_by=" 			. $sort_by
-											. "&amp;sort_order=" 		. $sort_order;
+				. "&amp;users_per_page="	. $limit
+				. "&amp;with_posts=" 		. $with_posts
+				. "&amp;count_back=" 		. $actions
+				. "&amp;sort_by=" 			. $sort_by
+				. "&amp;sort_order=" 		. $sort_order;
 
 			// Long list probably should make shorter.
 			// IDEA perhaps just set number of days insted of this?
@@ -211,27 +211,27 @@ class main_module
 				'30d' 		=> 'THIRTY_DAYS',
 				'60d' 		=> 'SIXTY_DAYS',
 				'90d' 		=> 'NINETY_DAYS',
-				'4m' 			=> 'FOUR_MONTHS',
-				'6m' 			=> 'SIX_MONTHS',
-				'9m' 			=> 'NINE_MONTHS',
-				'1Y' 			=> 'ONE_YEAR',
-				'2Y' 			=> 'TWO_YEARS',
-				'3Y' 			=> 'THREE_YEARS',
-				'5Y' 			=> 'FIVE_YEARS',
-				'7Y' 			=> 'SEVEN_YEARS',
+				'4m' 		=> 'FOUR_MONTHS',
+				'6m' 		=> 'SIX_MONTHS',
+				'9m' 		=> 'NINE_MONTHS',
+				'1Y' 		=> 'ONE_YEAR',
+				'2Y' 		=> 'TWO_YEARS',
+				'3Y' 		=> 'THREE_YEARS',
+				'5Y' 		=> 'FIVE_YEARS',
+				'7Y' 		=> 'SEVEN_YEARS',
 				'10Y' 		=> 'DECADE',
 			);
 
 			// Sort by element
 			$sort_by_ary = array(
-				'select' 							=> 'SORT_BY_SELECT',
-				'username' 						=> 'USERNAME',
-				'posts' 							=> 'POSTS',
-				'reg_date' 						=> 'JOINED',
-				'last_visit' 					=> 'LAST_VISIT',
+				'select' 				=> 'SORT_BY_SELECT',
+				'username' 				=> 'USERNAME',
+				'posts' 				=> 'POSTS',
+				'reg_date' 				=> 'JOINED',
+				'last_visit' 			=> 'LAST_VISIT',
 				'last_sent_reminder'	=> 'LAST_SENT_REMINDER',
-				'count' 							=> 'COUNT',
-				'reminder_date' 			=> 'REMINDER_DATE',
+				'count' 				=> 'COUNT',
+				'reminder_date' 		=> 'REMINDER_DATE',
 			);
 
 			// Get the users list using get_inactive_users required parameters $limit $start
