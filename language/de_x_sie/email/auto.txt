@@ -1,10 +1,13 @@
-Betreff: Sie wurden aus {SITENAME} gelöscht.
+Betreff: Sie wurden auf {SITENAME} gelÃ¶scht.
 
 Hallo, {USER_NAME}
 
-Es tut uns leid, aber Ihr Konto wurde gelöscht!
-Der Grund für die Löschung ist, dass Sie sich nicht länger als {INTERVAL_DAYS_SUM} Tage bei "{SITENAME}" angemeldet haben.
-Wenn Sie möchten, können Sie sich erneut anmelden.
+Es tut uns sehr leid, aber Ihr Konto wurde gelÃ¶scht!
+
+Der Grund fÃ¼r die LÃ¶schung ist, dass Sie sich seit mehr als {INTERVAL_DAYS_SUM} Tagen nicht mehr bei "{SITENAME}" angemeldet haben.
+
+Wenn Sie mÃ¶chten, kÃ¶nnen Sie sich erneut registrieren.
+
 Wir hoffen, Sie bald wieder zu sehen.
 
 {EMAIL_SIG}
