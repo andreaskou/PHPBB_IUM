@@ -343,7 +343,7 @@ class main_module
 				}
 
 				// Check if any user is selected from the list
-				if ($request->variable('mark', array(0)) == null)
+				if (empty($request->variable('mark', array(0))))
 				{
 					trigger_error($user->lang('NO_USER_SELECTED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}

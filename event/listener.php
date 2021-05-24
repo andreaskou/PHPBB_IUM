@@ -28,13 +28,13 @@ class listener implements EventSubscriberInterface
 
 	public function __construct($reminder, $ignore_user, \phpbb\user $user, \phpbb\config\config $config, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
-		$this->reminder			= $reminder;
-		$this->ignore_user	= $ignore_user;
-		$this->user 				=	$user;
-		$this->config 			=	$config;
+		$this->reminder		=	$reminder;
+		$this->ignore_user	=	$ignore_user;
+		$this->user 		=	$user;
+		$this->config 		=	$config;
 		$this->config_text	=	$config_text;
-		$this->auth					=	$auth;
-		$this->log					=	$log;
+		$this->auth			=	$auth;
+		$this->log			=	$log;
 	}
 
 	/**
@@ -47,7 +47,6 @@ class listener implements EventSubscriberInterface
 			'core.login_box_redirect'				=>	'update_ium_reminder_counter',
 			'core.acp_users_display_overview'		=>	'add_remind_user_option',
 			'core.acp_users_overview_run_quicktool'	=>	'remind_single_user',
-			// 'core.add_log'							=>	'overwrite_log',
 		);
 	}
 

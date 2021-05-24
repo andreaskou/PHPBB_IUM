@@ -23,11 +23,6 @@ class add_module extends migration
 		return array('\phpbb\db\migration\data\v31x\v316');
 	}
 
-	// public function effectively_installed()
-	// {
-	// 	return phpbb_version_compare($this->config['andreask_ium_version'], '0.9.1', '>=');
-	// }
-
 	public function update_data()
 	{
 		return array(
