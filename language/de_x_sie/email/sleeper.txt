@@ -2,7 +2,7 @@ Subject: {SITENAME}: Wir haben Sie vermisst {USERNAME}!
 
 Hallo {USERNAME},
 
-Ihr letzter Besuch beim Forum  {SITENAME} war am "{LAST_VISIT}".
+Ihr letzter Besuch beim Forum {SITENAME} war am "{LAST_VISIT}".
 Das ist schon eine Weile her und wir hoffen Sie bald wiederzusehen!
 
 Im Fall, dass Sie Ihre Zugangsdaten vergessen haben, so können Sie sie immer unter dem nachfolgenden Link zurückerlangen:
