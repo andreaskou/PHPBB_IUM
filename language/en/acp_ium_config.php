@@ -50,6 +50,10 @@ $lang = array_merge(
         'ANDREASK_IUM_INCLUDE_FORUM'				=>	'Include',
         'SELECT_A_FORUM'							=>	'Please select a forum',
         'EXCLUDED_EMPTY'							=>	'No excluded forums...',
+		'FIRST_REMINDER'	=>	'1st',
+		'SECOND_REMINDER'	=>	'2nd',
+		'THIRD_REMINDER'	=>	'3rd',
+		'ANDREASK_IUM_RESPECT_USR'	=> 'Respect User`s choice',
 
 		// ACP configuration page Explanations
 		'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'If enabled, the extension will start sending reminders to "sleepers".',
@@ -67,7 +71,7 @@ $lang = array_merge(
 		'ANDREASK_IUM_TEST_EMAIL_EXPLAIN'		=>	'A test e-mail will be sent to "%s"',
 		'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Select a category or subcategory to <strong>exclude</strong> it from the top topics lists that are sent to the users',
 		'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Select a category or subcategory to <strong>include</strong> it from the top topics lists that are sent to the users',
-
+		'ANDREASK_IUM_RESPECT_USR_EXPLAIN'		=>	'Some users may have chosen not to receive mass mail messages from admins. If "Yes" the extension will not send to these users the reminder.',
 		// configuration page
 		'INACTIVE_MAIL_SENT_TO'			=>	'A sample of email for inactive users was sent to "%s"',
 		'SLEEPER_MAIL_SENT_TO'			=>	'A sample of email for inactive users was sent to "%s"',
