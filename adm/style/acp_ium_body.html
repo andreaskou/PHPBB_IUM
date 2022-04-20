@@ -22,12 +22,20 @@
         <legend>{{ lang('ACP_IUM_MAIL_SETTINGS') }}</legend>
         <dl>
             <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_INTERVAL_EXPLAIN')}}</span></dt>
-            <dd><input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="999" /> {{ lang('DAYS') }} </dd>
+            {{ lang('FIRST_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="999" />
+            {{ lang('SECOND_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL2}" size="3" id="andreask_ium_interval2" name="andreask_ium_interval2" min="0" max="999" />
+            {{ lang('THIRD_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL3}" size="3" id="andreask_ium_interval3" name="andreask_ium_interval3" min="0" max="999" /> {{ lang('DAYS') }}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_email_limit">{{ lang('ANDREASK_IUM_EMAIL_LIMIT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN')}}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500" /> {{ lang('EMAILS')}} </dd>
         </dl>
+        <dl>
+            <dt><label for="andreask_ium_respect_user_choice">{{ lang('ANDREASK_IUM_RESPECT_USR') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_RESPECT_USR_EXPLAIN')}}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="1" <!-- IF ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="0" <!-- IF not ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+        </dl>
+
     </fieldset>
     <fieldset>
         <legend>{{ lang('ACP_IUM_DANGER') }}</legend>
