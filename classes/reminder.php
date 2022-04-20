@@ -32,6 +32,7 @@ class reminder
 	protected $php_ext;
 	protected $table_name;
 	protected $routing_helper;
+	private	  $intervals;
 
 	/**
 	*
@@ -59,6 +60,7 @@ class reminder
 		$this->routing_helper	=	$routing_helper;
 		$this->php_ext          =	$php_ext;
 		$this->phpbb_root_path	=	$phpbb_root_path;
+		$this->intervals		=	$this->get_intervals();
 	}
 
 	/**
@@ -66,17 +68,17 @@ class reminder
 	 * @param $limit ammount of email (users) to sent to
 	 */
 
-	public function send($limit, $single = false)
+	public function send($single = false)
 	{
 		if ($single)
 		{
 			$user = array_shift($this->inactive_users);
-			$this->get_users($limit, $user['user_id']);
+			$this->get_users($user['user_id']);
 		}
 
 		if (!$this->has_users())
 		{
-			$this->get_users($limit);
+			$this->get_users();
 		}
 
 		if ( $this->has_users() )
@@ -86,8 +88,27 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
+			$counter = 0;
 			foreach ($this->inactive_users as $sleeper)
 			{
+
+				if ($sleeper['ium_remind_counter'] == 0 && ($sleeper['user_lastvisit'] > $this->intervals[1]))
+				{
+					// skip user
+					continue;
+				}
+				elseif ($sleeper['ium_remind_counter'] == 1 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[2]))
+				{
+					// skip user
+					continue;
+				}
+				elseif ($sleeper['ium_remind_counter'] == 2 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
+				{
+					// skip again
+					continue;
+				}
+				$counter++;
+
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
 					$lang_file_loader = new \phpbb\language\language_file_loader($this->phpbb_root_path, $this->php_ext);
@@ -185,6 +206,7 @@ class reminder
 				// Update ext's table...
 				$this->update_user($sleeper);
 				unset($topics);
+				if ($counter == $this->config['andreask_ium_email_limit']) break;
 			}
 		}
 
@@ -194,51 +216,32 @@ class reminder
 	}
 
 	/**
-	 * Gets the users from database and loades them to inactive_users
-	 * @param int $limit amount of results. Default is null
+	 * Gets the users from database and loades them to inactive_users and stores them to $this->inactive_users
+	 * @param  boolean $user User id (if single user) of the requested user.
+	 * @return void
 	 */
 
-	private function get_users($limit = null, $user = false)
+	private function get_users($user = false)
 	{
-		// if limit is not set use limit from configuration.
-		$limit = ($limit) ? $limit : $this->config['andreask_ium_email_limit'];
 		$sql_opt = '';
 
 		if ($user)
 		{
 			$sql_opt .= ' AND user_id = ' . (int) $user;
-		}
-
-		if (!$user)
+		}else
 		{
-			// Current date
-			$present = new DateTime();
-
-			// Set interval
-			$back = 'P' . $this->config['andreask_ium_interval'] . 'D';
-			$interval = new DateInterval($back);
-
-			// Substract the interval of Days/Months/Years from present
-			$present->sub($interval);
-
-			// Convert past to timestamp
-			$past = strtotime($present->format("y-m-d h:i:s"));
-
-			$sql_opt .= ' AND ium_dont_send < 1
-			AND ium_reminder_sent_date < '. $past . '
-			AND user_lastvisit < ' . $past . '
-			AND user_regdate < ' . $past;
+			$sql_opt .= $this->config['andreask_ium_respect_user_choice'] ? ' AND user_allow_massemail <> 1 ' : '';
+			$sql_opt .= ' AND ium_dont_send < 1 ';
 		}
 
 		$ignore_groups = $this->ignore_user;
 		$must_ignore = $ignore_groups->ignore_groups();
 
-		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type, ium_request_type
-								FROM '. USERS_TABLE . '
-								WHERE '. $this->db->sql_in_set('user_id', '(SELECT ban_userid FROM '. BANLIST_TABLE .')', true) . $sql_opt . ' ' . $must_ignore .'
-								ORDER BY user_regdate ASC';
-
-		$result = $this->db->sql_query_limit($sql, $limit);
+		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type
+					FROM '. USERS_TABLE . '
+					WHERE '. $this->db->sql_in_set('user_id', '(SELECT ban_userid FROM '. BANLIST_TABLE .')', true) . $sql_opt . ' ' . $must_ignore .'
+					ORDER BY user_regdate ASC';
+		$result = $this->db->sql_query($sql);
 
 		$inactive_users = [];
 
@@ -499,5 +502,38 @@ class reminder
 			$topic_links[$key]['url'] = $url . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
 		}
 		return $topic_links;
+	}
+
+	public function get_intervals()
+	{
+		$first_interval		= (int) $this->config['andreask_ium_interval'];
+		$second_interval	= (int) $this->config['andreask_ium_interval2'] ?: $first_interval;
+		$third_interval		= (int) $this->config['andreask_ium_interval3'] ?: $second_interval;
+
+		// Current date
+		$present = new DateTime();
+
+		// Set intervals
+		$back = 'P' . $first_interval . 'D';
+		$interval = new DateInterval($back);
+
+		$back2 = 'P' . $second_interval . 'D';
+		$interval2 = new DateInterval($back2);
+
+		$back3 = 'P' . $third_interval . 'D';
+		$interval3 = new DateInterval($back3);
+
+		// Substract the interval of Days/Months/Years from present
+		$present->sub($interval);
+		$intervals[1] = strtotime($present->format("y-m-d h:i:s"));
+
+		// Convert past to timestamp
+		$present->sub($interval2);
+		$intervals[2] = strtotime($present->format("y-m-d h:i:s"));
+
+		$present->sub($interval3);
+		$intervals[3] = strtotime($present->format("y-m-d h:i:s"));
+
+		return $intervals;
 	}
 }
