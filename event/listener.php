@@ -96,7 +96,7 @@ class listener implements EventSubscriberInterface
 		if ($action == 'andreask_ium_remind')
 		{
 			$this->reminder->set_single($user);
-			$this->reminder->send(1, true);
+			$this->reminder->send(true);
 		}
 	}
 
