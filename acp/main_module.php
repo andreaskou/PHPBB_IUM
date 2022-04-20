@@ -137,6 +137,9 @@ class main_module
 			$template->assign_vars(array(
 				'ANDREASK_IUM_ENABLE'					=>	$config['andreask_ium_enable'],
 				'ANDREASK_IUM_INTERVAL'					=>	$config['andreask_ium_interval'],
+				'ANDREASK_IUM_INTERVAL2'				=>	$config['andreask_ium_interval2'],
+				'ANDREASK_IUM_INTERVAL3'				=>	$config['andreask_ium_interval3'],
+				'ANDREASK_IUM_USR_RSPCT'				=>	$config['andreask_ium_respect_user_choice'],
 				'ANDREASK_IUM_TOP_USER_THREADS'			=>	$config['andreask_ium_top_user_threads'],
 				'ANDREASK_IUM_TOP_USER_THREADS_COUNT'	=>	$config['andreask_ium_top_user_threads_count'],
 				'ANDREASK_IUM_TOP_FORUM_THREADS'		=>	$config['andreask_ium_top_forum_threads'],
@@ -532,6 +535,9 @@ class main_module
 
 		$config->set('andreask_ium_enable', 					$request->variable('andreask_ium_enable', false));
 		$config->set('andreask_ium_interval', 					$request->variable('andreask_ium_interval', 30));
+		$config->set('andreask_ium_interval2', 					$request->variable('andreask_ium_interval2', 0));
+		$config->set('andreask_ium_interval3', 					$request->variable('andreask_ium_interval3', 0));
+		$config->set('andreask_ium_respect_user_choice',		$request->variable('andreask_ium_respect_user_choice', true));
 		$config->set('andreask_ium_self_delete', 				$request->variable('andreask_ium_self_delete', false));
 		$config->set('andreask_ium_email_limit', 				$request->variable('andreask_ium_email_limit', 250));
 		$config->set('andreask_ium_approve_del', 				$request->variable('andreask_ium_delete_approve', true));
@@ -707,7 +713,7 @@ class main_module
 		$ignore_groups 	= $phpbb_container->get('andreask.ium.classes.ignore_user');
 		$must_ignore 	= $ignore_groups->ignore_groups();
 
-		$sql = 'SELECT user_id, username, user_regdate, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type, ium_request_type
+		$sql = 'SELECT user_id, username, user_regdate, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type
 			FROM ' . USERS_TABLE . '
 			WHERE user_id not in (SELECT ban_userid FROM ' . BANLIST_TABLE . ')'
 			. $must_ignore
