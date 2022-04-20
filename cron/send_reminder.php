@@ -41,7 +41,7 @@ class send_reminder extends \phpbb\cron\task\base
 	public function run()
 	{
 		$reminder = $this->reminder;
-		$reminder->send($this->config['andreask_ium_email_limit']);
+		$reminder->send();
 
 		// Update last run datetime stamp
 		$this->config->set('send_reminder_last_gc', time());
