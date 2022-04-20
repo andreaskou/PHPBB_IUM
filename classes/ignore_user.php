@@ -191,7 +191,7 @@ class ignore_user
 
 		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
 				  AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) .'
-				  AND ' . $this->db->sql_in_set('user_inactive_reason', INACTIVE_MANUAL, true) .' AND user_id > ' . ANONYMOUS . $ignore;
+				  AND ' . $this->db->sql_in_set('user_inactive_reason', INACTIVE_MANUAL, true) .' AND user_id <> ' . ANONYMOUS . $ignore;
 
 		return $text;
 	}
