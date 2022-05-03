@@ -13,8 +13,8 @@
 
 namespace andreask\ium\classes;
 
-use \DateTime;
 use \DateInterval;
+use \DateTimeImmutable;
 
 class reminder
 {
@@ -88,7 +88,7 @@ class reminder
 				include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 			}
 
-			$counter = 0;
+			$i = 0;
 			foreach ($this->inactive_users as $sleeper)
 			{
 
@@ -107,7 +107,7 @@ class reminder
 					// skip again
 					continue;
 				}
-				$counter++;
+				$i++;
 
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
@@ -155,13 +155,10 @@ class reminder
 				$template_ary	=	array(
 					'FORGOT_PASS'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=sendpassword",
 					'SEND_ACT_AG'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=resend_act",
-					'SITE_NAME'		=>	htmlspecialchars_decode($this->config['sitename']),
 					'USERNAME'		=>	htmlspecialchars_decode($sleeper['username']),
 					'LAST_VISIT'	=>	date('d-m-Y', $sleeper['user_lastvisit']),
 					'REG_DATE'		=>	date('d-m-Y', $sleeper['user_regdate']),
-					'SIGNATURE'		=>	$this->config['board_email_sig'],
 					'ADMIN_MAIL'	=>	$this->config['board_contact'],
-					'URL'			=>	generate_board_url(),
 				);
 
 				$messenger = new \messenger(false);
@@ -183,7 +180,6 @@ class reminder
 				$messenger->anti_abuse_headers($this->config, $this->user);
 
 				// mail content...
-				$messenger->from($this->config['board_contact']);
 				$messenger->to($sleeper['user_email'], htmlspecialchars_decode($sleeper['username']));
 
 				// Load email template depending on the user
@@ -206,12 +202,12 @@ class reminder
 				// Update ext's table...
 				$this->update_user($sleeper);
 				unset($topics);
-				if ($counter == $this->config['andreask_ium_email_limit']) break;
+				if ($i == $this->config['andreask_ium_email_limit']) break;
 			}
 		}
 
 		// Log it and release the user list.
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), array($i));
 		unset( $this->inactive_users );
 	}
 
@@ -230,7 +226,7 @@ class reminder
 			$sql_opt .= ' AND user_id = ' . (int) $user;
 		}else
 		{
-			$sql_opt .= $this->config['andreask_ium_respect_user_choice'] ? ' AND user_allow_massemail <> 1 ' : '';
+			$sql_opt .= $this->config['andreask_ium_respect_user_choice'] ? ' AND user_allow_massemail <> 0 ' : '';
 			$sql_opt .= ' AND ium_dont_send < 1 ';
 		}
 
@@ -249,14 +245,14 @@ class reminder
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$inactive_users[] = $row;
-		};
+		}
 
 		// Be sure to free the result after a SELECT query
 		$this->db->sql_freeresult($result);
 
 		// Store user so we can use them.
 		$this->set_users($inactive_users);
-		}
+	}
 
 	/**
 	 * Setter for $inactive_users
@@ -295,20 +291,19 @@ class reminder
 	private function update_user($user)
 	{
 		// Update user ium info for the reminder
-
 		$update_arr = array('ium_reminder_sent_date' => time());
-		$counter = ($user['ium_remind_counter'] + 1);
+		$remind_counter = ($user['ium_remind_counter'] + 1);
 
 		if ( $user['ium_remind_counter'] == 0 )
 		{
-			$merge = array('ium_remind_counter' => $counter);
+			$merge = array('ium_remind_counter' => $remind_counter);
 			$update_arr = array_merge($update_arr, $merge);
 		}
 		else if ( $user['ium_remind_counter'] == 1 )
 		{
 			$random_md5	= md5(uniqid($user['user_email'], true));
 			$merge = array('ium_previous_sent_date'	=>	$user['ium_reminder_sent_date'],
-				'ium_remind_counter'	=>	$counter,
+				'ium_remind_counter'	=>	$remind_counter,
 				'ium_random'			=>	$random_md5,
 				);
 			$update_arr = array_merge($update_arr, $merge);
@@ -316,7 +311,7 @@ class reminder
 		else if ( $user['ium_remind_counter'] >= 2 )
 		{
 			$merge = array('ium_previous_sent_date' =>	$user['ium_reminder_sent_date'],
-				'ium_remind_counter'	=>	$counter,
+				'ium_remind_counter'	=>	$remind_counter,
 				'ium_request_date'		=>	time(),
 				'ium_type'				=>	'auto',
 				'ium_dont_send'			=>	1,
@@ -405,13 +400,10 @@ class reminder
 			$template_ary	=	array(
 				'FORGOT_PASS'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=sendpassword",
 				'SEND_ACT_AG'	=>	generate_board_url() . "/ucp." . $this->php_ext . "?mode=resend_act",
-				'SITE_NAME'		=>	htmlspecialchars_decode($this->config['sitename']),
 				'USERNAME'		=>	htmlspecialchars_decode($sleeper['username']),
 				'LAST_VISIT'	=>	date('d-m-Y', $sleeper['user_lastvisit']),
 				'REG_DATE'		=>	date('d-m-Y', $sleeper['user_regdate']),
-				'SIGNATURE'		=>	$this->config['board_email_sig'],
 				'ADMIN_MAIL'	=>	$this->config['board_contact'],
-				'URL'			=>	generate_board_url(),
 			);
 
 			$messenger = new \messenger(false);
@@ -439,7 +431,6 @@ class reminder
 			$messenger->anti_abuse_headers($this->config, $this->user);
 
 			// mail content...
-			$messenger->from($this->config['board_contact']);
 			$messenger->to($sleeper['user_email'], $sleeper['username']);
 
 			// Load template depending on the user
@@ -504,6 +495,11 @@ class reminder
 		return $topic_links;
 	}
 
+	/**
+	 * Generates reminder intervals
+	 * @return array Intervals [1] First, [2] Second, [3] Third
+	 */
+
 	public function get_intervals()
 	{
 		$first_interval		= (int) $this->config['andreask_ium_interval'];
@@ -511,28 +507,16 @@ class reminder
 		$third_interval		= (int) $this->config['andreask_ium_interval3'] ?: $second_interval;
 
 		// Current date
-		$present = new DateTime();
-
-		// Set intervals
-		$back = 'P' . $first_interval . 'D';
-		$interval = new DateInterval($back);
-
-		$back2 = 'P' . $second_interval . 'D';
-		$interval2 = new DateInterval($back2);
-
-		$back3 = 'P' . $third_interval . 'D';
-		$interval3 = new DateInterval($back3);
+		$current_date = new DateTimeImmutable();
 
 		// Substract the interval of Days/Months/Years from present
-		$present->sub($interval);
-		$intervals[1] = strtotime($present->format("y-m-d h:i:s"));
+		$int = $current_date->sub(new DateInterval('P' . $first_interval . 'D'));
+		$int2 = $current_date->sub(new DateInterval('P' . $second_interval . 'D'));
+		$int3 = $current_date->sub(new DateInterval('P' . $third_interval . 'D'));
 
-		// Convert past to timestamp
-		$present->sub($interval2);
-		$intervals[2] = strtotime($present->format("y-m-d h:i:s"));
-
-		$present->sub($interval3);
-		$intervals[3] = strtotime($present->format("y-m-d h:i:s"));
+		$intervals[1] = ($int->getTimestamp());
+		$intervals[2] = ($int2->getTimestamp());
+		$intervals[3] = ($int3->getTimestamp());
 
 		return $intervals;
 	}
