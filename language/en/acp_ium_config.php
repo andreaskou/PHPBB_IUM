@@ -53,11 +53,11 @@ $lang = array_merge(
 		'FIRST_REMINDER'	=>	'1st',
 		'SECOND_REMINDER'	=>	'2nd',
 		'THIRD_REMINDER'	=>	'3rd',
-		'ANDREASK_IUM_RESPECT_USR'	=> 'Respect User`s choice',
+		'ANDREASK_IUM_RESPECT_USR'	=> 'Respect User’s choice',
 
 		// ACP configuration page Explanations
 		'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'If enabled, the extension will start sending reminders to "sleepers".',
-		'ANDREASK_IUM_INTERVAL_EXPLAIN'	=>	'It is the interval of days to count back to consider a user a "sleeper". Recommended is 30 days',
+		'ANDREASK_IUM_INTERVAL_EXPLAIN'	=>	'It is the interval of days to count back to consider a user a "sleeper". Recommended is 30 days. 1st interval minimum amount is 10, 2nd and/or 3rd if set 0 will take the value of the previous interval.<br>i.e if 2nd is set to "0" it will take the interval from the 1st, if the 3rd is set to "0" it will take the amount of days of the 2nd.',
 		'ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN'	=>	'Amount of the reminders that can be sent <b>per day</b>. Recommended is ~250. But do check with your provider for any limit of e-mails per day',
 		'ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN'	=>	'If enabled, mail will include user’s top active topics since user’s last visit.',
 		'ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN'	=>	'Amount of user’s top topics that should be included in the e-mail.',
@@ -72,6 +72,7 @@ $lang = array_merge(
 		'ANDREASK_IUM_INCLUDED_FORUMS_EXPLAIN'	=>	'Select a category or subcategory to <strong>exclude</strong> it from the top topics lists that are sent to the users',
 		'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Select a category or subcategory to <strong>include</strong> it from the top topics lists that are sent to the users',
 		'ANDREASK_IUM_RESPECT_USR_EXPLAIN'		=>	'Some users may have chosen not to receive mass mail messages from admins. If "Yes" the extension will not send to these users the reminder.',
+
 		// configuration page
 		'INACTIVE_MAIL_SENT_TO'			=>	'A sample of email for inactive users was sent to "%s"',
 		'SLEEPER_MAIL_SENT_TO'			=>	'A sample of email for inactive users was sent to "%s"',
