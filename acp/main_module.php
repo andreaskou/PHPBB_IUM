@@ -163,7 +163,6 @@ class main_module
 			$user->add_lang_ext('andreask/ium', 'inactive_user_list');
 			$user->add_lang('memberlist');
 
-
 			$start 			= $request->variable('start', 0);
 			$limit 			= $request->variable('users_per_page', 20);
 			$with_posts = $request->variable('with_posts', 0);
