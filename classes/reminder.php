@@ -91,21 +91,35 @@ class reminder
 			$i = 0;
 			foreach ($this->inactive_users as $sleeper)
 			{
-
-				if ($sleeper['ium_remind_counter'] == 0 && ($sleeper['user_lastvisit'] > $this->intervals[1]))
+				// If it's not for a single user...
+				if ($single == false)
 				{
-					// skip user
-					continue;
-				}
-				elseif ($sleeper['ium_remind_counter'] == 1 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[2]))
-				{
-					// skip user
-					continue;
-				}
-				elseif ($sleeper['ium_remind_counter'] == 2 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
-				{
-					// skip again
-					continue;
+					// Skip the users that have 3 reminders or more if the ext is set to send only 3 reminders.
+					if ($this->config['andreask_ium_ignore_limit'] != 1 && $sleeper['ium_remind_counter'] >= 3)
+					{
+						continue;
+					}
+					// Skip the users that should not receive the reminder acording to their reminder counter and the set interval for it.
+					elseif ($sleeper['ium_remind_counter'] == 0 && ($sleeper['user_lastvisit'] > $this->intervals[1]))
+					{
+						// skip user
+						continue;
+					}
+					elseif ($sleeper['ium_remind_counter'] == 1 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[2]))
+					{
+						// skip user
+						continue;
+					}
+					elseif ($sleeper['ium_remind_counter'] == 2 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
+					{
+						// skip again
+						continue;
+					}
+					// If the user has 3 reminders or more and he was not skiped already because there is no limit to the # of the reminders. he must be skiped if it's still not the time to send a reminder.
+					elseif ($sleeper['ium_remind_counter'] >= 3 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
+					{
+						continue;
+					}
 				}
 				$i++;
 
