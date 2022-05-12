@@ -34,16 +34,16 @@ $lang = array_merge(
 	'USER_ADMIN_ANDREASK_IUM_USERS_OVERVIEW_OPTION'	=>	'Send Reminder',
 
 	// Log
-	'SENT_REMINDER_TO_ADMIN'	=>	'"%1$s" şablonu "%2$s" adresine gönderildi.',
-	'SENT_REMINDERS'			=>	array(
+	'LOG_SENT_REMINDER_TO_ADMIN'	=>	'"%1$s" şablonu "%2$s" adresine gönderildi.',
+	'LOG_SENT_REMINDERS'			=>	array(
 			0	=>	'Hatırlatıcı gönderilmedi',
 			1	=>	'%s hatırlatıcı gönderildi.',
 			2	=>	'%s hatırlatıcılar gönderildi.',
 	),
-	'USERS_DELETED'				=>	'"%1$s" kullanıcıları silindi "<b>%2$s"</b>, istek türü: "<b>%3$s</b>',
-	'USER_DELETED'				=>	'"<b>%1$s</b>" adlı kullanıcı silindi, istek türü: "<b>%2$s</b>"',
-	'DELETE_REQUEST_DONT_MATCH'			=>	'İsteğinizle ilgili bir sorun vardı. Silmek için istenen kullanıcılar veritabanındaki gerçek kullanıcılarla eşleşmedi',
-	'USER_SELF_DELETED'			=>	'Bir kullanıcı kendisini silindi. Gönderiler için yapılandırma "%s" olarak ayarlandı',
-	'SENT_REMINDER_TO'			=>	'"%s" kullanıcısına bir hatırlatma gönderildi',
+	'LOG_USERS_DELETED'				=>	'"%1$s" kullanıcıları silindi "<b>%2$s"</b>, istek türü: "<b>%3$s</b>',
+	'LOG_USER_DELETED'				=>	'"<b>%1$s</b>" adlı kullanıcı silindi, istek türü: "<b>%2$s</b>"',
+	'LOG_DELETE_REQUEST_DONT_MATCH'			=>	'İsteğinizle ilgili bir sorun vardı. Silmek için istenen kullanıcılar veritabanındaki gerçek kullanıcılarla eşleşmedi',
+	'LOG_USER_SELF_DELETED'			=>	'Bir kullanıcı kendisini silindi. Gönderiler için yapılandırma "%s" olarak ayarlandı',
+	'LOG_SENT_REMINDER_TO'			=>	'"%s" kullanıcısına bir hatırlatma gönderildi',
 	)
 );

@@ -49,8 +49,6 @@ class send_reminder extends \phpbb\cron\task\base
 		// autodelete users if active
 		if ($this->config['andreask_ium_auto_del'])
 		{
-			// $delete_user = $this->delete_user;
-			// $delete_user->auto_delete();
 			$this->delete_user->auto_delete();
 		}
 	}

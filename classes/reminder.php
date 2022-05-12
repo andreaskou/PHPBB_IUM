@@ -102,14 +102,11 @@ class reminder
 					$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 				}
 
-				// Load top_topics class
-				$topics = $this->top_topics;
-
 				// Set the user topic links first.
 				$topic_links = null;
 
 				// If there are topics then prepare them for the e-mail.
-				if ($top_user_topics = $topics->get_user_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
+				if ($top_user_topics = $this->top_topics->get_user_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$topic_links = $this->make_topics($top_user_topics);
 				}
@@ -118,7 +115,7 @@ class reminder
 				$forum_links = null;
 
 				// If there are topics then prepare them for the e-mail.
-				if ($top_forum_topics = $topics->get_forum_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
+				if ($top_forum_topics = $this->top_topics->get_forum_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$forum_links = $this->make_topics($top_forum_topics);
 				}
@@ -146,14 +143,15 @@ class reminder
 					'URL'			=>	generate_board_url(),
 				);
 
+				$messenger = new \messenger(false);
+
 				if (!is_null($topic_links))
 				{
-					$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' => $topic_links));
-
+					$messenger->assign_vars(['USR_TPC_LIST' => $topic_links,]);
 				}
 				if (!is_null($forum_links))
 				{
-					$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
+					$messenger->assign_vars(['USR_FRM_LIST' => $forum_links,]);
 				}
 				if ( $this->config['andreask_ium_self_delete'] == 1 && $sleeper['ium_random'] )
 				{
@@ -161,8 +159,6 @@ class reminder
 					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
 
-				$messenger = new \messenger(false);
-				// $xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $user_instance->lang('ADMINISTRATOR');
 				$messenger->anti_abuse_headers($this->config, $this->user);
 
 				// mail content...
@@ -193,7 +189,7 @@ class reminder
 		}
 
 		// Log it and release the user list.
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), array(sizeof($this->inactive_users)));
 		unset( $this->inactive_users );
 	}
 
@@ -415,17 +411,20 @@ class reminder
 				'URL'			=>	generate_board_url(),
 			);
 
+			$messenger = new \messenger(false);
+
 			// If there are topics for user merge them with the template_ary
 			if (!is_null($topic_links))
 			{
-				$template_ary = array_merge( $template_ary, array('USR_TPC_LIST' =>  $topic_links));
+				$messenger->assign_vars(['USR_TPC_LIST' => $topic_links,]);
 			}
 
 			// If there are forum topics merge them with the template_ary
 			if (!is_null($forum_links))
 			{
-				$template_ary = array_merge($template_ary, array('USR_FRM_LIST' => $forum_links));
+				$messenger->assign_vars(['USR_FRM_LIST' => $forum_links,]);
 			}
+
 			// If self delete is set and 'random' has been generated for the user merge it with the template_ary
 			if ( $this->config['andreask_ium_self_delete'] == 1 && isset($sleeper['ium_random']))
 			{
@@ -433,16 +432,8 @@ class reminder
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
-			$messenger = new \messenger(false);
-
 			// mail headers
-
-			$xhead_username = ($this->config['board_contact_name']) ? $this->config['board_contact_name'] : $this->user->lang('ADMINISTRATOR');
-
-			$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
-			$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-			$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
-			$messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+			$messenger->anti_abuse_headers($this->config, $this->user);
 
 			// mail content...
 			$messenger->from($this->config['board_contact']);
@@ -473,7 +464,7 @@ class reminder
 		// Log it and release the user list.
 
 		$template = explode('_', $template);
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SENT_REMINDER_TO_ADMIN', time(), array($template[1], $sleeper['user_email']));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDER_TO_ADMIN', time(), array($template[1], $sleeper['user_email']));
 		unset( $this->inactive_users );
 	}
 
@@ -500,11 +491,12 @@ class reminder
 
 	public function make_topics($topics)
 	{
-		$topic_links = '';
-		foreach ($topics as $item)
+		$url = generate_board_url();
+		$topic_links = [];
+		foreach ($topics as $key=>$item)
 		{
-			$topic_links .= '"' . $item['topic_title'] . '"';
-			$topic_links .= generate_board_url() . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
+			$topic_links[$key]['title'] = $item['topic_title'];
+			$topic_links[$key]['url'] = $url . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];
 		}
 		return $topic_links;
 	}

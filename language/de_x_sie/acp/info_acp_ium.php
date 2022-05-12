@@ -33,15 +33,15 @@ $lang = array_merge($lang, array(
 	'USER_ADMIN_ANDREASK_IUM_USERS_OVERVIEW_OPTION'	=>	'Erinnerung senden',
 
 	// Log
-	'SENT_REMINDER_TO_ADMIN'	=>	'Die Vorlage "%1$s" wurde an "%2$s" gesendet.',
-	'SENT_REMINDERS'			=>	array(
+	'LOG_SENT_REMINDER_TO_ADMIN'	=>	'Die Vorlage "%1$s" wurde an "%2$s" gesendet.',
+	'LOG_SENT_REMINDERS'			=>	array(
 					0			=>	'Es wurden keine Erinnerungen gesendet',
 					1			=>	'%s Erinnerung wurde versendet.',
 					2			=>	'%s Erinnerungen wurden versendet.'
 	),
-	'USERS_DELETED'				=>	'"%1$s" Benutzer wurden gelöscht "<b>%2$s"</b>, Anfragetyp : "<b>%3$s</b>"',
-	'USER_DELETED'				=>	'Benutzer "<b>%1$s</b>" wurde gelöscht, Anfragetyp : "<b>%2$s</b>"',
-	'DELETE_REQUEST_DONT_MATCH'			=>	'Irgendetwas stimmte nicht mit Ihrer Anfrage. Angeforderte Benutzer zum Löschen stimmten nicht mit den tatsächlichen Benutzern in der Datenbank überein.',
-	'USER_SELF_DELETED'			=>	'Ein Benutzer hat sich selbst gelöscht. Konfiguration für Beiträge war gesetzt auf "%s"',
-	'SENT_REMINDER_TO'			=>	'Es wurde eine Erinnerung an den Benutzer "%s" gesendet.',
+	'LOG_USERS_DELETED'				=>	'"%1$s" Benutzer wurden gelöscht "<b>%2$s"</b>, Anfragetyp : "<b>%3$s</b>"',
+	'LOG_USER_DELETED'				=>	'Benutzer "<b>%1$s</b>" wurde gelöscht, Anfragetyp : "<b>%2$s</b>"',
+	'LOG_DELETE_REQUEST_DONT_MATCH'			=>	'Irgendetwas stimmte nicht mit Ihrer Anfrage. Angeforderte Benutzer zum Löschen stimmten nicht mit den tatsächlichen Benutzern in der Datenbank überein.',
+	'LOG_USER_SELF_DELETED'			=>	'Ein Benutzer hat sich selbst gelöscht. Konfiguration für Beiträge war gesetzt auf "%s"',
+	'LOG_SENT_REMINDER_TO'			=>	'Es wurde eine Erinnerung an den Benutzer "%s" gesendet.',
 ));

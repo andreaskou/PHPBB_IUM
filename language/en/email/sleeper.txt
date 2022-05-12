@@ -15,15 +15,21 @@ Hope to see you back again.
 <!-- IF USR_TPC_LIST -->
 Below some links to topics that you've been active.
 
-{USR_TPC_LIST}
+{% for user_topics in USR_TPC_LIST %}
+    "{{ user_topics.title }}"
+    {{ user_topics.url }}
 
+{% endfor %}
 <!-- ENDIF -->
 
 <!-- IF USR_FRM_LIST -->
 Below some links to the most active topics of the board.
 
-{USR_FRM_LIST}
+{% for forum_topics in USR_FRM_LIST %}
+    "{{ forum_topics.title }}"
+    {{ forum_topics.url }}
 
+{% endfor %}
 <!-- ENDIF -->
 
 <!-- IF SELF_DELETE_LINK -->
