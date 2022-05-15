@@ -55,6 +55,7 @@ $lang = array_merge(
 		'THIRD_REMINDER'	=>	'3rd',
 		'ANDREASK_IUM_IGNORE_LMT'	=> 'Do not spam the user',
 		'ANDREASK_IUM_RESPECT_USR'	=> 'Respect User’s choice',
+		'ANDREASK_IUM_NO_REPLY'	=> 'No Reply',
 
 		// ACP configuration page Explanations
 		'ANDREASK_IUM_ENABLE_EXPLAIN'	=>	'If enabled, the extension will start sending reminders to "sleepers".',
@@ -74,6 +75,8 @@ $lang = array_merge(
 		'ANDREASK_IUM_EXCLUDED_FORUMS_EXPLAIN'	=>	'Select a category or subcategory to <strong>include</strong> it from the top topics lists that are sent to the users',
 		'ANDREASK_IUM_IGNORE_LMT_EXPLAIN'		=>	'If "Yes" the ext will send only 3 reminders, if no the ext will continue sending reminders using the 3rd interval',
 		'ANDREASK_IUM_RESPECT_USR_EXPLAIN'		=>	'Some users may have chosen not to receive mass mail messages from admins. If "Yes" the extension will not send to these users the reminder.',
+		'ANDREASK_IUM_NO_REPLY_EXPLAIN'	=> 'If you would like you can specify a <strong>no reply</strong> e-mail, if left blank the extension will use the board’s contact inofrmation.',
+
 
 		// configuration page
 		'INACTIVE_MAIL_SENT_TO'			=>	'A sample of email for inactive users was sent to "%s"',

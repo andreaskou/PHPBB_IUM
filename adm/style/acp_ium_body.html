@@ -31,6 +31,10 @@
             <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500" /> {{ lang('EMAILS')}} </dd>
         </dl>
         <dl>
+            <dt><label for="andreask_ium_no_reply">{{ lang('ANDREASK_IUM_NO_REPLY') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_NO_REPLY_EXPLAIN')}}</span></dt>
+            <dd><input type="email" value="{ANDREASK_IUM_NO_REPLY}" id="andreask_ium_no_reply" name="andreask_ium_no_reply" /></dd>
+        </dl>
+        <dl>
             <dt><label for="andreask_ium_respect_user_choice">{{ lang('ANDREASK_IUM_RESPECT_USR') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_RESPECT_USR_EXPLAIN')}}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="1" <!-- IF ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
             <input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="0" <!-- IF not ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>

@@ -193,6 +193,16 @@ class reminder
 
 				$messenger->anti_abuse_headers($this->config, $this->user);
 
+				if (trim($this->config['andreask_ium_no_reply']))
+				{
+					$no_reply = htmlspecialchars_decode('No-reply');
+					$no_reply_mail = $this->config['andreask_ium_no_reply'];
+
+					$board_contact = '"' . mail_encode($no_reply) .'" '. '<' . $no_reply_mail . '>';
+					$messenger->from($board_contact);
+					$messenger->replyto($board_contact);
+				}
+
 				// mail content...
 				$messenger->to($sleeper['user_email'], htmlspecialchars_decode($sleeper['username']));
 
@@ -216,6 +226,7 @@ class reminder
 				// Update ext's table...
 				$this->update_user($sleeper);
 				unset($topics);
+				if ($i == 2) break;
 				if ($i == $this->config['andreask_ium_email_limit']) break;
 			}
 		}

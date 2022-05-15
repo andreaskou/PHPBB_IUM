@@ -146,6 +146,7 @@ class main_module
 				'ANDREASK_IUM_TOP_FORUM_THREADS'		=>	$config['andreask_ium_top_forum_threads'],
 				'ANDREASK_IUM_TOP_FORUM_THREADS_COUNT'	=>	$config['andreask_ium_top_forum_threads_count'],
 				'ANDREASK_IUM_EMAIL_LIMIT'				=>	$config['andreask_ium_email_limit'],
+				'ANDREASK_IUM_NO_REPLY'					=>	$config['andreask_ium_no_reply'],
 				'ANDREASK_IUM_SELF_DELETE'				=>	$config['andreask_ium_self_delete'],
 				'ANDREASK_IUM_APPROVE_DEL'				=>	$config['andreask_ium_approve_del'],
 				'ANDREASK_IUM_KEEP_POSTS'				=>	$config['andreask_ium_keep_posts'],
@@ -541,6 +542,7 @@ class main_module
 		$config->set('andreask_ium_ignore_limit',				$request->variable('andreask_ium_ignore_limit', true));
 		$config->set('andreask_ium_self_delete', 				$request->variable('andreask_ium_self_delete', false));
 		$config->set('andreask_ium_email_limit', 				$request->variable('andreask_ium_email_limit', 250));
+		$config->set('andreask_ium_no_reply',					$request->variable('andreask_ium_no_reply', ''));
 		$config->set('andreask_ium_approve_del', 				$request->variable('andreask_ium_delete_approve', true));
 		$config->set('andreask_ium_keep_posts', 				$request->variable('andreask_ium_keep_posts', true));
 		$config->set('andreask_ium_auto_del', 					$request->variable('andreask_ium_auto_del', false));
