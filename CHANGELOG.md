@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [PhpBB User Reminder/Manager](https://www.phpbb.com/customise/db/extension/phpbb_inactive_user_manager_reminder/).
+and this project adheres to [PhpBB Inactive User Reminder/Manager](https://www.phpbb.com/customise/db/extension/phpbb_inactive_user_manager_reminder/).
 
 ## [1.2.0] - 2022-03-30
 
@@ -14,14 +14,17 @@ I tried to implement some of the requested features. Let me know your ideas.
 ### Added
 - Ability to set different intervals for each of the 3 reminders.
 - Option to respect each user's choice of communication. (receive e-mail from admins or not)
+- Option to send reminders even after the 3 remind counter.
+- No-reply e-mail field
+- Language, for the extra options.
 
 ### Changed
-- The way the ext fetches and sends reminders to the users.
-- Language, for the extra options.
+- The way the ext fetches users and sends reminders.
 - Removed unused variables for the e-mail templates
 - Email templates minor change, make sure to update it in your languages accordingly.
 - Dropped unused column.
 
 ### Fixed
 - Minor issues, typos.
-- From: was not showing boards information in received e-mails
+- "From:" in the e-mail was not showing boards information when received
+- bug: ignore by admin was changing to auto ignore after sending reminder and reminder count was > 3
