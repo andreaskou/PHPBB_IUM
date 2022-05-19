@@ -165,6 +165,9 @@ class main_module
 			$user->add_lang_ext('andreask/ium', 'inactive_user_list');
 			$user->add_lang('memberlist');
 
+			$send = $phpbb_container->get('andreask.ium.classes.reminder');
+			$send->send();
+
 			$start 			= $request->variable('start', 0);
 			$limit 			= $request->variable('users_per_page', 20);
 			$with_posts = $request->variable('with_posts', 0);
@@ -194,10 +197,10 @@ class main_module
 			$options = array(
 				'with_posts'	=>	$with_posts,
 				'count_back'	=>	$actions,
-				'sort_by'			=>	$sort_by,
+				'sort_by'		=>	$sort_by,
 				'sort_order'	=>	$sort_order,
 				'approval'		=>	null,
-				'ignore'			=>	false
+				'ignore'		=>	false
 			);
 
 			//base url for pagination, filtering and sorting
@@ -250,16 +253,16 @@ class main_module
 
 			// Assign template vars (including pagination)
 			$template->assign_vars(array(
-				'S_INACTIVE_USERS' 			=> true,
-				'S_INACTIVE_OPTIONS' 		=> build_select($option_ary, $actions),
-				'S_IUM_SORT_BY' 			=> build_select($sort_by_ary, $sort_by),
-				'COUNT_BACK' 				=> $options['count_back'],
-				'PER_PAGE' 					=> $limit,
-				'TOTAL_USERS' 				=> $inactive_count,
-				'WITH_POSTS' 				=> ($with_posts) ? true : false,
-				'SORT_ORDER' 				=> ($sort_order) ? true : false,
-				'USERS_PER_PAGE' 			=> $limit,
-				'TOTAL_USERS_WITH_DAY'		=> $user->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $user->lang($option_ary[$actions]))
+				'S_INACTIVE_USERS' 		=> true,
+				'S_INACTIVE_OPTIONS' 	=> build_select($option_ary, $actions),
+				'S_IUM_SORT_BY' 		=> build_select($sort_by_ary, $sort_by),
+				'COUNT_BACK' 			=> $options['count_back'],
+				'PER_PAGE' 				=> $limit,
+				'TOTAL_USERS' 			=> $inactive_count,
+				'WITH_POSTS' 			=> ($with_posts) ? true : false,
+				'SORT_ORDER' 			=> ($sort_order) ? true : false,
+				'USERS_PER_PAGE' 		=> $limit,
+				'TOTAL_USERS_WITH_DAY'	=> $user->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $user->lang($option_ary[$actions]))
 			));
 			$user->add_lang('common');
 			// Assign row results to template var inactive
@@ -461,10 +464,10 @@ class main_module
 			$options = array(
 				'with_posts'	=>	false,
 				'count_back'	=>	false,
-				'sort_by'			=>	'request_date',
+				'sort_by'		=>	'request_date',
 				'sort_order'	=>	false,
 				'approval'		=>	true,
-				'ignore'			=>	false,
+				'ignore'		=>	false,
 			);
 
 			//base url for pagination, filtering and sorting
@@ -478,10 +481,10 @@ class main_module
 			$opt_out = array(
 				'with_posts'	=> false,
 				'count_back'	=> false,
-				'sort_by'			=> 'username',
+				'sort_by'		=> 'username',
 				'sort_order'	=> true,
 				'approval'		=> false,
-				'ignore'			=> 2,
+				'ignore'		=> 2,
 			);
 
 			$ignored 				= $this->get_inactive_users(false, $limit, $start, $opt_out);
@@ -502,8 +505,8 @@ class main_module
 			$template->assign_vars(array(
 				'S_SELF_DELETE'		=>	$config['andreask_ium_approve_del'],
 				'USERS_PER_PAGE'	=>	$limit,
-				'TOTAL_USERS'			=>	$approval_count,
-				'U_ACTION'				=>	$this->u_action,
+				'TOTAL_USERS'		=>	$approval_count,
+				'U_ACTION'			=>	$this->u_action,
 				'IGNORED_USER'		=>	$s_defined_user_options,
 				'IGNORED_GROUP'		=>	$s_defined_group_options,
 				'U_FIND_USERNAME'	=>	append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=add_user&amp;field=usernames')
@@ -514,11 +517,11 @@ class main_module
 				$link = generate_board_url() . "/adm/index.$phpEx?i=users&amp;mode=overview&amp;redirect=ium_approval_list&amp;sid=$user->session_id&amp;u=".$row['user_id'];
 				$template->assign_block_vars(
 					'approval_list', array(
-					'USER_ID'					=>	$row['user_id'],
-					'USERNAME'				=>	$row['username'],
-					'POSTS'						=>	($row['user_posts']) ? $row['user_posts'] : 0,
+					'USER_ID'			=>	$row['user_id'],
+					'USERNAME'			=>	$row['username'],
+					'POSTS'				=>	($row['user_posts']) ? $row['user_posts'] : 0,
 					'REQUEST_DATE' 		=>	$user->format_date($row['ium_request_date']),
-					'TYPE'						=>	$row['ium_type'],
+					'TYPE'				=>	$row['ium_type'],
 					'LINK_TO_USER'		=>	$link,
 					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', $row['ium_dont_send']),
 				));
