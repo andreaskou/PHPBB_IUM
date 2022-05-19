@@ -226,7 +226,6 @@ class reminder
 				// Update ext's table...
 				$this->update_user($sleeper);
 				unset($topics);
-				if ($i == 2) break;
 				if ($i == $this->config['andreask_ium_email_limit']) break;
 			}
 		}
@@ -251,8 +250,8 @@ class reminder
 			$sql_opt .= ' AND user_id = ' . (int) $user;
 		}else
 		{
-			$sql_opt .= $this->config['andreask_ium_respect_user_choice'] ? ' AND user_allow_massemail <> 0 ' : '';
-			$sql_opt .= ' AND ium_dont_send < 1 ';
+			$sql_opt .= ($this->config['andreask_ium_respect_user_choice']) ? ' AND user_allow_massemail <> 0 ' : '';
+			$sql_opt .= ($this->config['andreask_ium_ignore_limit']) ? ' AND ium_dont_send < 1 ' : ' AND ium_dont_send < 2 ';
 		}
 
 		$ignore_groups = $this->ignore_user;
@@ -263,7 +262,6 @@ class reminder
 					WHERE '. $this->db->sql_in_set('user_id', '(SELECT ban_userid FROM '. BANLIST_TABLE .')', true) . $sql_opt . ' ' . $must_ignore .'
 					ORDER BY user_regdate ASC';
 		$result = $this->db->sql_query($sql);
-
 		$inactive_users = [];
 
 		// Store results to rows
@@ -335,11 +333,15 @@ class reminder
 		}
 		else if ( $user['ium_remind_counter'] >= 2 )
 		{
+			if($user['ium_dont_send'] == 0)
+			{
+				$dont_send = ['ium_dont_send' => 1];
+				$update_arr = array_merge($update_arr, $dont_send);
+			}
 			$merge = array('ium_previous_sent_date' =>	$user['ium_reminder_sent_date'],
 				'ium_remind_counter'	=>	$remind_counter,
 				'ium_request_date'		=>	time(),
 				'ium_type'				=>	'auto',
-				'ium_dont_send'			=>	1,
 				);
 			$update_arr = array_merge($update_arr, $merge);
 		}
