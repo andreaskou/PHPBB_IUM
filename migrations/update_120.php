@@ -27,8 +27,8 @@ class update_120 extends migration
 		return array(
 			array('config.add', array('andreask_ium_interval2', 0)),
 			array('config.add', array('andreask_ium_interval3', 0)),
-			array('config.add', array('andreask_ium_respect_user_choice', 0)),
-			array('config.add', array('andreask_ium_ignore_limit', 0)),
+			array('config.add', array('andreask_ium_respect_user_choice', 1)),
+			array('config.add', array('andreask_ium_ignore_limit', 1)),
 			array('config.add', array('andreask_ium_no_reply', '')),
 			);
 	}
