@@ -84,5 +84,5 @@ $lang = array_merge(
 			'SEND_SLEEPER'					=>	'Send sleeper template',
 			'SEND_INACTIVE'					=>	'Send Inactive template',
 			'PLUS_SUBFORUMS'				=>	'+Subforums',
-    )
+		)
 );
