@@ -334,9 +334,9 @@ class reminder
 				);
 			$update_arr = array_merge($update_arr, $merge);
 		}
-		else if ( $user['ium_remind_counter'] >= 2 )
+		else if ($user['ium_remind_counter'] >= 2)
 		{
-			if( $user['ium_dont_send'] == 0 )
+			if ($user['ium_dont_send'] == 0)
 			{
 				$dont_send = ['ium_dont_send' => 1];
 				$update_arr = array_merge($update_arr, $dont_send);

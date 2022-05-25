@@ -61,7 +61,7 @@ class add_data extends migration
 	  return array(
 		  'add_columns' => array(
 			  $this->table_prefix . 'users' => array(
-			  		'ium_remind_counter' => array('UINT', 0),
+					'ium_remind_counter' => array('UINT', 0),
 					'ium_previous_sent_date' => array('TIMESTAMP', 0),
 					'ium_reminder_sent_date' => array('TIMESTAMP', 0),
 					'ium_dont_send' => array('UINT', 0),

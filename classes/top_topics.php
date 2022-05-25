@@ -116,7 +116,7 @@ class top_topics
 					unset($active_topics[$key]);
 				}
 			}
-			if( $active_topics )
+			if ($active_topics)
 			{
 				$topic_ids = array_column($active_topics, 'topic_id');
 
@@ -134,7 +134,7 @@ class top_topics
 				{
 					foreach ($topic_titles as $title)
 					{
-						if( $topics['topic_id'] == $title['topic_id'] )
+						if ($topics['topic_id'] == $title['topic_id'])
 						{
 							$active_topics[$key]['topic_title'] = (string) htmlspecialchars_decode($title['topic_title']);
 						}
