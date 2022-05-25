@@ -35,16 +35,16 @@ class update_120 extends migration
 
   static public function depends_on()
   {
-    return ['andreask\ium\migrations\add_data'];
+	  return ['andreask\ium\migrations\add_data'];
   }
 
   public function update_schema()
   {
-		return [
-			'drop_columns' =>[
-				$this->table_prefix . 'users'=>
-				['ium_request_type',],
-			],
-		];
+	return [
+		'drop_columns' =>[
+			$this->table_prefix . 'users'=>
+			['ium_request_type',],
+		],
+	];
   }
 }

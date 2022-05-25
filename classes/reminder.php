@@ -13,8 +13,8 @@
 
 namespace andreask\ium\classes;
 
-use \DateInterval;
-use \DateTimeImmutable;
+use DateInterval;
+use DateTimeImmutable;
 
 class reminder
 {
@@ -46,7 +46,7 @@ class reminder
 	* @param                                                          	$php_ext			Php file extension
 	*/
 
-	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user,\phpbb\request\request $request, \phpbb\routing\helper $routing_helper, $table_prefix, $phpbb_root_path, $php_ext)
+	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user, \phpbb\request\request $request, \phpbb\routing\helper $routing_helper, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
 		$this->db				=	$db;
@@ -100,23 +100,23 @@ class reminder
 						continue;
 					}
 					// Skip the users that should not receive the reminder acording to their reminder counter and the set interval for it.
-					elseif ($sleeper['ium_remind_counter'] == 0 && ($sleeper['user_lastvisit'] > $this->intervals[1]))
+					else if ($sleeper['ium_remind_counter'] == 0 && ($sleeper['user_lastvisit'] > $this->intervals[1]))
 					{
 						// skip user
 						continue;
 					}
-					elseif ($sleeper['ium_remind_counter'] == 1 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[2]))
+					else if ($sleeper['ium_remind_counter'] == 1 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[2]))
 					{
 						// skip user
 						continue;
 					}
-					elseif ($sleeper['ium_remind_counter'] == 2 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
+					else if ($sleeper['ium_remind_counter'] == 2 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
 					{
 						// skip again
 						continue;
 					}
 					// If the user has 3 reminders or more and he was not skiped already because there is no limit to the # of the reminders. he must be skiped if it's still not the time to send a reminder.
-					elseif ($sleeper['ium_remind_counter'] >= 3 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
+					else if ($sleeper['ium_remind_counter'] >= 3 && ($sleeper['ium_reminder_sent_date'] > $this->intervals[3]))
 					{
 						continue;
 					}
@@ -226,7 +226,10 @@ class reminder
 				// Update ext's table...
 				$this->update_user($sleeper);
 				unset($topics);
-				if ($i == $this->config['andreask_ium_email_limit']) break;
+				if ($i == $this->config['andreask_ium_email_limit'])
+				{
+					break;
+				}
 			}
 		}
 
@@ -333,7 +336,7 @@ class reminder
 		}
 		else if ( $user['ium_remind_counter'] >= 2 )
 		{
-			if($user['ium_dont_send'] == 0)
+			if( $user['ium_dont_send'] == 0 )
 			{
 				$dont_send = ['ium_dont_send' => 1];
 				$update_arr = array_merge($update_arr, $dont_send);
@@ -531,7 +534,7 @@ class reminder
 	{
 		$url = generate_board_url();
 		$topic_links = [];
-		foreach ($topics as $key=>$item)
+		foreach ($topics as $key => $item)
 		{
 			$topic_links[$key]['title'] = $item['topic_title'];
 			$topic_links[$key]['url'] = $url . "/viewtopic." . $this->php_ext . "?f=" . $item['forum_id'] . "?&t=" . $item['topic_id'];

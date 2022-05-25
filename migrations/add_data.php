@@ -53,27 +53,27 @@ class add_data extends migration
 
   static public function depends_on()
   {
-    return array('\phpbb\db\migration\data\v310\gold');
+	  return array('\phpbb\db\migration\data\v310\gold');
   }
 
-	public function update_schema()
+  public function update_schema()
   {
-    return array(
-      'add_columns' => array(
-				$this->table_prefix . 'users' => array(
-          'ium_remind_counter' => array('UINT', 0),
-          'ium_previous_sent_date' => array('TIMESTAMP', 0),
-          'ium_reminder_sent_date' => array('TIMESTAMP', 0),
-          'ium_dont_send' => array('UINT', 0),
+	  return array(
+		  'add_columns' => array(
+			  $this->table_prefix . 'users' => array(
+			  		'ium_remind_counter' => array('UINT', 0),
+					'ium_previous_sent_date' => array('TIMESTAMP', 0),
+					'ium_reminder_sent_date' => array('TIMESTAMP', 0),
+					'ium_dont_send' => array('UINT', 0),
 					'ium_request_date'	=> array('TIMESTAMP', 0),
 					'ium_random'	=> array('VCHAR:255', 0),
-          'ium_type'	=> array('VCHAR:10', ''),
+					'ium_type'	=> array('VCHAR:10', ''),
 					'ium_request_date'	=> array('TIMESTAMP', 0),
 					'ium_request_type'	=> array('VCHAR:10', ''),
 					'ium_random'	=> array('VCHAR:255', 0),
 				),
 			),
-    );
+		);
   }
 
 	public function revert_schema()
