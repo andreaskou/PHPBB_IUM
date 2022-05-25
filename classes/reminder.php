@@ -492,15 +492,32 @@ class reminder
 	/**
 	 * Resets the counter of reminders this function is called by the listener.
 	 * @param string $id user_id of loged in user.
+	 * @param bool	$login if true requests to reset counter comes from event listener
 	 * @return void
 	 */
 
-	public function reset_counter($id)
+	public function reset_counter($id, $login = false)
 	{
 		$ids = (!is_array($id)) ? $ids[] = $id : $ids = $id;
+		if ($login)
+		{
+			$sql = "SELECT ium_dont_send FROM " . USERS_TABLE . " WHERE " .  $this->db->sql_in_set('user_id', $ids);
+			$result = $this->db->sql_query($sql);
+			$dont_send = $this->db->sql_fetchfield('ium_dont_send');
+			$this->db->sql_freeresult($result);
+
+			if ($dont_send != 2)
+			{
+				$action = ' ium_dont_send = 0 ';
+			}
+			else
+			{
+				$action = '';
+			}
+		}
 
 		// reset counter(s)!
-		$sql = "UPDATE " . USERS_TABLE . " SET ium_remind_counter = 0, ium_request_date = 0, ium_type ='' WHERE ". $this->db->sql_in_set('user_id', $ids);
+		$sql = "UPDATE " . USERS_TABLE . " SET ium_remind_counter = 0, ium_request_date = 0, ium_type ='' ". $action ." WHERE ". $this->db->sql_in_set('user_id', $ids);
 		$this->db->sql_query($sql);
 	}
 
