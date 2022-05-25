@@ -13,8 +13,8 @@
 
 namespace andreask\ium\acp;
 
-use \DateTime;
-use \DateInterval;
+use DateTime;
+use DateInterval;
 
 class main_module
 {
@@ -130,12 +130,12 @@ class main_module
 
 			// TODO Check dont reply just in case!
 			// if(filter_var("some@address.com", FILTER_VALIDATE_EMAIL)) {
-        	// 	// valid address
-    		// }
-		    // else {
-		    //     // invalid address
-		    // }
-		    // php > 5.2 
+			// 	// valid address
+			// }
+			// else {
+			//     // invalid address
+			// }
+			// php > 5.2
 
 			// Get the forum list
 			$forum_list = make_forum_select(false, $ignored_forum_ids, true, false, false, false, true);
@@ -326,7 +326,6 @@ class main_module
 			$this->page_title	= $user->lang('ACP_IUM_APPROVAL_LIST_TITLE');
 			$user->add_lang('memberlist');
 			$user->add_lang_ext('andreask/ium', 'ignore_delete_list');
-
 
 			if ( $request->is_set_post('approve') )
 			{
