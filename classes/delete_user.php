@@ -13,8 +13,8 @@
 
 namespace andreask\ium\classes;
 
-use \DateTime;
-use \DateInterval;
+use DateTime;
+use DateInterval;
 
 class delete_user
 {
