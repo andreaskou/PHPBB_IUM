@@ -128,6 +128,15 @@ class main_module
 				$excluded_list = '<option disabled>' . $user->lang('EXCLUDED_EMPTY') . '</option>';
 			}
 
+			// TODO Check dont reply just in case!
+			// if(filter_var("some@address.com", FILTER_VALIDATE_EMAIL)) {
+        	// 	// valid address
+    		// }
+		    // else {
+		    //     // invalid address
+		    // }
+		    // php > 5.2 
+
 			// Get the forum list
 			$forum_list = make_forum_select(false, $ignored_forum_ids, true, false, false, false, true);
 
