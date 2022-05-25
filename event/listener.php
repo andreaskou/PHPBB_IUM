@@ -57,7 +57,10 @@ class listener implements EventSubscriberInterface
 	 */
 	public function update_ium_reminder_counter($event)
 	{
-		$this->reminder->reset_counter($this->user->data['user_id']);
+		if (!$this->user->data['ium_remind_counter'])
+		{
+			$this->reminder->reset_counter($this->user->data['user_id'], true);
+		}
 	}
 
 	/**
