@@ -23,8 +23,10 @@ I tried to implement some of the requested features. Let me know your ideas.
 - Removed unused variables for the e-mail templates
 - Email templates minor change, make sure to update it in your languages accordingly.
 - Dropped unused column.
+- Reset user's remind count only if there is reason to reset it
 
 ### Fixed
 - Minor issues, typos.
 - "From:" in the e-mail was not showing boards information when received
 - bug: ignore by admin was changing to auto ignore after sending reminder and reminder count was > 3
+- bug: if user returns and he was ignored by "admin" he would continue being ignored, so if he would stop visiting board in the future he would not receive reminders.
