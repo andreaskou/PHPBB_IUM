@@ -14,14 +14,13 @@ on:
             - stable
             - develop
         paths-ignore:
-            - language/**
-
+            - 'ext/andreask/ium/language/**'
     pull_request:        # Run tests when pull requests are made on these branches in your repo
         branches:
             - stable
             - develop
         paths-ignore:
-            - language/**
+            - 'ext/andreask/ium/language/**'
 
 jobs:
     # START Basic Checks Job (EPV, code sniffer, images check, etc.)
