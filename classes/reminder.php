@@ -508,7 +508,7 @@ class reminder
 
 			if ($dont_send != 2)
 			{
-				$action = ' ium_dont_send = 0 ';
+				$action = ', ium_dont_send = 0 ';
 			}
 			else
 			{
