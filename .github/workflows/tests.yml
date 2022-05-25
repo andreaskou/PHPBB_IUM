@@ -13,10 +13,15 @@ on:
         branches:        # Run tests when commits are pushed to these branches in your repo
             - stable
             - develop
+        paths-ignore:
+            - language/tr
+
     pull_request:        # Run tests when pull requests are made on these branches in your repo
         branches:
             - stable
             - develop
+        paths-ignore:
+            - language/tr
 
 jobs:
     # START Basic Checks Job (EPV, code sniffer, images check, etc.)
