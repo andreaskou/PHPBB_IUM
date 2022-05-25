@@ -14,14 +14,14 @@ on:
             - stable
             - develop
         paths-ignore:
-            - language/tr
+            - language/**
 
     pull_request:        # Run tests when pull requests are made on these branches in your repo
         branches:
             - stable
             - develop
         paths-ignore:
-            - language/tr
+            - language/**
 
 jobs:
     # START Basic Checks Job (EPV, code sniffer, images check, etc.)
