@@ -6,7 +6,7 @@ namespace andreask\ium\functional;
 /**
  * @group functional
  */
-class autodelete_page_user_test extends phpbb_functional_test_case
+class autodelete_page_user_test extends \phpbb_functional_test_case
 {
 	static protected function setup_extensions()
     {

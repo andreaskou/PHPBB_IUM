@@ -1,5 +1,4 @@
 vendor
-tests
 phpunit.xml
 package-lock.json
 composer.lock
