@@ -1,12 +1,12 @@
 <?php
-//tests/classes/ignore_user_test.php
+//tests/functional/autodelete_page_user_test.php
 namespace andreask\ium\functional;
 
 // require_once dirname(__FILE__) . '/../phpBB/includes/functions.php';
 /**
  * @group functional
  */
-class main_test extends phpbb_functional_test_case
+class autodelete_page_user_test extends phpbb_functional_test_case
 {
 	static protected function setup_extensions()
     {
