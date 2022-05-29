@@ -1,8 +1,6 @@
 <?php
-//tests/functional/autodelete_page_user_test.php
 namespace andreask\ium\functional;
 
-// require_once dirname(__FILE__) . '/../phpBB/includes/functions.php';
 /**
  * @group functional
  */
@@ -17,8 +15,6 @@ class autodelete_page_user_test extends \phpbb_functional_test_case
 	{
 		$this->add_language('andreask/ium', 'user_self_delete_page');
         $crawler = self::request('GET', 'app.php/ium/');
-		$this->assertStringContainsString($this->lang('NO_AUTH_SPEAKING', 'bertie'), $crawler->filter('#message p')->text());
+	    self::assert_response_html(404);
 	}
-
-
 }
