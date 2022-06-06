@@ -1,5 +1,5 @@
 <?php
-namespace andreask\ium\functional;
+namespace andreask\ium\tests\functional;
 
 /**
  * @group functional

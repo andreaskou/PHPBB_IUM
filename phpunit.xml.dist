@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="true" backupStaticAttributes="true" colors="true" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" processIsolation="false" stopOnFailure="false" verbose="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" bootstrap="../../../../tests/bootstrap.php">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">./language/</directory>
+      <directory suffix=".php">./migrations/</directory>
+      <directory suffix=".php">./tests/</directory>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="Extension phpbbIUM Test Suite">
+      <directory suffix="_test.php">./tests</directory>
+      <exclude>./tests/functional</exclude>
+    </testsuite>
+    <testsuite name="Extension phpbbIUM Functional Tests">
+      <directory suffix="_test.php">./tests/functional/</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
