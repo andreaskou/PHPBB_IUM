@@ -4,3 +4,4 @@ package-lock.json
 composer.lock
 travis
 .ideas
+.phpunit.result.cache
