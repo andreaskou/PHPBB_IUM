@@ -101,7 +101,6 @@ class main_module
 				{
 					trigger_error($user->lang('SELECT_A_FORUM'). adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
-
 				$remove_array 		= $this->sweap_sforums($request->variable('excluded_forum', 0));
 				$conf_text_array 	= json_decode($config_text->get('andreask_ium_ignore_forum'));
 				$new_conf_array 	= array_values(array_diff( $conf_text_array, $remove_array));
@@ -173,9 +172,6 @@ class main_module
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang_ext('andreask/ium', 'inactive_user_list');
 			$user->add_lang('memberlist');
-// Testing
-//			$send = $phpbb_container->get('andreask.ium.classes.reminder');
-//			$send->send();
 
 			$start 		= $request->variable('start', 0);
 			$limit 		= $request->variable('users_per_page', 20);
@@ -869,10 +865,10 @@ class main_module
 	 * @param  int $forum_id Forum id
 	 * @return string  Comma separated forum id's
 	 */
-	public function sweap_sforums(int $forum_id)
+	public function sweap_sforums(int $forum_id) : array
 	{
 		global $db;
-		$sql_arry = array('forum_id' => (int) $forum_id);
+		$sql_arry = array('forum_id' => $forum_id);
 		$sql = 'SELECT left_id, right_id
 						FROM ' . FORUMS_TABLE . '
 						WHERE ' . $db->sql_build_array('SELECT', $sql_arry);
@@ -887,13 +883,16 @@ class main_module
 		{
 			$sql = 'SELECT forum_id FROM ' .
 					FORUMS_TABLE . '
-					WHERE left_id >= ' . (int) $subforums['left_id'] . '
-					AND right_id <= ' . (int) $subforums['right_id'] . '
+					WHERE left_id >= ' .  $subforums['left_id'] . '
+					AND right_id <= ' .  $subforums['right_id'] . '
 					ORDER BY left_id';
 			$result = $db->sql_query($sql);
 			$puzzle = [];
 
-			$puzzle = $db->sql_fetchrowset($result);
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$puzzle[] = $row['forum_id'];
+			}
 			$db->sql_freeresult($result);
 
 			return $puzzle;
