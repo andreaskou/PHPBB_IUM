@@ -173,14 +173,14 @@ class main_module
 			$this->page_title = $user->lang('ACP_IUM_TITLE2');
 			$user->add_lang_ext('andreask/ium', 'inactive_user_list');
 			$user->add_lang('memberlist');
+// Testing
+//			$send = $phpbb_container->get('andreask.ium.classes.reminder');
+//			$send->send();
 
-			$send = $phpbb_container->get('andreask.ium.classes.reminder');
-			$send->send();
-
-			$start 			= $request->variable('start', 0);
-			$limit 			= $request->variable('users_per_page', 20);
+			$start 		= $request->variable('start', 0);
+			$limit 		= $request->variable('users_per_page', 20);
 			$with_posts = $request->variable('with_posts', 0);
-			$actions 		= $request->variable('count_back', '30d');
+			$actions 	= $request->variable('count_back', '30d');
 			if ($actions == 'select')
 			{
 				$actions = '30d';
@@ -251,13 +251,13 @@ class main_module
 			);
 
 			// Get the users list using get_inactive_users required parameters $limit $start
-			$rows 					= $this->get_inactive_users(true, $limit, $start, $options);
+			$rows 			= $this->get_inactive_users(true, $limit, $start, $options);
 			$inactive_count = $rows['count'];
-			$rows 					= $rows['results'];
+			$rows 			= $rows['results'];
 
 			// Load pagination
 			$pagination = $phpbb_container->get('pagination');
-			$start 			= $pagination->validate_start($start, $limit, $inactive_count);
+			$start 		= $pagination->validate_start($start, $limit, $inactive_count);
 			$pagination->generate_template_pagination($base_url, 'pagination', 'start', $inactive_count, $limit, $start);
 
 			// Assign template vars (including pagination)
@@ -268,8 +268,8 @@ class main_module
 				'COUNT_BACK' 			=> $options['count_back'],
 				'PER_PAGE' 				=> $limit,
 				'TOTAL_USERS' 			=> $inactive_count,
-				'WITH_POSTS' 			=> ($with_posts) ? true : false,
-				'SORT_ORDER' 			=> ($sort_order) ? true : false,
+				'WITH_POSTS' 			=> (bool) $with_posts,
+				'SORT_ORDER' 			=> (bool) $sort_order,
 				'USERS_PER_PAGE' 		=> $limit,
 				'TOTAL_USERS_WITH_DAY'	=> $user->lang('TOTAL_USERS_WITH_DAY_AMOUNT', $inactive_count, $user->lang($option_ary[$actions]))
 			));
@@ -304,11 +304,11 @@ class main_module
 				$template->assign_block_vars('inactive', array(
 					'USERNAME' 				=> $row['username'],
 					'JOINED' 				=> $user->format_date($row['user_regdate']),
-					'POSTS' 				=> ($row['user_posts']) ? $row['user_posts'] : 0,
+					'POSTS' 				=> ($row['user_posts']) ?: 0,
 					'LAST_VISIT' 			=> ($row['user_lastvisit']) ? $user->format_date($row['user_lastvisit']) : $user->lang('NEVER_CONNECTED'),
 					'INACTIVE_DATE' 		=> ($row['user_inactive_time']) ? $user->format_date($row['user_inactive_time']) : $user->lang('ACP_IUM_NODATE'),
 					'REASON' 				=> $row['user_inactive_reason'],
-					'COUNT' 				=> ($row['ium_remind_counter']) ? $row['ium_remind_counter'] : $user->lang('NO_REMINDER_COUNT'),
+					'COUNT' 				=> ($row['ium_remind_counter']) ?: $user->lang('NO_REMINDER_COUNT'),
 					'LAST_SENT_REMINDER' 	=> ($row['ium_previous_sent_date']) ? $user->format_date($row['ium_previous_sent_date']) : $user->lang('NO_PREVIOUS_SENT_DATE'),
 					'REMINDER_DATE' 		=> ($row['ium_reminder_sent_date']) ? $user->format_date($row['ium_reminder_sent_date']) : $user->lang('NO_REMINDER_SENT_YET'),
 					'IGNORE_USER' 			=> $row['ium_dont_send'],
@@ -527,7 +527,7 @@ class main_module
 					'approval_list', array(
 					'USER_ID'			=>	$row['user_id'],
 					'USERNAME'			=>	$row['username'],
-					'POSTS'				=>	($row['user_posts']) ? $row['user_posts'] : 0,
+					'POSTS'				=>	($row['user_posts']) ?: 0,
 					'REQUEST_DATE' 		=>	$user->format_date($row['ium_request_date']),
 					'TYPE'				=>	$row['ium_type'],
 					'LINK_TO_USER'		=>	$link,
@@ -538,10 +538,9 @@ class main_module
 	}
 
 	/**
-	* Configuration setter
-	*/
-
-	protected function update_config()
+	 * @return void
+	 */
+	protected function update_config() :void
 	{
 		global $config, $request;
 
@@ -746,11 +745,8 @@ class main_module
 
 		$inactive_users = array();
 
-		// Store results to rows
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$inactive_users[] = $row;
-		};
+		// Store results
+		$inactive_users = $db->sql_fetchrowset($result);
 
 		// Be sure to free the result after a SELECT query
 		$db->sql_freeresult($result);
@@ -761,11 +757,8 @@ class main_module
 		// $row should hold the data you selected
 		$count_inactive_users = array();
 
-		// Store results to an array
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$count_inactive_users[] = $row;
-		};
+		// Store results
+		$count_inactive_users = $db->sql_fetchrowset($result);
 
 		$count = sizeof($count_inactive_users);
 
@@ -796,7 +789,7 @@ class main_module
 	 * @param	array		$forum_list Need specific information from a function of phpbb
 	 * @return string		formated options list of forums
 	 */
-	function build_subforum_options($forum_list)
+	function build_subforum_options(array $forum_list) :string
 	{
 		global $user;
 
@@ -838,7 +831,7 @@ class main_module
 	/**
 	 * Creates the options for the excluded forums list
 	 * @param  array $forum_ids Forum id(s)
-	 * @return str   options for selection.
+	 * @return str options for selection.
 	 */
 	public function make_excluded_forums_list($forum_ids)
 	{
@@ -849,10 +842,7 @@ class main_module
 		$result = $db->sql_query($sql);
 
 		$forums = [];
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$forums[] = $row;
-		}
+		$forums = $db->sql_fetchrowset($result);
 		$db->sql_freeresult($result);
 
 		$option = '';
@@ -879,7 +869,7 @@ class main_module
 	 * @param  int $forum_id Forum id
 	 * @return string  Comma separated forum id's
 	 */
-	public function sweap_sforums($forum_id)
+	public function sweap_sforums(int $forum_id)
 	{
 		global $db;
 		$sql_arry = array('forum_id' => (int) $forum_id);
@@ -902,10 +892,8 @@ class main_module
 					ORDER BY left_id';
 			$result = $db->sql_query($sql);
 			$puzzle = [];
-			while ($row = $db->sql_fetchrow($result))
-			{
-				$puzzle[] = $row['forum_id'];
-			}
+
+			$puzzle = $db->sql_fetchrowset($result);
 			$db->sql_freeresult($result);
 
 			return $puzzle;
