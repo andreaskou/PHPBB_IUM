@@ -35,17 +35,19 @@ class reminder
 	private	  $intervals;
 
 	/**
-	*
-	* @param \phpbb\config\config 										$config				PhpBB Config
-	* @param \phpbb\db\driver\driver_interface                        	$db					PhpBB Database
-	* @param \phpbb\user                                              	$user				PhpBB User
-	* @param \phpbb\log\log                                           	$log				PhpBB Log
-	* @param \phpbb\request\request										$request			PhpBB request
-	* @param                                                          	$table_prefix		PhpBB table prefix
-	* @param                                                          	$phpbb_root_path	PhpBB root path
-	* @param                                                          	$php_ext			Php file extension
-	*/
-
+	 * @param \phpbb\config\config              $config				phpBB Config
+	 * @param \phpbb\db\driver\driver_interface $db					phpBB Database
+	 * @param \phpbb\user                       $user				phpBB User
+	 * @param \phpbb\user_loader                $user_loader		phpBB User Loader
+	 * @param \phpbb\log\log                    $log				phpBB Log
+	 * @param \andreask\ium\classes\top_topics  $top_topics			@andreask_ium.classes.top_topics
+	 * @param \andreask\ium\classes\ignore_user $ignore_user		@andreask_ium.classes.ignore_user
+	 * @param \phpbb\request\request            $request			phpBB Request
+	 * @param \phpbb\routing\helper             $routing_helper		phpBB Routing Helper
+	 * @param                                   $table_prefix		phpBB Table Prefix
+	 * @param                                   $phpbb_root_path	phpBB Root path
+	 * @param                                   $php_ext			php file ext
+	 */
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\user_loader $user_loader, \phpbb\log\log $log, \andreask\ium\classes\top_topics $top_topics, \andreask\ium\classes\ignore_user $ignore_user, \phpbb\request\request $request, \phpbb\routing\helper $routing_helper, $table_prefix, $phpbb_root_path, $php_ext)
 	{
 		$this->config           =	$config;
@@ -64,11 +66,11 @@ class reminder
 	}
 
 	/**
-	 * Send email to users in the list of stored $inactive_users (need to be populated by the set_users() function)
-	 * @param $limit ammount of email (users) to sent to
+	 * @param $single bool is set to true set_user needs to be evoced prior to set user_id
+	 * @return void
 	 */
 
-	public function send($single = false)
+	public function send(bool $single = false) :void
 	{
 		if ($single)
 		{
@@ -92,7 +94,7 @@ class reminder
 			foreach ($this->inactive_users as $sleeper)
 			{
 				// If it's not for a single user...
-				if ($single == false)
+				if (!$single)
 				{
 					// Skip the users that have 3 reminders or more if the ext is set to send only 3 reminders.
 					if ($this->config['andreask_ium_ignore_limit'] != 1 && $sleeper['ium_remind_counter'] >= 3)
@@ -211,19 +213,18 @@ class reminder
 				{
 					// User never came back after registration...
 					$messenger->template('@andreask_ium/sleeper', $lang);
-					$messenger->assign_vars($template_ary);
 				}
 				else
 				{
 					// User has forsaken us! :(
 					$messenger->template('@andreask_ium/inactive', $lang);
-					$messenger->assign_vars($template_ary);
 				}
+				$messenger->assign_vars($template_ary);
 
 				// Send mail...
 				$messenger->send();
 
-				// Update ext's table...
+				// Update users...
 				$this->update_user($sleeper);
 				unset($topics);
 				if ($i == $this->config['andreask_ium_email_limit'])
@@ -233,24 +234,27 @@ class reminder
 			}
 		}
 
+		$reminders_sent[] = (isset($i)) ? $i : 0;
+
 		// Log it and release the user list.
-		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), array($i));
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), $reminders_sent);
 		unset( $this->inactive_users );
 	}
 
 	/**
 	 * Gets the users from database and loades them to inactive_users and stores them to $this->inactive_users
-	 * @param  boolean $user User id (if single user) of the requested user.
+	 *
+	 * @param int $user user_id (if single user) of the requested user.
 	 * @return void
 	 */
 
-	private function get_users($user = false)
+	private function get_users(int $user = 0) :void
 	{
 		$sql_opt = '';
 
-		if ($user)
+		if ($user != 0)
 		{
-			$sql_opt .= ' AND user_id = ' . (int) $user;
+			$sql_opt .= ' AND user_id = ' . $user;
 		}else
 		{
 			$sql_opt .= ($this->config['andreask_ium_respect_user_choice']) ? ' AND user_allow_massemail <> 0 ' : '';
@@ -282,19 +286,19 @@ class reminder
 
 	/**
 	 * Setter for $inactive_users
-	 * @param $inactive_users
+	 * @param array $users
+	 * @return void
 	 */
-
-	private function set_users($users)
+	private function set_users(array $users) :void
 	{
 		$this->inactive_users = $users;
 	}
 
 	/**
 	 * Set user to send to a single user.
-	 * @param string $user user_id
+	 * @param int $user user_id
 	 */
-	public function set_single($user)
+	public function set_single(int $user) :void
 	{
 		$this->inactive_users = $user;
 	}
@@ -304,17 +308,17 @@ class reminder
 	 * @return bool returns false if empty.
 	 */
 
-	public function has_users()
+	public function has_users() :bool
 	{
 		return (bool) sizeof($this->inactive_users);
 	}
 
 	/**
 	 * Updates/inserts users to ium_reminder
-	 * @param $user single user
+	 * @param $user array single user
 	 */
 
-	private function update_user($user)
+	private function update_user(array $user) :void
 	{
 		// Update user ium info for the reminder
 		$update_arr = array('ium_reminder_sent_date' => time());
@@ -358,10 +362,10 @@ class reminder
 	/**
 	 * Check if language file exist
 	 * @param  string $user_lang user language preference
-	 * @return bool		true or false
+	 * @return bool
 	 */
 
-	public function lang_exists($user_lang)
+	public function lang_exists(string $user_lang) :bool
 	{
 		if (!$user_lang)
 		{
@@ -369,21 +373,21 @@ class reminder
 		}
 
 		$ext_path = $this->phpbb_root_path . 'ext/andreask/ium';
-		return (bool) file_exists($ext_path . '/language/' . $user_lang);
+		return file_exists($ext_path . '/language/' . $user_lang);
 	}
 
 	/**
 	 * Sends selected reminder template to admin.
-	 * @param  string $id       id of admin that requests the template
+	 * @param  int $id       id of admin that requests the template
 	 * @param  string $template requested template type
 	 * @return void
 	 */
 
-	public function send_to_admin($id, $template)
+	public function send_to_admin(int $id, string $template)
 	{
 
 		$sql = 'SELECT user_id, username, user_email, user_lang, user_dateformat, user_regdate, user_timezone, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason
-				FROM ' . USERS_TABLE . ' WHERE user_id = '. (int) $id ;
+				FROM ' . USERS_TABLE . ' WHERE user_id = '. $id ;
 
 		// Run the query
 		$result = $this->db->sql_query($sql);
@@ -494,12 +498,13 @@ class reminder
 
 	/**
 	 * Resets the counter of reminders this function is called by the listener.
-	 * @param string $id user_id of loged in user.
+	 * @param mixed $id user_id of loged in user.
 	 * @param bool	$login if true requests to reset counter comes from event listener
 	 * @return void
 	 */
 
-	public function reset_counter($id, $login = false)
+	// TODO always send array of id
+	public function reset_counter(mixed $id, bool $login = false) :void
 	{
 		$ids = (!is_array($id)) ? $ids[] = $id : $ids = $id;
 		if ($login)
@@ -527,10 +532,10 @@ class reminder
 	/**
 	 * Generates a formated string of topic title and link to topic.
 	 * @param  array $topics Must contain forum_id, topic_id
-	 * @return string
+	 * @return array
 	 */
 
-	public function make_topics($topics)
+	public function make_topics(array $topics) :array
 	{
 		$url = generate_board_url();
 		$topic_links = [];
@@ -545,9 +550,9 @@ class reminder
 	/**
 	 * Generates reminder intervals
 	 * @return array Intervals [1] First, [2] Second, [3] Third
+	 * @throws \Exception No exceptions
 	 */
-
-	public function get_intervals()
+	public function get_intervals() :array
 	{
 		$first_interval		= (int) $this->config['andreask_ium_interval'];
 		$second_interval	= (int) $this->config['andreask_ium_interval2'] ?: $first_interval;
