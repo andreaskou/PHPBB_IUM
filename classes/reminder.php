@@ -296,9 +296,9 @@ class reminder
 
 	/**
 	 * Set user to send to a single user.
-	 * @param int $user user_id
+	 * @param array $user user_id
 	 */
-	public function set_single(int $user) :void
+	public function set_single(array $user) :void
 	{
 		$this->inactive_users = $user;
 	}
@@ -459,6 +459,16 @@ class reminder
 			{
 				$link = $this->routing_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
+			}
+
+			if (trim($this->config['andreask_ium_no_reply']))
+			{
+				$no_reply = htmlspecialchars_decode('No-reply');
+				$no_reply_mail = $this->config['andreask_ium_no_reply'];
+
+				$board_contact = '"' . $no_reply .'" '. '<' . $no_reply_mail . '>';
+				$messenger->from(mail_encode($board_contact));
+				$messenger->replyto(mail_encode($board_contact));
 			}
 
 			// mail headers
