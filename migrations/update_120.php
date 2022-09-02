@@ -30,7 +30,8 @@ class update_120 extends migration
 			array('config.add', array('andreask_ium_respect_user_choice', 1)),
 			array('config.add', array('andreask_ium_ignore_limit', 1)),
 			array('config.add', array('andreask_ium_no_reply', '')),
-			);
+			array('config.remove', array('reminder_limit')),
+		);
 	}
 
   static public function depends_on()
