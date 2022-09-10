@@ -193,7 +193,6 @@ class ignore_user
 			$ignore = '';
 		}
 
-		var_dump($acp_req);
 		// Make an array of user_types to ignore
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
