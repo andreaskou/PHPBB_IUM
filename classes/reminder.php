@@ -91,6 +91,7 @@ class reminder
 			}
 
 			$i = 0;
+			$sent = [];
 			foreach ($this->inactive_users as $sleeper)
 			{
 				// If it's not for a single user...
@@ -222,10 +223,15 @@ class reminder
 				$messenger->assign_vars($template_ary);
 
 				// Send mail...
-				$messenger->send();
-
-				// Update users...
-				$this->update_user($sleeper);
+				if ($messenger->send())
+				{
+					// Update users...
+					$this->update_user($sleeper);
+				}else
+				{
+					// if failed save user for loging
+					$sent[] = $sleeper['username'];
+				}
 				unset($topics);
 				if ($i == $this->config['andreask_ium_email_limit'])
 				{
@@ -237,6 +243,10 @@ class reminder
 		$reminders_sent[] = (isset($i)) ? $i : 0;
 
 		// Log it and release the user list.
+		if (!empty($sent))
+		{
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_FAILED_EMAILS', time(), [implode(', ', $sent)]);
+		}
 		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), $reminders_sent);
 		unset( $this->inactive_users );
 	}
@@ -354,7 +364,7 @@ class reminder
 		}
 
 		$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $update_arr) . '
-						WHERE user_id = ' . (int) $user['user_id'];
+						WHERE user_id = ' . $user['user_id'];
 
 		$this->db->sql_query($sql);
 	}
@@ -508,35 +518,34 @@ class reminder
 
 	/**
 	 * Resets the counter of reminders this function is called by the listener.
-	 * @param mixed $id user_id of loged in user.
+	 * @param array $id user_id of logged in user.
 	 * @param bool	$login if true requests to reset counter comes from event listener
 	 * @return void
 	 */
 
-	// TODO always send array of id
-	public function reset_counter(mixed $id, bool $login = false) :void
+	public function reset_counter(array $id, bool $login = false) :void
 	{
-		$ids = (!is_array($id)) ? $ids[] = $id : $ids = $id;
+		$dont_send = '';
 		if ($login)
 		{
-			$sql = "SELECT ium_dont_send FROM " . USERS_TABLE . " WHERE " .  $this->db->sql_in_set('user_id', $ids);
+			$sql = "SELECT ium_dont_send FROM " . USERS_TABLE . " WHERE " .  $this->db->sql_in_set('user_id', $id);
 			$result = $this->db->sql_query($sql);
 			$dont_send = $this->db->sql_fetchfield('ium_dont_send');
 			$this->db->sql_freeresult($result);
-
-			if ($dont_send != 2)
-			{
-				$action = ', ium_dont_send = 0 ';
-			}
-			else
-			{
-				$action = '';
-			}
+		}
+		if ($dont_send != 2)
+		{
+			$action = ', ium_dont_send = 0 ';
+		}
+		else
+		{
+			$action = '';
 		}
 
 		// reset counter(s)!
-		$sql = "UPDATE " . USERS_TABLE . " SET ium_remind_counter = 0, ium_request_date = 0, ium_type ='' ". $action ." WHERE ". $this->db->sql_in_set('user_id', $ids);
+		$sql = "UPDATE " . USERS_TABLE . " SET ium_remind_counter = 0, ium_request_date = 0, ium_type ='' ". $action ." WHERE ". $this->db->sql_in_set('user_id', $id);
 		$this->db->sql_query($sql);
+
 	}
 
 	/**
