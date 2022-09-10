@@ -193,12 +193,13 @@ class ignore_user
 			$ignore = '';
 		}
 
+		var_dump($acp_req);
 		// Make an array of user_types to ignore
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
 		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
-				  AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) .'
 				  AND ' . $this->db->sql_in_set('user_inactive_reason', INACTIVE_MANUAL, true) .' AND user_id <> ' . ANONYMOUS . $ignore;
+		$text .= ($admin_mod_array) ? ' AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) : '';
 
 		return $text;
 	}
