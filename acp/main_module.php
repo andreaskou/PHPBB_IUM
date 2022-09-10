@@ -15,6 +15,7 @@ namespace andreask\ium\acp;
 
 use DateTime;
 use DateInterval;
+use phpbb\profilefields\type\type_base;
 
 class main_module
 {
@@ -246,8 +247,8 @@ class main_module
 				'reminder_date' 		=> 'REMINDER_DATE',
 			);
 
-			// Get the users list using get_inactive_users required parameters $limit $start
-			$rows 			= $this->get_inactive_users(true, $limit, $start, $options);
+			// Get the users list using get_inactive_users required parameters $limit $start for the full list of users
+			$rows 			= $this->get_inactive_users(true, $limit, $start, false, $options);
 			$inactive_count = $rows['count'];
 			$rows 			= $rows['results'];
 
@@ -398,11 +399,11 @@ class main_module
 					trigger_error($user->lang('NO_USER_TYPED') . adm_back_link( $this->u_action ), E_USER_WARNING);
 				}
 
-				// Users ingnore list
+				// Users ignore list
 				$users 	= explode("\n", $request->variable('usernames', '', true));
-				// clean emty lines if exist...
+				// clean empty lines if exist...
 				$users 	= array_filter($users);
-				// trim whipe spaces
+				// trim white spaces
 				$users 	= array_map('trim', $users);
 				// remove doubles if exist...
 				$users 	= array_unique($users);
@@ -477,8 +478,8 @@ class main_module
 			//base url for pagination, filtering and sorting
 			$base_url = $this->u_action . "&amp;users_per_page=" . $limit;
 
-			// Get the users list for delition using get_inactive_users
-			$rows = $this->get_inactive_users(true, $limit, $start, $options);
+			// Get the users list for approval deletion/reset using get_inactive_users
+			$rows = $this->get_inactive_users(true, $limit, $start, true, $options);
 			$approval_count = $rows['count'];
 			$rows = $rows['results'];
 
@@ -491,7 +492,8 @@ class main_module
 				'ignore'		=> 2,
 			);
 
-			$ignored 				= $this->get_inactive_users(false, $limit, $start, $opt_out);
+			// Get the users list of ignored by the admin
+			$ignored 				= $this->get_inactive_users(false, $limit, $start, true, $opt_out);
 			$ignored 				= $ignored['results'];
 			$s_defined_user_options = '';
 
@@ -527,13 +529,14 @@ class main_module
 					'REQUEST_DATE' 		=>	$user->format_date($row['ium_request_date']),
 					'TYPE'				=>	$row['ium_type'],
 					'LINK_TO_USER'		=>	$link,
-					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', $row['ium_dont_send']),
+					'IGNORE_METHODE'	=>	$user->lang('IGNORE_METHODE', (int) $row['ium_dont_send']),
 				));
 			}
 		}
 	}
 
 	/**
+	 * Updates configuration of the ext
 	 * @return void
 	 */
 	protected function update_config() :void
@@ -561,28 +564,30 @@ class main_module
 	}
 
 	/**
-	* Getter for inactive users
-	* @param int $limit Used for pagination in sql query to limit the numbers of rows.
-	* @param int $start Used for pagination in sql query to say where to start from.
-	* @param bool $paginate define if pagination is used or not.
-	* @param null $filters Array Used for query to supply extra filters.
-	* @return array result of query and total amount of the result.
-	*/
-
-	public function get_inactive_users($paginate = true, $limit = null, $start = null, $filters = null)
+	 * Getter for inactive users
+	 * @param bool       $paginate
+	 * @param int|null   $limit
+	 * @param int|null   $start
+	 * @param bool		 $acp_req
+	 * @param array|null $filters
+	 * @return array
+	 */
+	public function get_inactive_users(bool $paginate = true, int $limit = null, int $start = null, bool $acp_req = false, array $filters = null): array
 	{
-		return $this->inactive_users($paginate, $limit, $start, $filters);
+		return $this->inactive_users($paginate, $limit, $start, $acp_req, $filters);
 	}
 
 	/**
-	* @param int $limit Used for pagination in sql query to limit the numbers of rows.
-	* @param int $start Used for pagination in sql query to say where to start from.
-	* @param bool $paginate define if pagination is used or not.
-	* @param null $filters Array Used for query to supply extra filters.
-	* @return array result of query and total amount of the result.
-	*/
+	 * @param            $paginate bool define if pagination is used or not.
+	 * @param int|null   $limit    int Used for pagination in sql query to limit the numbers of rows.
+	 * @param int|null   $start    int Used for pagination in sql query to say where to start from.
+	 * @param bool		 $acp_req  bool this will enable the query to load faster since we don't need the ignored by default members
+	 * @param array|null $filters  array Used for query to supply extra filters.
+	 * @return array result of query and total amount of the result.
+	 * @throws \Exception
+	 */
 
-	private function inactive_users($paginate = true, $limit = null, $start = null, $filters = null)
+	private function inactive_users(bool $paginate = true, int $limit = null, int $start = null, bool $acp_req = false, array $filters = null)
 	{
 		global $db, $phpbb_container;
 
@@ -671,56 +676,56 @@ class main_module
 				$options .= ' AND user_regdate < ' . $past . ' AND user_lastvisit < ' . $past;
 			}
 
-				/**
-				* XXX
-				* Big case with sort by, probably will have to rethink it.
-				*/
-
-				if ($filters['sort_by'] && $filters['sort_by'] != $ignore)
+			/*
+			* XXX
+			* Big case with sort by, probably will have to rethink it.
+			*/
+			if ($filters['sort_by'] && $filters['sort_by'] != $ignore)
+			{
+				$sort = ' ORDER BY ';
+				switch ($filters['sort_by'])
 				{
-					$sort = ' ORDER BY ';
-					switch ($filters['sort_by'])
-					{
-						case 'username':
-							$sort .= 'username';
-							break;
-						case 'reg_date':
-							$sort .= 'user_regdate';
-							break;
-						case 'last_visit':
-							$sort .= 'user_lastvisit';
-							break;
-						case 'posts':
-							$sort .= 'user_posts';
-							break;
-						case 'last_sent_reminder':
-							$sort .= 'ium_previous_sent_date';
-							break;
-						case 'count':
-							$sort .= 'ium_remind_counter';
-							break;
-						case 'reminder_date':
-							$sort .= 'ium_reminder_sent_date';
-							break;
-						case 'request_date':
-							$sort .= 'ium_request_date';
-							break;
-						case 'select':
-							$sort .= 'user_regdate';
-							break;
-					}
-					if ($filters['sort_order'] === 1)
-					{
-						$sort .= ' DESC';
-					}
+					case 'username':
+						$sort .= 'username';
+						break;
+					case 'reg_date':
+						$sort .= 'user_regdate';
+						break;
+					case 'last_visit':
+						$sort .= 'user_lastvisit';
+						break;
+					case 'posts':
+						$sort .= 'user_posts';
+						break;
+					case 'last_sent_reminder':
+						$sort .= 'ium_previous_sent_date';
+						break;
+					case 'count':
+						$sort .= 'ium_remind_counter';
+						break;
+					case 'reminder_date':
+						$sort .= 'ium_reminder_sent_date';
+						break;
+					case 'request_date':
+						$sort .= 'ium_request_date';
+						break;
+					case 'select':
+						$sort .= 'user_regdate';
+						break;
 				}
+				if ($filters['sort_order'] === 1)
+				{
+					$sort .= ' DESC';
+				}
+			}
 		}
 
 		// Create the SQL statement
 		// $table_name = $table_prefix . 'ium_reminder';
 
-		$ignore_groups 	= $phpbb_container->get('andreask.ium.classes.ignore_user');
-		$must_ignore 	= $ignore_groups->ignore_groups();
+		$must_ignore = '';
+			$ignore_groups = $phpbb_container->get('andreask.ium.classes.ignore_user');
+			$must_ignore = $ignore_groups->ignore_groups($acp_req);
 
 		$sql = 'SELECT user_id, username, user_regdate, user_posts, user_lastvisit, user_inactive_time, user_inactive_reason, ium_remind_counter, ium_previous_sent_date, ium_reminder_sent_date, ium_dont_send, ium_request_date, ium_random, ium_type
 			FROM ' . USERS_TABLE . '
@@ -764,7 +769,11 @@ class main_module
 		return array('results'	=>	$inactive_users,	'count'	=>	$count);
 	}
 
-	private function get_groups()
+	/**
+	 * Return groups of forum
+	 * @return array groups
+	 */
+	private function get_groups(): array
 	{
 		global $db;
 
@@ -783,7 +792,7 @@ class main_module
 	/**
 	 * Build options from forums list, function is same as acp_permissions of phpbb.
 	 * @param	array		$forum_list Need specific information from a function of phpbb
-	 * @return string		formated options list of forums
+	 * @return string		formatted options list of forums
 	 */
 	function build_subforum_options(array $forum_list) :string
 	{
@@ -827,9 +836,9 @@ class main_module
 	/**
 	 * Creates the options for the excluded forums list
 	 * @param  array $forum_ids Forum id(s)
-	 * @return str options for selection.
+	 * @return string options for selection.
 	 */
-	public function make_excluded_forums_list($forum_ids)
+	public function make_excluded_forums_list(array $forum_ids): string
 	{
 		global $db, $user;
 
@@ -863,7 +872,7 @@ class main_module
 	/**
 	 * Getter of left and right id's for forums
 	 * @param  int $forum_id Forum id
-	 * @return string  Comma separated forum id's
+	 * @return array Comma separated forum id's
 	 */
 	public function sweap_sforums(int $forum_id) : array
 	{
