@@ -146,20 +146,27 @@ class ignore_user
 
 	/**
 	 * Returns a complete string of user_type and user_id that should be ignored by the queries.
+	 * @param bool $acp_req if request came from acp or not
 	 * @return string Complete ignore statement for sql
 	 */
-	public function ignore_groups()
+	public function ignore_groups(bool $acp_req = false)
 	{
-		// Get administrator user_ids
-		$administrators = $this->auth->acl_get_list(false, 'a_', false);
-		$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
+		$admin_mod_array = '';
 
-		// Get moderator user_ids
-		$moderators = $this->auth->acl_get_list(false, 'm_', false);
-		$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
+		if (!$acp_req)
+		{
+			// Get administrator user_ids
+			$administrators = $this->auth->acl_get_list(false, 'a_', false);
+			$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
 
-		// Merge them together
-		$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+			// Get moderator user_ids
+			$moderators = $this->auth->acl_get_list(false, 'm_', false);
+			$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
+
+			// Merge them together
+
+			$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+		}
 
 		// Ignored group_ids
 		$ignore = $this->config_text->get('andreask_ium_ignored_groups', '');
