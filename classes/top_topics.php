@@ -13,6 +13,8 @@
 
 namespace andreask\ium\classes;
 
+use phpDocumentor\Reflection\Types\Mixed_;
+
 class top_topics
 {
 
@@ -145,7 +147,12 @@ class top_topics
 		}
 	}
 
-	public function get_forum_top_topics($id, $last_visit)
+	/**
+	 * @param $id int user_id
+	 * @param $last_visit int timestamp
+	 * @return array
+	 */
+	public function get_forum_top_topics(int $id, int $last_visit): ?array
 	{
 		if (!$id)
 		{
@@ -237,7 +244,7 @@ class top_topics
 	 * @return bool|int Number of posts or else return false
 	 */
 
-	private function user_post_count($user_id)
+	private function user_post_count(int $user_id)
 	{
 		if (!$user_id)
 		{
@@ -246,7 +253,7 @@ class top_topics
 
 		$sql = 'SELECT user_posts AS post_count
 			FROM ' . USERS_TABLE . '
-			WHERE user_id = ' . (int) $user_id;
+			WHERE user_id = ' . $user_id;
 
 		$result = $this->db->sql_query($sql);
 		$post_count = (int) $this->db->sql_fetchfield('post_count');
