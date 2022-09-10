@@ -26,9 +26,9 @@ $lang = array_merge(
 
 	// Delete approval page
 	'IGNORE_METHODE'	=> array(
-		0 =>	'Not ignored',
-		1 =>	'Auto',
-		2	=>	'Ignored by Admin',
+		'0' =>	'Not ignored',
+		'1' =>	'Auto',
+		'2' =>	'Ignored by Admin'
 	),
 	'IGNORE_METHODES'	=>	'Ignore type',
 	'ACP_IUM_APPROVAL_LIST_TITLE'	=> 'Deletion approval list',
