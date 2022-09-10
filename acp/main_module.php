@@ -733,7 +733,7 @@ class main_module
 			. $must_ignore
 			. $options
 			. $sort;
-
+		
 		if ($paginate)
 		{
 			$result = $db->sql_query_limit( $sql, $limit, $start );
