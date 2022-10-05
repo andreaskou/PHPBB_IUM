@@ -91,7 +91,7 @@ class reminder
 			}
 
 			$i = 0;
-			$sent = [];
+			$failed = [];
 			foreach ($this->inactive_users as $sleeper)
 			{
 				// If it's not for a single user...
@@ -196,7 +196,7 @@ class reminder
 
 				$messenger->anti_abuse_headers($this->config, $this->user);
 
-				if (trim($this->config['andreask_ium_no_reply']))
+				if ($this->config['andreask_ium_no_reply'])
 				{
 					$no_reply = htmlspecialchars_decode('No-reply');
 					$no_reply_mail = $this->config['andreask_ium_no_reply'];
@@ -230,7 +230,7 @@ class reminder
 				}else
 				{
 					// if failed save user for loging
-					$sent[] = $sleeper['username'];
+					$failed[] = $sleeper['username'];
 				}
 				unset($topics);
 				if ($i == $this->config['andreask_ium_email_limit'])
@@ -243,9 +243,9 @@ class reminder
 		$reminders_sent[] = (isset($i)) ? $i : 0;
 
 		// Log it and release the user list.
-		if (!empty($sent))
+		if (!empty($failed))
 		{
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_FAILED_EMAILS', time(), [implode(', ', $sent)]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_FAILED_EMAILS', time(), [implode(', ', $failed)]);
 		}
 		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDERS', time(), $reminders_sent);
 		unset( $this->inactive_users );
@@ -471,7 +471,7 @@ class reminder
 				$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 			}
 
-			if (trim($this->config['andreask_ium_no_reply']))
+			if ($this->config['andreask_ium_no_reply'])
 			{
 				$no_reply = htmlspecialchars_decode('No-reply');
 				$no_reply_mail = $this->config['andreask_ium_no_reply'];
