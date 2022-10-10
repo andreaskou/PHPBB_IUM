@@ -231,6 +231,7 @@ class reminder
 				{
 					// if failed save user for loging
 					$failed[] = $sleeper['username'];
+					$i--;
 				}
 				unset($topics);
 				if ($i == $this->config['andreask_ium_email_limit'])

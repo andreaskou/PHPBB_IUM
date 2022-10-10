@@ -41,7 +41,7 @@ $lang = array_merge(
 			2	=>	'%s reminders were sent.'
 	),
 	'LOG_USERS_DELETED'				=>	'"%1$s" users were deleted "<b>%2$s"</b>, request type : "<b>%3$s</b>"',
-	'LOG_FAILED_EMAILS'				=>	'Faild to send e-mails to the following users : "<strong>%1$s</strong>"',
+	'LOG_FAILED_EMAILS'				=>	'Faild to send e-mails to the following users : "<strong>%1$s</strong>". Check error logs for more details.<br/>Will try again tomorrow',
 	'LOG_USER_DELETED'				=>	'User "<b>%1$s</b>" was deleted, request type : "<b>%2$s</b>"',
 	'LOG_DELETE_REQUEST_DONT_MATCH'	=>	'Something was wrong with your request. Requested users for deletion did not match with the actual users in the database',
 	'LOG_USER_SELF_DELETED'			=>	'A user was self deleted. Configuration for posts was set on "%s"',
