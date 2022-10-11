@@ -32,7 +32,7 @@ class reminder
 	protected $php_ext;
 	protected $table_name;
 	protected $routing_helper;
-	private	  $intervals;
+	protected $intervals;
 
 	/**
 	 * @param \phpbb\config\config              $config				phpBB Config
@@ -270,6 +270,7 @@ class reminder
 		{
 			$sql_opt .= ($this->config['andreask_ium_respect_user_choice']) ? ' AND user_allow_massemail <> 0 ' : '';
 			$sql_opt .= ($this->config['andreask_ium_ignore_limit']) ? ' AND ium_dont_send < 1 ' : ' AND ium_dont_send < 2 ';
+			$sql_opt .= ' AND user_regdate < ' . $this->intervals[1];
 		}
 
 		$ignore_groups = $this->ignore_user;
