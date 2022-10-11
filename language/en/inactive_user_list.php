@@ -43,8 +43,7 @@ $lang = array_merge(
 	'REMINDER_DATE'	=>	'Last Reminder Sent',
 	'NO_REMINDER_SENT_YET'	=>	'Not sent any reminders yet',
 	'IUM_INACTIVE_REASON'	=>	'Status',
-	'TOTAL_USERS_WITH_DAY_AMOUNT'	=>	'<strong>%1$s</strong> User(s) in total <i>for the set interval</i> of "<strong>%2$s</strong>"',
-
+	'TOTAL_USERS_WITH_DAY_AMOUNT'	=>	'<strong>%1$s</strong> User(s) in total <i>for the set interval</i> of "<strong>%2$s</strong>" prior.',
 	// configuration page Legend
 	'IUM_INACTIVE_USERS_EXPLAIN'	=>	'In this list you can see the users who, have registered but whose accounts are inactive and those who have not visited the board for the set amount of time here.<br>Username colors represent the ignore status. <span style="color: #DC143C;"><strong>Red</strong></span> -> Ignored by an administrator, <span style="color: #008000;"><strong>Green</strong></span> -> Auto Ignored, <span style="color: #000000;"><strong>Black</strong></span> -> Not ignored.',
 
