@@ -13,8 +13,6 @@
 
 namespace andreask\ium\classes;
 
-use phpDocumentor\Reflection\Types\Mixed_;
-
 class top_topics
 {
 

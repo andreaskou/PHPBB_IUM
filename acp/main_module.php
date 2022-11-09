@@ -15,7 +15,6 @@ namespace andreask\ium\acp;
 
 use DateTime;
 use DateInterval;
-use phpbb\profilefields\type\type_base;
 
 class main_module
 {
