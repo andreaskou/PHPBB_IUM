@@ -100,10 +100,11 @@ class reminder
 					// Skip the users that have 3 reminders or more if the ext is set to send only 3 reminders.
 					if ($this->config['andreask_ium_ignore_limit'] != 1 && $sleeper['ium_remind_counter'] >= 3)
 					{
+						// skip user
 						continue;
 					}
 					// Skip the users that should not receive the reminder acording to their reminder counter and the set interval for it.
-					else if ($sleeper['ium_remind_counter'] == 0 && ($sleeper['user_lastvisit'] > $this->intervals[1]))
+					if ($sleeper['ium_remind_counter'] == 0 && ($sleeper['user_lastvisit'] > $this->intervals[1]))
 					{
 						// skip user
 						continue;
