@@ -1,5 +1,7 @@
 vendor
-tests
 phpunit.xml
-.idea
-.package-lock.json
+package-lock.json
+composer.lock
+travis
+.ideas
+.phpunit.result.cache

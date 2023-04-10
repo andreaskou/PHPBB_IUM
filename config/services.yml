@@ -1,5 +1,4 @@
 imports:
-    - { resource: tables.yml }
     - { resource: event.yml }
 services:
     andreask.ium.cron.send_reminder:
@@ -24,6 +23,7 @@ services:
             - '@andreask.ium.classes.top_topics'
             - '@andreask.ium.classes.ignore_user'
             - '@request'
+            - '@routing.helper'
             - '%core.table_prefix%'
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -46,11 +46,11 @@ services:
     andreask.ium.classes.ignore_user:
         class: andreask\ium\classes\ignore_user
         arguments:
+            - '@user'
             - '@dbal.conn'
             - '@config_text'
             - '@auth'
             - '@log'
-            - '%andreask.ium.tables.reminder_table%'
     andreask.ium.controller:
         class: andreask\ium\controller\main
         arguments:
@@ -58,7 +58,8 @@ services:
             - '@dbal.conn'
             - '@user'
             - '@request'
-            - '@controller.helper'
             - '@template'
             - '@andreask.ium.classes.delete_user'
-            - '%andreask.ium.tables.reminder_table%'
+            - '@service_container'
+            - '%core.root_path%'
+            - '%core.php_ext%'

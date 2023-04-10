@@ -15,19 +15,19 @@ namespace andreask\ium\classes;
 
 class ignore_user
 {
+	protected $user;			/** User for the language */
 	protected $db; 				/** DBAL driver for database use */
 	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
 	protected $auth;			/** Auth class to get admins and mods */
-	protected $table_name;		/** Custome table for ease of use */
 
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log, $ium_reminder_table)
+	public function __construct(\phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
+		$this->user				=	$user;
 		$this->db				=	$db;
 		$this->log				=	$log;
 		$this->auth				=	$auth;
 		$this->config_text		=	$config_text;
-		$this->table_name		=	$ium_reminder_table;
 	}
 
 	/**
@@ -37,34 +37,21 @@ class ignore_user
 
 	public function exist($users)
 	{
-		$user_list = [];
-		$not_exist = [];
-		$user_count = 0;
-		$not_exist_count = 0;
 
-		foreach ($users as $user)
+		$sql = 'SELECT user_id, username FROM '. USERS_TABLE .' WHERE '. $this->db->sql_in_set('username', $users);
+		$result = $this->db->sql_query($sql);
+		$users_found = $this->db->sql_fetchrowset($result);
+
+		foreach ($users_found as $key => $user)
 		{
-			$sql = 'SELECT user_id, username FROM ' . USERS_TABLE . " WHERE username = '" . $this->db->sql_escape($user) . "'";
-			$result = $this->db->sql_query($sql);
-			$user_fetch = $this->db->sql_fetchrow($result);
-
-			// For any user that was not found, store them.
-			if (!$user_fetch)
+			if (($key = array_search($user['username'], $users )) !== null)
 			{
-				$not_exist[$not_exist_count]['username'] = $user;
-				$not_exist_count++;
+				unset($users[$key]);
 			}
-			else if ($user !== $user_fetch['username'])
-			{
-				$not_exist[$not_exist_count]['username'] = $user;
-				$not_exist_count++;
-			}
-
-			$this->db->sql_freeresult($result);
 		}
-		if ($not_exist)
+		if (!empty($users))
 		{
-			return $not_exist;
+			return $users;
 		}
 		return true;
 	}
@@ -80,49 +67,30 @@ class ignore_user
 	public function ignore_user($username, $mode = 1)
 	{
 		/**
-		*	We have to check if the given users exist or not in custome table 'ium_reminder'
-		*	This is done by doing left join USERS_TABLE and ium_reminder. and selecting users
-		*	that are null (don't exist) on ium_reminder.
+		*	We have to check if the given users exist or not
+		*	This is done by looking USERS_TABLE. And selecting users
 		*/
 
 		$sql_query = 'SELECT user_id, username
-									FROM ' . USERS_TABLE . ' WHERE ' .
-									$this->db->sql_in_set('username', $username ) . $this->ignore_groups();
+						FROM ' . USERS_TABLE . ' WHERE ' .
+						$this->db->sql_in_set('username', $username ) . $this->ignore_groups();
 
-
-		// $sql_array = array(
-		// 	'SELECT'	=> 'p.user_id, p.username',
-		// 	'FROM'		=> array(
-		// 		USERS_TABLE =>	'p',
-		// 		),
-		// 	'LEFT_JOIN' => array(
-		// 		array(
-		// 			'FROM'	=> array($this->table_name	=>	'r'),
-		// 			'ON'	=>	'p.user_id = r.user_id',
-		// 			)
-		// 		),
-		// 	'WHERE'	=> $this->db->sql_in_set('p.username', $username ) . $this->ignore_groups()
-		// 	. ' AND username is null');
-
-		// $sql = $this->db->sql_build_query('SELECT', $sql_array);
-		// $result = $this->db->sql_query($sql);
 		$result = $this->db->sql_query($sql_query);
-		$rows = [];
 
-		// Store in an array.
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$rows[] = $row;
-		}
-
+		$user = $this->db->sql_fetchrowset($result);
 		// Always free the results
 		$this->db->sql_freeresult($result);
-		$clean = [];
 
-		// if the above situation did not ocured just update, since all the users exist already.
-		foreach ($rows as $user)
+		$so_user 		= sizeof($user);
+		$so_username 	= sizeof($username);
+
+		if (!empty($user) && $so_user == $so_username)
 		{
 			$this->update_user($user, $mode);
+		}
+		else
+		{
+			trigger_error($this->user->lang('USER_EXIST_IN_IGNORED_GROUP') . adm_back_link( $this->u_action ), E_USER_WARNING);
 		}
 	}
 
@@ -140,14 +108,16 @@ class ignore_user
 		{
 			$username = $this->get_user_username($user);
 		}
-		$username = ($user_id) ? $username : $user;
-		// $username = ($user_id) ? array_shift($username) : $user;
-		$dont_send = $action;
+		else
+		{
+			$username = array_column($user, 'username');
+		}
 
 		$data = array ('ium_dont_send' => $action);
 		$sql = 'UPDATE ' . USERS_TABLE . '
 				SET ' . $this->db->sql_build_array('UPDATE', $data) . '
 				WHERE '. $this->db->sql_in_set('username', $username);
+
 		$this->db->sql_query($sql);
 	}
 
@@ -176,27 +146,47 @@ class ignore_user
 
 	/**
 	 * Returns a complete string of user_type and user_id that should be ignored by the queries.
+	 * @param bool $acp_req if request came from acp or not
 	 * @return string Complete ignore statement for sql
 	 */
-	public function ignore_groups()
+	public function ignore_groups(bool $acp_req = false)
 	{
-		// Get administrator user_ids
-		$administrators = $this->auth->acl_get_list(false, 'a_', false);
-		$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
+		$admin_mod_array = '';
 
-		// Get moderator user_ids
-		$moderators = $this->auth->acl_get_list(false, 'm_', false);
-		$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
+		if (!$acp_req)
+		{
+			// Get administrator user_ids
+			$administrators = $this->auth->acl_get_list(false, 'a_', false);
+			$admin_ary = (!empty($administrators[0]['a_'])) ? $administrators[0]['a_'] : array();
 
-		// Merge them together
-		$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+			// Get moderator user_ids
+			$moderators = $this->auth->acl_get_list(false, 'm_', false);
+			$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
+
+			// Merge them together
+
+			$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+		}
 
 		// Ignored group_ids
 		$ignore = $this->config_text->get('andreask_ium_ignored_groups', '');
 		$ignore = json_decode($ignore);
 		if (!empty($ignore))
 		{
-			$ignore = ' AND ' . $this->db->sql_in_set('group_id', $ignore, true);
+			$sql_ary = array(
+				'SELECT'	=>	'user_id',
+				'FROM'		=> array(USER_GROUP_TABLE => 'gr'),
+				'WHERE'		=> $this->db->sql_in_set('group_id', $ignore)
+			);
+			$sql = $this->db->sql_build_query('SELECT', $sql_ary);
+			$result = $this->db->sql_query($sql);
+			$users = [];
+			while ( $user = $this->db->sql_fetchrow($result))
+			{
+				$users[]= $user['user_id'];
+			}
+			$this->db->sql_freeresult($result);
+			$ignore = ' AND ' . $this->db->sql_in_set('user_id', $users, true );
 		}
 		else
 		{
@@ -207,8 +197,8 @@ class ignore_user
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
 		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
-				  		AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) .'
-							AND user_inactive_reason not in ('. INACTIVE_MANUAL .') AND user_id > ' . ANONYMOUS . $ignore;
+				  AND ' . $this->db->sql_in_set('user_inactive_reason', INACTIVE_MANUAL, true) .' AND user_id <> ' . ANONYMOUS . $ignore;
+		$text .= ($admin_mod_array) ? ' AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) : '';
 
 		return $text;
 	}

@@ -7,14 +7,14 @@
         <legend>{{ lang('ACP_IUM_SETTINGS') }}</legend>
         <dl>
             <dt><label for="andreask_ium_enable">{{ lang('ANDREASK_IUM_ENABLE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" name="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" name="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TEST_EMAIL') ~ lang('COLON') }}</label><br/><span>{ANDREASK_IUM_TEST_EXPLAIN}</span></dt>
             <dd>
-                <input class="button2" type="submit" id="submit" name="send_sleeper" value="{{lang('SEND_SLEEPER')}}" /> &nbsp;
-                <input class="button2" type="submit" id="submit" name="send_inactive" value="{{lang('SEND_INACTIVE')}}" />
+                <input class="button2" type="submit" id="send_sleeper" name="send_sleeper" value="{{lang('SEND_SLEEPER')}}" /> &nbsp;
+                <input class="button2" type="submit" id="send_inactive" name="send_inactive" value="{{lang('SEND_INACTIVE')}}" />
             </dd>
         </dl>
     </fieldset>
@@ -22,12 +22,29 @@
         <legend>{{ lang('ACP_IUM_MAIL_SETTINGS') }}</legend>
         <dl>
             <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_INTERVAL_EXPLAIN')}}</span></dt>
-            <dd><input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="999" /> days </dd>
+            {{ lang('FIRST_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="999" />
+            {{ lang('SECOND_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL2}" size="3" id="andreask_ium_interval2" name="andreask_ium_interval2" min="0" max="999" />
+            {{ lang('THIRD_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL3}" size="3" id="andreask_ium_interval3" name="andreask_ium_interval3" min="0" max="999" /> {{ lang('DAYS') }}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_email_limit">{{ lang('ANDREASK_IUM_EMAIL_LIMIT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN')}}</span></dt>
-            <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500" /> e-mails </dd>
+            <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500" /> {{ lang('EMAILS')}} </dd>
         </dl>
+        <dl>
+            <dt><label for="andreask_ium_no_reply">{{ lang('ANDREASK_IUM_NO_REPLY') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_NO_REPLY_EXPLAIN')}}</span></dt>
+            <dd><input type="email" value="{ANDREASK_IUM_NO_REPLY}" id="andreask_ium_no_reply" name="andreask_ium_no_reply" /></dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_respect_user_choice">{{ lang('ANDREASK_IUM_RESPECT_USR') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_RESPECT_USR_EXPLAIN')}}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="1" <!-- IF ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="0" <!-- IF not ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+        </dl>
+        <dl>
+            <dt><label for="andreask_ium_ignore_limit">{{ lang('ANDREASK_IUM_IGNORE_LMT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_IGNORE_LMT_EXPLAIN')}}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="1" <!-- IF ANDREASK_IUM_IGNORE_LIMIT -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="0" <!-- IF not ANDREASK_IUM_IGNORE_LIMIT -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+        </dl>
+
     </fieldset>
     <fieldset>
         <legend>{{ lang('ACP_IUM_DANGER') }}</legend>
@@ -81,7 +98,7 @@
     </fieldset>
     <fieldset>
         <p class="submit-buttons">
-            <input class="button1" type="submit" id="submit" name="submit_settings" value="{L_SUBMIT}" autofocus />&nbsp;
+            <input class="button1" type="submit" id="submit_settings" name="submit_settings" value="{L_SUBMIT}" autofocus />&nbsp;
             <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" autofocus />
         </p>
         {S_FORM_TOKEN}
@@ -97,7 +114,7 @@
                     <dd class="full"><select style="width: 100%;" id="sforum" name="subforum_id" size="6">{ANDREASK_IUM_EXCLUDE_FORUMS}</select></dd>
                 </dl>
                 <p class="submit-buttons">
-                    <input class="button2" type="submit" id="submit" name="exclude_forum" value="{{ lang('ANDREASK_IUM_EXCLUDE_FORUM') }}" autofocus />
+                    <input class="button2" type="submit" id="exclude_forum" name="exclude_forum" value="{{ lang('ANDREASK_IUM_EXCLUDE_FORUM') }}" autofocus />
                     {S_FORM_TOKEN}
                 </p>
             </fieldset>

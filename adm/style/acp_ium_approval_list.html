@@ -1,4 +1,5 @@
 <!-- INCLUDE overall_header.html -->
+{% INCLUDEJS '@andreask_ium/select_funtion.js' %}
 <a id="maincontent"></a>
 <h1>{{ lang('APPROVAL_LIST_PAGE_TITLE') }}</h1>
 
@@ -32,7 +33,7 @@
 		<td style="vertical-align: top;">{approval_list.IGNORE_METHODE}</td>
 		<td style="vertical-align: top;">{approval_list.REQUEST_DATE}</td>
 		<td style="vertical-align: top;">{approval_list.TYPE}</td>
-		<td style="vertical-align: top;">&nbsp;<input type="checkbox" class="radio" name="mark[]" value="{approval_list.USER_ID}" />&nbsp;</td>
+		<td style="vertical-align: top;">&nbsp;<input {% if not approval_list.POSTS %}id="no-posts" {% endif %}type="checkbox" class="radio" name="mark[]" value="{approval_list.USER_ID}" />&nbsp;</td>
 	</tr>
 <!-- BEGINELSE -->
 	<tr>
@@ -53,6 +54,8 @@
 		<a href="#" onclick="marklist('approval_list', 'mark', true); return false;">{L_MARK_ALL}</a>
 		&bull;
 		<a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{L_UNMARK_ALL}</a>
+		&bull;
+		<a href="#" onclick="andreask_ium_selector_switch('mark'); return false;">{{lang('ANDREASK_IUM_MARK_NOPOST')}}</a>
 	</p>
 	{{ lang('OPTIONS')}} {{ lang('COLON')}}
 	<select name="action">
@@ -62,7 +65,6 @@
 		<option value="dont_ignore">{{ lang('DONT_IGNORE') }}</option>
 	</select>
 	&nbsp;
-<!--		<input class="button2" type="submit" name="approve" value="{{ lang('APPROVE') }}" /> -->
 		<input class="button2" type="submit" value="{{ lang('SUBMIT') }}" name="do" />
 		{S_FORM_TOKEN}
 </fieldset>
@@ -114,8 +116,8 @@
 			<h3>{{ lang('IUM_IGNORE_GROUP_MANAGMENT') }}</h3>
 			<p>{{ lang('ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN') }}</p>
 			<dl>
-	            <dt><label for="andreask_group_ignore">{{ lang('ANDREASK_IUM_GROUP_IGNORE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_GROUP_IGNORE_EXPLAIN')}}</span></dt>
-	            <dd ><select style="width: 70%;" name="group_id[]" multiple="multiple" size="6">{IGNORED_GROUP}</select></dd>
+	            <dt>{{ lang('ANDREASK_IUM_GROUP_IGNORE') ~ lang('COLON') }}<br/><span>{{lang('ANDREASK_IUM_GROUP_IGNORE_EXPLAIN')}}</span></dt>
+	            <dd><select id="andreask_group_ignore" style="width: 70%;" name="group_id[]" multiple="multiple" size="6">{IGNORED_GROUP}</select></dd>
 				<p class="submit-buttons" style="width: 70%">
 					<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" autofocus />
 					<input type="submit" class="button2 column2" name="ignore_group[remove]" value="{{ lang('ANDREASK_IUM_UPDATE_IGNORE_LIST') }}" autofocus />

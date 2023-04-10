@@ -23,16 +23,18 @@ class listener implements EventSubscriberInterface
 	protected $config_text;
 	protected $auth;
 	protected $user;
+	protected $reminder;
+	protected $ignore_user;
 
 	public function __construct($reminder, $ignore_user, \phpbb\user $user, \phpbb\config\config $config, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
-		$this->reminder			= $reminder;
-		$this->ignore_user	= $ignore_user;
-		$this->user 				=	$user;
-		$this->config 			=	$config;
+		$this->reminder		=	$reminder;
+		$this->ignore_user	=	$ignore_user;
+		$this->user 		=	$user;
+		$this->config 		=	$config;
 		$this->config_text	=	$config_text;
-		$this->auth					=	$auth;
-		$this->log					=	$log;
+		$this->auth			=	$auth;
+		$this->log			=	$log;
 	}
 
 	/**
@@ -45,7 +47,6 @@ class listener implements EventSubscriberInterface
 			'core.login_box_redirect'				=>	'update_ium_reminder_counter',
 			'core.acp_users_display_overview'		=>	'add_remind_user_option',
 			'core.acp_users_overview_run_quicktool'	=>	'remind_single_user',
-			// 'core.add_log'							=>	'overwrite_log',
 		);
 	}
 
@@ -56,7 +57,10 @@ class listener implements EventSubscriberInterface
 	 */
 	public function update_ium_reminder_counter($event)
 	{
-		$this->reminder->reset_counter($this->user->data['user_id']);
+		if ($this->user->data['ium_remind_counter'])
+		{
+			$this->reminder->reset_counter([$this->user->data['user_id']], true);
+		}
 	}
 
 	/**
@@ -95,7 +99,7 @@ class listener implements EventSubscriberInterface
 		if ($action == 'andreask_ium_remind')
 		{
 			$this->reminder->set_single($user);
-			$this->reminder->send(1, true);
+			$this->reminder->send(true);
 		}
 	}
 
@@ -109,11 +113,9 @@ class listener implements EventSubscriberInterface
 		{
 			$username = array_shift($username);
 		}
-		if ($sql_ary['log_operation'] == 'SENT_REMINDERS' && (is_int($username)) && $username <= 1)
+		if ($sql_ary['log_operation'] == 'LOG_SENT_REMINDERS' && (is_int($username)) && $username <= 1)
 		{
-			// unset($sql_ary['log_type']);
-			// $event['sql_ary'] = $sql_ary;
-			$sql_ary['log_operation'] = 'SENT_REMINDER_TO';
+			$sql_ary['log_operation'] = 'LOG_SENT_REMINDER_TO';
 			$event['sql_ary'] = $sql_ary;
 		}
 	}
