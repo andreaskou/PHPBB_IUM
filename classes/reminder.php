@@ -228,7 +228,8 @@ class reminder
 				{
 					// Update users...
 					$this->update_user($sleeper);
-				}else
+				}
+				else
 				{
 					// if failed save user for loging
 					$failed[] = $sleeper['username'];
@@ -267,11 +268,12 @@ class reminder
 		if ($user != 0)
 		{
 			$sql_opt .= ' AND user_id = ' . $user;
-		}else
+		}
+		else
 		{
 			$sql_opt .= ($this->config['andreask_ium_respect_user_choice']) ? ' AND user_allow_massemail <> 0 ' : '';
 			$sql_opt .= ($this->config['andreask_ium_ignore_limit']) ? ' AND ium_dont_send < 1 ' : ' AND ium_dont_send < 2 ';
-			$sql_opt .= ' AND user_regdate < ' . $this->intervals[1];
+			$sql_opt .= ' AND user_regdate < ' . (int) $this->intervals[1];
 		}
 
 		$ignore_groups = $this->ignore_user;
@@ -591,6 +593,11 @@ class reminder
 		$intervals[1] = ($int->getTimestamp());
 		$intervals[2] = ($int2->getTimestamp());
 		$intervals[3] = ($int3->getTimestamp());
+
+		foreach ($intervals as $interv)
+		{
+			var_dump(type($interv));
+		}
 
 		return $intervals;
 	}
