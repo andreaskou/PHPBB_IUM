@@ -13,34 +13,34 @@
         <dl>
             <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TEST_EMAIL') ~ lang('COLON') }}</label><br/><span>{ANDREASK_IUM_TEST_EXPLAIN}</span></dt>
             <dd>
-                <input class="button2" type="submit" id="send_sleeper" name="send_sleeper" value="{{lang('SEND_SLEEPER')}}" /> &nbsp;
-                <input class="button2" type="submit" id="send_inactive" name="send_inactive" value="{{lang('SEND_INACTIVE')}}" />
+                <input class="button2" type="submit" id="send_sleeper" name="send_sleeper" value="{{ lang('SEND_SLEEPER') }}" /> &nbsp;
+                <input class="button2" type="submit" id="send_inactive" name="send_inactive" value="{{ lang('SEND_INACTIVE') }}" />
             </dd>
         </dl>
     </fieldset>
     <fieldset>
         <legend>{{ lang('ACP_IUM_MAIL_SETTINGS') }}</legend>
         <dl>
-            <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_INTERVAL_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_interval">{{ lang('ANDREASK_IUM_INTERVAL') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_INTERVAL_EXPLAIN') }}</span></dt>
             {{ lang('FIRST_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL}" size="3" id="andreask_ium_interval" name="andreask_ium_interval" min="10" max="999" />
             {{ lang('SECOND_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL2}" size="3" id="andreask_ium_interval2" name="andreask_ium_interval2" min="0" max="999" />
             {{ lang('THIRD_REMINDER') }}{{ lang('COLON') }} <input type="number" value="{ANDREASK_IUM_INTERVAL3}" size="3" id="andreask_ium_interval3" name="andreask_ium_interval3" min="0" max="999" /> {{ lang('DAYS') }}</dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_email_limit">{{ lang('ANDREASK_IUM_EMAIL_LIMIT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_email_limit">{{ lang('ANDREASK_IUM_EMAIL_LIMIT') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_EMAIL_LIMIT_EXPLAIN') }}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_EMAIL_LIMIT}" size="3" id="andreask_ium_email_limit" name="andreask_ium_email_limit" min="10" max="500" /> {{ lang('EMAILS')}} </dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_no_reply">{{ lang('ANDREASK_IUM_NO_REPLY') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_NO_REPLY_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_no_reply">{{ lang('ANDREASK_IUM_NO_REPLY') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_NO_REPLY_EXPLAIN') }}</span></dt>
             <dd><input type="email" value="{ANDREASK_IUM_NO_REPLY}" id="andreask_ium_no_reply" name="andreask_ium_no_reply" /></dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_respect_user_choice">{{ lang('ANDREASK_IUM_RESPECT_USR') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_RESPECT_USR_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_respect_user_choice">{{ lang('ANDREASK_IUM_RESPECT_USR') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_RESPECT_USR_EXPLAIN') }}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="1" {% if ANDREASK_IUM_USR_RSPCT %}checked="checked" {% endif %}/> {L_YES} &nbsp;
             <input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="0" {% if not ANDREASK_IUM_USR_RSPCT %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_ignore_limit">{{ lang('ANDREASK_IUM_IGNORE_LMT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_IGNORE_LMT_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_ignore_limit">{{ lang('ANDREASK_IUM_IGNORE_LMT') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_IGNORE_LMT_EXPLAIN') }}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="1" {% if ANDREASK_IUM_IGNORE_LIMIT %}checked="checked" {% endif %}/> {L_YES} &nbsp;
             <input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="0" {% if not ANDREASK_IUM_IGNORE_LIMIT %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
@@ -49,7 +49,7 @@
     <fieldset>
         <legend>{{ lang('ACP_IUM_DANGER') }}</legend>
         <dl>
-            <dt><label for="andreask_ium_self_delete">{{ lang('ANDREASK_IUM_SELF_DELETE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_SELF_DELETE_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_self_delete">{{ lang('ANDREASK_IUM_SELF_DELETE') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_SELF_DELETE_EXPLAIN') }}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="1" {% if ANDREASK_IUM_SELF_DELETE %}checked="checked" {% endif %}/> {L_YES} &nbsp;
             <input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="0" {% if not ANDREASK_IUM_SELF_DELETE %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
@@ -70,29 +70,29 @@
                 <input type="radio" class="radio" name="andreask_ium_auto_del" id="andreask_ium_auto_del" value="0" {% if not ANDREASK_IUM_AUTO_DEL %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_auto_del_days">{{ lang('ANDREASK_IUM_AUTO_DEL_DAYS') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_auto_del_days">{{ lang('ANDREASK_IUM_AUTO_DEL_DAYS') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN') }}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_AUTO_DEL_DAYS}" size="2" id="andreask_ium_auto_del_days" name="andreask_ium_auto_del_days" min="1" max="999" /></dd>
         </dl>
     </fieldset>
     <fieldset>
         <legend>{{ lang('ACP_IUM_MAIL_INCLUDE_SETTINGS') }}</legend>
         <dl>
-            <dt><label for="andreask_ium_top_user_threads">{{ lang('ANDREASK_IUM_TOP_USER_THREADS')  ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_top_user_threads">{{ lang('ANDREASK_IUM_TOP_USER_THREADS')  ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN') }}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_top_user_threads" id="andreask_ium_top_user_threads" value="1" {% if ANDREASK_IUM_TOP_USER_THREADS %}checked="checked" {% endif %}/> {L_YES} &nbsp;
             <input type="radio" class="radio" name="andreask_ium_top_user_threads" value="0" {% if not ANDREASK_IUM_TOP_USER_THREADS %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_top_user_threads_count">{{ lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_top_user_threads_count">{{ lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN') }}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_TOP_USER_THREADS_COUNT}" size="2" id="andreask_ium_top_user_threads_count" name="andreask_ium_top_user_threads_count" min="1" max="10" /></dd>
         </dl>
         <hr>
         <dl>
-            <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN') }}</span></dt>
             <dd><input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="1" {% if ANDREASK_IUM_TOP_FORUM_THREADS %}checked="checked" {% endif %}/> {L_YES} &nbsp;
             <input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="0" {% if not ANDREASK_IUM_TOP_FORUM_THREADS %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
-            <dt><label for="andreask_ium_top_forum_threads_count">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN')}}</span></dt>
+            <dt><label for="andreask_ium_top_forum_threads_count">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN') }}</span></dt>
             <dd><input type="number" value="{ANDREASK_IUM_TOP_FORUM_THREADS_COUNT}" size="2" id="andreask_ium_top_forum_threads_count" name="andreask_ium_top_forum_threads_count" min="1" max="10" /></dd>
         </dl>
     </fieldset>

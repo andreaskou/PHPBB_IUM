@@ -55,7 +55,7 @@
 		&bull;
 		<a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{L_UNMARK_ALL}</a>
 		&bull;
-		<a href="#" onclick="andreask_ium_selector_switch('mark'); return false;">{{lang('ANDREASK_IUM_MARK_NOPOST')}}</a>
+		<a href="#" onclick="andreask_ium_selector_switch('mark'); return false;">{{ lang('ANDREASK_IUM_MARK_NOPOST') }}</a>
 	</p>
 	{{ lang('OPTIONS')}} {{ lang('COLON')}}
 	<select name="action">
@@ -116,7 +116,7 @@
 			<h3>{{ lang('IUM_IGNORE_GROUP_MANAGMENT') }}</h3>
 			<p>{{ lang('ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN') }}</p>
 			<dl>
-	            <dt>{{ lang('ANDREASK_IUM_GROUP_IGNORE') ~ lang('COLON') }}<br/><span>{{lang('ANDREASK_IUM_GROUP_IGNORE_EXPLAIN')}}</span></dt>
+	            <dt>{{ lang('ANDREASK_IUM_GROUP_IGNORE') ~ lang('COLON') }}<br/><span>{{ lang('ANDREASK_IUM_GROUP_IGNORE_EXPLAIN') }}</span></dt>
 	            <dd><select id="andreask_group_ignore" style="width: 70%;" name="group_id[]" multiple="multiple" size="6">{IGNORED_GROUP}</select></dd>
 				<p class="submit-buttons" style="width: 70%">
 					<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" autofocus />
