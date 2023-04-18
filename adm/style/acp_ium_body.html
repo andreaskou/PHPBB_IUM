@@ -1,4 +1,4 @@
-<!-- INCLUDE overall_header.html -->
+{% include "overall_header.html" %}
 
 <h1>{{ lang('ACP_IUM') }}</h1>
 
@@ -6,9 +6,9 @@
     <fieldset>
         <legend>{{ lang('ACP_IUM_SETTINGS') }}</legend>
         <dl>
-            <dt><label for="andreask_ium_enable">{{ lang('ANDREASK_IUM_ENABLE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_ENABLE_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="1" <!-- IF ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="0" <!-- IF not ANDREASK_IUM_ENABLE -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dt><label for="andreask_ium_enable">{{ lang('ANDREASK_IUM_ENABLE') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_ENABLE_EXPLAIN') }}</span></dt>
+            <dd><input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="1" {% if ANDREASK_IUM_ENABLE %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_enable" id="andreask_ium_enable" value="0" {% if not ANDREASK_IUM_ENABLE %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TEST_EMAIL') ~ lang('COLON') }}</label><br/><span>{ANDREASK_IUM_TEST_EXPLAIN}</span></dt>
@@ -36,13 +36,13 @@
         </dl>
         <dl>
             <dt><label for="andreask_ium_respect_user_choice">{{ lang('ANDREASK_IUM_RESPECT_USR') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_RESPECT_USR_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="1" <!-- IF ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="0" <!-- IF not ANDREASK_IUM_USR_RSPCT -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="1" {% if ANDREASK_IUM_USR_RSPCT %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_respect_user_choice" id="andreask_ium_respect_user_choice" value="0" {% if not ANDREASK_IUM_USR_RSPCT %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_ignore_limit">{{ lang('ANDREASK_IUM_IGNORE_LMT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_IGNORE_LMT_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="1" <!-- IF ANDREASK_IUM_IGNORE_LIMIT -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="0" <!-- IF not ANDREASK_IUM_IGNORE_LIMIT -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="1" {% if ANDREASK_IUM_IGNORE_LIMIT %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_ignore_limit" id="andreask_ium_ignore_limit" value="0" {% if not ANDREASK_IUM_IGNORE_LIMIT %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
 
     </fieldset>
@@ -50,24 +50,24 @@
         <legend>{{ lang('ACP_IUM_DANGER') }}</legend>
         <dl>
             <dt><label for="andreask_ium_self_delete">{{ lang('ANDREASK_IUM_SELF_DELETE') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_SELF_DELETE_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="1" <!-- IF ANDREASK_IUM_SELF_DELETE -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="0" <!-- IF not ANDREASK_IUM_SELF_DELETE -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="1" {% if ANDREASK_IUM_SELF_DELETE %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_self_delete" id="andreask_ium_self_delete" value="0" {% if not ANDREASK_IUM_SELF_DELETE %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_delete_approve">{{ lang('ANDREASK_IUM_DELETE_APPROVE') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_DELETE_APPROVE_EXPLAIN') }}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_delete_approve" id="andreask_ium_delete_approve" value="1" <!-- IF ANDREASK_IUM_APPROVE_DEL -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_delete_approve" id="andreask_ium_delete_approve" value="0" <!-- IF not ANDREASK_IUM_APPROVE_DEL -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_delete_approve" id="andreask_ium_delete_approve" value="1" {% if ANDREASK_IUM_APPROVE_DEL %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_delete_approve" id="andreask_ium_delete_approve" value="0" {% if not ANDREASK_IUM_APPROVE_DEL %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_keep_posts">{{ lang('ANDREASK_IUM_KEEP_POSTS') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_KEEP_POSTS_EXPLAIN') }}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_keep_posts" id="andreask_ium_keep_posts" value="1" <!-- IF ANDREASK_IUM_KEEP_POSTS -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_keep_posts" id="andreask_ium_keep_posts" value="0" <!-- IF not ANDREASK_IUM_KEEP_POSTS -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_keep_posts" id="andreask_ium_keep_posts" value="1" {% if ANDREASK_IUM_KEEP_POSTS %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_keep_posts" id="andreask_ium_keep_posts" value="0" {% if not ANDREASK_IUM_KEEP_POSTS %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <hr>
         <dl>
             <dt><label for="andreask_ium_auto_del">{{ lang('ANDREASK_IUM_AUTO_DEL') ~ lang('COLON') }}</label><br/><span>{{ lang('ANDREASK_IUM_AUTO_DEL_EXPLAIN') }}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_auto_del" id="andreask_ium_auto_del" value="1" <!-- IF ANDREASK_IUM_AUTO_DEL -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-                <input type="radio" class="radio" name="andreask_ium_auto_del" id="andreask_ium_auto_del" value="0" <!-- IF not ANDREASK_IUM_AUTO_DEL -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_auto_del" id="andreask_ium_auto_del" value="1" {% if ANDREASK_IUM_AUTO_DEL %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+                <input type="radio" class="radio" name="andreask_ium_auto_del" id="andreask_ium_auto_del" value="0" {% if not ANDREASK_IUM_AUTO_DEL %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_auto_del_days">{{ lang('ANDREASK_IUM_AUTO_DEL_DAYS') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_AUTO_DEL_DAYS_EXPLAIN')}}</span></dt>
@@ -78,8 +78,8 @@
         <legend>{{ lang('ACP_IUM_MAIL_INCLUDE_SETTINGS') }}</legend>
         <dl>
             <dt><label for="andreask_ium_top_user_threads">{{ lang('ANDREASK_IUM_TOP_USER_THREADS')  ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_top_user_threads" id="andreask_ium_top_user_threads" value="1" <!-- IF ANDREASK_IUM_TOP_USER_THREADS -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_top_user_threads" value="0" <!-- IF not ANDREASK_IUM_TOP_USER_THREADS -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_top_user_threads" id="andreask_ium_top_user_threads" value="1" {% if ANDREASK_IUM_TOP_USER_THREADS %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_top_user_threads" value="0" {% if not ANDREASK_IUM_TOP_USER_THREADS %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_top_user_threads_count">{{ lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_USER_THREADS_COUNT_EXPLAIN')}}</span></dt>
@@ -88,8 +88,8 @@
         <hr>
         <dl>
             <dt><label for="andreask_ium_top_forum_threads">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_EXPLAIN')}}</span></dt>
-            <dd><input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="1" <!-- IF ANDREASK_IUM_TOP_FORUM_THREADS -->checked="checked" <!-- ENDIF -->/> {L_YES} &nbsp;
-            <input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="0" <!-- IF not ANDREASK_IUM_TOP_FORUM_THREADS -->checked="checked" <!-- ENDIF -->/> {L_NO}</dd>
+            <dd><input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="1" {% if ANDREASK_IUM_TOP_FORUM_THREADS %}checked="checked" {% endif %}/> {L_YES} &nbsp;
+            <input type="radio" class="radio" name="andreask_ium_top_forum_threads" id="andreask_ium_top_forum_threads" value="0" {% if not ANDREASK_IUM_TOP_FORUM_THREADS %}checked="checked" {% endif %}/> {L_NO}</dd>
         </dl>
         <dl>
             <dt><label for="andreask_ium_top_forum_threads_count">{{ lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT') ~ lang('COLON') }}</label><br/><span>{{lang('ANDREASK_IUM_TOP_FORUM_THREADS_COUNT_EXPLAIN')}}</span></dt>
@@ -136,4 +136,4 @@
     	</form>
     <div>
 </fieldset>
-<!-- INCLUDE overall_footer.html -->
+{% include "overall_footer.html" %}

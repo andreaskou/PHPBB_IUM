@@ -1,4 +1,4 @@
-<!-- INCLUDE overall_header.html -->
+{% include "overall_header.html" %} 
 {% INCLUDEJS '@andreask_ium/select_funtion.js' %}
 <a id="maincontent"></a>
 <h1>{{ lang('APPROVAL_LIST_PAGE_TITLE') }}</h1>
@@ -8,11 +8,11 @@
 <form id="approval_list" method="post" action="{U_ACTION}">
 
 
-<!-- IF .pagination -->
+{% if pagination %} 
 <div class="pagination">
-	<!-- INCLUDE pagination.html -->
+	{%  include "pagination.html" %} 
 </div>
-<!-- ENDIF -->
+{% endif %} 
 
 <table class="table1 zebra-table">
 <thead>
@@ -25,30 +25,30 @@
 </tr>
 </thead>
 <tbody>
-<!-- BEGIN approval_list -->
+{%  for list in approval_list %} 
 	<tr>
-		<td style="vertical-align: top;"><a href="{approval_list.LINK_TO_USER}">{approval_list.USERNAME}</a>
-		<!-- IF approval_list.POSTS --><br />{L_POSTS}{L_COLON}<strong>{approval_list.POSTS}</strong><!-- ENDIF -->
+		<td style="vertical-align: top;"><a href="{list.LINK_TO_USER}">{list.USERNAME}</a>
+		{% if list.POSTS %} <br />{L_POSTS}{L_COLON}<strong>{list.POSTS}</strong>{% endif %} 
 		</td>
-		<td style="vertical-align: top;">{approval_list.IGNORE_METHODE}</td>
-		<td style="vertical-align: top;">{approval_list.REQUEST_DATE}</td>
-		<td style="vertical-align: top;">{approval_list.TYPE}</td>
-		<td style="vertical-align: top;">&nbsp;<input {% if not approval_list.POSTS %}id="no-posts" {% endif %}type="checkbox" class="radio" name="mark[]" value="{approval_list.USER_ID}" />&nbsp;</td>
+		<td style="vertical-align: top;">{list.IGNORE_METHODE}</td>
+		<td style="vertical-align: top;">{list.REQUEST_DATE}</td>
+		<td style="vertical-align: top;">{list.TYPE}</td>
+		<td style="vertical-align: top;">&nbsp;<input {% if not list.POSTS %}id="no-posts" {% endif %}type="checkbox" class="radio" name="mark[]" value="{list.USER_ID}" />&nbsp;</td>
 	</tr>
-<!-- BEGINELSE -->
+{%  else %} 
 	<tr>
 		<td colspan="6" style="text-align: center;">{{ lang('NO_REQUESTS') }}</td>
 	</tr>
-<!-- END approval_list -->
+{%  endfor %} 
 </tbody>
 </table>
 <fieldset class="quick">
 	<p class="small">	{{ lang('USERS_PER_PAGE') }} {{ lang('COLON') }} &nbsp;
 		<select name="users_per_page" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
-			<option value="20" <!-- IF USERS_PER_PAGE === 20 --> selected="selected" <!-- ENDIF -->>20</option>
-			<option value="50" <!-- IF USERS_PER_PAGE === 50 --> selected="selected" <!-- ENDIF -->>50</option>
-			<option value="100" <!-- IF USERS_PER_PAGE === 100 --> selected="selected" <!-- ENDIF -->>100</option>
-			<option value="200" <!-- IF USERS_PER_PAGE === 200 --> selected="selected" <!-- ENDIF -->>200</option>
+			<option value="20" {%  if  USERS_PER_PAGE === 20 %}  selected="selected" {%  endif %} >20</option>
+			<option value="50" {%  if  USERS_PER_PAGE === 50 %}  selected="selected" {%  endif %} >50</option>
+			<option value="100" {%  if  USERS_PER_PAGE === 100 %}  selected="selected" {%  endif %} >100</option>
+			<option value="200" {%  if  USERS_PER_PAGE === 200 %}  selected="selected" {%  endif %} >200</option>
 		</select>
 		&bull;
 		<a href="#" onclick="marklist('approval_list', 'mark', true); return false;">{L_MARK_ALL}</a>
@@ -68,11 +68,11 @@
 		<input class="button2" type="submit" value="{{ lang('SUBMIT') }}" name="do" />
 		{S_FORM_TOKEN}
 </fieldset>
-<!-- IF .pagination -->
+{% if pagination %} 
 	<div class="pagination">
-		<!-- INCLUDE pagination.html -->
+		{%  include "pagination.html" %} 
 	</div>
-<!-- ENDIF -->
+{% endif %} 
 </form>
 <hr>
 <fieldset>
@@ -126,4 +126,4 @@
 		</fieldset>
 	</form>
 </fieldset>
-<!-- INCLUDE overall_footer.html -->
+{%  include "overall_footer.html" %} 
