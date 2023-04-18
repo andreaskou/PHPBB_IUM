@@ -20,6 +20,7 @@ class ignore_user
 	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
 	protected $auth;			/** Auth class to get admins and mods */
+	protected $u_action;		/** u_action... (?) */
 
 	public function __construct(\phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
@@ -28,6 +29,7 @@ class ignore_user
 		$this->log				=	$log;
 		$this->auth				=	$auth;
 		$this->config_text		=	$config_text;
+		$this->u_action			=	$u_action;
 	}
 
 	/**
@@ -83,6 +85,9 @@ class ignore_user
 
 		$so_user 		= sizeof($user);
 		$so_username 	= sizeof($username);
+		// XXX how? where?
+		// var_dump($this->u_action);
+		// die();
 
 		if (!empty($user) && $so_user == $so_username)
 		{
@@ -151,7 +156,7 @@ class ignore_user
 	 */
 	public function ignore_groups(bool $acp_req = false)
 	{
-		$admin_mod_array = '';
+		$admin_mod_array = [];
 
 		if (!$acp_req)
 		{
@@ -169,8 +174,8 @@ class ignore_user
 		}
 
 		// Ignored group_ids
-		$ignore = $this->config_text->get('andreask_ium_ignored_groups', '');
-		$ignore = json_decode($ignore);
+		$ignore = $this->config_text->get('andreask_ium_ignored_groups');
+		$ignore = json_decode($ignore, true);
 		if (!empty($ignore))
 		{
 			$sql_ary = array(
@@ -197,7 +202,7 @@ class ignore_user
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
 		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
-				  AND ' . $this->db->sql_in_set('user_inactive_reason', INACTIVE_MANUAL, true) .' AND user_id <> ' . ANONYMOUS . $ignore;
+				  AND user_inactive_reason <> '. INACTIVE_MANUAL .' AND user_id <> ' . ANONYMOUS . $ignore;
 		$text .= ($admin_mod_array) ? ' AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) : '';
 
 		return $text;
