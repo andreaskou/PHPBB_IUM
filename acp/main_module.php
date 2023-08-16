@@ -18,6 +18,10 @@ use DateInterval;
 
 class main_module
 {
+
+	var $u_action;
+	var $tpl_name;
+	var $page_title;
 	public function main($id, $mode)
 	{
 		global $user, $template, $request, $config, $phpbb_container, $phpbb_root_path, $phpEx;
@@ -425,9 +429,9 @@ class main_module
 			{
 				$user_ids 	= $request->variable('user_id', array(0));
 				$remove 	= $phpbb_container->get('andreask.ium.classes.ignore_user');
-				foreach ($user_ids as $id)
+				foreach ($user_ids as $usr_id)
 				{
-						$remove->update_user($id, false, true);
+						$remove->update_user($usr_id, false, true);
 				}
 			}
 
@@ -601,7 +605,7 @@ class main_module
 			}
 			if ( $filters['approval'])
 			{
-				$options .= ' AND ('. $db->sql_in_set('ium_request_date', 0, true) .' OR '. $db->sql_in_set('ium_type', array('user', 'auto')).')';
+				$options .= ' AND (ium_request_date <> 0 OR '. $db->sql_in_set('ium_type', array('user', 'auto')).')';
 			}
 			if ( $filters['ignore'] == 1)
 			{
