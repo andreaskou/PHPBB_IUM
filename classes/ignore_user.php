@@ -20,7 +20,7 @@ class ignore_user
 	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
 	protected $auth;			/** Auth class to get admins and mods */
-	protected $u_action;		/** u_action... (?) */
+	private	  $u_action;		/** u_action */
 
 	public function __construct(\phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
@@ -29,7 +29,6 @@ class ignore_user
 		$this->log				=	$log;
 		$this->auth				=	$auth;
 		$this->config_text		=	$config_text;
-		$this->u_action			=	$u_action;
 	}
 
 	/**
@@ -85,9 +84,6 @@ class ignore_user
 
 		$so_user 		= sizeof($user);
 		$so_username 	= sizeof($username);
-		// XXX how? where?
-		// var_dump($this->u_action);
-		// die();
 
 		if (!empty($user) && $so_user == $so_username)
 		{
@@ -169,7 +165,6 @@ class ignore_user
 			$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
 
 			// Merge them together
-
 			$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
 		}
 
@@ -188,7 +183,7 @@ class ignore_user
 			$users = [];
 			while ( $user = $this->db->sql_fetchrow($result))
 			{
-				$users[]= $user['user_id'];
+				$users[]= (int) $user['user_id'];
 			}
 			$this->db->sql_freeresult($result);
 			$ignore = ' AND ' . $this->db->sql_in_set('user_id', $users, true );
@@ -201,8 +196,22 @@ class ignore_user
 		// Make an array of user_types to ignore
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
+		// Make an array of banned users to ignore
+		$banned_users = '';
+		if (!$acp_req)
+		{
+			if ($banned = $this->get_banned())
+			{
+				$banned_users  = ' AND ' . $this->db->sql_in_set('user_id', $banned, true);
+			}
+			else
+			{
+				$banned_users = '';
+			}
+		}
+
 		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
-				  AND user_inactive_reason <> '. INACTIVE_MANUAL .' AND user_id <> ' . ANONYMOUS . $ignore;
+			AND user_inactive_reason <> '. INACTIVE_MANUAL .' AND user_id <> ' . ANONYMOUS . $ignore . $banned_users;
 		$text .= ($admin_mod_array) ? ' AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) : '';
 
 		return $text;
@@ -224,5 +233,22 @@ class ignore_user
 		$this->db->sql_freeresult($result);
 
 		return $group_ids;
+	}
+
+	/**
+	 * Getter for banned users
+	 *
+	 * @return array of user ids
+	 */
+	private function get_banned(): array
+	{
+		$sql = 'SELECT ban_userid from '. BANLIST_TABLE;
+		$result = $this->db->sql_query($sql);
+		while($banned_user = $this->db->sql_fetchrow($result))
+		{
+			$banned[] = (int) $banned_user['ban_userid'];
+		}
+		$this->db->sql_freeresult($result);
+		return $banned;
 	}
 }
