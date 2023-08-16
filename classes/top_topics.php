@@ -78,7 +78,7 @@ class top_topics
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$active_t_row[] = $row['topic_id'];
-			};
+			}
 
 			$this->db->sql_freeresult($result);
 
