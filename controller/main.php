@@ -34,6 +34,7 @@ class main
 	protected	$u_action;
 	protected	$php_root;
 	protected	$php_ext;
+	protected	$controller_helper;
 
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\request\request $request, \phpbb\template\template $template, \andreask\ium\classes\delete_user $delete_user, ContainerInterface $container, $php_root, $php_ext)
 	{
