@@ -273,7 +273,7 @@ class reminder
 		{
 			$sql_opt .= ($this->config['andreask_ium_respect_user_choice']) ? ' AND user_allow_massemail <> 0 ' : '';
 			$sql_opt .= ($this->config['andreask_ium_ignore_limit']) ? ' AND ium_dont_send < 1 ' : ' AND ium_dont_send < 2 ';
-			$sql_opt .= ' AND user_regdate < ' . (int) $this->intervals[1];
+			$sql_opt .= ' AND user_regdate < ' . $this->intervals[1];
 		}
 
 		$ignore_groups = $this->ignore_user;
@@ -338,12 +338,14 @@ class reminder
 		// Update user ium info for the reminder
 		$update_arr = array('ium_reminder_sent_date' => time());
 		$remind_counter = ($user['ium_remind_counter'] + 1);
-
+		
+		// No reminders
 		if ( $user['ium_remind_counter'] == 0 )
 		{
 			$merge = array('ium_remind_counter' => $remind_counter);
 			$update_arr = array_merge($update_arr, $merge);
 		}
+		// 1 reminder
 		else if ( $user['ium_remind_counter'] == 1 )
 		{
 			$random_md5	= md5(uniqid($user['user_email'], true));
@@ -353,6 +355,7 @@ class reminder
 				);
 			$update_arr = array_merge($update_arr, $merge);
 		}
+		// 2 or more reminders
 		else if ($user['ium_remind_counter'] >= 2)
 		{
 			if ($user['ium_dont_send'] == 0)
@@ -515,7 +518,6 @@ class reminder
 		}
 
 		// Log it and release the user list.
-
 		$template = explode('_', $template);
 		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDER_TO_ADMIN', time(), array($template[1], $sleeper['user_email']));
 		unset( $this->inactive_users );
@@ -550,7 +552,6 @@ class reminder
 		// reset counter(s)!
 		$sql = "UPDATE " . USERS_TABLE . " SET ium_remind_counter = 0, ium_request_date = 0, ium_type ='' ". $action ." WHERE ". $this->db->sql_in_set('user_id', $id);
 		$this->db->sql_query($sql);
-
 	}
 
 	/**
@@ -593,11 +594,6 @@ class reminder
 		$intervals[1] = ($int->getTimestamp());
 		$intervals[2] = ($int2->getTimestamp());
 		$intervals[3] = ($int3->getTimestamp());
-
-		foreach ($intervals as $interv)
-		{
-			var_dump(type($interv));
-		}
 
 		return $intervals;
 	}
