@@ -213,8 +213,7 @@ class delete_user
 		// Convert past to timestamp
 		$past = strtotime($present->format("y-m-d h:i:s"));
 
-		$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
-				WHERE '. $this->db->sql_in_set('ium_type', 'auto') .' AND ium_request_date < ' . (int) $past;
+		$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE ium_type = "auto" AND ium_request_date < ' . (int) $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
@@ -228,13 +227,13 @@ class delete_user
 		$this->delete($users);
 	}
 
-/**
- * This is a feature function, will send e-mails to users that is being deleted.
- * Need to make a new branch!
- * @param  int		$user_ids	User ids of users
- * @param  str		$request	String value of requested type for deletion (user, auto, admin).
- * @return void
- */
+	/**
+	 * This is a feature function, will send e-mails to users that is being deleted.
+	 * Need to make a new branch!
+	 * @param  int		$user_ids	User ids of users
+	 * @param  str		$request	String value of requested type for deletion (user, auto, admin).
+	 * @return void
+	 */
 	public function email_for_delition($user_ids, $request)
 	{
 
