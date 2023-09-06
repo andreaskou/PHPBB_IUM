@@ -20,7 +20,6 @@ class ignore_user
 	protected $config_text;		/** Db config text	*/
 	protected $log;				/** Log class for logging informatin */
 	protected $auth;			/** Auth class to get admins and mods */
-	private	  $u_action;		/** u_action */
 
 	public function __construct(\phpbb\user $user, \phpbb\db\driver\driver_interface $db, \phpbb\config\db_text $config_text, \phpbb\auth\auth $auth, \phpbb\log\log $log)
 	{
@@ -29,6 +28,7 @@ class ignore_user
 		$this->log				=	$log;
 		$this->auth				=	$auth;
 		$this->config_text		=	$config_text;
+		$this->u_action			=	append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
 
 	/**
@@ -58,10 +58,10 @@ class ignore_user
 	}
 
 	/**
-	 *  function ignore_user updates Custome table with existing or new users (in table).
+	 *  function ignore_user updates trigers an update to users table.
 	 *	with the dont_send flag so they will be ignored by the reminder.
 	 *	@param	$username, array of username(s)
-	 *	@param	$mode, 1 (default) auto 2 admin
+	 *	@param	$mode, 1 (default) auto, 2 admin
 	 *	@return	null
 	 */
 
@@ -84,7 +84,6 @@ class ignore_user
 
 		$so_user 		= sizeof($user);
 		$so_username 	= sizeof($username);
-
 		if (!empty($user) && $so_user == $so_username)
 		{
 			$this->update_user($user, $mode);
@@ -97,7 +96,6 @@ class ignore_user
 
 	 /**
 	  * Function Updates dont_sent field on users table
-	  *
 	  * @param  array  		$user	Usernames
 	  * @param  boolean		$action  true for set user to ignore false for unset ignore
 	  * @param  boolean 	$user_id use user_id instead of username
