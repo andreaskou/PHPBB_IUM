@@ -140,25 +140,25 @@ class reminder
 					$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 					$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 				}
-
+				
 				// Set the user topic links first.
 				$topic_links = null;
-
+				
 				// If there are topics then prepare them for the e-mail.
 				if ($top_user_topics = $this->top_topics->get_user_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$topic_links = $this->make_topics($top_user_topics);
 				}
-
+				
 				// Set the forum topic links first.
 				$forum_links = null;
-
+				
 				// If there are topics then prepare them for the e-mail.
 				if ($top_forum_topics = $this->top_topics->get_forum_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$forum_links = $this->make_topics($top_forum_topics);
 				}
-
+				
 				// dirty fix for now, need to find a way for the templates.
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
@@ -194,14 +194,14 @@ class reminder
 					$link = $this->routing_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
-
+				
 				$messenger->anti_abuse_headers($this->config, $this->user);
-
+				
 				if ($this->config['andreask_ium_no_reply'])
 				{
 					$no_reply = htmlspecialchars_decode('No-reply');
 					$no_reply_mail = $this->config['andreask_ium_no_reply'];
-
+					
 					$board_contact = '"' . mail_encode($no_reply) .'" '. '<' . $no_reply_mail . '>';
 					$messenger->from($board_contact);
 					$messenger->replyto($board_contact);
@@ -209,7 +209,7 @@ class reminder
 
 				// mail content...
 				$messenger->to($sleeper['user_email'], htmlspecialchars_decode($sleeper['username']));
-
+				
 				// Load email template depending on the user
 				if ($sleeper['user_lastvisit'] != 0)
 				{
@@ -222,7 +222,7 @@ class reminder
 					$messenger->template('@andreask_ium/inactive', $lang);
 				}
 				$messenger->assign_vars($template_ary);
-
+				
 				// Send mail...
 				if ($messenger->send())
 				{
