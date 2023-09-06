@@ -104,7 +104,7 @@ class delete_user
 
 	 /**
 		* Updates ext's table and runs the delete_user to delete the user for board.
-		* @param  int  $id     Array of user ids
+		* @param  array  $id     Array of user ids
 		* @param  String $type   Can be only AUTO|ADMIN|USER AUTO for scheduler, ADMIN for admins approvals, USER for user request
 		* @param  String $action retain|remove this is a parameter for delete_user to retain or delete user posts
 		* @return null
@@ -194,7 +194,7 @@ class delete_user
 
 	/**
 	 * This runs from the scheduler and it's for deleting the users automatically.
-	 * @return null
+	 * @return void
 	 */
 
 	public function	auto_delete()
