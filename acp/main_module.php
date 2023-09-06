@@ -19,7 +19,6 @@ use DateInterval;
 class main_module
 {
 
-	var $u_action;
 	var $tpl_name;
 	var $page_title;
 	public function main($id, $mode)
