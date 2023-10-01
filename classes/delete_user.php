@@ -114,7 +114,7 @@ class delete_user
 	{
 		$req_to_del = sizeof($id);
 
-		// Lets just keep the usernames for logging and have a count to verify later the delete later.
+		// Keep the usernames for logging and have a count to verify later the delete later.
 		$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
@@ -228,9 +228,9 @@ class delete_user
 	}
 
 	/**
-	 * This is a feature function, will send e-mails to users that is being deleted.
+	 * Send e-mails to user(s) that is/are being deleted.
 	 * Need to make a new branch!
-	 * @param  int		$user_ids	User ids of users
+	 * @param  array	$user_ids	User ids of users
 	 * @param  str		$request	String value of requested type for deletion (user, auto, admin).
 	 * @return void
 	 */
