@@ -200,6 +200,8 @@ class ignore_user
 		{
 			if ($banned = $this->get_banned())
 			{
+				$banned = array_column($banned, 'ban_userid');
+				$banned = array_map('intval', $banned);
 				$banned_users  = ' AND ' . $this->db->sql_in_set('user_id', $banned, true);
 			}
 			else
@@ -236,16 +238,13 @@ class ignore_user
 	/**
 	 * Getter for banned users
 	 *
-	 * @return array of user ids
+	 * @return array of banned user ids
 	 */
 	private function get_banned(): array
 	{
 		$sql = 'SELECT ban_userid from '. BANLIST_TABLE;
 		$result = $this->db->sql_query($sql);
-		while($banned_user = $this->db->sql_fetchrow($result))
-		{
-			$banned[] = (int) $banned_user['ban_userid'];
-		}
+		$banned = $this->db->sql_fetchrowset($result);
 		$this->db->sql_freeresult($result);
 		return $banned;
 	}
