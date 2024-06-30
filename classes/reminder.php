@@ -140,25 +140,25 @@ class reminder
 					$user_instance->lang_name = $user_instance->data['user_lang'] = $sleeper['user_lang'];
 					$user_instance->timezone = $user_instance->data['user_timezone'] = $sleeper['user_timezone'];
 				}
-
+				
 				// Set the user topic links first.
 				$topic_links = null;
-
+				
 				// If there are topics then prepare them for the e-mail.
 				if ($top_user_topics = $this->top_topics->get_user_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$topic_links = $this->make_topics($top_user_topics);
 				}
-
+				
 				// Set the forum topic links first.
 				$forum_links = null;
-
+				
 				// If there are topics then prepare them for the e-mail.
 				if ($top_forum_topics = $this->top_topics->get_forum_top_topics($sleeper['user_id'], $sleeper['user_lastvisit']))
 				{
 					$forum_links = $this->make_topics($top_forum_topics);
 				}
-
+				
 				// dirty fix for now, need to find a way for the templates.
 				if (phpbb_version_compare($this->config['version'], '3.2', '>='))
 				{
@@ -194,14 +194,14 @@ class reminder
 					$link = $this->routing_helper->route('andreask_ium_controller', array('random' => $sleeper['ium_random']), true, null, \Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL);
 					$template_ary = array_merge($template_ary, array('SELF_DELETE_LINK' => $link));
 				}
-
+				
 				$messenger->anti_abuse_headers($this->config, $this->user);
-
+				
 				if ($this->config['andreask_ium_no_reply'])
 				{
 					$no_reply = htmlspecialchars_decode('No-reply');
 					$no_reply_mail = $this->config['andreask_ium_no_reply'];
-
+					
 					$board_contact = '"' . mail_encode($no_reply) .'" '. '<' . $no_reply_mail . '>';
 					$messenger->from($board_contact);
 					$messenger->replyto($board_contact);
@@ -209,7 +209,7 @@ class reminder
 
 				// mail content...
 				$messenger->to($sleeper['user_email'], htmlspecialchars_decode($sleeper['username']));
-
+				
 				// Load email template depending on the user
 				if ($sleeper['user_lastvisit'] != 0)
 				{
@@ -222,13 +222,14 @@ class reminder
 					$messenger->template('@andreask_ium/inactive', $lang);
 				}
 				$messenger->assign_vars($template_ary);
-
+				
 				// Send mail...
 				if ($messenger->send())
 				{
 					// Update users...
 					$this->update_user($sleeper);
-				}else
+				}
+				else
 				{
 					// if failed save user for loging
 					$failed[] = $sleeper['username'];
@@ -267,7 +268,8 @@ class reminder
 		if ($user != 0)
 		{
 			$sql_opt .= ' AND user_id = ' . $user;
-		}else
+		}
+		else
 		{
 			$sql_opt .= ($this->config['andreask_ium_respect_user_choice']) ? ' AND user_allow_massemail <> 0 ' : '';
 			$sql_opt .= ($this->config['andreask_ium_ignore_limit']) ? ' AND ium_dont_send < 1 ' : ' AND ium_dont_send < 2 ';
@@ -336,12 +338,14 @@ class reminder
 		// Update user ium info for the reminder
 		$update_arr = array('ium_reminder_sent_date' => time());
 		$remind_counter = ($user['ium_remind_counter'] + 1);
-
+		
+		// No reminders
 		if ( $user['ium_remind_counter'] == 0 )
 		{
 			$merge = array('ium_remind_counter' => $remind_counter);
 			$update_arr = array_merge($update_arr, $merge);
 		}
+		// 1 reminder
 		else if ( $user['ium_remind_counter'] == 1 )
 		{
 			$random_md5	= md5(uniqid($user['user_email'], true));
@@ -351,6 +355,7 @@ class reminder
 				);
 			$update_arr = array_merge($update_arr, $merge);
 		}
+		// 2 or more reminders
 		else if ($user['ium_remind_counter'] >= 2)
 		{
 			if ($user['ium_dont_send'] == 0)
@@ -513,7 +518,6 @@ class reminder
 		}
 
 		// Log it and release the user list.
-
 		$template = explode('_', $template);
 		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_SENT_REMINDER_TO_ADMIN', time(), array($template[1], $sleeper['user_email']));
 		unset( $this->inactive_users );
@@ -548,7 +552,6 @@ class reminder
 		// reset counter(s)!
 		$sql = "UPDATE " . USERS_TABLE . " SET ium_remind_counter = 0, ium_request_date = 0, ium_type ='' ". $action ." WHERE ". $this->db->sql_in_set('user_id', $id);
 		$this->db->sql_query($sql);
-
 	}
 
 	/**

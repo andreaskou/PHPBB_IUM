@@ -51,12 +51,12 @@ class update_120 extends migration
 
 	public function revert_schema()
 	{
-//		return array(
-//			'add_columns' => array(
-//				$this->table_prefix . 'users' => array(
-//					'ium_request_type',
-//				),
-//			),
-//		);
+		return array(
+			'add_columns' => array(
+				$this->table_prefix . 'users' => array(
+					'ium_request_type',
+				),
+			),
+		);
 	}
 }

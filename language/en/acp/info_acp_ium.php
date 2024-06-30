@@ -24,7 +24,7 @@ if (empty( $lang) || !is_array($lang) )
 $lang = array_merge(
 		$lang, array(
 	//
-	'ACP_IUM'	=>	'IUM configuration',
+	'ACP_IUM'	=>	'IUM Settings',
 	'ACP_IUM_LIST'	=>	'Inactive Users List',
 	'ACP_IUM_TITLE'	=>	'IUM extension',
 	'ACP_IUM_TITLE2'	=> 'Inactive Users List',

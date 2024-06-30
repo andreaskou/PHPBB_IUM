@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [PhpBB Inactive User Reminder/Manager](https://www.phpbb.com/customise/db/extension/phpbb_inactive_user_manager_reminder/).
 
-## [1.3.0] - 2022-06-22
+## [1.3.5] - 2023-10-10
 
 It's a solo effort to make this ext so please be patient and helpful if possible!
 In this version some internal issues have been addressed.
@@ -26,7 +26,7 @@ I tried to implement some of the requested features. Let me know your ideas.
 - Language, for the extra options.
 
 ### Fixed
-- Minor issues, typos.
+- Minor issues, typos and gramatical errors.
 - "From:" in the e-mail was not showing boards information when received
 - bug: ignore by admin was changing to auto ignore after sending reminder and reminder count was > 3
 - bug: if user returns and he was ignored by "admin" he would continue being ignored, so if he would stop visiting board in the future he would not receive reminders.

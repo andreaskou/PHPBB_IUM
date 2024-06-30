@@ -78,7 +78,7 @@ class top_topics
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$active_t_row[] = $row['topic_id'];
-			};
+			}
 
 			$this->db->sql_freeresult($result);
 
@@ -189,7 +189,7 @@ class top_topics
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$active_t_row[] = $row;
-		};
+		}
 
 		$this->db->sql_freeresult($result);
 
@@ -270,7 +270,7 @@ class top_topics
 
 	private function exclude_forums()
 	{
-		$forum_list	=	$this->config_text->get('andreask_ium_ignore_forum','');
+		$forum_list	=	$this->config_text->get('andreask_ium_ignore_forum');
 		if ($forum_list != null)
 		{
 			$this->excluded_forums	=	array_map('intval', json_decode($forum_list, true));

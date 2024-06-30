@@ -104,7 +104,7 @@ class delete_user
 
 	 /**
 		* Updates ext's table and runs the delete_user to delete the user for board.
-		* @param  int  $id     Array of user ids
+		* @param  array  $id     Array of user ids
 		* @param  String $type   Can be only AUTO|ADMIN|USER AUTO for scheduler, ADMIN for admins approvals, USER for user request
 		* @param  String $action retain|remove this is a parameter for delete_user to retain or delete user posts
 		* @return null
@@ -114,7 +114,7 @@ class delete_user
 	{
 		$req_to_del = sizeof($id);
 
-		// Lets just keep the usernames for logging and have a count to verify later the delete later.
+		// Keep the usernames for logging and have a count to verify later the delete later.
 		$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
@@ -194,7 +194,7 @@ class delete_user
 
 	/**
 	 * This runs from the scheduler and it's for deleting the users automatically.
-	 * @return null
+	 * @return void
 	 */
 
 	public function	auto_delete()
@@ -213,8 +213,7 @@ class delete_user
 		// Convert past to timestamp
 		$past = strtotime($present->format("y-m-d h:i:s"));
 
-		$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
-				WHERE '. $this->db->sql_in_set('ium_type', 'auto') .' AND ium_request_date < ' . (int) $past;
+		$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE ium_type = "auto" AND ium_request_date < ' . (int) $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
@@ -228,13 +227,13 @@ class delete_user
 		$this->delete($users);
 	}
 
-/**
- * This is a feature function, will send e-mails to users that is being deleted.
- * Need to make a new branch!
- * @param  int		$user_ids	User ids of users
- * @param  str		$request	String value of requested type for deletion (user, auto, admin).
- * @return void
- */
+	/**
+	 * Send e-mails to user(s) that is/are being deleted.
+	 * Need to make a new branch!
+	 * @param  array	$user_ids	User ids of users
+	 * @param  str		$request	String value of requested type for deletion (user, auto, admin).
+	 * @return void
+	 */
 	public function email_for_delition($user_ids, $request)
 	{
 

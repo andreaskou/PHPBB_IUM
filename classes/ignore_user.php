@@ -28,6 +28,7 @@ class ignore_user
 		$this->log				=	$log;
 		$this->auth				=	$auth;
 		$this->config_text		=	$config_text;
+		$this->u_action			=	append_sid(generate_board_url() . '/' . $this->user->page['page']);
 	}
 
 	/**
@@ -57,10 +58,10 @@ class ignore_user
 	}
 
 	/**
-	 *  function ignore_user updates Custome table with existing or new users (in table).
+	 *  function ignore_user updates trigers an update to users table.
 	 *	with the dont_send flag so they will be ignored by the reminder.
 	 *	@param	$username, array of username(s)
-	 *	@param	$mode, 1 (default) auto 2 admin
+	 *	@param	$mode, 1 (default) auto, 2 admin
 	 *	@return	null
 	 */
 
@@ -83,7 +84,6 @@ class ignore_user
 
 		$so_user 		= sizeof($user);
 		$so_username 	= sizeof($username);
-
 		if (!empty($user) && $so_user == $so_username)
 		{
 			$this->update_user($user, $mode);
@@ -96,7 +96,6 @@ class ignore_user
 
 	 /**
 	  * Function Updates dont_sent field on users table
-	  *
 	  * @param  array  		$user	Usernames
 	  * @param  boolean		$action  true for set user to ignore false for unset ignore
 	  * @param  boolean 	$user_id use user_id instead of username
@@ -151,7 +150,7 @@ class ignore_user
 	 */
 	public function ignore_groups(bool $acp_req = false)
 	{
-		$admin_mod_array = '';
+		$admin_mod_array = [];
 
 		if (!$acp_req)
 		{
@@ -164,13 +163,12 @@ class ignore_user
 			$mod_ary = (!empty($moderators[0]['m_'])) ? $moderators[0]['m_'] : array();
 
 			// Merge them together
-
 			$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
 		}
 
 		// Ignored group_ids
-		$ignore = $this->config_text->get('andreask_ium_ignored_groups', '');
-		$ignore = json_decode($ignore);
+		$ignore = $this->config_text->get('andreask_ium_ignored_groups');
+		$ignore = json_decode($ignore, true);
 		if (!empty($ignore))
 		{
 			$sql_ary = array(
@@ -183,7 +181,7 @@ class ignore_user
 			$users = [];
 			while ( $user = $this->db->sql_fetchrow($result))
 			{
-				$users[]= $user['user_id'];
+				$users[]= (int) $user['user_id'];
 			}
 			$this->db->sql_freeresult($result);
 			$ignore = ' AND ' . $this->db->sql_in_set('user_id', $users, true );
@@ -196,8 +194,24 @@ class ignore_user
 		// Make an array of user_types to ignore
 		$ignore_users_extra = array(USER_FOUNDER, USER_IGNORE);
 
+		// Make an array of banned users to ignore
+		$banned_users = '';
+		if (!$acp_req)
+		{
+			if ($banned = $this->get_banned())
+			{
+				$banned = array_column($banned, 'ban_userid');
+				$banned = array_map('intval', $banned);
+				$banned_users  = ' AND ' . $this->db->sql_in_set('user_id', $banned, true);
+			}
+			else
+			{
+				$banned_users = '';
+			}
+		}
+
 		$text = ' AND '	. $this->db->sql_in_set('user_type', $ignore_users_extra, true) .'
-				  AND ' . $this->db->sql_in_set('user_inactive_reason', INACTIVE_MANUAL, true) .' AND user_id <> ' . ANONYMOUS . $ignore;
+			AND user_inactive_reason <> '. INACTIVE_MANUAL .' AND user_id <> ' . ANONYMOUS . $ignore . $banned_users;
 		$text .= ($admin_mod_array) ? ' AND '	. $this->db->sql_in_set('user_id', $admin_mod_array, true) : '';
 
 		return $text;
@@ -219,5 +233,19 @@ class ignore_user
 		$this->db->sql_freeresult($result);
 
 		return $group_ids;
+	}
+
+	/**
+	 * Getter for banned users
+	 *
+	 * @return array of banned user ids
+	 */
+	private function get_banned(): array
+	{
+		$sql = 'SELECT ban_userid from '. BANLIST_TABLE;
+		$result = $this->db->sql_query($sql);
+		$banned = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
+		return $banned;
 	}
 }
