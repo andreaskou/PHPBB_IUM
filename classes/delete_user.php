@@ -13,13 +13,12 @@
 
 namespace andreask\ium\classes;
 
-use \DateTime;
-use \DateInterval;
+use DateTime;
+use DateInterval;
 
 class delete_user
 {
 
-	protected $inactive_users = [];
 	protected $config;
 	protected $db;
 	protected $user;
@@ -71,7 +70,7 @@ class delete_user
 
 		if ( !$user_count == $users_to_delete )
 		{
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'SOMETHING_WRONG', time());
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_DELETE_REQUEST_DONT_MATCH', time());
 			return false;
 		}
 
@@ -80,7 +79,6 @@ class delete_user
 
 	public function delete($ids, $request = 'auto', $posts = null)
 	{
-
 		if (!$this->user_exist($ids))
 		{
 			return false;
@@ -106,7 +104,7 @@ class delete_user
 
 	 /**
 		* Updates ext's table and runs the delete_user to delete the user for board.
-		* @param  int  $id     Array of user ids
+		* @param  array  $id     Array of user ids
 		* @param  String $type   Can be only AUTO|ADMIN|USER AUTO for scheduler, ADMIN for admins approvals, USER for user request
 		* @param  String $action retain|remove this is a parameter for delete_user to retain or delete user posts
 		* @return null
@@ -116,7 +114,7 @@ class delete_user
 	{
 		$req_to_del = sizeof($id);
 
-		// Lets just keep the usernames for logging and have a count to verify later the delete later.
+		// Keep the usernames for logging and have a count to verify later the delete later.
 		$sql = 'SELECT username FROM ' . USERS_TABLE . ' WHERE ' . $this->db->sql_in_set('user_id', $id);
 		$result = $this->db->sql_query($sql);
 
@@ -131,7 +129,10 @@ class delete_user
 		$this->db->sql_freeresult($result);
 
 		// Include functions_user for the user_delete function
-		include_once( $this->phpbb_root_path . 'includes/functions_user.' . $this->php_ext );
+		if (!function_exists('user_get_id_name'))
+		{
+			include_once( $this->phpbb_root_path . 'includes/functions_user.' . $this->php_ext );
+		}
 
 		// Use config to determin if posts shuld be kept or deleted. or perhaps admin want's them specifically deleted.
 		$posts = ( $this->config['andreask_ium_keep_posts'] ) ? 'retain' : 'remove';
@@ -143,11 +144,11 @@ class delete_user
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users[0], $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USER_DELETED', time(), array($users[0], $type));
 			}
 		}
 
@@ -159,11 +160,11 @@ class delete_user
 
 			if ( $req_to_del > 1 )
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USERS_DELETED', time(), array($req_to_del, implode(', ', $users), $type));
 			}
 			else
 			{
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_DELETED', time(), array($users[0], $type));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USER_DELETED', time(), array($users[0], $type));
 			}
 		}
 
@@ -171,10 +172,11 @@ class delete_user
 		{
 			if ( $this->config['andreask_ium_approve_del'] )
 			{
+				$id = implode("", $id);
 				// store for approval and add user to the list.
 				$sql_array = array(
 								'ium_request_date'	=>	time(),
-								'ium_type'					=>	$type,
+								'ium_type'			=>	$type,
 							);
 				$sql = "UPDATE " . USERS_TABLE . "
 						SET ". $this->db->sql_build_array('UPDATE', $sql_array) ."
@@ -185,18 +187,19 @@ class delete_user
 			else
 			{
 				user_delete($posts, $id);
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'USER_SELF_DELETED', time(), array($posts));
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_USER_SELF_DELETED', time(), array($posts));
 			}
 		}
 	}
 
 	/**
 	 * This runs from the scheduler and it's for deleting the users automatically.
-	 * @return null
+	 * @return void
 	 */
 
 	public function	auto_delete()
 	{
+
 		// Current date
 		$present = new DateTime();
 
@@ -210,8 +213,7 @@ class delete_user
 		// Convert past to timestamp
 		$past = strtotime($present->format("y-m-d h:i:s"));
 
-		$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
-				WHERE ium_type="auto" AND ium_request_date < ' . (int) $past;
+		$sql = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE ium_type = "auto" AND ium_request_date < ' . (int) $past;
 		$result = $this->db->sql_query($sql);
 
 		$users = [];
@@ -225,13 +227,13 @@ class delete_user
 		$this->delete($users);
 	}
 
-/**
- * This is a feature function, will send e-mails to users that is being deleted.
- * Need to make a new branch!
- * @param  int		$user_ids	User ids of users
- * @param  str		$request	String value of requested type for deletion (user, auto, admin).
- * @return void
- */
+	/**
+	 * Send e-mails to user(s) that is/are being deleted.
+	 * Need to make a new branch!
+	 * @param  array	$user_ids	User ids of users
+	 * @param  str		$request	String value of requested type for deletion (user, auto, admin).
+	 * @return void
+	 */
 	public function email_for_delition($user_ids, $request)
 	{
 
@@ -253,7 +255,6 @@ class delete_user
 			include( $this->phpbb_root_path . 'includes/functions_messenger.' . $this->php_ext );
 		}
 
-		$this->user->add_lang('common');
 		$interval_days_sum = $this->config['andreask_ium_interval'] * 3;
 
 		$messenger = new \messenger(false);
@@ -262,8 +263,7 @@ class delete_user
 		// mail headers
 		$messenger->headers('X-AntiAbuse: Board servername - ' . $this->config['server_name']);
 		$messenger->headers('X-AntiAbuse: Username - ' . $xhead_username);
-		$messenger->headers('X-AntiAbuse: User_id - 2');
-		// $messenger->headers('X-AntiAbuse: User IP - ' . $this->request->server('SERVER_ADDR'));
+		$messenger->headers('X-AntiAbuse: User_id - ' . $this->user->data['user_id']);
 
 		// mail content...
 		$messenger->from($this->config['board_contact']);

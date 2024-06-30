@@ -2,7 +2,7 @@ Subject: We've missed you!
 
 Hello, {USERNAME}
 
-We see that your last visit on our forum {SITE_NAME}, was on "{LAST_VISIT}".
+We see that your last visit on our forum {SITENAME}, was on "{LAST_VISIT}".
 It's been a while, and we would like you to know that we hope to see you again soon!
 
 In case you have forgot your credentials you can always retrieve them using the following link.
@@ -15,18 +15,28 @@ Hope to see you back again.
 <!-- IF USR_TPC_LIST -->
 Below some links to topics that you've been active.
 
-{USR_TPC_LIST}
+{% for user_topics in USR_TPC_LIST %}
+    "{{ user_topics.title }}"
+    {{ user_topics.url }}
+
+{% endfor %}
 <!-- ENDIF -->
 
 <!-- IF USR_FRM_LIST -->
 Below some links to the most active topics of the board.
 
-{USR_FRM_LIST}
+{% for forum_topics in USR_FRM_LIST %}
+    "{{ forum_topics.title }}"
+    {{ forum_topics.url }}
+
+{% endfor %}
 <!-- ENDIF -->
 
 <!-- IF SELF_DELETE_LINK -->
 Click on the following link to delete your account.
+
 {SELF_DELETE_LINK}
+
 <!-- ENDIF -->
 
 {EMAIL_SIG}
