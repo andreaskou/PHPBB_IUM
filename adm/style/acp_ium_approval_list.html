@@ -1,18 +1,18 @@
-<!-- INCLUDE overall_header.html -->
-{% INCLUDEJS '@andreask_ium/select_funtion.js' %}
+{% INCLUDE 'overall_header.html' %}
+{% INCLUDEJS '@andreask_ium/select_function.js' %}
 <a id="maincontent"></a>
 <h1>{{ lang('APPROVAL_LIST_PAGE_TITLE') }}</h1>
 
 <p>{{ lang('IUM_APPROVAL_LIST_EXPLAIN') }}</p>
 
-<form id="approval_list" method="post" action="{U_ACTION}">
+<form id="approval_list" method="post" action="{{ U_ACTION }}">
 
 
-<!-- IF .pagination -->
+{% if pagination %}
 <div class="pagination">
-	<!-- INCLUDE pagination.html -->
+	{% INCLUDE 'pagination.html' %}
 </div>
-<!-- ENDIF -->
+{% endif %}
 
 <table class="table1 zebra-table">
 <thead>
@@ -25,37 +25,37 @@
 </tr>
 </thead>
 <tbody>
-<!-- BEGIN approval_list -->
+{% for approval in approval_list %}
 	<tr>
-		<td style="vertical-align: top;"><a href="{approval_list.LINK_TO_USER}">{approval_list.USERNAME}</a>
-		<!-- IF approval_list.POSTS --><br />{L_POSTS}{L_COLON}<strong>{approval_list.POSTS}</strong><!-- ENDIF -->
+		<td style="vertical-align: top;"><a href="{{ approval.LINK_TO_USER }}">{{ approval.USERNAME }}</a>
+		{% if approval.POSTS %}<br />{{ lang('POSTS') }}{{ lang('COLON') }}<strong>{{ approval.POSTS }}</strong>{% endif %}
 		</td>
-		<td style="vertical-align: top;">{approval_list.IGNORE_METHODE}</td>
-		<td style="vertical-align: top;">{approval_list.REQUEST_DATE}</td>
-		<td style="vertical-align: top;">{approval_list.TYPE}</td>
-		<td style="vertical-align: top;">&nbsp;<input {% if not approval_list.POSTS %}id="no-posts" {% endif %}type="checkbox" class="radio" name="mark[]" value="{approval_list.USER_ID}" />&nbsp;</td>
+		<td style="vertical-align: top;">{{ approval.IGNORE_METHODE }}</td>
+		<td style="vertical-align: top;">{{ approval.REQUEST_DATE }}</td>
+		<td style="vertical-align: top;">{{ approval.TYPE }}</td>
+		<td style="vertical-align: top;">&nbsp;<input {% if not approval.POSTS %}id="no-posts" {% endif %}type="checkbox" class="radio" name="mark[]" value="{{ approval.USER_ID }}" />&nbsp;</td>
 	</tr>
-<!-- BEGINELSE -->
+{% else %}
 	<tr>
-		<td colspan="6" style="text-align: center;">{{ lang('NO_REQUESTS') }}</td>
+		<td colspan="5" style="text-align: center;">{{ lang('NO_REQUESTS') }}</td>
 	</tr>
-<!-- END approval_list -->
+{% endfor %}
 </tbody>
 </table>
 <fieldset class="quick">
 	<p class="small">	{{ lang('USERS_PER_PAGE') }} {{ lang('COLON') }} &nbsp;
 		<select name="users_per_page" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">
-			<option value="20" <!-- IF USERS_PER_PAGE === 20 --> selected="selected" <!-- ENDIF -->>20</option>
-			<option value="50" <!-- IF USERS_PER_PAGE === 50 --> selected="selected" <!-- ENDIF -->>50</option>
-			<option value="100" <!-- IF USERS_PER_PAGE === 100 --> selected="selected" <!-- ENDIF -->>100</option>
-			<option value="200" <!-- IF USERS_PER_PAGE === 200 --> selected="selected" <!-- ENDIF -->>200</option>
+			<option value="20" {{ USERS_PER_PAGE == 20 ? 'selected="selected"' : '' }}>20</option>
+			<option value="50" {{ USERS_PER_PAGE == 50 ? 'selected="selected"' : '' }}>50</option>
+			<option value="100" {{ USERS_PER_PAGE == 100 ? 'selected="selected"' : '' }}>100</option>
+			<option value="200" {{ USERS_PER_PAGE == 200 ? 'selected="selected"' : '' }}>200</option>
 		</select>
 		&bull;
-		<a href="#" onclick="marklist('approval_list', 'mark', true); return false;">{L_MARK_ALL}</a>
+		<a href="#" onclick="marklist('approval_list', 'mark', true); return false;">{{ lang('MARK_ALL') }}</a>
 		&bull;
-		<a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{L_UNMARK_ALL}</a>
+		<a href="#" onclick="marklist('approval_list', 'mark', false); return false;">{{ lang('UNMARK_ALL') }}</a>
 		&bull;
-		<a href="#" onclick="andreask_ium_selector_switch('mark'); return false;">{{lang('ANDREASK_IUM_MARK_NOPOST')}}</a>
+		<a href="#" onclick="andreask_ium_selector_switch('mark'); return false;">{{ lang('ANDREASK_IUM_MARK_NOPOST') }}</a>
 	</p>
 	{{ lang('OPTIONS')}} {{ lang('COLON')}}
 	<select name="action">
@@ -68,11 +68,11 @@
 		<input class="button2" type="submit" value="{{ lang('SUBMIT') }}" name="do" />
 		{S_FORM_TOKEN}
 </fieldset>
-<!-- IF .pagination -->
+{% if pagination %}
 	<div class="pagination">
-		<!-- INCLUDE pagination.html -->
+		{% INCLUDE pagination.html %}
 	</div>
-<!-- ENDIF -->
+{% endif %}
 </form>
 <hr>
 <fieldset>
@@ -80,23 +80,23 @@
 		<h1>{{ lang('IUM_MANAGMENT') }}</h1>
 		<p>{{ lang('ANDREASK_IUM_IGNORE_LIST_EXPLAIN') }}</p>
 		<div class="column1">
-			<form id="add_user" method="post" action="{U_ACTION}">
+			<form id="add_user" method="post" action="{{ U_ACTION }}">
 				<fieldset>
 					<legend>{{ lang('IGNORE_USER_LIST') }}</legend>
 					<dl>
 					<dd class="full"><textarea id="usernames" name="usernames" rows="5" cols="5" style="width: 100%; height: 60px;"></textarea></dd>
-					<dd class="full" style="text-align: left;"><div style="float: {S_CONTENT_FLOW_END};">[ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]</div></dd>
+					<dd class="full" style="text-align: left;"><div style="float: {{ S_CONTENT_FLOW_END }};">[ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]</div></dd>
 				</dl>
 				</fieldset>
 				<fieldset class="quick">
-					{S_HIDDEN_FIELDS}
-					{S_FORM_TOKEN}
+					{{ S_HIDDEN_FIELDS }}
+					{{ S_FORM_TOKEN }}
 					<input class="button2" type="submit" name="add_users_options" value="{{ lang('ADD_IGNORE_USER') }}" autofocus />
 				</fieldset>
 			</form>
 		</div>
 		<div class="column2">
-			<form id="users" method="post" action="{U_ACTION}">
+			<form id="users" method="post" action="{{ U_ACTION }}">
 				<fieldset>
 					<legend>{{ lang('IGNORED_USERS_LIST') }}</legend>
 				<dl>
@@ -104,26 +104,26 @@
 				</dl>
 				</fieldset>
 				<fieldset class="quick">
-					{S_HIDDEN_FIELDS}
-					{S_FORM_TOKEN}
+					{{ S_HIDDEN_FIELDS }}
+					{{ S_FORM_TOKEN }}
 					<input type="submit" class="button2" name="ignore[remove]" value="{{ lang('REMOVE_IGNORE_USER') }}" autofocus />
 				</fieldset>
 			</form>
 		</div>
 	</fieldset>
-	<form id="groups" method="post" action="{U_ACTION}">
+	<form id="groups" method="post" action="{{ U_ACTION }}">
 		<fieldset>
 			<h3>{{ lang('IUM_IGNORE_GROUP_MANAGMENT') }}</h3>
 			<p>{{ lang('ANDREASK_IUM_IGNORE_GROUP_LIST_EXPLAIN') }}</p>
 			<dl>
-	            <dt>{{ lang('ANDREASK_IUM_GROUP_IGNORE') ~ lang('COLON') }}<br/><span>{{lang('ANDREASK_IUM_GROUP_IGNORE_EXPLAIN')}}</span></dt>
+	            <dt>{{ lang('ANDREASK_IUM_GROUP_IGNORE') ~ lang('COLON') }}<br/><span>{{ lang('ANDREASK_IUM_GROUP_IGNORE_EXPLAIN') }}</span></dt>
 	            <dd><select id="andreask_group_ignore" style="width: 70%;" name="group_id[]" multiple="multiple" size="6">{IGNORED_GROUP}</select></dd>
 				<p class="submit-buttons" style="width: 70%">
-					<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" autofocus />
+					<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}" autofocus />
 					<input type="submit" class="button2 column2" name="ignore_group[remove]" value="{{ lang('ANDREASK_IUM_UPDATE_IGNORE_LIST') }}" autofocus />
 				</p>
 	        </dl>
 		</fieldset>
 	</form>
 </fieldset>
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}
